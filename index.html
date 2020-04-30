@@ -380,12 +380,166 @@
 </ul>
 <p><strong>向上转型</strong></p>
 <p>父类指向子类的引用</p>
-<h1 id="Person-p-new-Person-“zhangsan”-20-发生了什么"><a href="#Person-p-new-Person-“zhangsan”-20-发生了什么" class="headerlink" title="Person p = new Person(“zhangsan”,20)发生了什么"></a>Person p = new Person(“zhangsan”,20)发生了什么</h1><ol>
-<li>首先在栈内存中给p分配一个空间</li>
-<li>在堆中给Person对象分配内存空间，并为属性值初始化。</li>
-<li>调用构造方法，给属性做赋值操作</li>
-<li>将Person的内存地址，赋值给p，通过p可以找到堆中对象的具体信息。</li>
-</ol>
+<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM组成"><a href="#JVM组成" class="headerlink" title="JVM组成"></a>JVM组成</h2><p>JVM由三个主要的子系统构成：</p>
+<ul>
+<li>类加载子系统：负责加载类或者接口</li>
+<li>运行时数据去（内存结构）：包含方法区、Java堆、Java栈、本地方法栈、指令计数器及其他隐含寄存器</li>
+<li>执行引擎：负责执行包含在已装载的类或接口中的指令</li>
+</ul>
+<h3 id="类加载子系统"><a href="#类加载子系统" class="headerlink" title="类加载子系统"></a>类加载子系统</h3><h4 id="什么是类加载"><a href="#什么是类加载" class="headerlink" title="什么是类加载"></a>什么是类加载</h4><p>答：类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个java.lang.Class对象，用来封装类在方法区内的数据结构。类的加载的最终产品是位于堆区中的Class对象，Class对象封装了类在方法区内的数据结构，并且向Java程序员提供了访问方法区内的数据结构的接口。</p>
+<h4 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h4><p>类的生命周期包括加载、连接、初始化、使用和卸载。</p>
+<ul>
+<li><p>加载：查找并加载类的二进制数据，并在堆内存中创建对象。</p>
+</li>
+<li><p>连接：连接又分为三步：验证、准备、解析</p>
+<ul>
+<li>验证：验证文件格式、元数据、字节码、符号引用。</li>
+<li>准备：为类的静态变量分配内存并初始化默认值。</li>
+<li>解析：把类中的符号引用转换为直接引用</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+<li><p>使用：new出对象程序中使用</p>
+</li>
+<li><p>卸载：执行垃圾回收</p>
+</li>
+</ul>
+<h4 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h4><p><img src="https://img-blog.csdnimg.cn/20190603164758648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>启动类加载器：Bootstrap ClassLoader，负责加载存放在JDK\jre\lib(JDK代表JDK的安装目录，下同)下，或被-Xbootclasspath参数指定的路径中的，并且能被虚拟机识别的类库</li>
+<li>扩展类加载器：Extension ClassLoader，该加载器由sun.misc.Launcher$ExtClassLoader实现，它负责加载DK\jre\lib\ext目录中，或者由java.ext.dirs系统变量指定的路径中的所有类库（如javax.*开头的类），开发者可以直接使用扩展类加载器。</li>
+<li>应用程序类加载器：Application ClassLoader，该类加载器由sun.misc.Launcher$AppClassLoader来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器</li>
+</ul>
+<h5 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h5><p>双亲委派的意思是如果一个类加载器需要加载类，那么首先它会把这个类请求委派给父类加载器去完成，每一层都是如此。一直递归到顶层，当父加载器无法完成这个请求时，子类才会尝试去加载。这里的双亲其实就指的是父类。父类也不是我们平日所说的那种继承关系，只是调用逻辑是这样。</p>
+<h3 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h3><p><img src="https://img-blog.csdnimg.cn/20190603165013168.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>方法区和堆是<strong>所有线程共享</strong>的内存区域；而java栈、本地方法栈和程序计数器是<strong>运行时线程私有</strong>的内存区域。</p>
+<p>JVM把内存划分成了如下几个区域：</p>
+<ul>
+<li><p>堆区（Heap）：存放<strong>通过new创建的对象实例</strong>，容易OutOfMemoryEroor。</p>
+</li>
+<li><p>方法区（Method Area）：存放类的信息（字段和方法的字节码、构造函数、接口定义等）、静态变量，常量，运行时常量池。</p>
+</li>
+<li><p>虚拟机栈（VM Stack）：用于存储局部变量表、操作数栈、动态链接、方法出口等。只要线程已结束栈就出栈，生命周期与线程一致，其内存管理如下：</p>
+<ul>
+<li>方法中的基础数据类型直接在栈空间分配</li>
+<li>方法中的引用数据类型，需要new来创建，既在栈中分配空间，也在堆中分配对象，栈中的地址指向堆内对象</li>
+<li>方法的形式参数直接在栈空间分配，方法调用完毕在栈空间回收</li>
+<li>方法中的引用参数，在栈中分配空间指向堆中对象，方法执行完毕回收栈空间。</li>
+<li>字符串常量,static静态变量在方法区分配空间。</li>
+</ul>
+</li>
+<li><p>本地方法栈（Native Method Stack）：可理解为java中jni调用。用于支持native方法执行</p>
+</li>
+<li><p>程序计数器（Program Counter Register）：每个方法在运行时都存储着一个独立的程序计数器，程序计数器是指定程序运行的行数指针。</p>
+</li>
+</ul>
+<h3 id="堆内存分区"><a href="#堆内存分区" class="headerlink" title="堆内存分区"></a>堆内存分区</h3><p><img src="https://img-blog.csdnimg.cn/20190604161655494.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>内存分为:</p>
+<ul>
+<li>新生代(<strong>1/3堆空间</strong>)<ul>
+<li>Eden(伊甸园区)</li>
+<li>Survivor From（幸存者区）</li>
+<li>Survivor To（幸存者区）</li>
+</ul>
+</li>
+<li>老年代(<strong>2/3堆空间</strong>)</li>
+<li>持久代。(<strong>直接内存JDK1.8后</strong>)</li>
+</ul>
+<h4 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h4><p>新生代中98%的对象都是”朝生夕死”的，所以并不需要按照1 : 1的比例来划分内存空间，而是将内存(新生代内存)分为一块较大的Eden(伊甸园)空间和两块较小的Survivor(幸存者)空间（8:1:1），每次使用Eden和其中一块Survivor（两个Survivor区域一个称为From区，另一个称为To区域）。</p>
+<p><strong>当进行垃圾回收时，将Eden和Survivor中还存活的对象一次性复制到另一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间。(复制算法)</strong></p>
+<p>HotSpot实现的复制算法流程如下:</p>
+<ul>
+<li><p>当Eden区满的时候,会触发第一次Minor gc,把还活着的对象拷贝到Survivor From区；当Eden区再次触发Minor gc的时候,会扫描Eden区和From区域,对两个区域进行垃圾回收,经过这次回收后还存活的对象,则直接复制到To区域,并将Eden和From区域清空。</p>
+</li>
+<li><p>当后续Eden又发生Minor gc的时候,会对Eden和To区域进行垃圾回收,存活的对象复制到From区域,并将Eden和To区域清空。</p>
+</li>
+<li><p>部分对象会在From和To区域中复制来复制去,如此交换15次(由JVM参数MaxTenuringThreshold决定,这个参数默认是15),最终如果还是存活,就存入到老年代。</p>
+</li>
+</ul>
+<p>也有例外出现，对于一些比较大的对象（需要分配一块比较大的连续内存空间）则直接进入到老年代。一般在Survivor 空间不足的情况下发生。</p>
+<h4 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h4><p>在年轻代中经历了N次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。内存比新生代也大很多(大概比例是1:2)，当老年代内存满时触发Major GC即Full GC，Full GC发生频率比较低，老年代对象存活时间比较长，存活率标记高。一般来说，大对象会被直接分配到老年代。所谓的大对象是指需要大量连续存储空间的对象。</p>
+<h4 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h4><p>不属于堆内存，属于内存空间。真正与堆隔离。方法区是类逻辑上的一个抽象模板，而元空间是<strong>方法区的实现</strong>，是真实存在的内存。</p>
+<h4 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h4><ul>
+<li><p>虚拟机在进行MinorGC（新生代的GC）的时候，会判断要进入OldGeneration区域对象的大小，是否大于Old Generation剩余空间大小，如果大于就会发生Full GC。</p>
+</li>
+<li><p>刚分配对象在Eden中，如果空间不足尝试进行GC，回收空间，如果进行了MinorGC空间依旧不够就放入Old Generation，如果OldGeneration空间还不够就OOM了。</p>
+</li>
+<li><p>比较大的对象，数组等，大于某值（可配置）就直接分配到老年代，（避免频繁内存拷贝）</p>
+</li>
+<li><p>年轻代和年老代属于Heap空间的，Permanent Generation（永久代）可以理解成方法区，（它属于方法区）也有可能发生GC，例如类的实例对象全部被GC了，同时它的类加载器也被GC掉了，这个时候就会触发永久代中对象的GC。</p>
+</li>
+<li><p>如果OldGeneration满了就会产生FullGC。老年代满原因：</p>
+<ul>
+<li>1、from survive中对象的生命周期到一定阈值</li>
+<li>2、分配的对象直接是大对象</li>
+<li>3、由于To 空间不够，进行GC直接把对象拷贝到年老代（年老代GC时候采用不同的算法）</li>
+</ul>
+</li>
+<li><p>如果Young Generation大小分配不合理或空间比较小，这个时候导致对象很容易进入Old Generation中，而Old Generation中回收具体对象的时候速度是远远低于Young Generation回收速度。</p>
+</li>
+</ul>
+<h4 id="对象的分配"><a href="#对象的分配" class="headerlink" title="对象的分配"></a>对象的分配</h4><ul>
+<li>对象优先分配在Eden区，如果Eden区没有足够的空间时，虚拟机执行一次Minor GC。</li>
+<li>大对象直接进入老年代（大对象是指需要大量连续内存空间的对象）。这样做的目的是避免在Eden区和两个Survivor区之间发生大量的内存拷贝（新生代采用复制算法收集内存）。</li>
+<li>长期存活的对象进入老年代。虚拟机为每个对象定义了一个年龄计数器，如果对象经过了1次Minor GC那么对象会进入Survivor区，之后每经过一次Minor GC那么对象的年龄加1，直到达到阀值对象进入老年区。</li>
+<li>动态判断对象的年龄。如果Survivor区中相同年龄的所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象可以直接进入老年代。</li>
+<li>空间分配担保。每次进行Minor GC时，JVM会计算Survivor区移至老年区的对象的平均大小，如果这个值大于老年区的剩余值大小则进行一次Full GC，如果小于检查HandlePromotionFailure设置，如果true则只进行Monitor GC,如果false则进行Full GC。</li>
+</ul>
+<h1 id="GC算法-垃圾回收"><a href="#GC算法-垃圾回收" class="headerlink" title="GC算法 垃圾回收"></a>GC算法 垃圾回收</h1><ul>
+<li>垃圾：无任何对象引用的对象。</li>
+<li>回收：清理“垃圾”占用的内存空间而非对象本身。</li>
+<li>发生地点：一般发生在堆内存中，因为大部分的对象都储存在堆内存中。</li>
+<li>发生时间：程序空闲时间不定时回收。</li>
+</ul>
+<h2 id="对象的生命周期"><a href="#对象的生命周期" class="headerlink" title="对象的生命周期"></a>对象的生命周期</h2><h3 id="创建阶段-Created"><a href="#创建阶段-Created" class="headerlink" title="创建阶段(Created)"></a>创建阶段(Created)</h3><p>在创建阶段系统通过下面的几个步骤来完成对象的创建过程：</p>
+<ul>
+<li><p>为对象分配存储空间</p>
+<ul>
+<li>开始构造对象</li>
+<li>从超类到子类对static成员进行初始化</li>
+<li>超累成员变量按顺序初始化，递归调用超累的构造方法</li>
+<li>子类成员变量按顺序初始化，子类构造方法调用</li>
+</ul>
+</li>
+<li><p>应用阶段(In Use)：对象至少被一个强引用持有。</p>
+</li>
+<li><p>不可见阶段(Invisible)：简单说就是程序的执行已经超出了该对象的作用域了。</p>
+</li>
+<li><p>不可达阶段(Unreachable)：对象处于不可达阶段是指该对象不再被任何强引用所持有。</p>
+</li>
+<li><p>收集阶段(Collected)：</p>
+</li>
+<li><p>当垃圾回收器发现该对象已经处于“不可达阶段”并且垃圾回收器已经对该对象的内存空间重新分配做好准备时，则对象进入了“收集阶段”。如果该对象已经重写了finalize()方法，则会去执行该方法的终端操作。</p>
+</li>
+<li><p>终结阶段(Finalized)：当对象执行完finalize()方法后仍然处于不可达状态时，则该对象进入终结阶段。在该阶段是等待垃圾回收器对该对象空间进行回收。</p>
+</li>
+<li><p>对象空间重分配阶段(De-allocated)：垃圾回收器对该对象的所占用的内存空间进行回收或者再分配了，则该对象彻底消失了，称之为“对象空间重新分配阶段”。</p>
+</li>
+</ul>
+<h2 id="判断对象是否是垃圾算法"><a href="#判断对象是否是垃圾算法" class="headerlink" title="判断对象是否是垃圾算法"></a>判断对象是否是垃圾算法</h2><h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><p>堆中每个对象（不是引用）都有一个引用计数器。当一个对象被创建并初始化赋值后，该变量计数设置为1。每当有一个地方引用它时，计数器值就加1（a = b， b被引用，则b引用的对象计数+1）。当引用失效时（一个对象的某个引用超过了生命周期（出作用域后）或者被设置为一个新值时），计数器值就减1。任何引用计数为0的对象可以被当作垃圾收集。当一个对象被垃圾收集时，它引用的任何对象计数减1。</p>
+<h4 id="根搜索算法（可达性分析算法）"><a href="#根搜索算法（可达性分析算法）" class="headerlink" title="根搜索算法（可达性分析算法）"></a>根搜索算法（可达性分析算法）</h4><p><img src="https://upload-images.jianshu.io/upload_images/4118241-bdc59e28c5775caf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>从一个GC ROOT节点开始，寻找对应的引用节点，找到这个节点后，继续寻找这个节点的引用节点。当所有的引用节点寻找完毕后，剩余的节点则被认为是没有被引用到的节点，即无用的节点。</p>
+<p><strong>所谓的GC根对象包括：</strong></p>
+<ul>
+<li>虚拟机栈中引用的对象（本地变量表）</li>
+<li>方法区中静态属性引用的对象</li>
+<li>方法区中常亮引用的对象</li>
+<li>本地方法栈中引用的对象（Native对象）</li>
+</ul>
+<h2 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h2><p>GC最基础的算法有三种：标记 -清除算法、复制算法、标记-整理算法，我们常用的垃圾回收器一般都采用分代收集算法。</p>
+<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记 -清除算法"></a>标记 -清除算法</h3><p>标记清除算法是最基础的收集算法，其他收集算法都是基于这种思想。标记清除算法分为“标记”和“清除”两个阶段：首先标记出需要回收的对象（<strong>这一过程在可达性分析过程中进行</strong>），标记完成之后统一清除对象。</p>
+<p><strong>它的主要缺点：</strong></p>
+<ul>
+<li>标记和清除过程效率不高 。</li>
+<li>标记清除之后会产生大量不连续的内存碎片。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-ab33b8257a3ed8bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p>标记整理，标记操作和“标记-清除”算法一致，后续操作不只是直接清理对象，而是在清理无用对象完成后让所有存活的对象都向一端移动，并更新引用其对象的指针。</p>
+<p>主要缺点：在标记-清除的基础上还需进行对象的移动，成本相对较高，好处则是不会产生内存碎片。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-e02d7d3ebf1d75af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="复制算法-新生代算法"><a href="#复制算法-新生代算法" class="headerlink" title="复制算法(新生代算法)"></a>复制算法(新生代算法)</h3><p>复制算法，它将可用内存容量划分为大小相等的两块，每次只使用其中的一块。当这一块用完之后，就将还存活的对象复制到另外一块上面，然后在把已使用过的内存空间一次理掉。这样使得每次都是对其中的一块进行内存回收，不会产生碎片等情况，只要移动堆订的指针，按顺序分配内存即可，实现简单，运行高效。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-98d9dff8f994e8bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h1 id="基本数据类型和引用数据类型"><a href="#基本数据类型和引用数据类型" class="headerlink" title="基本数据类型和引用数据类型"></a>基本数据类型和引用数据类型</h1><p><strong>基本数据类型</strong></p>
 <ul>
 <li>byte</li>
@@ -403,6 +557,7 @@
 <li>数组</li>
 </ul>
 <p><img src="https://img-blog.csdn.net/20140531091306906" alt="img"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190526183106748.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p><strong>区别:</strong></p>
 <ul>
 <li>基本数据类型保存的是值，引用类型保存的是内存地址</li>
@@ -412,6 +567,64 @@
 <li>一个方法不能修改一个基本类型的参数；一个方法可以修改引用类型参数中对象所指向的值。</li>
 </ul>
 <p><a href="https://blog.csdn.net/javazejian/article/details/51192130?utm_medium=distribute.pc_relevant.none-task-blog-OPENSEARCH-5&depth_1-utm_source=distribute.pc_relevant.none-task-blog-OPENSEARCH-5" target="_blank" rel="noopener">数据类型分析</a></p>
+<p><strong>int与Integer不同</strong></p>
+<ul>
+<li>Integer是int的包装类，int则是java的一种基本数据类型</li>
+<li>Integer变量必须实例化后才能使用，而int变量不需要</li>
+<li>Integer实际是对象的引用，当new一个Integer时，实际上是生成一个指针指向此对象；而int则是直接存储数据值</li>
+<li>Integer的默认值是null，int的默认值是0</li>
+</ul>
+<p><strong>延伸：关于Integer和int的比较</strong></p>
+<ul>
+<li><p>由于Integer变量实际上是对一个Integer对象的引用，所以两个通过new生成的Integer变量永远是不相等的（因为new生成的是两个对象，其内存地址不同）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; new Integer(100);</span><br><span class="line">Integer j &#x3D; new Integer(100);</span><br><span class="line">System.out.print(i &#x3D;&#x3D; j); &#x2F;&#x2F;false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Integer变量和int变量比较时，只要两个变量的值是相等的，则结果为true（因为包装类Integer和基本数据类型int比较时，java会自动拆包装为int，然后进行比较，实际上就变为两个int变量的比较）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; new Integer(100);</span><br><span class="line">int j &#x3D; 100；</span><br><span class="line">System.out.print(i &#x3D;&#x3D; j); &#x2F;&#x2F;true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>非new生成的Integer变量和new Integer()生成的变量比较时，结果为false。（因为非new生成的Integer变量指向的是java常量池中的对象，而new Integer()生成的变量指向堆中新建的对象，两者在内存中的地址不同）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; new Integer(100);</span><br><span class="line">Integer j &#x3D; 100;</span><br><span class="line">System.out.print(i &#x3D;&#x3D; j); &#x2F;&#x2F;false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于两个非new生成的Integer对象，进行比较时，如果两个变量的值在区间-128到127之间，则比较结果为true，如果两个变量的值不在此区间，则比较结果为false</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; 100;</span><br><span class="line">Integer j &#x3D; 100;</span><br><span class="line">System.out.print(i &#x3D;&#x3D; j); &#x2F;&#x2F;true</span><br><span class="line">Integer i &#x3D; 128;</span><br><span class="line">Integer j &#x3D; 128;</span><br><span class="line">System.out.print(i &#x3D;&#x3D; j); &#x2F;&#x2F;false</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>原因：<br>java在编译Integer i = 100 ;时，会翻译成为Integer i = Integer.valueOf(100)；，而java API中对Integer类型的valueOf的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;public static Integer valueOf(int i)&#123;</span><br><span class="line">  assert IntegerCache.high &gt;&#x3D; 127;</span><br><span class="line">  if (i &gt;&#x3D; IntegerCache.low &amp;&amp; i &lt;&#x3D; IntegerCache.high)&#123;</span><br><span class="line">      return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">  &#125;</span><br><span class="line">  return new Integer(i);</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+</li>
+</ul>
+<h1 id="Java自动装箱与拆箱"><a href="#Java自动装箱与拆箱" class="headerlink" title="Java自动装箱与拆箱"></a>Java自动装箱与拆箱</h1><h2 id="什么是自动装箱、拆箱"><a href="#什么是自动装箱、拆箱" class="headerlink" title="什么是自动装箱、拆箱"></a>什么是自动装箱、拆箱</h2><p>装箱就是 自动将基本数据类型转换为包装器类型；拆箱就是 自动将包装器类型转换为基本数据类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i = <span class="number">10</span>;  <span class="comment">//装箱</span></span><br><span class="line"><span class="keyword">int</span> n = i;   <span class="comment">//拆箱</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="自动装箱的原理及使用场景"><a href="#自动装箱的原理及使用场景" class="headerlink" title="自动装箱的原理及使用场景"></a>自动装箱的原理及使用场景</h2><p>基本数据类型–&gt;封装类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; 10;</span><br></pre></td></tr></table></figure>
+
+<p>执行时实际上系统执行了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; Integer.valueOf(10);</span><br></pre></td></tr></table></figure>
+
+<p>分析Integer的valueOf源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">    if(i &gt;&#x3D; -128 &amp;&amp; i &lt;&#x3D; IntegerCache.high)　　&#x2F;&#x2F; 没有设置的话，IngegerCache.high 默认是127</span><br><span class="line">        return IntegerCache.cache[i + 128];</span><br><span class="line">    else</span><br><span class="line">        return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于–128到127（默认是127）之间的值，Integer.valueOf(int i) 返回的是缓存的Integer对象（并不是新建对象），而其他值，执行Integer.valueOf(int i) 返回的是一个新建的 Integer对象。装箱的过程会创建对应的对象，这个会消耗内存，所以装箱的过程会增加内存的消耗，影响性能。</p>
+<h2 id="自动拆箱的原理及使用场景"><a href="#自动拆箱的原理及使用场景" class="headerlink" title="自动拆箱的原理及使用场景"></a>自动拆箱的原理及使用场景</h2><p>封装类–&gt;基本数据类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; 10; &#x2F;&#x2F;装箱 </span><br><span class="line">int t &#x3D; i; &#x2F;&#x2F;拆箱，实际上执行了 int t &#x3D; i.intValue();</span><br></pre></td></tr></table></figure>
+
+<p>进行运算时也可以进行拆箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i &#x3D; 10; </span><br><span class="line">System.out.println(i++);</span><br></pre></td></tr></table></figure>
+
+<p>Integer与int运算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i &#x3D; 10;</span><br><span class="line">Integer integer1 &#x3D; new Integer(10); </span><br><span class="line">System.out.println(i&#x3D;&#x3D;integer1);&#x2F;&#x2F;true,integer1自动拆箱</span><br></pre></td></tr></table></figure>
+
+<p>intValue函数很简单，直接返回value值即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line"> public int intValue() &#123;</span><br><span class="line">    return value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <h1 id="String-类"><a href="#String-类" class="headerlink" title="String 类"></a>String 类</h1><ul>
 <li>final类说明是一个不可变对象</li>
 <li>内部使用value[]数组实现</li>
@@ -488,6 +701,159 @@
 <li>将类声明为final</li>
 <li>声明属性为private 和 final</li>
 <li>不要提供任何会修改对象状态的方法</li>
+</ul>
+<p><strong>改变”不可变对象”</strong></p>
+<p>现在我们已经知道了String的成员变量是private final 的，也就是初始化之后不可改变的。同时也提到value这个成员变量其实也是一个引用，指向真正的数组内存地址，不能改变它的引用指向，我们能不能直接改变内存数组中的数据呢，那么就需要获取到value，而value是私有的，可用反射获取</p>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><p>对象序列化是一个用于将对象状态转换为字节流的过程，可以将其保存到磁盘文件中或通过网络发送到任何其他程序；从字节流创建对象的相反的过程称为反序列化。</p>
+<p>序列化的作用就是为了保存java的类对象的状态，并将对象转换成可存储或者可传输的状态，用于不同jvm之间进行类实例间的共享。</p>
+<h2 id="序列化方式"><a href="#序列化方式" class="headerlink" title="序列化方式"></a>序列化方式</h2><p>实现序列化的两种方式：</p>
+<ul>
+<li>实现Serializable接口：Java专用</li>
+<li>实现Parcelable接口：Android专用</li>
+</ul>
+<h3 id="Serializable-和Parcelable的对比"><a href="#Serializable-和Parcelable的对比" class="headerlink" title="Serializable 和Parcelable的对比"></a>Serializable 和Parcelable的对比</h3><p>Android上应该尽量采用Parcelable，效率至上,Parcelable的速度比高十倍以上。</p>
+<p><strong>Serializable</strong>的迷人之处在于你只需要对某个类以及它的属性实现Serializable 接口即可。Serializable 接口是一种标识接口（marker interface），这意味着无需实现方法，Java便会对这个对象进行高效的序列化操作。这种方法的缺点是使用了反射，序列化的过程较慢。这种机制会在序列化的时候创建许多的临时对象，容易触发垃圾回收。</p>
+<p><strong>Parcelable</strong>方式的实现原理是将一个完整的对象进行分解，而分解后的每一部分都是Intent所支持的数据类型，这样也就实现传递对象的功能了</p>
+<h1 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h1><p>定义在类内部的类就被称为内部类。外部类按常规的类访问方式使用内部类，唯一的差别是内部类可以访问外部类的所有方法与属性，包括私有方法与属性。</p>
+<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><p>定义在类内部的静态类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Out &#123;</span><br><span class="line">    private static int a;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    public static class Inner &#123;</span><br><span class="line">        public void print() &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Inner是静态内部类。静态内部类可以访问外部类所有静态变量和方法。静态内部类和一般类一致，可以定义静态变量、方法，构造方法等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Out.Inner inner &#x3D; new Out.Inner();</span><br><span class="line">inner.print();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="成员内部类"><a href="#成员内部类" class="headerlink" title="成员内部类"></a>成员内部类</h3><p>定义在类内部的非静态类称为成员内部类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class Out &#123;</span><br><span class="line">    private static int a;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    public class Inner &#123;</span><br><span class="line">        public void print() &#123;</span><br><span class="line">            System.out.println(a);</span><br><span class="line">            System.out.println(b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成员内部类可以访问外部类所有的变量和方法，包括静态和实例，私有和非私有。和静态内部类不同的是，每一个成员内部类的实例都依赖一个外部类的实例（成员内部类是依附外部类而存在的）。其它类使用内部类必须要先创建一个外部类的实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Out out &#x3D; new Out();</span><br><span class="line">Out.Inner inner &#x3D; out.new Inner();</span><br><span class="line">inner.print();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>成员内部类不能定义静态方法和变量（final修饰的除外）。这是因为成员内部类是非静态的，类初始化的时候先初始化静态成员，如果允许成员内部类定义静态变量，那么成员内部类的静态变量初始化顺序是有歧义的。</li>
+<li>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类。</li>
+<li>成员内部类与外部类可以拥有同名的成员变量或方法，默认情况下访问的是成员内部类的成员。如果要外部类的同名成员，需用下面的形式访问：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OutterClass(外部类).this.成员</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>为什么Java中成员内部类可以访问外部类成员？</strong></p>
+<ul>
+<li>成员内部类的创建需要外部类的对象</li>
+<li>内部类对象持有指向外部类对象的引用。</li>
+</ul>
+<p><strong>静态内部类与成员内部类对比</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20190528190801750.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="局部内部类-amp-闭包"><a href="#局部内部类-amp-闭包" class="headerlink" title="局部内部类&amp;闭包"></a>局部内部类&amp;闭包</h3><p>定义在外部类方法中的类，叫局部类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class Out &#123;</span><br><span class="line">    private static int a;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    public void test(final int c) &#123;</span><br><span class="line">        final int d &#x3D; 1;</span><br><span class="line">        class Inner &#123;</span><br><span class="line">            public void print() &#123;</span><br><span class="line">                System.out.println(a);</span><br><span class="line">                System.out.println(b);</span><br><span class="line">                System.out.println(c);</span><br><span class="line">                System.out.println(d);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void testStatic(final int c) &#123;</span><br><span class="line">        final int d &#x3D; 1;</span><br><span class="line">        class Inner &#123;</span><br><span class="line">            public void print() &#123;</span><br><span class="line">                System.out.println(a);</span><br><span class="line">                &#x2F;&#x2F;定义在静态方法中的局部类不可以访问外部类的实例变量</span><br><span class="line">                &#x2F;&#x2F;System.out.println(b);</span><br><span class="line">                System.out.println(c);</span><br><span class="line">                System.out.println(d);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>局部类只能在定义该局部类的方法中使用。定义在实例方法中的局部类可以访问外部类的所有变量和方法，定义在静态方法中的局部类只能访问外部类的静态变量和方法。同时局部类还可以访问方法的参数和方法中的局部变量，这些参数和变量必须要声明为final的。否则会报错</p>
+<h3 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Out &#123;</span><br><span class="line">    private static int a;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    private Object obj &#x3D; new Object() &#123;</span><br><span class="line">        private String name &#x3D; &quot;匿名内部类&quot;;</span><br><span class="line">        @Override</span><br><span class="line">        public String toString() &#123;</span><br><span class="line">            return name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public void test() &#123;</span><br><span class="line">        Object obj &#x3D; new Object() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public String toString() &#123;</span><br><span class="line">                System.out.println(b);</span><br><span class="line">                return String.valueOf(a);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        System.out.println(obj.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>匿名内部类可以访问外部类所有的变量和方法。</p>
+<h3 id="内部类特点"><a href="#内部类特点" class="headerlink" title="内部类特点"></a>内部类特点</h3><ul>
+<li>非静态内部类对象不仅指向该内部类，还指向实例化该内部类的外部类对象的内存。</li>
+<li>内部类和普通类一样可以重写Object类的方法，如toString方法；并且有构造函数，执行顺序依旧是先初始化属性，再执行构造函数</li>
+<li>在编译完之后，会出现（外部类.class）和（外部类﹩内部类.class）两个类文件名。</li>
+<li>内部类可以被修饰为private，只能被外部类所访问。事实上一般也都是如此书写。</li>
+<li>内部类可以被写在外部类的任意位置，如成员位置，方法内。</li>
+</ul>
+<h4 id="内部类访问外部类"><a href="#内部类访问外部类" class="headerlink" title="内部类访问外部类"></a>内部类访问外部类</h4><ul>
+<li>静态时，静态内部类只能访问外部类静态成员;非静态内部类都可以直接访问。（原因是：内部类有一个外部类名.this的指引）当访问外部类静态成员出现重名时，通过(外部类名.静态成员变量名)访问。如，Out.show();</li>
+<li>重名情况下，非静态时，内部类访问自己内部类通过this.变量名。访问外部类通过（外部类名.this.变量名）访问 。如Out.this.show();</li>
+<li>在没有重名的情况下，无论静态非静态，内部类直接通过变量名访问外部成员变量。</li>
+</ul>
+<h4 id="外部类访问内部类"><a href="#外部类访问内部类" class="headerlink" title="外部类访问内部类"></a>外部类访问内部类</h4><ul>
+<li>内部类为非静态时，外部类访问内部类，必须建立内部类对象。建立对象方法，如前所述。</li>
+<li>内部类为静态时，外部类访问非静态成员，通过（外部类对象名.内部类名.方法名）访问，如new Out().In.function();</li>
+<li>内部类为静态时，外部类访问静态成员时，直接通过（外部类名.内部类名.方法名），如 Out.In.funchtion();</li>
+<li>当内部类中定义了静态成员时，内部类必须是静态的；当外部静态方法访问内部类时，内部类也必须是静态的才能访问。</li>
+</ul>
+<h1 id="静态（static）"><a href="#静态（static）" class="headerlink" title="静态（static）"></a>静态（static）</h1><p>把一个变量声明为静态变量通常基于以下三个目的：</p>
+<ul>
+<li>作为共享变量</li>
+<li>减少对象的创建</li>
+<li>保留唯一副本</li>
+</ul>
+<h2 id="静态变量"><a href="#静态变量" class="headerlink" title="静态变量"></a>静态变量</h2><ul>
+<li>静态变量在内存中只有一份拷贝，JVM只为静态分配一次内存，在类加载的过程中完成静态变量的内存分配。可用类名直接访问（方便），当然也可以通过对象来访问（但是这是不推荐的）。</li>
+<li>实例变量，每次创建实例，都会对实例变量分配一次内存，实例变量可以在内存中有多个拷贝，互不影响（灵活）。</li>
+</ul>
+<h3 id="静态变量与实例变量区别"><a href="#静态变量与实例变量区别" class="headerlink" title="静态变量与实例变量区别"></a>静态变量与实例变量区别</h3><ul>
+<li>所属不同，静态变量属于类，普通成员变量所有当前对象。</li>
+<li>存储区域不同，静态变量存在方法区，普通成员变量存在堆（成员变量存储在堆中的对象里面）。</li>
+<li>生命周期不同，静态变量生周期与类相同；普通成员变量与当前对象相同。</li>
+<li>序列化时，静态变量会被拆除在外。</li>
+</ul>
+<h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>静态方法可以直接使用类名调用，静态方法中不能使用this、super，不能直接访问成员变量，成员方法，只能访问类下的静态变量、静态方法，因为实例成员和实例方法与当前对象关联，静态属于类。静态方法不能被抽象。</p>
+<h3 id="静态代码块"><a href="#静态代码块" class="headerlink" title="静态代码块"></a>静态代码块</h3><p>static代码块也叫静态代码块，是在类中独立于类成员的static语句块，可以有多个，位置可以随便放，它不在任何的方法体内，JVM加载类时会执行这些静态的代码块，如果static代码块有多个，JVM将按照它们在类中出现的先后顺序依次执行它们，每个代码块只会被执行一次。</p>
+<h3 id="静态方法和静态代码块的区别"><a href="#静态方法和静态代码块的区别" class="headerlink" title="静态方法和静态代码块的区别"></a>静态方法和静态代码块的区别</h3><ul>
+<li>如果有些代码必须在项目启动的时候就执行,就需要使用静态代码块,这种代码是主动执行的；</li>
+<li>需要在项目启动的时候就初始化但是不执行,在不创建对象的情况下,可以供其他程序调用,而在调用的时候才执行，这需要使用静态方法,这种代码是被动执行的。 静态方法在类加载的时候 就已经加载 可以用类名直接调用。</li>
+</ul>
+<p>一句话：类加载时初始化，静态代码块是自动执行的；静态方法是被调用的时候才执行的。</p>
+<h3 id="静态内部类和非静态内部类的区别"><a href="#静态内部类和非静态内部类的区别" class="headerlink" title="静态内部类和非静态内部类的区别"></a>静态内部类和非静态内部类的区别</h3><ul>
+<li>静态内部类可以有静态成员(方法，属性)，而非静态内部类则不能有静态成员(方法，属性)。</li>
+<li>静态内部类只能够访问外部类的静态成员,而非静态内部类则可以访问外部类的所有成员(方法，属性)。</li>
+<li>非静态内部类会持有外部类的引用；静态内部类不会持有外部类的引用。</li>
+</ul>
+<h1 id="Java的异常体系"><a href="#Java的异常体系" class="headerlink" title="Java的异常体系"></a>Java的异常体系</h1><p>异常知识体系树如下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190530174605603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>Error是程序代码无法处理的错误，比如OutOfMemoryError、ThreadDeath等。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止退出，其表示程序在运行期间出现了十分严重、不可恢复的错误，应用程序只能中止运行。</li>
+<li>Exception分运行时异常和非运行时异常。<ul>
+<li>运行时异常都是RuntimeException类及其子类异常，如NullPointerException、IndexOutOfBoundsException等，这些异常也是不检查异常，程序代码中自行选择捕获处理，也可以不处理。这些异常一般是由程序逻辑错误引起的，程序代码应该从逻辑角度尽可能避免这类异常的发生。</li>
+<li>所有继承Exception且不是RuntimeException的异常都是非运行时异常，也称检查异常，如上图中的IOException和ClassNotFoundException，编译器会对其作检查，故程序中一定会对该异常进行处理，处理方法要么在方法体中声明抛出checked Exception，要么使用catch语句捕获checked Exception进行处理，不然不能通过编译。</li>
+</ul>
+</li>
+</ul>
+<h2 id="抛出异常的方式"><a href="#抛出异常的方式" class="headerlink" title="抛出异常的方式"></a>抛出异常的方式</h2><ul>
+<li><p>使用 <code>throw</code> 抛出异常：throw<code>总是出现在**函数体**中，用来抛出一个</code>Throwable<code>类型的异常，例如抛出一个</code> <code>IOException</code> 类的异常对象。</p>
+</li>
+<li><p>使用 <code>throws</code> 抛出异常：如果一个方法可能会出现异常，但没有能力处理这种异常，可以在<strong>方法声明处</strong>用 <code>throws</code> 子句来声明抛出异常。</p>
+</li>
+</ul>
+<p><strong>throw 和 throws 的区别？</strong></p>
+<ul>
+<li>throw用于方法内部，throws用于方法声明上</li>
+<li>throw后跟异常对象，throws后跟异常类型</li>
+<li>throw后只能跟一个异常对象，throws后可以一次声明多种异常类型</li>
+</ul>
+<h2 id="final、finally、finalize-有什么区别"><a href="#final、finally、finalize-有什么区别" class="headerlink" title="final、finally、finalize 有什么区别"></a>final、finally、finalize 有什么区别</h2><ul>
+<li>final：是修饰符，如果修饰类，此类不能被继承；如果修饰方法和变量，则表示此方法和此变量不能在被改变，只能使用。</li>
+<li>finally：是 try{} catch{} finally{} 最后一部分，表示不论发生任何情况都会执行，finally 部分可以省略，但如果 finally 部分存在，则一定会执行 finally 里面的代码。</li>
+<li>finalize： 是 Object 类的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h2 id="try-catch-finally-中哪个部分可以省略？"><a href="#try-catch-finally-中哪个部分可以省略？" class="headerlink" title="try-catch-finally 中哪个部分可以省略？"></a>try-catch-finally 中哪个部分可以省略？</h2><p>try-catch-finally 其中 catch 和 finally 都可以被省略，但是不能同时省略，也就是说有 try 的时候，必须后面跟一个 catch 或者 finally。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public static void omitFinally() &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			int i &#x3D; 0;</span><br><span class="line">			i +&#x3D; 1;</span><br><span class="line">			System.out.println(i);</span><br><span class="line">		&#125; catch (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	public static void omitCatch() &#123;</span><br><span class="line">		int i &#x3D; 0;</span><br><span class="line">		try &#123;</span><br><span class="line">			i +&#x3D; 1;</span><br><span class="line">		&#125; finally &#123;</span><br><span class="line">			i &#x3D; 10;</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(i);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="try-catch-finally-中，如果-catch-中-return-了，finally-还会执行吗？"><a href="#try-catch-finally-中，如果-catch-中-return-了，finally-还会执行吗？" class="headerlink" title="try-catch-finally 中，如果 catch 中 return 了，finally 还会执行吗？"></a>try-catch-finally 中，如果 catch 中 return 了，finally 还会执行吗？</h2><p>finally 一定会执行，即使是 catch 中 return 了，catch 中的 return 会等 finally 中的代码执行完之后，才会执行。</p>
+<p><strong>在以下 4 种特殊情况下，<code>finally</code> 块不会被执行：</strong></p>
+<ul>
+<li>在 <code>finally</code> 语句块中发生了异常。</li>
+<li>在前面的代码中用了 <code>System.exit()</code> 退出程序。</li>
+<li>程序所在的线程死亡。</li>
+<li>关闭 CPU。</li>
+</ul>
+<h2 id="常见的异常类有哪些？"><a href="#常见的异常类有哪些？" class="headerlink" title="常见的异常类有哪些？"></a>常见的异常类有哪些？</h2><ul>
+<li>NullPointerException 当应用程序试图访问空对象时，则抛出该异常。</li>
+<li>SQLException 提供关于数据库访问错误或其他错误信息的异常。</li>
+<li>IndexOutOfBoundsException指示某排序索引（例如对数组、字符串或向量的排序）超出范围时抛出。</li>
+<li>NumberFormatException当应用程序试图将字符串转换成一种数值类型，但该字符串不能转换为适当格式时，抛出该异常。</li>
+<li>FileNotFoundException当试图打开指定路径名表示的文件失败时，抛出此异常。</li>
+<li>IOException当发生某种I/O异常时，抛出此异常。此类是失败或中断的I/O操作生成的异常的通用类。</li>
+<li>ClassCastException当试图将对象强制转换为不是实例的子类时，抛出该异常。</li>
+<li>ArrayStoreException试图将错误类型的对象存储到一个对象数组时抛出的异常。</li>
+<li>IllegalArgumentException 抛出的异常表明向方法传递了一个不合法或不正确的参数。</li>
+<li>ArithmeticException当出现异常的运算条件时，抛出此异常。例如，一个整数“除以零”时，抛出此类的一个实例。</li>
+<li>NegativeArraySizeException如果应用程序试图创建大小为负的数组，则抛出该异常。</li>
+<li>NoSuchMethodException无法找到某一特定方法时，抛出该异常。</li>
+<li>SecurityException由安全管理器抛出的异常，指示存在安全侵犯。</li>
+<li>UnsupportedOperationException当不支持请求的操作时，抛出该异常。</li>
+<li>RuntimeExceptionRuntimeException 是那些可能在Java虚拟机正常运行期间抛出的异常的超类。</li>
 </ul>
 
           
