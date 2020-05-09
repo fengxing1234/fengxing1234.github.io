@@ -262,6 +262,213 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/git_md/git%E5%91%BD%E4%BB%A4%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/09/git_md/git%E5%91%BD%E4%BB%A4%E9%9B%86/" itemprop="url">git命令集</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-09T14:32:33+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/09/git_md/git%E5%91%BD%E4%BB%A4%E9%9B%86/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/git_md/git%E5%91%BD%E4%BB%A4%E9%9B%86/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p><img src="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015120901.png" alt="img"></p>
+<ul>
+<li>Workspace：工作区</li>
+<li>Index / Stage：暂存区</li>
+<li>Repository：仓库区（或本地仓库）</li>
+<li>Remote：远程仓库</li>
+</ul>
+<h3 id="新建代码库"><a href="#新建代码库" class="headerlink" title="新建代码库"></a>新建代码库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录新建一个Git代码库</span></span><br><span class="line">$ git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建一个目录，将其初始化为Git代码库</span></span><br><span class="line">$ git init [project-name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载一个项目和它的整个代码历史</span></span><br><span class="line">$ git <span class="built_in">clone</span> [url]</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加-删除文件"><a href="#增加-删除文件" class="headerlink" title="增加/删除文件"></a>增加/删除文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加指定文件到暂存区</span></span><br><span class="line">$ git add [file1] [file2] ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加指定目录到暂存区，包括子目录</span></span><br><span class="line">$ git add [dir]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加当前目录的所有文件到暂存区</span></span><br><span class="line">$ git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加每个变化前，都会要求确认</span></span><br><span class="line"><span class="comment"># 对于同一个文件的多处变化，可以实现分次提交</span></span><br><span class="line">$ git add -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除工作区文件，并且将这次删除放入暂存区</span></span><br><span class="line">$ git rm [file1] [file2] ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止追踪指定文件，但该文件会保留在工作区</span></span><br><span class="line">$ git rm --cached [file]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 改名文件，并且将这个改名放入暂存区</span></span><br><span class="line">$ git mv [file-original] [file-renamed]</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码提交"><a href="#代码提交" class="headerlink" title="代码提交"></a>代码提交</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提交暂存区到仓库区</span></span><br><span class="line">$ git commit -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交暂存区的指定文件到仓库区</span></span><br><span class="line">$ git commit [file1] [file2] ... -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交工作区自上次commit之后的变化，直接到仓库区</span></span><br><span class="line">$ git commit -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交时显示所有diff信息</span></span><br><span class="line">$ git commit -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用一次新的commit，替代上一次提交</span></span><br><span class="line"><span class="comment"># 如果代码没有任何新变化，则用来改写上一次commit的提交信息</span></span><br><span class="line">$ git commit --amend -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重做上一次commit，并包括指定文件的新变化</span></span><br><span class="line">$ git commit --amend [file1] [file2] ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有本地分支</span><br><span class="line">$ git branch</span><br><span class="line"></span><br><span class="line"># 列出所有远程分支</span><br><span class="line">$ git branch -r</span><br><span class="line"></span><br><span class="line"># 列出所有本地分支和远程分支</span><br><span class="line">$ git branch -a</span><br><span class="line"></span><br><span class="line"># 新建一个分支，但依然停留在当前分支</span><br><span class="line">$ git branch [branch-name]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，并切换到该分支</span><br><span class="line">$ git checkout -b [branch]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，指向指定commit</span><br><span class="line">$ git branch [branch] [commit]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，与指定的远程分支建立追踪关系</span><br><span class="line">$ git branch --track [branch] [remote-branch]</span><br><span class="line"></span><br><span class="line"># 切换到指定分支，并更新工作区</span><br><span class="line">$ git checkout [branch-name]</span><br><span class="line"></span><br><span class="line"># 切换到上一个分支</span><br><span class="line">$ git checkout -</span><br><span class="line"></span><br><span class="line"># 建立追踪关系，在现有分支与指定的远程分支之间</span><br><span class="line">$ git branch --set-upstream [branch] [remote-branch]</span><br><span class="line"></span><br><span class="line"># 合并指定分支到当前分支</span><br><span class="line">$ git merge [branch]</span><br><span class="line"></span><br><span class="line"># 选择一个commit，合并进当前分支</span><br><span class="line">$ git cherry-pick [commit]</span><br><span class="line"></span><br><span class="line"># 删除分支</span><br><span class="line">$ git branch -d [branch-name]</span><br><span class="line"></span><br><span class="line"># 删除远程分支</span><br><span class="line">$ git push origin --delete [branch-name]</span><br><span class="line">$ git branch -dr [remote&#x2F;branch]</span><br></pre></td></tr></table></figure>
+
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有tag</span><br><span class="line">$ git tag</span><br><span class="line"></span><br><span class="line"># 新建一个tag在当前commit</span><br><span class="line">$ git tag [tag]</span><br><span class="line"></span><br><span class="line"># 新建一个tag在指定commit</span><br><span class="line">$ git tag [tag] [commit]</span><br><span class="line"></span><br><span class="line"># 删除本地tag</span><br><span class="line">$ git tag -d [tag]</span><br><span class="line"></span><br><span class="line"># 删除远程tag</span><br><span class="line">$ git push origin :refs&#x2F;tags&#x2F;[tagName]</span><br><span class="line"></span><br><span class="line"># 查看tag信息</span><br><span class="line">$ git show [tag]</span><br><span class="line"></span><br><span class="line"># 提交指定tag</span><br><span class="line">$ git push [remote] [tag]</span><br><span class="line"></span><br><span class="line"># 提交所有tag</span><br><span class="line">$ git push [remote] --tags</span><br><span class="line"></span><br><span class="line"># 新建一个分支，指向某个tag</span><br><span class="line">$ git checkout -b [branch] [tag]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"># 显示有变更的文件</span><br><span class="line">$ git status</span><br><span class="line"></span><br><span class="line"># 显示当前分支的版本历史</span><br><span class="line">$ git log</span><br><span class="line"></span><br><span class="line"># 显示commit历史，以及每次commit发生变更的文件</span><br><span class="line">$ git log --stat</span><br><span class="line"></span><br><span class="line"># 搜索提交历史，根据关键词</span><br><span class="line">$ git log -S [keyword]</span><br><span class="line"></span><br><span class="line"># 显示某个commit之后的所有变动，每个commit占据一行</span><br><span class="line">$ git log [tag] HEAD --pretty&#x3D;format:%s</span><br><span class="line"></span><br><span class="line"># 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件</span><br><span class="line">$ git log [tag] HEAD --grep feature</span><br><span class="line"></span><br><span class="line"># 显示某个文件的版本历史，包括文件改名</span><br><span class="line">$ git log --follow [file]</span><br><span class="line">$ git whatchanged [file]</span><br><span class="line"></span><br><span class="line"># 显示指定文件相关的每一次diff</span><br><span class="line">$ git log -p [file]</span><br><span class="line"></span><br><span class="line"># 显示过去5次提交</span><br><span class="line">$ git log -5 --pretty --oneline</span><br><span class="line"></span><br><span class="line"># 显示所有提交过的用户，按提交次数排序</span><br><span class="line">$ git shortlog -sn</span><br><span class="line"></span><br><span class="line"># 显示指定文件是什么人在什么时间修改过</span><br><span class="line">$ git blame [file]</span><br><span class="line"></span><br><span class="line"># 显示暂存区和工作区的差异</span><br><span class="line">$ git diff</span><br><span class="line"></span><br><span class="line"># 显示暂存区和上一个commit的差异</span><br><span class="line">$ git diff --cached [file]</span><br><span class="line"></span><br><span class="line"># 显示工作区与当前分支最新commit之间的差异</span><br><span class="line">$ git diff HEAD</span><br><span class="line"></span><br><span class="line"># 显示两次提交之间的差异</span><br><span class="line">$ git diff [first-branch]...[second-branch]</span><br><span class="line"></span><br><span class="line"># 显示今天你写了多少行代码</span><br><span class="line">$ git diff --shortstat &quot;@&#123;0 day ago&#125;&quot;</span><br><span class="line"></span><br><span class="line"># 显示某次提交的元数据和内容变化</span><br><span class="line">$ git show [commit]</span><br><span class="line"></span><br><span class="line"># 显示某次提交发生变化的文件</span><br><span class="line">$ git show --name-only [commit]</span><br><span class="line"></span><br><span class="line"># 显示某次提交时，某个文件的内容</span><br><span class="line">$ git show [commit]:[filename]</span><br><span class="line"></span><br><span class="line"># 显示当前分支的最近几次提交</span><br><span class="line">$ git reflog</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a>配置相关</h2><p>Git的设置文件为<code>.gitconfig</code>，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 显示当前的Git配置</span><br><span class="line">$ git config --list</span><br><span class="line"></span><br><span class="line"># 编辑Git配置文件</span><br><span class="line">$ git config -e [--global]</span><br><span class="line"></span><br><span class="line"># 设置提交代码时的用户信息</span><br><span class="line">$ git config [--global] user.name &quot;[name]&quot;</span><br><span class="line">$ git config [--global] user.email &quot;[email address]&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h2><h3 id="提交数统计"><a href="#提交数统计" class="headerlink" title="提交数统计"></a>提交数统计</h3><p>统计提交(commit)次数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --oneline | wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="统计每个人增删行数"><a href="#统计每个人增删行数" class="headerlink" title="统计每个人增删行数"></a>统计每个人增删行数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --format&#x3D;&#39;%aN&#39; | sort -u | while read name; do echo -en &quot;$name\t&quot;; git log --author&#x3D;&quot;$name&quot; --pretty&#x3D;tformat: --numstat | awk &#39;&#123; add +&#x3D; $1; subs +&#x3D; $2; loc +&#x3D; $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#39; -; done</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fengxing	added lines: 56705, removed lines: 21012, total lines: 35693</span><br><span class="line">jiaozhegang	added lines: 10477, removed lines: 10156, total lines: 321</span><br><span class="line">unknown	added lines: 10469, removed lines: 14, total lines: 10455</span><br><span class="line">wangkai	added lines: 5, removed lines: 4, total lines: 1</span><br><span class="line">zhangyun	added lines: 33495, removed lines: 8966, total lines: 24529</span><br><span class="line">zrj	added lines: 7841, removed lines: 15648, total lines: -7807</span><br><span class="line">冯海超	added lines: 2, removed lines: 1, total lines: 1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">71012679	added lines: 2, removed lines: 2, total lines: 0</span><br><span class="line">chouyanhejiutangtou	added lines: 8979, removed lines: 1925, total lines: 7054</span><br><span class="line">fengxing	added lines: 26709, removed lines: 7520, total lines: 19189</span><br><span class="line">unknown	added lines: , removed lines: , total lines:</span><br><span class="line">wangkai	added lines: 17284, removed lines: 8779, total lines: 8505</span><br><span class="line">zhangyun	added lines: 22444, removed lines: 6506, total lines: 15938</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>git log 参数说明：<br>–author 指定作者<br>–stat 显示每次更新的文件修改统计信息，会列出具体文件列表<br>–shortstat 统计每个commit 的文件修改行数，包括增加，删除，但不列出文件列表：<br>–numstat 统计每个commit 的文件修改行数，包括增加，删除，并列出文件列表：<br>-p 选项展开显示每次提交的内容差异，用 -2 则仅显示最近的两次更新<br>例如：git log -p -2<br>–name-only 仅在提交信息后显示已修改的文件清单<br>–name-status 显示新增、修改、删除的文件清单<br>–abbrev-commit 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符<br>–relative-date 使用较短的相对时间显示（比如，“2 weeks ago”）<br>–graph 显示 ASCII 图形表示的分支合并历史<br>–pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）<br>例如： git log –pretty=oneline ; git log –pretty=short ; git log –pretty=full ; git log –pretty=fuller<br>–pretty=tformat: 可以定制要显示的记录格式，这样的输出便于后期编程提取分析<br>例如：git log –pretty=format:””%h - %an, %ar : %s””<br>下面列出了常用的格式占位符写法及其代表的意义。<br>选项 说明<br>%H 提交对象（commit）的完整哈希字串<br>%h 提交对象的简短哈希字串<br>%T 树对象（tree）的完整哈希字串<br>%t 树对象的简短哈希字串<br>%P 父对象（parent）的完整哈希字串<br>%p 父对象的简短哈希字串<br>%an 作者（author）的名字<br>%ae 作者的电子邮件地址<br>%ad 作者修订日期（可以用 -date= 选项定制格式）<br>%ar 作者修订日期，按多久以前的方式显示<br>%cn 提交者(committer)的名字<br>%ce 提交者的电子邮件地址<br>%cd 提交日期<br>%cr 提交日期，按多久以前的方式显示<br>%s 提交说明<br>–since 限制显示输出的范围，<br>例如： git log –since=2.weeks 显示最近两周的提交<br>选项 说明<br>-(n) 仅显示最近的 n 条提交<br>–since, –after 仅显示指定时间之后的提交。<br>–until, –before 仅显示指定时间之前的提交。<br>–author 仅显示指定作者相关的提交。<br>–committer 仅显示指定提交者相关的提交。</p>
+</blockquote>
+<h3 id="查看git上的个人代码量："><a href="#查看git上的个人代码量：" class="headerlink" title="查看git上的个人代码量："></a>查看git上的个人代码量：</h3><p>使用的使用把<code>fengxing</code>换成自己的用户名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --author&#x3D;&quot;fengxing&quot; --pretty&#x3D;tformat: --numstat | awk &#39;&#123; add +&#x3D; $1; subs +&#x3D; $2; loc +&#x3D; $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#39; -</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码总行数"><a href="#代码总行数" class="headerlink" title="代码总行数"></a>代码总行数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . &quot;(&quot; -name &quot;*.java&quot; &quot;)&quot; -print | xargs wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="贡献者统计"><a href="#贡献者统计" class="headerlink" title="贡献者统计"></a>贡献者统计</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty&#x3D;&#39;%aN&#39; | sort -u | wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看仓库提交者排名前-5"><a href="#查看仓库提交者排名前-5" class="headerlink" title="查看仓库提交者排名前 5"></a>查看仓库提交者排名前 5</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty&#x3D;&#39;%aN&#39; | sort | uniq -c | sort -k1 -n -r | head -n 5</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/%E7%BA%A2%E9%BB%91%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1097,180 +1304,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="url">Android面试基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T23:03:36+08:00">
-                2020-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
-                    <span itemprop="name">面试</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Android基础面试题详解"><a href="#Android基础面试题详解" class="headerlink" title="Android基础面试题详解"></a>Android基础面试题详解</h1><p><img src="https://img-blog.csdnimg.cn/2020041121370949.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70#pic_center" alt="Android面试知识框架"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1520,6 +1553,13 @@
 <li>动态判断对象的年龄。如果Survivor区中相同年龄的所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象可以直接进入老年代。</li>
 <li>空间分配担保。每次进行Minor GC时，JVM会计算Survivor区移至老年区的对象的平均大小，如果这个值大于老年区的剩余值大小则进行一次Full GC，如果小于检查HandlePromotionFailure设置，如果true则只进行Monitor GC,如果false则进行Full GC。</li>
 </ul>
+<h1 id="Java中的堆栈"><a href="#Java中的堆栈" class="headerlink" title="Java中的堆栈"></a>Java中的堆栈</h1><p><strong>栈内存</strong></p>
+<p>在函数中定义的基本类型的变量和对象的引用变量都是在函数的栈内存中分配。</p>
+<p>当在一段代码块中声明了一个变量时，java就会在栈内存中为这个变量分配内存空间，当超过变量的作用域之后，java也会自动释放为该变量分配的空间，而这个回收的空间可以即刻用作他用。</p>
+<p><strong>堆内存</strong></p>
+<p>堆内存用于存放由new创建的对象和数组。</p>
+<p>在堆内存中分配的内存空间，由java虚拟机自动垃圾回收器来管理。在堆中产生了一个数组或者对象后，还可以在栈中定义一个特殊的变量，变量的值就等于数组或对象在堆内存中的首地址，而这个栈中的特殊变量，也就成为数组或对象的引用变量。以后可以在程序中使用栈内存中的引用变量访问堆内存中的数组或对象了。引用变量相当于是为数组或对象起的一个别名，或者是代号。</p>
+<p>数组和对象在没有引用变量指向它的时候，才变成垃圾，不能被继续使用，但是仍然会占用堆内存空间，而后在一个不确定的时间内，由java虚拟机自动垃圾回收器回收，这也是java程序为什么会占用很大内存的原因。</p>
 <h1 id="GC算法-垃圾回收"><a href="#GC算法-垃圾回收" class="headerlink" title="GC算法 垃圾回收"></a>GC算法 垃圾回收</h1><ul>
 <li>垃圾：无任何对象引用的对象。</li>
 <li>回收：清理“垃圾”占用的内存空间而非对象本身。</li>
@@ -1664,9 +1704,14 @@
 <p>原因：<br>java在编译Integer i = 100 ;时，会翻译成为Integer i = Integer.valueOf(100)；，而java API中对Integer类型的valueOf的定义如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;public static Integer valueOf(int i)&#123;</span><br><span class="line">  assert IntegerCache.high &gt;&#x3D; 127;</span><br><span class="line">  if (i &gt;&#x3D; IntegerCache.low &amp;&amp; i &lt;&#x3D; IntegerCache.high)&#123;</span><br><span class="line">      return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">  &#125;</span><br><span class="line">  return new Integer(i);</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
 
-
 </blockquote>
 </li>
+</ul>
+<h2 id="数组与链表的区别"><a href="#数组与链表的区别" class="headerlink" title="数组与链表的区别"></a>数组与链表的区别</h2><ul>
+<li>数组从栈中分配空间，对程序员方便快速，自由度小。</li>
+<li>链表从堆中分配内存。自由度大但申请管理比较麻烦。</li>
+<li>数组必须事先定义固定的长度（元素个数），不能适应数据动态地增减情况（数据插入、删除比较麻烦）。当数据增加时，可能会超出数组的最大空间（越界）；当数据减少时，造成内存浪费。</li>
+<li>链表动态地进行存储分配，可以适应数据动态地增减情况（数据插入删除简单）（数组中插入、删除数据项时，需要移动其他项），但链表查找元素时需要遍历整个链表。</li>
 </ul>
 <h1 id="Java自动装箱与拆箱"><a href="#Java自动装箱与拆箱" class="headerlink" title="Java自动装箱与拆箱"></a>Java自动装箱与拆箱</h1><h2 id="什么是自动装箱、拆箱"><a href="#什么是自动装箱、拆箱" class="headerlink" title="什么是自动装箱、拆箱"></a>什么是自动装箱、拆箱</h2><p>装箱就是 自动将基本数据类型转换为包装器类型；拆箱就是 自动将包装器类型转换为基本数据类型。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i = <span class="number">10</span>;  <span class="comment">//装箱</span></span><br><span class="line"><span class="keyword">int</span> n = i;   <span class="comment">//拆箱</span></span><br></pre></td></tr></table></figure>
@@ -2198,299 +2243,135 @@
 <li>抽象方法比接口速度快。接口需要时间去寻找在类中实现的方法，故速度较慢。</li>
 <li>抽象类是对事物的一种抽象，描述的是某一类特性的事物。表示 这个对象是什么。（is-a关系——强调所属关系）;接口是对行为功能的抽象，描述是否具备某种行为特征。表示 这个对象能做什么。（has-a关系——强调功能实现）</li>
 </ul>
+<h1 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a>深拷贝和浅拷贝</h1><h2 id="对象的创建方式"><a href="#对象的创建方式" class="headerlink" title="对象的创建方式"></a>对象的创建方式</h2><h3 id="使用new操作符创建一个对象"><a href="#使用new操作符创建一个对象" class="headerlink" title="使用new操作符创建一个对象"></a>使用new操作符创建一个对象</h3><p>new操作符的本意是分配内存。程序执行到new操作符时， 首先去看new操作符后面的类型，因为知道了类型，才能知道要分配多大的内存空间。分配完内存之后，再调用构造函数，填充对象的各个域，这一步叫做对象的初始化，构造方法返回后，一个对象创建完毕，可以把他的引用（地址）发布到外部，在外部就可以使用这个引用操纵这个对象。</p>
+<h3 id="使用clone方法复制一个对象"><a href="#使用clone方法复制一个对象" class="headerlink" title="使用clone方法复制一个对象"></a>使用clone方法复制一个对象</h3><p>clone在第一步是和new相似的， 都是分配内存，调用clone方法时，分配的内存和源对象（即调用clone方法的对象）相同，然后再使用原对象中对应的各个域，填充新对象的域， 填充完成之后，clone方法返回，一个新的相同的对象被创建，同样可以把这个新对象的引用发布到外部。</p>
+<h2 id="clone的使用"><a href="#clone的使用" class="headerlink" title="clone的使用"></a>clone的使用</h2><ul>
+<li><p>实现Cloneable接口</p>
+</li>
+<li><p>重写Object中clone方法，定位为public</p>
+</li>
+<li><p>调用super.clone();</p>
+</li>
+<li><p>实现try catch 捕获异常</p>
+</li>
+<li><p>clone默认实现的是浅拷贝。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Book implements Cloneable &#123;</span><br><span class="line">	@Override</span><br><span class="line">    public Object clone() throws CloneNotSupportedException &#123;</span><br><span class="line">        return (Book)super.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url">Java设计模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T23:03:36+08:00">
-                2020-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
-                    <span itemprop="name">面试</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="依赖（Dependency）"><a href="#依赖（Dependency）" class="headerlink" title="依赖（Dependency）"></a>依赖（Dependency）</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>依赖是类与类之间的连接，依赖关系表示一个类依赖于另一个类的定义，通俗来讲就是需要。</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>一个人(Person)可以买车(Car)和房子(House),Person类依赖于Car类和House类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String ... args)&#123;</span><br><span class="line">        &#x2F;&#x2F;TODO:</span><br><span class="line"></span><br><span class="line">    Person person &#x3D; new Person();</span><br><span class="line">    person.buy(new House());</span><br><span class="line">    person.buy(new Car());</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class Person&#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;表示依赖House</span><br><span class="line">    public void buy(House house)&#123;&#125;</span><br><span class="line">    &#x2F;&#x2F;表示依赖Car</span><br><span class="line">    public void buy(Car car)&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class House&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class Car&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="依赖倒置-Dependence-Inversion-Principle"><a href="#依赖倒置-Dependence-Inversion-Principle" class="headerlink" title="依赖倒置(Dependence Inversion Principle)"></a>依赖倒置(Dependence Inversion Principle)</h1><h2 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h2><p>高层模块不应该依赖低层模块，二者都该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象；通俗来讲，依赖倒置原则的本质就是通过抽象（接口或抽象类）使个各类或模块的实现彼此独立，互不影响，实现模块间的松耦合。</p>
-<p>类A直接依赖类B，假如要将类A改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑；类B和类C是低层模块，负责基本的原子操作；假如修改类A，会给程序带来不必要的风险。此时将类A修改为依赖接口interface，类B和类C各自实现接口interface，类A通过接口interface间接与类B或者类C发生联系，则会大大降低修改类A的几率。</p>
-<h2 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h2><p>不使用依赖倒置，每次出行都需要修改Person类代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line">    private Bike mBike;</span><br><span class="line">    private Car mCar;</span><br><span class="line">    private Train mTrain;</span><br><span class="line"></span><br><span class="line">    public Person()&#123;</span><br><span class="line">        mBike &#x3D; new Bike();</span><br><span class="line">        &#x2F;&#x2F;mCar &#x3D; new Car();</span><br><span class="line">&#x2F;&#x2F;        mTrain &#x3D; new Train();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mBike.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person person &#x3D; new Person();</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>（2）使用依赖倒置，上层模块不应该依赖底层模块，它们都应该依赖于抽象。抽象不应该依赖于细节，细节应该依赖于抽象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;    private Bike mBike;</span><br><span class="line">    private Car mCar;</span><br><span class="line">    private Train mTrain;</span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person()&#123;</span><br><span class="line">&#x2F;&#x2F;        mBike &#x3D; new Bike();</span><br><span class="line">        &#x2F;&#x2F;mCar &#x3D; new Car();</span><br><span class="line">       mDriveable &#x3D; new Train();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person person &#x3D; new Person();</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="控制反转-Inversion-of-Control"><a href="#控制反转-Inversion-of-Control" class="headerlink" title="控制反转(Inversion of Control)"></a>控制反转(Inversion of Control)</h1><h2 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h2><p>IoC 是一种新的设计模式，它对上层模块与底层模块进行了更进一步的解耦。控制反转的意思是反转了上层模块对于底层模块的依赖控制。</p>
-<h2 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Person2 &#123;</span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person2(Driveable driveable)&#123;</span><br><span class="line">        this.mDriveable &#x3D; driveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:将 mDriveable 的实例化移到 Person 外面</span><br><span class="line">        Person2 person &#x3D; new Person2(new Car());</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>就这样无论出行方式怎么变化，Person 这个类都不需要更改代码了。<br>在上面代码中，Person 把内部依赖的创建权力移交给了 Person2。也就是说 Person 只关心依赖提供的功能，但并不关心依赖的创建。<br>其中Person2称为IoC容器（依赖注入的地方）</p>
-<h1 id="依赖注入-Dependency-injection"><a href="#依赖注入-Dependency-injection" class="headerlink" title="依赖注入(Dependency injection)"></a>依赖注入(Dependency injection)</h1><p>为了不因为依赖实现的变动而去修改 Person，也就是说以可能在 Driveable 实现类的改变下不改动 Person 这个类的代码，尽可能减少两者之间的耦合需要采用IoC 模式来进行改写代码。</p>
-<p>这个需要我们移交出对于依赖实例化的控制权，Person 无法实例化依赖了，它就需要在外部（IoC 容器）赋值给它，这个赋值的动作有个专门的术语叫做注入（injection），需要注意的是在 IoC 概念中，这个注入依赖的地方被称为 IoC 容器，但在依赖注入概念中，一般被称为注射器 （injector)。</p>
-<p>表达通俗一点就是：我不想自己实例化依赖，你（injector）创建它们，然后在合适的时候注入给我。</p>
-<p>实现依赖注入有 3 种方式：</p>
+<h3 id="clone规则"><a href="#clone规则" class="headerlink" title="clone规则"></a>clone规则</h3><ul>
+<li>如果变量是基本类型，克隆的是其<strong>值</strong>比如int、float等。</li>
+<li>如果变量是实例对象，则拷贝其<strong>地址引用</strong>，也就是说新对象和原来对象是共用实例变量的。</li>
+<li>若变量是string字符串，拷贝其地址引用，但是在修改时，它会从字符串池中重新生成一个新的字符串，原有的对象保持不变。</li>
+<li>clone默认实现的是浅拷贝。</li>
+</ul>
+<h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><p>浅拷贝是按位拷贝对象，它会创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值；如果属性是内存地址（引用类型），拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象。</p>
 <ul>
-<li>构造函数中注入</li>
-<li>setter 方式注入</li>
-<li>接口注入</li>
+<li>如果原型对象的成员变量是值类型，将复制一份给克隆对象，</li>
+<li>如果原型对象的成员变量是引用类型，则将引用类型的地址复制一份给克隆对象。<strong>也就是说原型对象和克隆对象的成员变量指向相同的内存地址</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 接口方式注入</span><br><span class="line"> * 接口的存在，表明了一种依赖配置的能力。</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface DepedencySetter &#123;</span><br><span class="line">    void set(Driveable driveable);</span><br><span class="line">&#125;</span><br><span class="line">public class Person2  implements DepedencySetter &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;接口方式注入</span><br><span class="line">    @Override</span><br><span class="line">    public void set(Driveable driveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;构造函数注入</span><br><span class="line">    public Person2(Driveable driveable)&#123;</span><br><span class="line">        this.mDriveable &#x3D; driveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;setter 方式注入</span><br><span class="line">    public void setDriveable(Driveable mDriveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person2 person &#x3D; new Person2(new Car());</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Java代理模式"><a href="#Java代理模式" class="headerlink" title="Java代理模式"></a>Java代理模式</h1><h2 id="代理模式基本概念及分类"><a href="#代理模式基本概念及分类" class="headerlink" title="代理模式基本概念及分类"></a>代理模式基本概念及分类</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。</p>
-<p>例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务，如电话预约，提供额外服务的同时，会收取一定金额的手续费。也可以将原有的功能去掉，如代售处不能提供退票服务。</p>
-<h3 id="代理模式模型"><a href="#代理模式模型" class="headerlink" title="代理模式模型"></a>代理模式模型</h3><p>代理模式一般设计到角色有4 种：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-8ec91452d46a20ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>在深拷贝中无论值类型还是引用类型都会复制一份给克隆对象，深拷贝将原型对象的所有引用对象也复制一份给克隆对象。</p>
+<p>深拷贝会拷贝所有的属性,并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝。深拷贝相比于浅拷贝速度较慢并且花销较大。</p>
+<p>如果想要深拷贝一个对象， 这个对象必须要实现Cloneable接口，实现clone方法，并且在clone方法内部，把该对象引用的其他对象也要clone一份 ， 这就要求这个被引用的对象必须也要实现Cloneable接口并且实现clone方法。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-c2b9f8dbacd2bffc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-76e0e5813178abab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h1 id="Java多线程之同步集合与并发集合"><a href="#Java多线程之同步集合与并发集合" class="headerlink" title="Java多线程之同步集合与并发集合"></a>Java多线程之同步集合与并发集合</h1><h2 id="同步集合类"><a href="#同步集合类" class="headerlink" title="同步集合类"></a>同步集合类</h2><p>包括<code>Hashtable</code>、<code>Vector</code>、同步集合包装类，<code>Collections.synchronizedMap()</code>和<code>Collections.synchronizedList()</code>。</p>
+<h2 id="并发集合类"><a href="#并发集合类" class="headerlink" title="并发集合类"></a>并发集合类</h2><p>包括<code>ConcurrentHashMap</code>、<code>CopyOnWriteArrayList</code>、<code>CopyOnWriteHashSet</code></p>
+<p>同步集合比并发集合会慢得多，主要原因是锁，同步集合会对整个Map或List加锁。</p>
 <ul>
-<li><strong>抽象角色</strong>：对应代理接口（&lt;&lt; interface &gt;&gt;Subject），用来定义代理类和委托类的公共对外方法/接口；</li>
-<li><strong>真实角色</strong>：对应委托类（接口实现类RealSubject），真正实现业务逻辑的类，是代理角色所代表的真实对象，是最终要引用的对象；</li>
-<li><strong>代理角色</strong>：对应代理类（Proxy），用来代理和封装真实角色。代理角色内部含有对真实对象的引用，从而可以操作真实对象。同时，代理对象可以在执行真是对象操作时，添加或去除其他操作，相当于对真实对象进行封装；</li>
-<li><strong>客户角色</strong>：对应客户端，使用代理类和主题接口完成一些工作。</li>
+<li><strong>ConcurrentHashMap：</strong>把整个Map 划分成几个片段，只对相关的几个片段上锁，同时允许多线程访问其他未上锁的片段。</li>
+<li><strong>CopyOnWriteArrayList：</strong>允许多个线程以非同步的方式读，当有线程写的时候它会将整个List复制一个副本给它。如果在读多写少这种对并发集合有利的条件下使用并发集合，这会比使用同步集合更具有可伸缩性。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20190601204859723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>在代理模式中真实角色对于客户端角色来说的透明的，也就是客户端不知道也无需知道真实角色的存在。 为了保持行为的一致性，代理角色和真实角色通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</p>
-<p>通过代理角色这中间一层，能有效控制对真实角色（委托类对象）的直接访问，也可以很好地隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</p>
-<h3 id="代理模式特点"><a href="#代理模式特点" class="headerlink" title="代理模式特点"></a>代理模式特点</h3><h4 id="代理模式优点"><a href="#代理模式优点" class="headerlink" title="代理模式优点"></a>代理模式优点</h4><ul>
-<li>隐藏委托类的实现，调用者只需要和代理类进行交互即可。</li>
-<li>解耦，在不改变委托类代码情况下做一些额外处理，比如添加初始判断及其他公共操作</li>
-</ul>
-<h2 id="代理模式实现方式"><a href="#代理模式实现方式" class="headerlink" title="代理模式实现方式"></a>代理模式实现方式</h2><p>根据代理类的<strong>生成时间</strong>不同可以将代理分为静态代理和动态代理。</p>
-<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>所谓静态代理也就是在程序运行前就已经存在代理类的.class文件，代理类和委托类的关系在运行前就确定了。</p>
-<p>接口</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>被代理对象Car</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="继承方式"><a href="#继承方式" class="headerlink" title="继承方式"></a>继承方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car2 extends Car &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		super.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="聚合方式"><a href="#聚合方式" class="headerlink" title="聚合方式"></a>聚合方式</h4><p>聚合：在代理中引用被代理对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Car3 implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public Car3(Car car) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.car &#x3D; car;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Car car;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		car.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="继承方式与聚合方式对比"><a href="#继承方式与聚合方式对比" class="headerlink" title="继承方式与聚合方式对比"></a>继承方式与聚合方式对比</h4><p>聚合方式比继承方式更适合代理模式：适合功能的叠加（可灵活传递，组合）。</p>
-<p>记录日志代理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class CarLogProxy implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public CarLogProxy(Moveable m) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.m &#x3D; m;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Moveable m;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		System.out.println(&quot;日志开始....&quot;);</span><br><span class="line">		m.move();</span><br><span class="line">		System.out.println(&quot;日志结束....&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>记录时间代理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	Car car &#x3D; new Car();</span><br><span class="line">	CarLogProxy clp &#x3D; new CarLogProxy(car);</span><br><span class="line">	CarTimeProxy ctp &#x3D; new CarTimeProxy(clp);</span><br><span class="line">	ctp.move();&#x2F;&#x2F;先记录日志后记录时间</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果要按照上述的方法使用代理模式，那么真实角色(委托类)必须是事先已经存在的，并将其作为代理对象的内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀；此外，如果事先并不知道真实角色（委托类），该如何使用代理呢？这个问题可以通过Java的动态代理类来解决。</p>
-<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>通过动态代理可实现对不同类、不同方法的代理。动态代理的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件（.class）。代理类和委托类的关系在程序运行时确定。</p>
-<h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><p><strong>实现模式</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20190601211348201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>Java动态代理类位于java.lang.reflect包下，一般主要涉及到以下两个类：</p>
-<p><strong>Interface InvocationHandler</strong></p>
-<p>InvocationHandler是负责连接代理类和委托类的中间类必须实现的接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，每次生成动态代理对象都邀制定一个对应的调用处理器对象，通常在该方法中实现对委托类的代理访问。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public object invoke(Object obj,Method method,Object[] args)</span><br></pre></td></tr></table></figure>
-
-<p>在实际使用时，obj指代理类的实例，method指被代理的方法，args是该方法的参数数组。这个抽象方法在代理类中动态实现。</p>
-<p>该方法也是InvocationHandler接口所定义的唯一的一个方法，该方法负责集中处理动态代理类上的所有方法的调用。调用处理器根据这三个参数进行预处理或分派到委托类实例上执行。</p>
-<p><strong>Proxy class动态代理类</strong></p>
-<p>Proxy是 Java 动态代理机制的主类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static Object newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h)</span><br></pre></td></tr></table></figure>
-
-<p>返回代理类的一个实例，返回后的代理类可以当做被代理类使用（可使用被代理类在接口中声明过的方法）</p>
-<p>该方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</p>
-<h4 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h4><p><strong>步骤1：创建一个实现接口InvocationHandler的调用处理器，它必须实现invoke方法</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class TimeHandler implements InvocationHandler &#123;</span><br><span class="line">&#x2F;&#x2F;动态代理类对应的调用处理程序类（时间处理器）</span><br><span class="line">	public TimeHandler(Object target) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.target &#x3D; target;</span><br><span class="line">	&#125;</span><br><span class="line">&#x2F;&#x2F;代理类持有一个委托类的对象引用</span><br><span class="line">	private Object target;</span><br><span class="line">	</span><br><span class="line">	&#x2F;*</span><br><span class="line">	 * 参数：</span><br><span class="line">	 * proxy  被代理对象</span><br><span class="line">	 * method  被代理对象的方法</span><br><span class="line">	 * args 方法的参数</span><br><span class="line">	 * </span><br><span class="line">	 * 返回值：</span><br><span class="line">	 * Object  方法的返回值</span><br><span class="line">	 * *&#x2F;</span><br><span class="line">	@Override</span><br><span class="line">	public Object invoke(Object proxy, Method method, Object[] args)</span><br><span class="line">			throws Throwable &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		method.invoke(target);&#x2F;&#x2F;调用被代理对象的方法（Car的move方法）</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">		return null;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>TimeHandler实现了InvocationHandler的invoke方法，当代理对象的方法被调用时，invoke方法会被回调。其中proxy表示实现了公共代理方法的动态代理对象。</p>
-<p><strong>步骤2：创建被代理的类以及接口</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>代理类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>步骤3：调用Proxy的静态方法newProxyInstance，提供ClassLoader和代理接口类型数组动态创建一个代理类，并通过代理调用方法</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;客户端，使用代理类和主题接口完成功能</span><br><span class="line">public class Test &#123;</span><br><span class="line">	&#x2F;**</span><br><span class="line">	 * JDK动态代理测试类</span><br><span class="line">	 *&#x2F;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Car car &#x3D; new Car();</span><br><span class="line">		InvocationHandler h &#x3D; new TimeHandler(car);</span><br><span class="line">		Class&lt;?&gt; cls &#x3D; car.getClass();</span><br><span class="line">		&#x2F;**</span><br><span class="line">		 * loader  类加载器</span><br><span class="line">		 * interfaces  实现接口</span><br><span class="line">		 * h InvocationHandler</span><br><span class="line">		 *&#x2F;</span><br><span class="line">		Moveable m &#x3D; (Moveable)Proxy.newProxyInstance(cls.getClassLoader(),</span><br><span class="line">												cls.getInterfaces(), h);&#x2F;&#x2F;获得动态代理对象，动态代理对象与代理对象实现同一接口</span><br><span class="line">		m.move();&#x2F;&#x2F;调用动态代理的move方法</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码通过InvocationHandler handler=new TimeHandler(target);将委托对象作为构造方法的参数传递给了TimeHandler来作为代理方法调用的对象。当我们调用代理对象的move()方法时，该调用将会被转发到TimeHandler对象的invoke上从而达到动态代理的效果。</p>
-<p>所谓动态代理是这样一种class：它是运行时生成的class，该class需要实现一组interface，使用动态代理类时，必须实现InvocationHandler接口</p>
-<h3 id="静态代理与动态代理对比"><a href="#静态代理与动态代理对比" class="headerlink" title="静态代理与动态代理对比"></a>静态代理与动态代理对比</h3><h4 id="静态代理-1"><a href="#静态代理-1" class="headerlink" title="静态代理"></a>静态代理</h4><ul>
-<li>优点：<br>业务类只需要关注业务逻辑本身，保证了业务类的重用性。这是代理的共有优点。</li>
-<li>缺点：<ul>
-<li>代理对象的一个接口只服务于一种类型的对象，如果要代理的方法很多，势必要为每一种方法都进行代理，静态代理在程序规模稍大时就无法胜任了。</li>
-<li>如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度。</li>
-<li>采用静态代理模式，那么真实角色（委托类）必须事先已经存在的，并将其作为代理对象代理对象内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀。</li>
-</ul>
+<p>一般不需要多线程的情况，只用到HashMap、ArrayList，只要真正用到多线程的时候就一定要考虑同步。所以这时候才需要考虑同步集合或并发集合。</p>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>ConcurrentHashMap是由Segment数组结构和HashEntry数组结构组成。Segment是一种可重入锁ReentrantLock，在ConcurrentHashMap里扮演锁的角色，HashEntry则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment数组，Segment的结构和HashMap类似，是一种数组和链表结构， 一个Segment里包含一个HashEntry数组，每个HashEntry是一个链表结构的元素， 每个Segment守护者一个HashEntry数组里的元素,当对HashEntry数组的数据进行修改时，必须首先获得它对应的Segment锁。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-cefab31cd3461494.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h4 id="JDK1-7-amp-JDK1-8-对比"><a href="#JDK1-7-amp-JDK1-8-对比" class="headerlink" title="JDK1.7 &amp; JDK1.8 对比"></a>JDK1.7 &amp; JDK1.8 对比</h4><ol>
+<li><p>数据结构：取消了Segment分段锁的数据结构，取而代之的是数组+链表+红黑树的结构。</p>
 </li>
-</ul>
-<h4 id="动态代理-1"><a href="#动态代理-1" class="headerlink" title="动态代理"></a>动态代理</h4><ul>
-<li>优点<ul>
-<li>动态代理类的字节码在程序运行时由Java反射机制动态生成，无需程序员手工编写它的源代码。</li>
-<li>动态代理类不仅简化了编程工作，而且提高了软件系统的可扩展性，因为Java 反射机制可以生成任意类型的动态代理类。</li>
-</ul>
+<li><p>保证线程安全机制：JDK1.7采用segment的分段锁机制实现线程安全，其中segment继承自ReentrantLock。JDK1.8采用CAS+Synchronized保证线程安全。</p>
 </li>
-<li>缺点<ul>
-<li>JDK的动态代理机制只能代理实现了接口的类，而不能实现接口的类就不能实现JDK的动态代理，cglib是针对类来实现代理的，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，但因为采用的是继承，所以不能对final修饰的类进行代理。</li>
-</ul>
+<li><p>锁的粒度：原来是对需要进行数据操作的Segment加锁，现调整为对每个数组元素加锁（Node）。</p>
 </li>
+<li><p>链表转化为红黑树:定位结点的hash算法简化会带来弊端,Hash冲突加剧,因此在链表节点数量大于8时，会将链表转化为红黑树进行存储。</p>
+</li>
+<li><p>查询时间复杂度：从原来的遍历链表O(n)，变成遍历红黑树O(logN)。</p>
+</li>
+</ol>
+<h3 id="CopyOnWrite容器"><a href="#CopyOnWrite容器" class="headerlink" title="CopyOnWrite容器"></a>CopyOnWrite容器</h3><p>CopyOnWrite容器即写时复制的容器。通俗的理解是当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。这样做的好处是我们可以对CopyOnWrite容器进行并发的读，而不需要加锁，因为当前容器不会添加任何元素。所以CopyOnWrite容器也是一种读写分离的思想，读和写不同的容器。</p>
+<h4 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h4><p>在添加的时候是需要加锁的，否则多线程写的时候会Copy出N个副本出来。</p>
+<p>读的时候不需要加锁，如果读的时候有多个线程正在向ArrayList添加数据，读还是会读到旧的数据，因为写的时候不会锁住旧的ArrayList。</p>
+<h1 id="多线程开发"><a href="#多线程开发" class="headerlink" title="多线程开发"></a>多线程开发</h1><h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p><img src="https://upload-images.jianshu.io/upload_images/4118241-98c472afe493c25d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-891a1d42c08637a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h2 id="wait-与-sleep-的区别与联系"><a href="#wait-与-sleep-的区别与联系" class="headerlink" title="wait 与 sleep 的区别与联系"></a>wait 与 sleep 的区别与联系</h2><p>wait和sleep均能使线程处于等待状态</p>
+<ul>
+<li>wait方法定义在Object里面，基于对象锁，所有的对象都能使用（Java里面每一个对象都有隐藏锁，也叫监视器(monitor)。当一个线程进入一个synchronized方法的时候它会获得一个当前对象的锁。）；sleep方法定义在Thread里面，是基于当前线程。</li>
+<li>wait必须在同步环境（synchronized方法）下使用，否则会报IllegalMonitorStateException异常<br>sleep方法可在任意条件下使用</li>
+<li>wait/notify一起使用，用于线程间的通信。wait用于让线程进入等待状态，notify则唤醒正在等待的线程；sleep用于暂停当前线程的执行，它会在一定时间内释放CPU资源给其他线程执行，超过睡眠时间则会正常唤醒。</li>
+<li>在同步环境中调用wait方法会释放当前持有的锁；调用sleep则不会释放锁，一直持有锁（直到睡眠结束）</li>
 </ul>
+<h2 id="线程阻塞的原因"><a href="#线程阻塞的原因" class="headerlink" title="线程阻塞的原因"></a>线程阻塞的原因</h2><ul>
+<li>Thread.sleep(int millsecond) 调用 sleep 的线程会在一定时间内将 CPU 资源给其他线程执行，超过睡眠事件后唤醒。与是否持有同步锁无关。进程处于 TIMED_WAITING 状态</li>
+<li>线程执行一段同步代码（Synchronic）代码，但无法获取同步锁：同步锁用于实现线程同步执行，未获得同步锁而无法进入同步块的线程处于 BLOCKED 状态</li>
+<li>线程对象调用 wait 方法，进入同步块的线程发现运行条件不满足，此时会释放锁，并释放CPU，等待其他线程norify。此时线程处于 WAITING 状态</li>
+<li>执行阻塞式I/O操作，等待相关I/O设备（如键盘、网卡等），为了节省CPU资源，释放CPU。此时线程处于RUNNABLE状态。</li>
+</ul>
+<h2 id="线程控制方法"><a href="#线程控制方法" class="headerlink" title="线程控制方法"></a>线程控制方法</h2><p>JVM充分地利用现代多核处理器的强大性能。采用异步调用线程，提高使用性能，缺点就是会造成线程不安全。为了保证线程安全性，即确保Java内存模型的可见性、原子性和有序性。Java主要通过volatile、synchronized实现线程安全。</p>
+<h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><p>synchronized 规定了同一个时刻只允许一条线程可以进入临界区（互斥性），同时还保证了共享变量的内存可见性。此规则决定了持有同一个对象锁的多个同步块只能串行执行。</p>
+<p>Java中的每个对象都可以为锁：</p>
+<ul>
+<li>普通同步方法，锁是当前实例对象。</li>
+<li>静态同步方法，锁是当前类的class对象。</li>
+<li>同步代码块，锁是括号中的对象。</li>
+</ul>
+<p>wait/notify必须存在于synchronized块中。并且，这三个关键字针对的是同一个监视器（某个对象的监视器）。当某个线程并不持有监视器的使用权时，去wait或notify，会抛出java.lang.IllegalMonitorStateException。</p>
+<p>当某个线程wait之后，其他执行该同步快的线程可以进入该同步块执行。</p>
+<h4 id="锁的内部机制：从偏向锁到重量级锁"><a href="#锁的内部机制：从偏向锁到重量级锁" class="headerlink" title="锁的内部机制：从偏向锁到重量级锁"></a>锁的内部机制：从偏向锁到重量级锁</h4><h5 id="对象头和monitor"><a href="#对象头和monitor" class="headerlink" title="对象头和monitor"></a>对象头和monitor</h5><p>Java对象在内存中的存储结构主要有一下三个部分：</p>
+<ul>
+<li>对象头</li>
+<li>实例数据</li>
+<li>填充数据</li>
+</ul>
+<p>monitor是线程私有的数据结构，每一个线程都有一个可用monitor列表，同时还有一个全局的可用列表，先来看monitor的内部。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190718141919602.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>Owner：初始时为NULL表示当前没有任何线程拥有该monitor，当线程成功拥有该锁后保存线程唯一标识，当锁被释放时又设置为NULL；</li>
+<li>EntryQ：关联一个系统互斥锁（semaphore），阻塞所有试图锁住monitor失败的线程。</li>
+<li>RcThis：表示blocked或waiting在该monitor上的所有线程的个数。</li>
+<li>Nest：用来实现重入锁的计数。</li>
+<li>HashCode：保存从对象头拷贝过来的HashCode值（可能还包含GC age）。</li>
+<li>Candidate：用来避免不必要的阻塞或等待线程唤醒，因为每一次只有一个线程能够成功拥有锁，如果每次前一个释放锁的线程唤醒所有正在阻塞或等待的线程，会引起不必要的上下文切换（从阻塞到就绪然后因为竞争锁失败又被阻塞）从而导致性能严重下降。Candidate只有两种可能的值：0表示没有需要唤醒的线程，1表示要唤醒一个继任线程来竞争锁。</li>
+</ul>
+<p>在 java 虚拟机中，线程一旦进入到被synchronized修饰的方法或代码块时，指定的锁对象通过某些操作将对象头中的LockWord指向monitor 的起始地址与之关联，同时monitor 中的Owner存放拥有该锁的线程的唯一标识，确保一次只能有一个线程执行该部分的代码，线程在获取锁之前不允许执行该部分的代码。</p>
+<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>当线程执行到临界区（critical section）时，此时会利用CAS(Compare and Swap)操作，将线程ID插入到Markword中，同时修改偏向锁的标志位。</p>
+<p>此时偏向锁标志位为1。</p>
+<p><strong>偏向锁是jdk1.6引入的一项锁优化，其中的“偏”是偏心的偏。它的意思就是说，这个锁会偏向于第一个获得它的线程，在接下来的执行过程中，假如该锁没有被其他线程所获取，没有其他线程来竞争该锁，那么持有偏向锁的线程将永远不需要进行同步操作。</strong></p>
+<p><strong>在此线程之后的执行过程中，如果再次进入或者退出同一段同步块代码，并不再需要去进行加锁或者解锁操作，而是会做以下的步骤：</strong></p>
+<ul>
+<li>Load-and-test，也就是简单判断一下当前线程id是否与Markword当中的线程id是否一致.</li>
+<li>如果一致，则说明此线程已经成功获得了锁，继续执行下面的代码.</li>
+<li>如果不一致，则要检查一下对象是否还是可偏向，即“是否偏向锁”标志位的值。</li>
+<li>如果还未偏向，则利用CAS操作来竞争锁，也即是第一次获取锁时的操作。</li>
+<li>如果此对象已经偏向了，并且不是偏向自己，则说明存在了竞争。此时可能就要根据另外线程的情况，可能是重新偏向，也有可能是做偏向撤销，但大部分情况下就是升级成轻量级锁了。</li>
+</ul>
+<p>即偏向锁是针对于一个线程而言的，线程获得锁之后就不会进行解锁操作，节省了很多开销。为什么要这样做呢？因为经验表明，其实大部分情况下，都会是同一个线程进入同一块同步代码块的。这也是为什么会有偏向锁出现的原因。在Jdk1.6中，偏向锁的开关是默认开启的，适用于只有一个线程访问同步块的场景。</p>
+<p>下述代码中，当线程访问同步方法method1时，会在对象头（SynchronizedTest.class对象的对象头）和栈帧的锁记录中存储锁偏向的线程ID，下次该线程在进入method2，只需要判断对象头存储的线程ID是否为当前线程，而不需要进行CAS操作进行加锁和解锁（因为CAS原子指令虽然相对于重量级锁来说开销比较小但还是存在非常可观的本地延迟）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class SynchronizedTest &#123;</span><br><span class="line">    private static Object lock &#x3D; new Object();</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        method1();</span><br><span class="line">        method2();</span><br><span class="line">    &#125;</span><br><span class="line">    synchronized static void method1() &#123;&#125;</span><br><span class="line">    synchronized static void method2() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>当出现有两个线程来竞争锁的话，那么偏向锁就失效了，此时锁就会膨胀，升级为轻量级锁。锁撤销升级为轻量级锁之后，那么对象的Markword也会进行相应的的变化。下面先简单描述下锁撤销之后，升级为轻量级锁的过程：</p>
+<ul>
+<li>线程在自己的栈桢中创建锁记录 LockRecord。</li>
+<li>将锁对象的对象头中的MarkWord复制到线程的刚刚创建的锁记录中。</li>
+<li>将锁记录中的Owner指针指向锁对象。</li>
+<li>将锁对象的对象头的MarkWord替换为指向锁记录的指针。</li>
+</ul>
+<p>轻量级锁主要是自旋锁。所谓自旋，就是指当有另外一个线程来竞争锁时，这个线程会在原地循环等待，而不是把该线程给阻塞，直到那个获得锁的线程释放锁之后，这个线程就可以马上获得锁的。注意，锁在原地循环的时候，是会消耗cpu的，就相当于在执行一个啥也没有的for循环。所以，轻量级锁适用于那些同步代码块执行的很快的场景，这样，线程原地等待很短很短的时间就能够获得锁了。自旋锁有一些问题：</p>
+<ul>
+<li>如果同步代码块执行的很慢，需要消耗大量的时间，那么这个时侯，其他线程在原地等待空消耗cpu。</li>
+<li>本来一个线程把锁释放之后，当前线程是能够获得锁的，但是假如这个时候有好几个线程都在竞争这个锁的话，那么有可能当前线程会获取不到锁，还得原地等待继续空循环消耗cup，甚至有可能一直获取不到锁。</li>
+</ul>
+<p>基于这个问题，我们必须给线程空循环设置一个次数，当线程超过了这个次数，我们就认为，继续使用自旋锁就不适合了，此时锁会再次膨胀，升级为重量级锁。</p>
+<h5 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h5><p>轻量级锁膨胀之后，就升级为重量级锁了。重量级锁是依赖对象内部的monitor锁来实现的，而monitor又依赖操作系统的MutexLock(互斥锁)来实现的，所以重量级锁也被成为互斥锁。</p>
 
           
         
@@ -3284,6 +3165,473 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="url">Android面试基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T23:03:36+08:00">
+                2020-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
+                    <span itemprop="name">面试</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9D%A2%E8%AF%95/%E5%9F%BA%E7%A1%80/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Android基础面试题详解"><a href="#Android基础面试题详解" class="headerlink" title="Android基础面试题详解"></a>Android基础面试题详解</h1><p><img src="https://img-blog.csdnimg.cn/2020041121370949.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70#pic_center" alt="Android面试知识框架"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url">Java设计模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T23:03:36+08:00">
+                2020-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="依赖（Dependency）"><a href="#依赖（Dependency）" class="headerlink" title="依赖（Dependency）"></a>依赖（Dependency）</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>依赖是类与类之间的连接，依赖关系表示一个类依赖于另一个类的定义，通俗来讲就是需要。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>一个人(Person)可以买车(Car)和房子(House),Person类依赖于Car类和House类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String ... args)&#123;</span><br><span class="line">        &#x2F;&#x2F;TODO:</span><br><span class="line"></span><br><span class="line">    Person person &#x3D; new Person();</span><br><span class="line">    person.buy(new House());</span><br><span class="line">    person.buy(new Car());</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class Person&#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;表示依赖House</span><br><span class="line">    public void buy(House house)&#123;&#125;</span><br><span class="line">    &#x2F;&#x2F;表示依赖Car</span><br><span class="line">    public void buy(Car car)&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class House&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static class Car&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="依赖倒置-Dependence-Inversion-Principle"><a href="#依赖倒置-Dependence-Inversion-Principle" class="headerlink" title="依赖倒置(Dependence Inversion Principle)"></a>依赖倒置(Dependence Inversion Principle)</h1><h2 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h2><p>高层模块不应该依赖低层模块，二者都该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象；通俗来讲，依赖倒置原则的本质就是通过抽象（接口或抽象类）使个各类或模块的实现彼此独立，互不影响，实现模块间的松耦合。</p>
+<p>类A直接依赖类B，假如要将类A改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑；类B和类C是低层模块，负责基本的原子操作；假如修改类A，会给程序带来不必要的风险。此时将类A修改为依赖接口interface，类B和类C各自实现接口interface，类A通过接口interface间接与类B或者类C发生联系，则会大大降低修改类A的几率。</p>
+<h2 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h2><p>不使用依赖倒置，每次出行都需要修改Person类代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line">    private Bike mBike;</span><br><span class="line">    private Car mCar;</span><br><span class="line">    private Train mTrain;</span><br><span class="line"></span><br><span class="line">    public Person()&#123;</span><br><span class="line">        mBike &#x3D; new Bike();</span><br><span class="line">        &#x2F;&#x2F;mCar &#x3D; new Car();</span><br><span class="line">&#x2F;&#x2F;        mTrain &#x3D; new Train();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mBike.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person person &#x3D; new Person();</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2）使用依赖倒置，上层模块不应该依赖底层模块，它们都应该依赖于抽象。抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;    private Bike mBike;</span><br><span class="line">    private Car mCar;</span><br><span class="line">    private Train mTrain;</span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person()&#123;</span><br><span class="line">&#x2F;&#x2F;        mBike &#x3D; new Bike();</span><br><span class="line">        &#x2F;&#x2F;mCar &#x3D; new Car();</span><br><span class="line">       mDriveable &#x3D; new Train();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person person &#x3D; new Person();</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="控制反转-Inversion-of-Control"><a href="#控制反转-Inversion-of-Control" class="headerlink" title="控制反转(Inversion of Control)"></a>控制反转(Inversion of Control)</h1><h2 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h2><p>IoC 是一种新的设计模式，它对上层模块与底层模块进行了更进一步的解耦。控制反转的意思是反转了上层模块对于底层模块的依赖控制。</p>
+<h2 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Person2 &#123;</span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person2(Driveable driveable)&#123;</span><br><span class="line">        this.mDriveable &#x3D; driveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:将 mDriveable 的实例化移到 Person 外面</span><br><span class="line">        Person2 person &#x3D; new Person2(new Car());</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就这样无论出行方式怎么变化，Person 这个类都不需要更改代码了。<br>在上面代码中，Person 把内部依赖的创建权力移交给了 Person2。也就是说 Person 只关心依赖提供的功能，但并不关心依赖的创建。<br>其中Person2称为IoC容器（依赖注入的地方）</p>
+<h1 id="依赖注入-Dependency-injection"><a href="#依赖注入-Dependency-injection" class="headerlink" title="依赖注入(Dependency injection)"></a>依赖注入(Dependency injection)</h1><p>为了不因为依赖实现的变动而去修改 Person，也就是说以可能在 Driveable 实现类的改变下不改动 Person 这个类的代码，尽可能减少两者之间的耦合需要采用IoC 模式来进行改写代码。</p>
+<p>这个需要我们移交出对于依赖实例化的控制权，Person 无法实例化依赖了，它就需要在外部（IoC 容器）赋值给它，这个赋值的动作有个专门的术语叫做注入（injection），需要注意的是在 IoC 概念中，这个注入依赖的地方被称为 IoC 容器，但在依赖注入概念中，一般被称为注射器 （injector)。</p>
+<p>表达通俗一点就是：我不想自己实例化依赖，你（injector）创建它们，然后在合适的时候注入给我。</p>
+<p>实现依赖注入有 3 种方式：</p>
+<ul>
+<li>构造函数中注入</li>
+<li>setter 方式注入</li>
+<li>接口注入</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 接口方式注入</span><br><span class="line"> * 接口的存在，表明了一种依赖配置的能力。</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface DepedencySetter &#123;</span><br><span class="line">    void set(Driveable driveable);</span><br><span class="line">&#125;</span><br><span class="line">public class Person2  implements DepedencySetter &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;接口方式注入</span><br><span class="line">    @Override</span><br><span class="line">    public void set(Driveable driveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;构造函数注入</span><br><span class="line">    public Person2(Driveable driveable)&#123;</span><br><span class="line">        this.mDriveable &#x3D; driveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;setter 方式注入</span><br><span class="line">    public void setDriveable(Driveable mDriveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void goOut()&#123;</span><br><span class="line">        System.out.println(&quot;出门啦&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">        &#x2F;&#x2F;mCar.drive();</span><br><span class="line">&#x2F;&#x2F;        mTrain.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String ... args)&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO:</span><br><span class="line">        Person2 person &#x3D; new Person2(new Car());</span><br><span class="line">        person.goOut();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Java代理模式"><a href="#Java代理模式" class="headerlink" title="Java代理模式"></a>Java代理模式</h1><h2 id="代理模式基本概念及分类"><a href="#代理模式基本概念及分类" class="headerlink" title="代理模式基本概念及分类"></a>代理模式基本概念及分类</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。</p>
+<p>例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务，如电话预约，提供额外服务的同时，会收取一定金额的手续费。也可以将原有的功能去掉，如代售处不能提供退票服务。</p>
+<h3 id="代理模式模型"><a href="#代理模式模型" class="headerlink" title="代理模式模型"></a>代理模式模型</h3><p>代理模式一般设计到角色有4 种：</p>
+<ul>
+<li><strong>抽象角色</strong>：对应代理接口（&lt;&lt; interface &gt;&gt;Subject），用来定义代理类和委托类的公共对外方法/接口；</li>
+<li><strong>真实角色</strong>：对应委托类（接口实现类RealSubject），真正实现业务逻辑的类，是代理角色所代表的真实对象，是最终要引用的对象；</li>
+<li><strong>代理角色</strong>：对应代理类（Proxy），用来代理和封装真实角色。代理角色内部含有对真实对象的引用，从而可以操作真实对象。同时，代理对象可以在执行真是对象操作时，添加或去除其他操作，相当于对真实对象进行封装；</li>
+<li><strong>客户角色</strong>：对应客户端，使用代理类和主题接口完成一些工作。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20190601204859723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>在代理模式中真实角色对于客户端角色来说的透明的，也就是客户端不知道也无需知道真实角色的存在。 为了保持行为的一致性，代理角色和真实角色通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</p>
+<p>通过代理角色这中间一层，能有效控制对真实角色（委托类对象）的直接访问，也可以很好地隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</p>
+<h3 id="代理模式特点"><a href="#代理模式特点" class="headerlink" title="代理模式特点"></a>代理模式特点</h3><h4 id="代理模式优点"><a href="#代理模式优点" class="headerlink" title="代理模式优点"></a>代理模式优点</h4><ul>
+<li>隐藏委托类的实现，调用者只需要和代理类进行交互即可。</li>
+<li>解耦，在不改变委托类代码情况下做一些额外处理，比如添加初始判断及其他公共操作</li>
+</ul>
+<h2 id="代理模式实现方式"><a href="#代理模式实现方式" class="headerlink" title="代理模式实现方式"></a>代理模式实现方式</h2><p>根据代理类的<strong>生成时间</strong>不同可以将代理分为静态代理和动态代理。</p>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>所谓静态代理也就是在程序运行前就已经存在代理类的.class文件，代理类和委托类的关系在运行前就确定了。</p>
+<p>接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>被代理对象Car</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="继承方式"><a href="#继承方式" class="headerlink" title="继承方式"></a>继承方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car2 extends Car &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		super.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="聚合方式"><a href="#聚合方式" class="headerlink" title="聚合方式"></a>聚合方式</h4><p>聚合：在代理中引用被代理对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Car3 implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public Car3(Car car) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.car &#x3D; car;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Car car;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		car.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="继承方式与聚合方式对比"><a href="#继承方式与聚合方式对比" class="headerlink" title="继承方式与聚合方式对比"></a>继承方式与聚合方式对比</h4><p>聚合方式比继承方式更适合代理模式：适合功能的叠加（可灵活传递，组合）。</p>
+<p>记录日志代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class CarLogProxy implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public CarLogProxy(Moveable m) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.m &#x3D; m;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Moveable m;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		System.out.println(&quot;日志开始....&quot;);</span><br><span class="line">		m.move();</span><br><span class="line">		System.out.println(&quot;日志结束....&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>记录时间代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	Car car &#x3D; new Car();</span><br><span class="line">	CarLogProxy clp &#x3D; new CarLogProxy(car);</span><br><span class="line">	CarTimeProxy ctp &#x3D; new CarTimeProxy(clp);</span><br><span class="line">	ctp.move();&#x2F;&#x2F;先记录日志后记录时间</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果要按照上述的方法使用代理模式，那么真实角色(委托类)必须是事先已经存在的，并将其作为代理对象的内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀；此外，如果事先并不知道真实角色（委托类），该如何使用代理呢？这个问题可以通过Java的动态代理类来解决。</p>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>通过动态代理可实现对不同类、不同方法的代理。动态代理的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件（.class）。代理类和委托类的关系在程序运行时确定。</p>
+<h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><p><strong>实现模式</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20190601211348201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>Java动态代理类位于java.lang.reflect包下，一般主要涉及到以下两个类：</p>
+<p><strong>Interface InvocationHandler</strong></p>
+<p>InvocationHandler是负责连接代理类和委托类的中间类必须实现的接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，每次生成动态代理对象都邀制定一个对应的调用处理器对象，通常在该方法中实现对委托类的代理访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public object invoke(Object obj,Method method,Object[] args)</span><br></pre></td></tr></table></figure>
+
+<p>在实际使用时，obj指代理类的实例，method指被代理的方法，args是该方法的参数数组。这个抽象方法在代理类中动态实现。</p>
+<p>该方法也是InvocationHandler接口所定义的唯一的一个方法，该方法负责集中处理动态代理类上的所有方法的调用。调用处理器根据这三个参数进行预处理或分派到委托类实例上执行。</p>
+<p><strong>Proxy class动态代理类</strong></p>
+<p>Proxy是 Java 动态代理机制的主类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static Object newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h)</span><br></pre></td></tr></table></figure>
+
+<p>返回代理类的一个实例，返回后的代理类可以当做被代理类使用（可使用被代理类在接口中声明过的方法）</p>
+<p>该方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</p>
+<h4 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h4><p><strong>步骤1：创建一个实现接口InvocationHandler的调用处理器，它必须实现invoke方法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class TimeHandler implements InvocationHandler &#123;</span><br><span class="line">&#x2F;&#x2F;动态代理类对应的调用处理程序类（时间处理器）</span><br><span class="line">	public TimeHandler(Object target) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.target &#x3D; target;</span><br><span class="line">	&#125;</span><br><span class="line">&#x2F;&#x2F;代理类持有一个委托类的对象引用</span><br><span class="line">	private Object target;</span><br><span class="line">	</span><br><span class="line">	&#x2F;*</span><br><span class="line">	 * 参数：</span><br><span class="line">	 * proxy  被代理对象</span><br><span class="line">	 * method  被代理对象的方法</span><br><span class="line">	 * args 方法的参数</span><br><span class="line">	 * </span><br><span class="line">	 * 返回值：</span><br><span class="line">	 * Object  方法的返回值</span><br><span class="line">	 * *&#x2F;</span><br><span class="line">	@Override</span><br><span class="line">	public Object invoke(Object proxy, Method method, Object[] args)</span><br><span class="line">			throws Throwable &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		method.invoke(target);&#x2F;&#x2F;调用被代理对象的方法（Car的move方法）</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">		return null;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>TimeHandler实现了InvocationHandler的invoke方法，当代理对象的方法被调用时，invoke方法会被回调。其中proxy表示实现了公共代理方法的动态代理对象。</p>
+<p><strong>步骤2：创建被代理的类以及接口</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代理类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>步骤3：调用Proxy的静态方法newProxyInstance，提供ClassLoader和代理接口类型数组动态创建一个代理类，并通过代理调用方法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;客户端，使用代理类和主题接口完成功能</span><br><span class="line">public class Test &#123;</span><br><span class="line">	&#x2F;**</span><br><span class="line">	 * JDK动态代理测试类</span><br><span class="line">	 *&#x2F;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Car car &#x3D; new Car();</span><br><span class="line">		InvocationHandler h &#x3D; new TimeHandler(car);</span><br><span class="line">		Class&lt;?&gt; cls &#x3D; car.getClass();</span><br><span class="line">		&#x2F;**</span><br><span class="line">		 * loader  类加载器</span><br><span class="line">		 * interfaces  实现接口</span><br><span class="line">		 * h InvocationHandler</span><br><span class="line">		 *&#x2F;</span><br><span class="line">		Moveable m &#x3D; (Moveable)Proxy.newProxyInstance(cls.getClassLoader(),</span><br><span class="line">												cls.getInterfaces(), h);&#x2F;&#x2F;获得动态代理对象，动态代理对象与代理对象实现同一接口</span><br><span class="line">		m.move();&#x2F;&#x2F;调用动态代理的move方法</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码通过InvocationHandler handler=new TimeHandler(target);将委托对象作为构造方法的参数传递给了TimeHandler来作为代理方法调用的对象。当我们调用代理对象的move()方法时，该调用将会被转发到TimeHandler对象的invoke上从而达到动态代理的效果。</p>
+<p>所谓动态代理是这样一种class：它是运行时生成的class，该class需要实现一组interface，使用动态代理类时，必须实现InvocationHandler接口</p>
+<h3 id="静态代理与动态代理对比"><a href="#静态代理与动态代理对比" class="headerlink" title="静态代理与动态代理对比"></a>静态代理与动态代理对比</h3><h4 id="静态代理-1"><a href="#静态代理-1" class="headerlink" title="静态代理"></a>静态代理</h4><ul>
+<li>优点：<br>业务类只需要关注业务逻辑本身，保证了业务类的重用性。这是代理的共有优点。</li>
+<li>缺点：<ul>
+<li>代理对象的一个接口只服务于一种类型的对象，如果要代理的方法很多，势必要为每一种方法都进行代理，静态代理在程序规模稍大时就无法胜任了。</li>
+<li>如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度。</li>
+<li>采用静态代理模式，那么真实角色（委托类）必须事先已经存在的，并将其作为代理对象代理对象内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀。</li>
+</ul>
+</li>
+</ul>
+<h4 id="动态代理-1"><a href="#动态代理-1" class="headerlink" title="动态代理"></a>动态代理</h4><ul>
+<li>优点<ul>
+<li>动态代理类的字节码在程序运行时由Java反射机制动态生成，无需程序员手工编写它的源代码。</li>
+<li>动态代理类不仅简化了编程工作，而且提高了软件系统的可扩展性，因为Java 反射机制可以生成任意类型的动态代理类。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>JDK的动态代理机制只能代理实现了接口的类，而不能实现接口的类就不能实现JDK的动态代理，cglib是针对类来实现代理的，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，但因为采用的是继承，所以不能对final修饰的类进行代理。</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/29/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3496,173 +3844,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/29/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/29/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-29T18:48:29+08:00">
-                2020-04-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">Hexo</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/29/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/29/hello-world/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -3706,7 +3894,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -3717,7 +3905,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -3728,7 +3916,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
