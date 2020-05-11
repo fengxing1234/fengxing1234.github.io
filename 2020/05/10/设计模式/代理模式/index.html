@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Java代理模式代理模式基本概念及分类基本概念 为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。 例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务">
+<meta name="description" content="定义： 类型： 类图： 模式的结构： 解决的问题： 优点： 缺点： 适用场景： 案例结果： Java代理模式代理模式基本概念及分类基本概念 为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息">
 <meta property="og:type" content="article">
 <meta property="og:title" content="代理模式">
 <meta property="og:url" content="http://yoursite.com/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="冯星的博客">
-<meta property="og:description" content="Java代理模式代理模式基本概念及分类基本概念 为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。 例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务">
+<meta property="og:description" content="定义： 类型： 类图： 模式的结构： 解决的问题： 优点： 缺点： 适用场景： 案例结果： Java代理模式代理模式基本概念及分类基本概念 为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190601204859723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190601211348201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-05-10T12:12:32.000Z">
-<meta property="article:modified_time" content="2020-05-10T12:15:16.648Z">
+<meta property="article:modified_time" content="2020-05-11T08:50:02.367Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -323,29 +323,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/%E5%9F%BA%E7%A1%80/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
                     <span itemprop="name">设计模式</span>
                   </a>
                 </span>
@@ -392,7 +370,16 @@
       
 
       
-        <h1 id="Java代理模式"><a href="#Java代理模式" class="headerlink" title="Java代理模式"></a>Java代理模式</h1><h2 id="代理模式基本概念及分类"><a href="#代理模式基本概念及分类" class="headerlink" title="代理模式基本概念及分类"></a>代理模式基本概念及分类</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+        <p><strong>定义：</strong></p>
+<p><strong>类型：</strong></p>
+<p><strong>类图：</strong></p>
+<p><strong>模式的结构：</strong></p>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<p><strong>缺点：</strong></p>
+<p><strong>适用场景：</strong></p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><strong>结果：</strong></p>
+<h1 id="Java代理模式"><a href="#Java代理模式" class="headerlink" title="Java代理模式"></a>Java代理模式</h1><h2 id="代理模式基本概念及分类"><a href="#代理模式基本概念及分类" class="headerlink" title="代理模式基本概念及分类"></a>代理模式基本概念及分类</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p>为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。</p>
 <p>例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务，如电话预约，提供额外服务的同时，会收取一定金额的手续费。也可以将原有的功能去掉，如代售处不能提供退票服务。</p>
 <h3 id="代理模式模型"><a href="#代理模式模型" class="headerlink" title="代理模式模型"></a>代理模式模型</h3><p>代理模式一般设计到角色有4 种：</p>
@@ -529,8 +516,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="prev" title="设计模式中类的关系">
-                设计模式中类的关系 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/10/UML/UML%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="prev" title="UML中类的关系">
+                UML中类的关系 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -613,7 +600,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -624,7 +611,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -635,7 +622,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -668,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java代理模式"><span class="nav-number">1.</span> <span class="nav-text">Java代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式基本概念及分类"><span class="nav-number">1.1.</span> <span class="nav-text">代理模式基本概念及分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式模型"><span class="nav-number">1.1.2.</span> <span class="nav-text">代理模式模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式特点"><span class="nav-number">1.1.3.</span> <span class="nav-text">代理模式特点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式优点"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">代理模式优点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式实现方式"><span class="nav-number">1.2.</span> <span class="nav-text">代理模式实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理"><span class="nav-number">1.2.1.</span> <span class="nav-text">静态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#继承方式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">继承方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚合方式"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">聚合方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#继承方式与聚合方式对比"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">继承方式与聚合方式对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理"><span class="nav-number">1.2.2.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JDK动态代理"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">JDK动态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理与动态代理对比"><span class="nav-number">1.2.3.</span> <span class="nav-text">静态代理与动态代理对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态代理-1"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态代理-1"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">动态代理</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java代理模式"><span class="nav-number"></span> <span class="nav-text">Java代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式基本概念及分类"><span class="nav-number">1.</span> <span class="nav-text">代理模式基本概念及分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式模型"><span class="nav-number">1.2.</span> <span class="nav-text">代理模式模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式特点"><span class="nav-number">1.3.</span> <span class="nav-text">代理模式特点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式优点"><span class="nav-number">1.3.1.</span> <span class="nav-text">代理模式优点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式实现方式"><span class="nav-number">2.</span> <span class="nav-text">代理模式实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理"><span class="nav-number">2.1.</span> <span class="nav-text">静态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#继承方式"><span class="nav-number">2.1.1.</span> <span class="nav-text">继承方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚合方式"><span class="nav-number">2.1.2.</span> <span class="nav-text">聚合方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#继承方式与聚合方式对比"><span class="nav-number">2.1.3.</span> <span class="nav-text">继承方式与聚合方式对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理"><span class="nav-number">2.2.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JDK动态代理"><span class="nav-number">2.2.1.</span> <span class="nav-text">JDK动态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">2.2.2.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理与动态代理对比"><span class="nav-number">2.3.</span> <span class="nav-text">静态代理与动态代理对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态代理-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态代理-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">动态代理</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
