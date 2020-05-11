@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面试,基础,设计模式,Java,建造者模式," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="定义： 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示 适用于一个类内部数据结构过于复杂时（用于很多数据，且组织装配复杂），通过构建者模式可以对类中的数据按部就班地创建与设置。即Builder模式可以将一个类的构建和表示进行分离。 类型：创建类模式 类图：  模式的结构：  产品类：一般是一个较为复杂的对象，也就是说创建对象的过程比较复杂，一般会有比较多的代码量。在本类图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建造者模式">
+<meta property="og:url" content="http://yoursite.com/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="定义： 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示 适用于一个类内部数据结构过于复杂时（用于很多数据，且组织装配复杂），通过构建者模式可以对类中的数据按部就班地创建与设置。即Builder模式可以将一个类的构建和表示进行分离。 类型：创建类模式 类图：  模式的结构：  产品类：一般是一个较为复杂的对象，也就是说创建对象的过程比较复杂，一般会有比较多的代码量。在本类图">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-c20470f8eee9e56f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-05-11T05:15:23.000Z">
+<meta property="article:modified_time" content="2020-05-11T09:30:11.083Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="建造者模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4118241-c20470f8eee9e56f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/11/设计模式/创建型模式/建造者模式/"/>
+
+
+
+
+
+  <title>建造者模式 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">建造者模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-11T13:15:23+08:00">
+                2020-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">建造者模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>定义：</strong></p>
+<p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示</p>
+<p>适用于一个类内部数据结构过于复杂时（用于很多数据，且组织装配复杂），通过构建者模式可以对类中的数据按部就班地创建与设置。即Builder模式可以将一个类的构建和表示进行分离。</p>
+<p><strong>类型：</strong>创建类模式</p>
+<p><strong>类图：</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-c20470f8eee9e56f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>模式的结构：</strong></p>
+<ul>
+<li><strong>产品类：</strong>一般是一个较为复杂的对象，也就是说创建对象的过程比较复杂，一般会有比较多的代码量。在本类图中，产品类是一个具体的类，而非抽象类。实际编程中，产品类可以是由一个抽象类与它的不同实现组成，也可以是由多个抽象类与他们的实现组成。</li>
+<li><strong>抽象建造者：</strong>引入抽象建造者的目的，是为了将建造的具体过程交与它的子类来实现。这样更容易扩展。一般至少会有两个抽象方法，一个用来建造产品，一个是用来返回产品。</li>
+<li><strong>建造者：</strong>实现抽象类的所有未实现的方法，具体来说一般是两项任务：组建产品；返回组建好的产品。</li>
+<li><strong>导演类：</strong>负责调用适当的建造者来组建产品，导演类一般不与产品类发生依赖关系，与导演类直接交互的是建造者类。一般来说，导演类被用来封装程序中易变的部分。</li>
+</ul>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>在建造者模式中， 客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象</li>
+<li>每一个具体建造者都相对独立，而与其他的具体建造者无关，因此可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象</li>
+<li>可以更加精细地控制产品的创建过程 。将复杂产品的创建步骤分解在不同的方法中，使得创建过程更加清晰，也更方便使用程序来控制创建过程</li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制。</li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大。</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>当创建复杂对象的算法应该独立于该对象的组成部分以及它们的装配方式时。</li>
+<li>相同的方法，不同的执行顺序，生产不同的事件结果时。</li>
+<li>多个部件或零件都可以被装配到一个对象中，但是生产的运行结果又不相同时。</li>
+<li>产品类非常复杂，或者产品类中的调用顺序不同而生产了不同的效能时。</li>
+<li>需要创建一些复杂对象，这些对象内部组成构件间的建造顺序是稳定的，但是对象的内部组成构件面临复杂的变化时。</li>
+</ul>
+<h2 id="案例："><a href="#案例：" class="headerlink" title="案例："></a>案例：</h2><p>组装电脑案例</p>
+<p><strong>创建产品类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">public class Computer &#123;</span><br><span class="line">    &#x2F;&#x2F;CPU</span><br><span class="line">    private String mCpu;</span><br><span class="line">    &#x2F;&#x2F;主板</span><br><span class="line">    private String mMainBoard;</span><br><span class="line">    &#x2F;&#x2F;硬盘</span><br><span class="line">    private String mHardDisk;</span><br><span class="line">    &#x2F;&#x2F;内存</span><br><span class="line">    private String mMemory;</span><br><span class="line">    &#x2F;&#x2F;显卡</span><br><span class="line">    private String mGpu;</span><br><span class="line"></span><br><span class="line">    public String getCpu() &#123;</span><br><span class="line">        return mCpu;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCpu(String cpu) &#123;</span><br><span class="line">        this.mCpu &#x3D; cpu;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMainBoard() &#123;</span><br><span class="line">        return mMainBoard;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMainBoard(String mainBoard) &#123;</span><br><span class="line">        this.mMainBoard &#x3D; mainBoard;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getHardDisk() &#123;</span><br><span class="line">        return mHardDisk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setHardDisk(String hardDisk) &#123;</span><br><span class="line">        this.mHardDisk &#x3D; hardDisk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMemory() &#123;</span><br><span class="line">        return mMemory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMemory(String memory) &#123;</span><br><span class="line">        this.mMemory &#x3D; memory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getGpu() &#123;</span><br><span class="line">        return mGpu;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setGpu(String gpu) &#123;</span><br><span class="line">        this.mGpu &#x3D; gpu;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show() &#123;</span><br><span class="line">        return &quot;开始组装电脑 &quot; + &quot;\n&quot; +</span><br><span class="line">                &quot;CPU &#x3D; &quot; + mCpu + &quot;\n&quot; +</span><br><span class="line">                &quot;主板 &#x3D; &quot; + mMainBoard + &quot;\n&quot; +</span><br><span class="line">                &quot;硬盘 &#x3D; &quot; + mHardDisk + &quot;\n&quot; +</span><br><span class="line">                &quot;内存 &#x3D; &quot; + mMemory + &quot;\n&quot; +</span><br><span class="line">                &quot;显卡 &#x3D; &quot; + mGpu + &quot;\n&quot; +</span><br><span class="line">                &quot;电脑组装完毕&quot;;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>抽象的建造者</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractBuilder &#123;</span><br><span class="line">    protected Computer mComputer &#x3D; new Computer();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;设置CPU</span><br><span class="line">    abstract void setCpu(String cpu);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;设置主板</span><br><span class="line">    abstract void setMainBoard(String board);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;设置硬盘</span><br><span class="line">    abstract void setHardDisk(String hardDisk);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;设置内存</span><br><span class="line">    abstract void setMemory(String memory);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;设置显卡</span><br><span class="line">    abstract void setGpu(String gpu);</span><br><span class="line"></span><br><span class="line">    abstract Computer build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>具体建造者</strong>：组装一个打游戏的电脑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class PlayGameBuilder extends AbstractBuilder &#123;</span><br><span class="line">    &#x2F;&#x2F;private Computer mComputer &#x3D; new Computer();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setCpu(String cpu) &#123;</span><br><span class="line">        mComputer.setCpu(cpu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setMainBoard(String board) &#123;</span><br><span class="line">        mComputer.setMainBoard(board);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setHardDisk(String hardDisk) &#123;</span><br><span class="line">        mComputer.setHardDisk(hardDisk);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setMemory(String memory) &#123;</span><br><span class="line">        mComputer.setMemory(memory);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setGpu(String gpu) &#123;</span><br><span class="line">        mComputer.setGpu(gpu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    Computer build() &#123;</span><br><span class="line">        return mComputer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在组装一个看电影的电脑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class MoviesBuilder extends AbstractBuilder &#123;</span><br><span class="line">    &#x2F;&#x2F;private Computer mComputer &#x3D; new Computer();</span><br><span class="line">    @Override</span><br><span class="line">    void setCpu(String cpu) &#123;</span><br><span class="line">        mComputer.setCpu(cpu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setMainBoard(String board) &#123;</span><br><span class="line">        mComputer.setMainBoard(board);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setHardDisk(String hardDisk) &#123;</span><br><span class="line">        mComputer.setHardDisk(hardDisk);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setMemory(String memory) &#123;</span><br><span class="line">        mComputer.setMemory(memory);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void setGpu(String gpu) &#123;</span><br><span class="line">        mComputer.setGpu(gpu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    Computer build() &#123;</span><br><span class="line">        return mComputer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>导演类、指挥者</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Director &#123;</span><br><span class="line">    private AbstractBuilder builder;</span><br><span class="line"></span><br><span class="line">    public Director()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public Director(AbstractBuilder builder) &#123;</span><br><span class="line">        this.builder &#x3D; builder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setBuilder(AbstractBuilder builder) &#123;</span><br><span class="line">        this.builder &#x3D; builder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Computer createComputer(String cpu, String hardDisk, String mainBoard, String memory, String gpu) &#123;</span><br><span class="line">        builder.setCpu(cpu);</span><br><span class="line">        builder.setMainBoard(mainBoard);</span><br><span class="line">        builder.setHardDisk(hardDisk);</span><br><span class="line">        builder.setMemory(memory);</span><br><span class="line">        builder.setGpu(gpu);</span><br><span class="line">        return builder.build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Director director &#x3D; new Director();</span><br><span class="line">        PlayGameBuilder builder &#x3D; new PlayGameBuilder();</span><br><span class="line">        director.setBuilder(builder);</span><br><span class="line">        Computer playGameComputer &#x3D; director.createComputer(&quot;游戏专属CPU&quot;, &quot;游戏专属硬盘&quot;, &quot;游戏专属主板&quot;, &quot;游戏专属内存&quot;, &quot;游戏专属GPU&quot;);</span><br><span class="line">        String show &#x3D; playGameComputer.show();</span><br><span class="line">        System.out.println(show);</span><br><span class="line"></span><br><span class="line">        MoviesBuilder moviesBuilder &#x3D; new MoviesBuilder();</span><br><span class="line">        director.setBuilder(moviesBuilder);</span><br><span class="line">        Computer moviesComputer &#x3D; director.createComputer(&quot;看电影专属CPU&quot;, &quot;看电影专属硬盘&quot;, &quot;看电影专属主板&quot;, &quot;看电影专属内存&quot;, &quot;看电影专属GPU&quot;);</span><br><span class="line">        System.out.println(moviesComputer.show());</span><br><span class="line"></span><br><span class="line">        System.out.println(playGameComputer + &quot; ::: &quot; + moviesComputer);</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">开始组装电脑 </span><br><span class="line">CPU &#x3D; 游戏专属CPU</span><br><span class="line">主板 &#x3D; 游戏专属主板</span><br><span class="line">硬盘 &#x3D; 游戏专属硬盘</span><br><span class="line">内存 &#x3D; 游戏专属内存</span><br><span class="line">显卡 &#x3D; 游戏专属GPU</span><br><span class="line">电脑组装完毕</span><br><span class="line">开始组装电脑 </span><br><span class="line">CPU &#x3D; 看电影专属CPU</span><br><span class="line">主板 &#x3D; 看电影专属主板</span><br><span class="line">硬盘 &#x3D; 看电影专属硬盘</span><br><span class="line">内存 &#x3D; 看电影专属内存</span><br><span class="line">显卡 &#x3D; 看电影专属GPU</span><br><span class="line">电脑组装完毕</span><br><span class="line">Computer@12a3a380 ::: Computer@29453f44</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="没有Director的建造者"><a href="#没有Director的建造者" class="headerlink" title="没有Director的建造者"></a>没有Director的建造者</h1><p>一般在使用都是使用没有Director的builder，尤其在Android中，查看源码和第三方框架都是这么实现的。</p>
+<p>还是产品类。</p>
+<p>添加几个配置项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">public class Computer2 &#123;</span><br><span class="line">    private String mainBoard;     &#x2F;&#x2F; 主板</span><br><span class="line">    private String cpu;           &#x2F;&#x2F; cpu</span><br><span class="line">    private String hd;            &#x2F;&#x2F; 硬盘</span><br><span class="line">    private String powerSupplier; &#x2F;&#x2F; 电源</span><br><span class="line">    private String graphicsCard;   &#x2F;&#x2F; 显卡</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 其它一些可选配置</span><br><span class="line">    private String mouse; &#x2F;&#x2F; 鼠标</span><br><span class="line">    private String computerCase; &#x2F;&#x2F;机箱</span><br><span class="line">    private String mousePad;   &#x2F;&#x2F;鼠标垫</span><br><span class="line">    private String other;  &#x2F;&#x2F;其它配件</span><br><span class="line"></span><br><span class="line">    public Computer2(ComputerBuilder builder) &#123;</span><br><span class="line">        this.mainBoard &#x3D; builder.mainBoard;</span><br><span class="line">        this.cpu &#x3D; builder.cpu;</span><br><span class="line">        this.hd &#x3D; builder.hd;</span><br><span class="line">        this.powerSupplier &#x3D; builder.powerSupplier;</span><br><span class="line">        this.graphicsCard &#x3D; builder.graphicsCard;</span><br><span class="line"></span><br><span class="line">        this.mouse &#x3D; builder.mouse;</span><br><span class="line">        this.computerCase &#x3D; builder.computerCase;</span><br><span class="line">        this.mousePad &#x3D; builder.mousePad;</span><br><span class="line">        this.other &#x3D; builder.other;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public String show() &#123;</span><br><span class="line">        return &quot;Computer2&#123;&quot; +</span><br><span class="line">                &quot;mainBoard&#x3D;&#39;&quot; + mainBoard + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, cpu&#x3D;&#39;&quot; + cpu + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, hd&#x3D;&#39;&quot; + hd + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, powerSupplier&#x3D;&#39;&quot; + powerSupplier + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, graphicsCard&#x3D;&#39;&quot; + graphicsCard + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, mouse&#x3D;&#39;&quot; + mouse + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, computerCase&#x3D;&#39;&quot; + computerCase + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, mousePad&#x3D;&#39;&quot; + mousePad + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, other&#x3D;&#39;&quot; + other + &#39;\&#39;&#39; +</span><br><span class="line">                &#39;&#125;&#39;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void apply() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static class ComputerBuilder &#123;</span><br><span class="line">        private String mainBoard;     &#x2F;&#x2F; 主板</span><br><span class="line">        private String cpu;           &#x2F;&#x2F; cpu</span><br><span class="line">        private String hd;            &#x2F;&#x2F; 硬盘</span><br><span class="line">        private String powerSupplier; &#x2F;&#x2F; 电源</span><br><span class="line">        private String graphicsCard;   &#x2F;&#x2F; 显卡</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 其它一些可选配置</span><br><span class="line">        private String mouse; &#x2F;&#x2F; 鼠标</span><br><span class="line">        private String computerCase; &#x2F;&#x2F;机箱</span><br><span class="line">        private String mousePad;   &#x2F;&#x2F;鼠标垫</span><br><span class="line">        private String other;  &#x2F;&#x2F;其它配件</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder() &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setMainBoard(String mainBoard) &#123;</span><br><span class="line">            this.mainBoard &#x3D; mainBoard;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setCpu(String cpu) &#123;</span><br><span class="line">            this.cpu &#x3D; cpu;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setHd(String hd) &#123;</span><br><span class="line">            this.hd &#x3D; hd;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setPowerSupplier(String powerSupplier) &#123;</span><br><span class="line">            this.powerSupplier &#x3D; powerSupplier;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setGraphicsCard(String graphicsCard) &#123;</span><br><span class="line">            this.graphicsCard &#x3D; graphicsCard;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setMouse(String mouse) &#123;</span><br><span class="line">            this.mouse &#x3D; mouse;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setComputerCase(String computerCase) &#123;</span><br><span class="line">            this.computerCase &#x3D; computerCase;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setMousePad(String mousePad) &#123;</span><br><span class="line">            this.mousePad &#x3D; mousePad;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public ComputerBuilder setOther(String other) &#123;</span><br><span class="line">            this.other &#x3D; other;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public Computer2 build() &#123;</span><br><span class="line">            Computer2 computer2 &#x3D; new Computer2(this);</span><br><span class="line">            computer2.apply();</span><br><span class="line">            return computer2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Computer2 build &#x3D; new Computer2.ComputerBuilder()</span><br><span class="line">                .setCpu(&quot;写博客的CPU&quot;)</span><br><span class="line">                .setMainBoard(&quot;不太需要主板&quot;)</span><br><span class="line">                .setComputerCase(&quot;也不需要机箱&quot;)</span><br><span class="line">                .setMousePad(&quot;有个鼠标垫就可以写博客了&quot;)</span><br><span class="line">                .build();</span><br><span class="line">        String show1 &#x3D; build.show();</span><br><span class="line">        System.out.println(show1);</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Computer2&#123;mainBoard&#x3D;&#39;不太需要主板&#39;, cpu&#x3D;&#39;写博客的CPU&#39;, hd&#x3D;&#39;null&#39;, powerSupplier&#x3D;&#39;null&#39;, graphicsCard&#x3D;&#39;null&#39;, mouse&#x3D;&#39;null&#39;, computerCase&#x3D;&#39;也不需要机箱&#39;, mousePad&#x3D;&#39;有个鼠标垫就可以写博客了&#39;, other&#x3D;&#39;null&#39;&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+          
+            <a href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag"># 基础</a>
+          
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag"># 建造者模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="next" title="抽象工厂模式">
+                <i class="fa fa-chevron-left"></i> 抽象工厂模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="prev" title="原型模式">
+                原型模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例："><span class="nav-number">1.</span> <span class="nav-text">案例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#没有Director的建造者"><span class="nav-number"></span> <span class="nav-text">没有Director的建造者</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
