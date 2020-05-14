@@ -88,7 +88,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-c998036eea2e3af3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2020-05-11T16:26:36.000Z">
-<meta property="article:modified_time" content="2020-05-12T12:15:25.880Z">
+<meta property="article:modified_time" content="2020-05-14T07:01:04.308Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -405,6 +405,15 @@
 <li>当需要控制子类的扩展时，模板方法只在特定点调用钩子操作，这样就只允许在这些点进行扩展。</li>
 </ul>
 <p><strong>系统中的使用</strong></p>
+<p>模板模式在Android源码中出现的很多，比如Activity和Srervice的生命周期，启动过程，还有AsyncTask类等。</p>
+<p><strong>AsyncTask</strong>的模板就是那几个抽象方法</p>
+<ul>
+<li>onPreExecute（）</li>
+<li>doInBackground（） </li>
+<li>onProgressUpdate（） </li>
+<li>onPostExecute（）</li>
+</ul>
+<p><strong>LinkedHashMap</strong></p>
 <p><code>LinkedHashMap</code> 继承了<code>HashMap</code>实现自己的双向链表，并可以按照特定的顺序进行排序。</p>
 <p>在<code>HashMap</code>中<code>putVal、remove</code>方法中调用下面方法，这些方法都是空实现，目的就是放子类去实现，来扩展父类的功能。</p>
 <p><strong>HashMap</strong>中：</p>
@@ -476,7 +485,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/" rel="next" title="创建类型模式总结篇">
+              <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/" rel="next" title="创建类型模式总结篇">
                 <i class="fa fa-chevron-left"></i> 创建类型模式总结篇
               </a>
             
@@ -570,7 +579,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -592,7 +601,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

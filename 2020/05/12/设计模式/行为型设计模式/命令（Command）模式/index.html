@@ -87,9 +87,10 @@
 <meta property="og:description" content="在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。 在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://c.biancheng.net/uploads/allimg/181116/3-1Q11611335E44.gif">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-5207a689f3ee1d3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://c.biancheng.net/uploads/allimg/181116/3-1Q1161134341E.gif">
 <meta property="article:published_time" content="2020-05-12T15:36:32.000Z">
-<meta property="article:modified_time" content="2020-05-13T03:37:10.538Z">
+<meta property="article:modified_time" content="2020-05-14T07:30:39.459Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -384,6 +385,12 @@
 <li>调用者/请求者（Invoker）角色：是请求的发送者，它通常拥有很多的命令对象，并通过访问命令对象来执行相关请求，它不直接访问接收者。</li>
 </ul>
 <p>所谓对命令的封装，说白了，无非就是把一系列的操作写到一个方法中，然后供客户端调用就行了，反映到类图上，只需要一个ConcreteCommand类和Client类就可以完成对命令的封装，即使再进一步，为了增加灵活性，可以再增加一个Command类进行适当地抽象，这个调用者和接收者到底是什么作用呢？其实大家可以换一个角度去想：假如仅仅是简单地把一些操作封装起来作为一条命令供别人调用，怎么能称为一种模式呢？命令模式作为一种行为类模式，首先要做到低耦合，耦合度低了才能提高灵活性，而加入调用者和接收者两个角色的目的也正是为此。</p>
+<p><strong>Android中</strong>：</p>
+<p><strong>PackageManagerService</strong>是Android系统的Service之一，主要功能是实现对应用包的解析、管理、卸载等操作。我们来看下具体的结构。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-5207a689f3ee1d3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>HandlerParams是命令接口，即我们的Command角色。</strong></p>
+<p><strong>具体的包的安装、移动以及包大小的测量分别在3个具体子类InstallParams、MoveParams和MeasureParams中实现。</strong></p>
+<p><strong>而PackageHandler是Handler的子类，用来负责包相关消息的处理，不同的请求对应不同的命令对象，然后通过命令对象来执行具体操作。</strong></p>
 <p><strong>解决的问题：</strong></p>
 <p><strong>优点：</strong></p>
 <ul>
@@ -583,7 +590,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -605,7 +612,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

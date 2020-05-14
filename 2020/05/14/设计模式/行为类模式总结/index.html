@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="创建类模式主要关注对象的创建过程，将对象的创建过程进行封装，使客户端可以直接得到对象，而不用去关心如何创建对象。创建类模式有5种，分别是：  单例模式：用于得到内存中的唯一对象。  工厂方法模式：用于创建复杂对象。  抽象工厂模式：用于创建一组相关或相互依赖的复杂对象。  建造者模式：用于创建模块化的更加复杂的对象。  用于得到一个对象的拷贝。 为什么需要创建性模式   首先，在编程中，对象的创建">
+<meta name="description" content="行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。 行为型模式分为类行为模式和对象行为模式  类行为模式：采用继承机制来在类间分派行为 对象行为模式：采用组合或聚合在对象间分配行为  由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。 行为类">
 <meta property="og:type" content="article">
-<meta property="og:title" content="创建类型模式总结篇">
-<meta property="og:url" content="http://yoursite.com/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/index.html">
+<meta property="og:title" content="行为类模式总结">
+<meta property="og:url" content="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="冯星的博客">
-<meta property="og:description" content="创建类模式主要关注对象的创建过程，将对象的创建过程进行封装，使客户端可以直接得到对象，而不用去关心如何创建对象。创建类模式有5种，分别是：  单例模式：用于得到内存中的唯一对象。  工厂方法模式：用于创建复杂对象。  抽象工厂模式：用于创建一组相关或相互依赖的复杂对象。  建造者模式：用于创建模块化的更加复杂的对象。  用于得到一个对象的拷贝。 为什么需要创建性模式   首先，在编程中，对象的创建">
+<meta property="og:description" content="行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。 行为型模式分为类行为模式和对象行为模式  类行为模式：采用继承机制来在类间分派行为 对象行为模式：采用组合或聚合在对象间分配行为  由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。 行为类">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-05-11T09:23:46.000Z">
-<meta property="article:modified_time" content="2020-05-11T15:46:39.833Z">
+<meta property="article:published_time" content="2020-05-14T06:35:09.000Z">
+<meta property="article:modified_time" content="2020-05-14T08:16:50.406Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/05/11/设计模式/创建型模式/创建类模式总结篇/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/05/14/设计模式/行为类模式总结/"/>
 
 
 
 
 
-  <title>创建类型模式总结篇 | 冯星的博客</title>
+  <title>行为类模式总结 | 冯星的博客</title>
   
 
 
@@ -267,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯星">
@@ -284,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">创建类型模式总结篇</h1>
+          <h1 class="post-title" itemprop="name headline">行为类模式总结</h1>
         
 
         <div class="post-meta">
@@ -296,8 +296,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-11T17:23:46+08:00">
-                2020-05-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-14T14:35:09+08:00">
+                2020-05-14
               </time>
             
 
@@ -337,8 +337,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%E7%AF%87/" itemprop="commentCount"></span>
+                <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,24 +366,87 @@
       
 
       
-        <p>创建类模式主要关注对象的创建过程，将对象的创建过程进行封装，使客户端可以直接得到对象，而不用去关心如何创建对象。创建类模式有5种，分别是：</p>
+        <p>行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。</p>
+<p><strong>行为型模式分为类行为模式和对象行为模式</strong></p>
 <ul>
-<li><p><strong>单例模式：</strong>用于得到内存中的唯一对象。</p>
+<li>类行为模式：采用继承机制来在类间分派行为</li>
+<li>对象行为模式：采用组合或聚合在对象间分配行为</li>
+</ul>
+<p>由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。</p>
+<p>行为类型设计模式有11种：</p>
+<ul>
+<li><p>模版方法：(AsyncTask)</p>
+<ul>
+<li>定义一个操作中的算法骨架，将算法的一些步骤延迟到子类中，使得子类在可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</li>
+</ul>
 </li>
-<li><p><strong>工厂方法模式：</strong>用于创建复杂对象。</p>
-</li>
-<li><p><strong>抽象工厂模式：</strong>用于创建一组相关或相互依赖的复杂对象。</p>
-</li>
-<li><p><strong>建造者模式：</strong>用于创建模块化的更加复杂的对象。</p>
-</li>
-<li><p>用于得到一个对象的拷贝。</p>
-<p><strong>为什么需要创建性模式</strong></p>
+<li><p>中介者：（房屋中介、Android锁屏KeyGuardViewMediator）</p>
+<ul>
+<li>定义一个中介对象来简化原有对象之间的交互关系，降低系统中对象间的耦合度，使原有对象之间不必相互了解。<ul>
+<li>将网状结构转化成星型结构，可以避免同事类之间的过度耦合</li>
+<li>同事对象只知道中介者而不知道其他同事对象，同事类之间必须通过中介者才能进行消息传递</li>
+</ul>
 </li>
 </ul>
-<p>首先，在编程中，对象的创建通常是一件比较复杂的事，因为，为了达到降低耦合的目的，我们通常采用面向抽象编程的方式，对象间的关系不会硬编码到类中，而是等到调用的时候再进行组装，这样虽然降低了对象间的耦合，提高了对象复用的可能，但在一定程度上将组装类的任务都交给了最终调用的客户端程序，大大增加了客户端程序的复杂度。采用创建类模式的优点之一就是将组装对象的过程封装到一个单独的类中，这样，既不会增加对象间的耦合，又可以最大限度的减小客户端的负担。</p>
-<p>其次，使用普通的方式创建对象，一般都是返回一个具体的对象，即所谓的面向实现编程，这与设计模式原则是相违背的。采用创建类模式则可以实现面向抽象编程。客户端要求的只是一个抽象的类型，具体返回什么样的对象，由创建者来决定。</p>
-<p>再次，可以对创建对象的过程进行优化，客户端关注的只是得到对象，对对象的创建过程则不关心，因此，创建者可以对创建的过程进行优化，例如在特定条件下，如果使用单例模式或者是使用原型模式，都可以优化系统的性能。</p>
-<p>所有的创建类模式本质上都是对对象的创建过程进行封装。</p>
+</li>
+<li><p>观察者：（ListView中notifyDataSetChanged）</p>
+<ul>
+<li>指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式。</li>
+</ul>
+</li>
+<li><p>访问者：</p>
+<ul>
+<li>将作用于某种数据结构中的各元素的操作分离出来封装成独立的类，使其在不改变数据结构的前提下可以添加作用于这些元素的新的操作，为数据结构中的每个元素提供多种访问方式。它将对数据的操作与数据结构进行分离，是行为类模式中最复杂的一种模式。</li>
+</ul>
+</li>
+<li><p>命令模式：（PackageManagerService）</p>
+<ul>
+<li>将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行储存、传递、调用、增加与管理。</li>
+</ul>
+</li>
+<li><p>责任链模式(OkHttp拦截器、View事件分发机制)</p>
+<ul>
+<li>为了避免请求发送者与多个请求处理者耦合在一起，将所有请求的处理者通过前一对象记住其下一个对象的引用而连成一条链；当有请求发生时，可将请求沿着这条链传递，直到有对象处理它为止。</li>
+</ul>
+</li>
+<li><p>策略模式（插值器）</p>
+<ul>
+<li>定义一组算法，将每个算法都封装起来，并且使他们之间可以互换。</li>
+</ul>
+</li>
+<li><p>迭代器模式（Map、List等有用到迭代器模式，Cursor）</p>
+<ul>
+<li>提供一种方法访问一个容器对象中各个元素，而又不暴露该对象的内部细节。<ul>
+<li>至少提供hasNext()和next()方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>解释器模式（正则）</p>
+<ul>
+<li>给定一种语言，定义他的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中句子<ul>
+<li>正则表达式Pattern</li>
+<li>解释加减乘除、或与非</li>
+<li>时间格式化Format、Html格式化、Integer.parseInt解析、SQL解析</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>备忘录模式（Activity的onSaveInstanceState）</p>
+<ul>
+<li>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后当需要时能将该对象恢复到原先保存的状态。该模式又叫快照模式。</li>
+</ul>
+</li>
+<li><p>状态模式：（）</p>
+<ul>
+<li>对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。<ul>
+<li>把所研究的对象的行为包装在不同的状态对象里</li>
+<li>登录状态、未登录状态下用户的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -422,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="next" title="原型模式">
-                <i class="fa fa-chevron-left"></i> 原型模式
+              <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/" rel="next" title="状态（State）模式">
+                <i class="fa fa-chevron-left"></i> 状态（State）模式
               </a>
             
           </div>
@@ -432,8 +495,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%EF%BC%88Template%20Method%EF%BC%89/" rel="prev" title="模版方法（Template Method）">
-                模版方法（Template Method） <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter%EF%BC%89/" rel="prev" title="适配器模式（Adapter）">
+                适配器模式（Adapter） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -507,7 +570,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -529,7 +592,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

@@ -88,7 +88,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-d5b6f068df5001d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2020-05-12T11:07:13.000Z">
-<meta property="article:modified_time" content="2020-05-12T12:11:35.087Z">
+<meta property="article:modified_time" content="2020-05-14T07:17:30.573Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -370,7 +370,7 @@
       
         <p>在现实世界中，许多对象并不是独立存在的，其中一个对象的行为发生改变可能会导致一个或者多个其他对象的行为也发生改变。例如，某种商品的物价上涨时会导致部分商家高兴，而消费者伤心；还有，当我们开车到交叉路口时，遇到红灯会停，遇到绿灯会行。这样的例子还有很多，例如，股票价格与股民、微信公众号与微信用户、气象局的天气预报与听众、小偷与警察等。</p>
 <p><strong>定义：</strong></p>
-<p>观察者（Observer）模式的定义：指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式，它是对象行为型模式。</p>
+<p>观察者（Observer）模式的定义：指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式。</p>
 <p><strong>类型：</strong>行为类模式</p>
 <p><strong>类图：</strong></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/4118241-d5b6f068df5001d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
@@ -394,6 +394,9 @@
 <li>目标与观察者之间的依赖关系并没有完全解除，而且有可能出现循环引用。</li>
 <li>当观察者对象很多时，通知的发布会花费很多时间，影响程序的效率。</li>
 </ul>
+<p><strong>Android中使用</strong></p>
+<p>ListView 是 Android 中很常用的控件，我们在使用 ListView 添加数据后会调用 Adapter 的 notifyDataSetChanged()方法。</p>
+<p>监听器、点击事件、滚动事件<br>rxjava、eventbus、广播</p>
 <p><strong>适用场景：</strong></p>
 <ul>
 <li>对象间存在一对多关系，一个对象的状态发生改变会影响其他对象。</li>
@@ -549,7 +552,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -571,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

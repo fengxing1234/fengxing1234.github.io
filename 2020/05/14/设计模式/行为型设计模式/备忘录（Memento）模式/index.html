@@ -79,15 +79,17 @@
 
 
 
-<meta name="description" content="定义： 类型： 类图： 模式的结构： 解决的问题： 优点： 缺点： 适用场景： 案例结果：">
+<meta name="description" content="每个人都有犯错误的时候，都希望有种“后悔药”能弥补自己的过失，让自己重新开始，但现实是残酷的。在计算机应用中，客户同样会常常犯错误，能否提供“后悔药”给他们呢？当然是可以的，而且是有必要的。这个功能由“备忘录模式”来实现。 其实很多应用软件都提供了这项功能，如 Word、记事本、Photoshop、Eclipse 等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有">
 <meta property="og:type" content="article">
 <meta property="og:title" content="备忘录（Memento）模式">
 <meta property="og:url" content="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%A4%87%E5%BF%98%E5%BD%95%EF%BC%88Memento%EF%BC%89%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="冯星的博客">
-<meta property="og:description" content="定义： 类型： 类图： 模式的结构： 解决的问题： 优点： 缺点： 适用场景： 案例结果：">
+<meta property="og:description" content="每个人都有犯错误的时候，都希望有种“后悔药”能弥补自己的过失，让自己重新开始，但现实是残酷的。在计算机应用中，客户同样会常常犯错误，能否提供“后悔药”给他们呢？当然是可以的，而且是有必要的。这个功能由“备忘录模式”来实现。 其实很多应用软件都提供了这项功能，如 Word、记事本、Photoshop、Eclipse 等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://c.biancheng.net/uploads/allimg/181119/3-1Q119130413927.gif">
+<meta property="og:image" content="http://c.biancheng.net/uploads/allimg/181119/3-1Q119130439230.gif">
 <meta property="article:published_time" content="2020-05-13T16:27:28.000Z">
-<meta property="article:modified_time" content="2020-05-13T16:28:35.261Z">
+<meta property="article:modified_time" content="2020-05-14T04:50:31.104Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -95,6 +97,7 @@
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="备忘录（Memento）模式">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://c.biancheng.net/uploads/allimg/181119/3-1Q119130413927.gif">
 
 
 
@@ -366,15 +369,65 @@
       
 
       
-        <p><strong>定义：</strong></p>
-<p><strong>类型：</strong></p>
+        <p>每个人都有犯错误的时候，都希望有种“后悔药”能弥补自己的过失，让自己重新开始，但现实是残酷的。在计算机应用中，客户同样会常常犯错误，能否提供“后悔药”给他们呢？当然是可以的，而且是有必要的。这个功能由“备忘录模式”来实现。</p>
+<p>其实很多应用软件都提供了这项功能，如 Word、记事本、Photoshop、Eclipse 等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有在 IE 中的后退键、数据库事务管理中的回滚操作、玩游戏时的中间结果存档功能、数据库与操作系统的备份操作、棋类游戏中的悔棋功能等都属于这类。</p>
+<p><strong>备忘录模式能记录一个对象的内部状态，当用户后悔时能撤销当前操作，使数据恢复到它原先的状态。</strong></p>
+<p><strong>定义：</strong></p>
+<p>备忘录（Memento）模式的定义：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后当需要时能将该对象恢复到原先保存的状态。该模式又叫快照模式。</p>
+<p><strong>类型：</strong>行为型设计模式</p>
 <p><strong>类图：</strong></p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181119/3-1Q119130413927.gif" alt="备忘录模式的结构图"></p>
 <p><strong>模式的结构：</strong></p>
-<p><strong>解决的问题：</strong></p>
+<ul>
+<li>发起人（Originator）角色：记录当前时刻的内部状态信息，提供创建备忘录和恢复备忘录数据的功能，实现其他业务功能，它可以访问备忘录里的所有信息。</li>
+<li>备忘录（Memento）角色：负责存储发起人的内部状态，在需要的时候提供这些内部状态给发起人。</li>
+<li>管理者（Caretaker）角色：对备忘录进行管理，提供保存与获取备忘录的功能，但其不能对备忘录的内容进行访问与修改。</li>
+</ul>
+<p><strong>解决的问题：</strong>解决没有后悔药的问题</p>
 <p><strong>优点：</strong></p>
+<ul>
+<li>提供了一种可以恢复状态的机制。当用户需要时能够比较方便地将数据恢复到某个历史的状态。</li>
+<li>实现了内部状态的封装。除了创建它的发起人之外，其他对象都不能够访问这些状态信息。</li>
+<li>简化了发起人类。发起人不需要管理和保存其内部状态的各个备份，所有状态信息都保存在备忘录中，并由管理者进行管理，这符合单一职责原则。</li>
+</ul>
 <p><strong>缺点：</strong></p>
+<ul>
+<li>资源消耗大。如果要保存的内部状态信息过多或者特别频繁，将会占用比较大的内存资源。</li>
+</ul>
 <p><strong>适用场景：</strong></p>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><strong>结果：</strong></p>
+<ul>
+<li>需要保存与恢复数据的场景，如玩游戏时的中间结果的存档功能</li>
+<li>需要提供一个可回滚操作的场景，如 Word、记事本、Photoshop，Eclipse 等软件在编辑时按 Ctrl+Z 组合键，还有数据库中事务操作。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 管理者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Caretaker &#123;</span><br><span class="line">    private Memento memento;</span><br><span class="line"></span><br><span class="line">    public Memento getMemento() &#123;</span><br><span class="line">        return memento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMemento(Memento memento) &#123;</span><br><span class="line">        this.memento &#x3D; memento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 备忘录</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Memento &#123;</span><br><span class="line">    private String state;</span><br><span class="line"></span><br><span class="line">    public Memento(String state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setState(String state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 发起人</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Originator &#123;</span><br><span class="line">    private String state;</span><br><span class="line"></span><br><span class="line">    public Originator() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setState(String state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Memento createMemento() &#123;</span><br><span class="line">        return new Memento(state);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void restoreMemento(Memento memento) &#123;</span><br><span class="line">        setState(memento.getState());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端使用</span><br><span class="line">Originator originator &#x3D; new Originator();</span><br><span class="line">        Caretaker caretaker &#x3D; new Caretaker();</span><br><span class="line">        originator.setState(&quot;S0&quot;);</span><br><span class="line">        System.out.println(&quot;初始状态:&quot; + originator.getState());</span><br><span class="line">        caretaker.setMemento(originator.createMemento()); &#x2F;&#x2F;保存状态</span><br><span class="line">        originator.setState(&quot;S1&quot;);</span><br><span class="line">        System.out.println(&quot;新的状态:&quot; + originator.getState());</span><br><span class="line">        originator.restoreMemento(caretaker.getMemento()); &#x2F;&#x2F;恢复状态</span><br><span class="line">        System.out.println(&quot;恢复状态:&quot; + originator.getState());</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始状态:S0</span><br><span class="line">新的状态:S1</span><br><span class="line">恢复状态:S0</span><br></pre></td></tr></table></figure>
+
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h3><p>【例1】利用备忘录模式设计相亲游戏。</p>
+<p>分析：假如有西施、王昭君、貂蝉、杨玉环四大美女同你相亲，你可以选择其中一位作为你的爱人；当然，如果你对前面的选择不满意，还可以重新选择，但希望你不要太花心；这个游戏提供后悔功能，用“备忘录模式”设计比较合适。</p>
+<p>首先，先设计一个美女（Girl）类，它是备忘录角色，提供了获取和存储美女信息的功能；然后，设计一个相亲者（You）类，它是发起人角色，它记录当 前时刻的内部状态信息（临时妻子的姓名），并提供创建备忘录和恢复备忘录数据的功能；最后，定义一个美女栈（GirlStack）类，它是管理者角色，负责对备忘录进行管理，用于保存相亲者（You）前面选过的美女信息，不过最多只能保存 4 个，提供后悔功能。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181119/3-1Q119130439230.gif" alt="相亲游戏的结构图"></p>
+<p><strong>备忘录角色美女类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 备忘录</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Girl &#123;</span><br><span class="line">    &#x2F;&#x2F;未婚妻</span><br><span class="line">    public String fiancee;</span><br><span class="line"></span><br><span class="line">    public Girl(String fiancee) &#123;</span><br><span class="line">        this.fiancee &#x3D; fiancee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getFiancee() &#123;</span><br><span class="line">        return fiancee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setFiancee(String fiancee) &#123;</span><br><span class="line">        this.fiancee &#x3D; fiancee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>发起人 You去相亲</strong></p>
+<ul>
+<li>create 保存一次状态到管理者</li>
+<li>restore 从管理者中恢复一次状态</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 发起人</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class You &#123;</span><br><span class="line">    &#x2F;&#x2F;未婚妻</span><br><span class="line">    public String fiancee;</span><br><span class="line"></span><br><span class="line">    public You() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getFiancee() &#123;</span><br><span class="line">        return fiancee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setFiancee(String fiancee) &#123;</span><br><span class="line">        this.fiancee &#x3D; fiancee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Girl createGirl() &#123;</span><br><span class="line">        return new Girl(fiancee);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void restoreGirl(Girl girl) &#123;</span><br><span class="line">        setFiancee(girl.getFiancee());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>管理者</strong></p>
+<p>保存状态的地方,push保存一次状态，pop取出一次状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 管理者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class GirlStack &#123;</span><br><span class="line">    private Girl[] girls &#x3D; new Girl[5];</span><br><span class="line">    private int top &#x3D; -1;</span><br><span class="line"></span><br><span class="line">    public boolean push(Girl girl) &#123;</span><br><span class="line">        if (top &gt; 4) &#123;</span><br><span class="line">            System.out.println(&quot;你太花心了，变来变去的！&quot;);</span><br><span class="line">            return false;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            girls[++top] &#x3D; girl;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Girl pop() &#123;</span><br><span class="line">        if (top &lt;&#x3D; 0) &#123;</span><br><span class="line">            System.out.println(&quot;美女栈空了！&quot;);</span><br><span class="line">            return girls[0];</span><br><span class="line">        &#125; else return girls[--top];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端调用</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private static void mementoDemo() &#123;</span><br><span class="line">        You you &#x3D; new You();</span><br><span class="line">        GirlStack girlStack &#x3D; new GirlStack();</span><br><span class="line">        you.setFiancee(&quot;西施&quot;);</span><br><span class="line">        &#x2F;&#x2F;保存状态</span><br><span class="line">        girlStack.push(you.createGirl());</span><br><span class="line">        System.out.println(&quot;当前选择的美女是&quot; + you.getFiancee());</span><br><span class="line"></span><br><span class="line">        you.setFiancee(&quot;貂蝉&quot;);</span><br><span class="line">        girlStack.push(you.createGirl());</span><br><span class="line">        System.out.println(&quot;当前选择的美女是&quot; + you.getFiancee());</span><br><span class="line"></span><br><span class="line">        you.setFiancee(&quot;王昭君&quot;);</span><br><span class="line">        girlStack.push(you.createGirl());</span><br><span class="line">        System.out.println(&quot;当前选择的美女是&quot; + you.getFiancee());</span><br><span class="line"></span><br><span class="line">        you.restoreGirl(girlStack.pop());</span><br><span class="line">        System.out.println(&quot;返回了选择上一个美女&quot; + you.getFiancee());</span><br><span class="line"></span><br><span class="line">        you.restoreGirl(girlStack.pop());</span><br><span class="line">        System.out.println(&quot;返回了选择上一个美女&quot; + you.getFiancee());</span><br><span class="line"></span><br><span class="line">        you.restoreGirl(girlStack.pop());</span><br><span class="line">        System.out.println(&quot;返回了选择上一个美女&quot; + you.getFiancee());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">当前选择的美女是西施</span><br><span class="line">当前选择的美女是貂蝉</span><br><span class="line">当前选择的美女是王昭君</span><br><span class="line">返回了选择上一个美女貂蝉</span><br><span class="line">返回了选择上一个美女西施</span><br><span class="line">美女栈空了！</span><br><span class="line">返回了选择上一个美女西施</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -422,6 +475,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/" rel="prev" title="状态（State）模式">
+                状态（State）模式 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -503,7 +560,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -525,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -558,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UML"><span class="nav-number">1.1.</span> <span class="nav-text">UML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例-1"><span class="nav-number">1.2.</span> <span class="nav-text">案例</span></a></li></ol></li></ol></div>
             
 
           </div>

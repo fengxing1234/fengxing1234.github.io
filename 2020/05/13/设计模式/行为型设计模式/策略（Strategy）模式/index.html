@@ -88,7 +88,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://c.biancheng.net/uploads/allimg/181116/3-1Q116103K1205.gif">
 <meta property="article:published_time" content="2020-05-13T09:54:29.000Z">
-<meta property="article:modified_time" content="2020-05-13T13:45:54.891Z">
+<meta property="article:modified_time" content="2020-05-14T08:03:22.201Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="基础">
@@ -397,7 +397,21 @@
 <li>策略模式造成很多的策略类。</li>
 <li>必须对客户端（调用者）暴露所有的策略类，因为使用哪种策略是由客户端来决定的，因此，客户端应该知道有什么策略，并且了解各种策略之间的区别，否则，后果很严重。例如，有一个排序算法的策略模式，提供了快速排序、冒泡排序、选择排序这三种算法，客户端在使用这些算法之前，是不是先要明白这三种算法的适用情况？再比如，客户端要使用一个容器，有链表实现的，也有数组实现的，客户端是不是也要明白链表和数组有什么区别？就这一点来说是有悖于迪米特法则的。</li>
 </ul>
-<p><strong>适用场景：</strong></p>
+<p><strong>Android中</strong></p>
+<p>在动画执行过程中，我们需要一些动态效果，有点类似电影的慢镜头，有时需要慢一点，有时需要快一点，这样动画变得灵动起来，这些动态效果就是通过插值器（TimeInterpolator）实现的，我们只需要对Animation对象设置不同的插值器就可以实现不同的动态效果，该效果则使用的就是策略模式实现。</p>
+<ul>
+<li>AccelerateDecelerateInterpolator 在动画开始与介绍的地方速率改变比较慢，在中间的时候加速</li>
+<li>AccelerateInterpolator 在动画开始的地方速率改变比较慢，然后开始加速</li>
+<li>AnticipateInterpolator 开始的时候向后然后向前甩</li>
+<li>AnticipateOvershootInterpolator 开始的时候向后然后向前甩一定值后返回最后的值</li>
+<li>BounceInterpolator 动画结束的时候弹起</li>
+<li>CycleInterpolator 动画循环播放特定的次数，速率改变沿着正弦曲线</li>
+<li>DecelerateInterpolator 在动画开始的地方快然后慢</li>
+<li>LinearInterpolator 以常量速率改变</li>
+<li>OvershootInterpolator 向前甩一定值后再回到原来位置</li>
+<li>PathInterpolator 路径插值器</li>
+</ul>
+<p><strong>适用场景</strong></p>
 <p>做面向对象设计的，对策略模式一定很熟悉，因为它实质上就是面向对象中的继承和多态，在看完策略模式的通用代码后，我想，即使之前从来没有听说过策略模式，在开发过程中也一定使用过它吧？至少在在以下两种情况下，大家可以考虑使用策略模式，</p>
 <ul>
 <li>几个类的主要逻辑相同，只在部分逻辑的算法和行为上稍有区别的情况。</li>
@@ -541,7 +555,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -563,7 +577,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
