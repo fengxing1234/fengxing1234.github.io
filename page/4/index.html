@@ -262,6 +262,787 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/CodeReview%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/09/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/CodeReview%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" itemprop="url">CodeReview代码审查</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-09T21:43:53+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" itemprop="url" rel="index">
+                    <span itemprop="name">项目管理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/09/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/CodeReview%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/CodeReview%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Code-Review"><a href="#Code-Review" class="headerlink" title="Code Review"></a>Code Review</h1><h2 id="什么是Code-Review"><a href="#什么是Code-Review" class="headerlink" title="什么是Code Review?"></a>什么是Code Review?</h2><p>Code Review, 意即代码审查,是指一种有意识和系统的召集其他程序员来检查彼此的代码是否有错误的地方.</p>
+<p>通常进行Code Review会有以下效果:</p>
+<ul>
+<li>提高代码质量和可维护性, 可读性等.</li>
+<li>查漏补缺, 发现一些潜在的问题点等.</li>
+<li>最佳实践, 能够更好更快的完成任务的方法.</li>
+<li>知识分享, Review他人代码时, 其实也是一个学习的过程, 自己也会反思&amp;总结.</li>
+</ul>
+<h2 id="为什么要-Code-Review"><a href="#为什么要-Code-Review" class="headerlink" title="为什么要 Code Review?"></a>为什么要 Code Review?</h2><p>要不要Code Review, 需要结合当前的环境和形势来决定. 如果项目组开发任务极其紧张, 此时再进行Code Review可能会收到不利的效果. 因势利导,求同存异是Code Review的核心所在。</p>
+<p>Code Review尤其需要和项目组成员沟通和配合, 同时也在检验各成员的技术水平.</p>
+<blockquote>
+<p>尤其需要注意的是, 人都有惰性, 每个人都有自己的一套行为准则和规范, 要想把他们的行为或规范统一起来, 很容易使他们产生抗拒心理.</p>
+</blockquote>
+<p>在Code Review之前, 和项目成员沟通好, 有一个共同的愿景, 并辅助以相应的培训, 把部分人员的短板补齐. 会减轻项目成员的一些不适感, 也会使得项目运行更加顺畅。</p>
+<h2 id="Code-Review的前提条件"><a href="#Code-Review的前提条件" class="headerlink" title="Code Review的前提条件"></a>Code Review的前提条件</h2><p>Code Review本身属于”事后”工作, 可以起到查漏被缺的作用.</p>
+<p>在推行Code Review时, 需要先提前准备以下几个工作, 以便团队能够更快更好的接受和实施.</p>
+<ul>
+<li>建立规范, 包含:<ul>
+<li>编码规范, 如变量命名, 文件命名规范等</li>
+<li>设计原则, 如单一职责原则, 最少知识原则等</li>
+<li>分支管理策略</li>
+</ul>
+</li>
+<li>完善的文档, 方便查阅. 文档内容最好能共建, 千万不可出现”一言堂”</li>
+<li>制定Code Review流程&amp;目标, 以及实施周期.</li>
+</ul>
+<p>根据困难程度, Code Review实施分为3个阶段：</p>
+<ul>
+<li>第一阶段, 重点关注, 恰到好处的函数注释, “硬编码”问题, 常见变量命名规则等, 预期实施周期为1~3个月</li>
+<li>第二阶段, 重点关注, 代码耦合性, 单一职责、最少知识原则, 潜在隐患, 性能问题等, 预期实施周期为3~6个月</li>
+<li>第三阶段, 重点关注, 模块实现方案, 设计模式, 最佳实践, 代码重构等.</li>
+</ul>
+<p>在实施过程中, 如果遇到比较大的阻力或困难, 推行Code Review所得到的收益较低时, 可以考虑适当”休息”一段时间.</p>
+<h2 id="Code-Review如何实施"><a href="#Code-Review如何实施" class="headerlink" title="Code Review如何实施?"></a>Code Review如何实施?</h2><p>从当前项目的实施过程的体会, 以及结合其他人的一些经验来看, 在Code Review时建议:</p>
+<ul>
+<li>单次查看代码不多于500行, 人的精力有限, 一次审查太多的代码, 收益可能不理想.</li>
+<li>单次审查建议不要超过30分钟</li>
+</ul>
+<h2 id="常见的Code-Review项"><a href="#常见的Code-Review项" class="headerlink" title="常见的Code Review项"></a>常见的Code Review项</h2><h3 id="git使用规范"><a href="#git使用规范" class="headerlink" title="git使用规范"></a>git使用规范</h3><p>git commit提交规范, 如:</p>
+<ul>
+<li>不标注信息</li>
+<li>不及时commit</li>
+<li>提交时标注的信息不规范等</li>
+</ul>
+<p>都是严重阻扰review的因素之一,除了常规的描述信息外,还可以按类型等备注:</p>
+<ul>
+<li>feat: 新特性</li>
+<li>fix: 修改问题</li>
+<li>refactor: 代码重构</li>
+<li>docs: 文档修改</li>
+<li>chore: 其他修改</li>
+<li>test: 测试用例修改</li>
+<li>style: 代码格式修改等等</li>
+</ul>
+<p>当然, 也要以利用一些工具, 来协助我们完成基本的约束和检查. 如: <a href="https://juejin.im/post/5de280cfe51d450f0a2006f1" target="_blank" rel="noopener">优雅的使用Git</a></p>
+<h3 id="风格"><a href="#风格" class="headerlink" title="风格"></a>风格</h3><h4 id="1-可读性"><a href="#1-可读性" class="headerlink" title="1. 可读性"></a>1. 可读性</h4><p>衡量可读性, 有很好的实践标准, 即Code Review时能否非常容易的理解代码逻辑, 如果不能, 那意味着代码的可读性要进行改进.</p>
+<h4 id="2-命名"><a href="#2-命名" class="headerlink" title="2. 命名"></a>2. 命名</h4><ul>
+<li>命名对可读性非常重要, 我个人倾向于函数名/类名长一点都没关系, 但必须能清晰的表明函数/类的作用.</li>
+<li>英语用词尽量准确, 哪怕需要借助翻译工具, 也是值得的. 但有一点需要注意, 如果使用的单词很冷门, 都没人认识, 那就不要使用.</li>
+</ul>
+<h4 id="3-函数体长度-类长度"><a href="#3-函数体长度-类长度" class="headerlink" title="3. 函数体长度/类长度"></a>3. 函数体长度/类长度</h4><ul>
+<li>函数体太长, 不好阅读, 一般建议不要超过50行</li>
+<li>类太长, 如超过10000行, 那可能就要看下是否违反了”单一职责”原则.</li>
+</ul>
+<h4 id="4-参数个数"><a href="#4-参数个数" class="headerlink" title="4. 参数个数"></a>4. 参数个数</h4><p>不要太多, 一般不要超过5个, 超过5个, 建议使用对象</p>
+<h4 id="5-注释"><a href="#5-注释" class="headerlink" title="5. 注释"></a>5. 注释</h4><p>恰到好处的注释, 能够帮助我们理解函数/类的作用。</p>
+<h3 id="架构-设计"><a href="#架构-设计" class="headerlink" title="架构/设计"></a>架构/设计</h3><h4 id="1-单一职责原则"><a href="#1-单一职责原则" class="headerlink" title="1. 单一职责原则"></a>1. 单一职责原则</h4><p>这是经常被违背的原则, 也是最难运用好的原则.</p>
+<ul>
+<li>一个类只做一类相关的事情</li>
+<li>一个函数/方法, 最好只做一件事情</li>
+</ul>
+<h4 id="2-行为是否统一"><a href="#2-行为是否统一" class="headerlink" title="2. 行为是否统一"></a>2. 行为是否统一</h4><p>什么是行为统一? 例如:</p>
+<ul>
+<li>错误处理是否统一</li>
+<li>错误提示是否统一</li>
+<li>弹出框是否统一</li>
+<li>…</li>
+</ul>
+<p>同一逻辑/行为, 有没有执行同样的代码路径:</p>
+<ul>
+<li><strong>低质量</strong>的代码一个特征是, 同一逻辑/行为, 在不同的地方或不同的方式触发时, 没有执行同样的代码路径(产生出不同的结果), 或者是各处copy一份实现, 导致非常难以维护。</li>
+</ul>
+<h4 id="3-代码污染"><a href="#3-代码污染" class="headerlink" title="3. 代码污染"></a>3. 代码污染</h4><p>代码有没有对其他模块强耦合</p>
+<h4 id="4-重复代码"><a href="#4-重复代码" class="headerlink" title="4. 重复代码"></a>4. 重复代码</h4><p>主要看有没有把公用组件, 可复用的代码、函数抽取出来</p>
+<h4 id="5-开放-封闭原则"><a href="#5-开放-封闭原则" class="headerlink" title="5. 开放-封闭原则"></a>5. 开放-封闭原则</h4><p>简单理解是, 看代码好不好扩展</p>
+<h4 id="6-健壮性"><a href="#6-健壮性" class="headerlink" title="6. 健壮性"></a>6. 健壮性</h4><ul>
+<li>核心数据有没有强制校验?</li>
+<li>对业务有没有考虑完整, 逻辑是否健壮</li>
+<li>有没有潜在的bug?</li>
+<li>有没有内存泄露?有没有循环依赖?</li>
+</ul>
+<h4 id="7-错误处理"><a href="#7-错误处理" class="headerlink" title="7. 错误处理"></a>7. 错误处理</h4><p>有没有很好的Error Handling? 如网络出错, IO出错等。</p>
+<h4 id="8-面向接口编程-面向对象接口编程"><a href="#8-面向接口编程-面向对象接口编程" class="headerlink" title="8. 面向接口编程/面向对象接口编程"></a>8. 面向接口编程/面向对象接口编程</h4><p>主要看有没有进行合适的抽象, 把一些行为抽象为接口</p>
+<h4 id="9-效率-性能"><a href="#9-效率-性能" class="headerlink" title="9. 效率/性能"></a>9. 效率/性能</h4><ul>
+<li><p>客户端程序对频繁的消息和较大数据等耗时操作是否处理得当</p>
+</li>
+<li><p>关键算法的时间复杂度是多少? 有没有潜在的性能瓶颈? </p>
+</li>
+</ul>
+<h4 id="10-代码重构"><a href="#10-代码重构" class="headerlink" title="10. 代码重构"></a>10. 代码重构</h4><ul>
+<li>新的改动是打补丁, 让代码质量继续恶化, 还是对代码质量提升有帮助?</li>
+</ul>
+<h3 id="低质量代码的常见特征"><a href="#低质量代码的常见特征" class="headerlink" title="低质量代码的常见特征"></a>低质量代码的常见特征</h3><ul>
+<li>违反”单一职责”原则</li>
+<li>同一逻辑/行为, 通过不同的方式触发时, 不会执行同样的代码路径</li>
+<li>缺少注释</li>
+<li>函数/类命名乱, 词不达意, 或”挂羊头卖狗肉”, 例如</li>
+</ul>
+<h3 id="下面推荐一些-Code-Review-工具："><a href="#下面推荐一些-Code-Review-工具：" class="headerlink" title="下面推荐一些 Code Review 工具："></a>下面推荐一些 Code Review 工具：</h3><ul>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//www.atlassian.com/software/crucible">Crucible</a>：</strong>Atlassian 内部代码审查工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//www.gerritcodereview.com/">Gerrit</a>：</strong>Google 开源的 git 代码审查工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//github.com/">GitHub</a>：</strong>程序员应该很熟悉了，上面的 “Pull Request” 在代码审查这里很好用；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//lgtm.com/">LGTM</a>：</strong>可用于 GitHub 和 Bitbucket 的 PR 代码安全漏洞和代码质量审查辅助工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//www.phacility.com/phabricator/">Phabricator</a>：</strong>Facebook 开源的 git/mercurial/svn 代码审查工具； </li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//www.pullrequest.com/">PullRequest</a>：</strong>GitHub pull requests 代码审查辅助工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//pullreminders.com/">Pull Reminders</a>：</strong>GitHub 上有 PR 需要你审核，该插件自动通过 Slack 提醒你；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//reviewable.io/">Reviewable</a>：</strong>基于 GitHub pull requests 的代码审查辅助工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//sider.review/">Sider</a>：</strong>GitHub 自动代码审查辅助工具；</li>
+<li><strong><a href="https://link.zhihu.com/?target=https%3A//www.jetbrains.com/upsource/">Upsource</a>：</strong>JetBrain 内部部署的 git/mercurial/perforce/svn 代码审查工具。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/git/git%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/09/git/git%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%A7%84%E8%8C%83/" itemprop="url">git项目管理规范</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-09T17:13:54+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/09/git/git%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%A7%84%E8%8C%83/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/git/git%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%A7%84%E8%8C%83/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="git项目管理规范"><a href="#git项目管理规范" class="headerlink" title="git项目管理规范"></a>git项目管理规范</h1><p>试想遇到以下这些问题，你会采取怎样的方式去解决：</p>
+<ul>
+<li>需要线上某个历史版本的源码，直接在 develop 分支根据提交记录和时间找对应的节点？</li>
+<li>线上版本出现严重 bug 需要紧急修复发版本，而你的项目就一个分支，上个版本发布之后已经有大量改动了，怎么办？</li>
+<li>某个提交改动了部分代码，涉及到 10 几个文件，现在这个改动不需要了，此时要一个个找出这些文件然后再改回去么？</li>
+<li>出现了一个 bug，之前好像处理过，但是现在忘了当初怎么处理的了，在一堆写着 “fix bug”、“update” 的提交记录中，如何找到当初那笔的提交？</li>
+<li>某个功能本来准备发布的，现在突然决定这个版本不上了，现在要一处处找到之前的代码，然后再改回去？</li>
+<li>……</li>
+</ul>
+<p>既然认同需要一份 Git 规范，那么这个规范需要规范哪些内容，解决哪些问题，又带来哪些好处呢？有以下几点：</p>
+<p> <strong>分支管理：</strong></p>
+<ul>
+<li>代码提交在应该提交的分支</li>
+<li>随时可以切换到线上稳定版本代码</li>
+<li>多个版本的开发工作同时进行</li>
+</ul>
+<p><strong>提交记录的可读性</strong></p>
+<ul>
+<li>准确的提交描述，具备可检索性</li>
+<li>合理的提交范围，避免一个功能就一笔提交</li>
+<li>分支间的合并保有提交历史，且合并后结果清晰明了</li>
+<li>避免出现过多的分叉</li>
+</ul>
+<p><strong>团队协作</strong></p>
+<ul>
+<li><p>明确每个分支的功用，做到对应的分支执行对应的操作</p>
+</li>
+<li><p>合理的提交，每次提交有明确的改动范围和规范的提交信息</p>
+</li>
+<li><p>使用 Git 管理版本迭代、紧急线上 bug fix、功能开发等任务</p>
+<p>以上就是一份 Git 规范的作用和使命。</p>
+</li>
+</ul>
+<p>Git-Flow 的经典流程图：</p>
+<p><img src="https://jaeger.itscoder.com/img/postimg/git-flow.png" alt="img"></p>
+<p><img src="https://ourai.ws/assets/posts/20160418/working-with-gitflow-efa631445317065fd85a17b314e91907ec6ef5e380460dd77a68aa60f91d95c4.png" alt="基于 Git Flow 的开发流程"></p>
+<h2 id="分支管理规范"><a href="#分支管理规范" class="headerlink" title="分支管理规范"></a>分支管理规范</h2><h3 id="分支操作和说明"><a href="#分支操作和说明" class="headerlink" title="分支操作和说明"></a>分支操作和说明</h3><p><strong>master 分支</strong></p>
+<ul>
+<li>主分支，永远处于稳定状态，对应当前线上版本</li>
+<li>以 tag 标记一个版本，因此在 master 分支上看到的每一个 tag 都应该对应一个线上版本</li>
+<li>不允许在该分支直接提交代码</li>
+</ul>
+<p><strong>develop 分支</strong></p>
+<ul>
+<li>开发分支，包含了项目最新的功能和代码，所有开发都依赖 develop 分支进行</li>
+<li>小的改动可以直接在 develop 分支进行，改动较多时切出新的 feature 分支进行</li>
+</ul>
+<p><strong>注：</strong> 更好的做法是 develop 分支作为开发的主分支，也不允许直接提交代码。小改动也应该以 feature 分支提 merge request 合并，目的是保证每个改动都经过了强制代码 review，降低代码风险</p>
+<p><strong>feature 分支</strong></p>
+<ul>
+<li>功能分支，开发新功能的分支</li>
+<li>开发新的功能或者改动较大的调整，从 develop 分支切换出 feature 分支，分支名称为 <code>feature/xxx</code></li>
+<li>开发完成后合并回 develop 分支并且删除该 feature/xxx 分支</li>
+</ul>
+<p><strong>release 分支</strong></p>
+<ul>
+<li>发布分支，新功能合并到 develop 分支，准备发布新版本时使用的分支</li>
+<li>当 develop 分支完成功能合并和部分 bug fix，准备发布新版本时，切出一个 release 分支，来做发布前的准备，分支名约定为<code>release/xxx</code></li>
+<li>发布之前发现的 bug 就直接在这个分支上修复，确定准备发版本就合并到 master 分支，完成发布，同时合并到 develop 分支</li>
+</ul>
+<p><strong>hotfix 分支</strong></p>
+<ul>
+<li>紧急修复线上 bug 分支</li>
+<li>当线上版本出现 bug 时，从 master 分支切出一个 <code>hotfix/xxx</code> 分支，完成 bug 修复，然后将 <code>hotfix/xxx</code> 合并到 master 和 develop 分支(如果此时存在 release 分支，则应该合并到 release 分支)，合并完成后删除该 <code>hotfix/xxx</code> 分支</li>
+</ul>
+<p>以上就是在项目中应该出现的分支以及每个分支功能的说明。 其中稳定长期存在的分支只有 master 和 develop 分支，别的分支在完成对应的使命之后都会合并到这两个分支然后被删除。简单总结如下：</p>
+<p><strong>小结</strong></p>
+<ul>
+<li>master 分支: 线上稳定版本分支</li>
+<li>develop 分支: 开发分支，衍生出 feature 分支和 release 分支</li>
+<li>release 分支: 发布分支，准备待发布版本的分支，存在多个，版本发布之后删除</li>
+<li>feature 分支: 功能分支，完成特定功能开发的分支，存在多个，功能合并之后删除</li>
+<li>hotfix 分支: 紧急热修复分支，存在多个，紧急版本发布之后删除</li>
+</ul>
+<h3 id="分支间操作注意事项"><a href="#分支间操作注意事项" class="headerlink" title="分支间操作注意事项"></a>分支间操作注意事项</h3><h4 id="同一分支-git-pull-使用-rebase"><a href="#同一分支-git-pull-使用-rebase" class="headerlink" title="同一分支 git pull 使用 rebase"></a>同一分支 <code>git pull</code> 使用 <code>rebase</code></h4><p><img src="https://jaeger.itscoder.com/img/postimg/git_pull_no_rebase.jpg" alt="img"></p>
+<p>看到这样的  提交线图，想从中看出一条清晰的提交线几乎是不可能的，充满了 <code>Merge remote-tracking branch &#39;origin/xxx&#39; into xxx</code> 这样的提交记录，同时也将提交线弄成了交错纵横的图，没有了可读性。</p>
+<p>这里最大的原因就是因为默认的 <code>git pull</code> 使用的是 merge 行为，当你更新代码时，如果本地存在未推送到远程的提交，就会产生一个这样的 merge 提交记录。因此在同一个分支上更新代码时推荐使用 <code>git pull --rebase</code>。</p>
+<p>下面这张图展示了默认的 <code>git pull</code> 和 <code>git pull --rebase</code> 的结果差异，使用 <code>git pull --rebase</code> 目的是修整提交线图，使其形成一条直线。</p>
+<p><img src="https://jaeger.itscoder.com/img/postimg/git_pull_rebase_diff.jpg" alt="img"></p>
+<p>使用<code>git pull</code>会产生<code>H</code>这个没必要的提交记录。</p>
+<p>如果是执行 <code>git pull --rebase</code>的话，<code>C</code>和<code>D</code>这两个提交通过 <code>rebase</code> 方式重新拼接在 <code>G</code> 之后，多余的分叉去掉了，更加简洁清晰。</p>
+<p>默认的 <code>git pull</code> 行为是 merge，可以进行如下设置修改默认的 <code>git pull</code> 行为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 为某个分支单独设置，这里是设置 dev 分支</span><br><span class="line">git config branch.dev.rebase true</span><br><span class="line"># 全局设置，所有的分支 git pull 均使用 --rebase</span><br><span class="line">git config --global pull.rebase true</span><br><span class="line">git config --global branch.autoSetupRebase always</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里需要说明一下，在我看来使用 <code>git pull --rebase</code> 操作是比较好的，能够得到一条很清晰的提交直线图，方便查看提交记录和 code review，但是由于 rebase 会改变提交历史，也存在一些不好的影响。这里就不做过多的讨论了，有兴趣的话可以移步知乎上的讨论：<a href="https://www.zhihu.com/question/36509119" target="_blank" rel="noopener">在开发过程中使用 git rebase 还是 git merge，优缺点分别是什么？</a></p>
+</blockquote>
+<p><strong>小结</strong></p>
+<p>大多数时候，使用 <code>git pull --rebase</code>是为了使提交线图更好看，从而方便 code review。</p>
+<p>不过，如果你对使用 git 还不是十分熟练的话，我的建议是 <code>git pull --rebase</code>多练习几次之后再使用，因为 <strong>rebase 在 git 中，算得上是『危险行为』</strong>。</p>
+<p>另外，还需注意的是，使用 <code>git pull --rebase</code>比直接 pull 容易导致冲突的产生，如果预期冲突比较多的话，建议还是直接 pull。</p>
+<h4 id="分支合并使用-merge-no-ff"><a href="#分支合并使用-merge-no-ff" class="headerlink" title="分支合并使用 merge --no-ff"></a>分支合并使用 <code>merge --no-ff</code></h4><p>上述的 <code>git pull --rebase</code> 策略目的是修整提交线图，使其形成一条直线，而 <code>git merge --no-ff</code> 策略偏偏是反行其道，刻意地弄出提交线图分叉出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 例如当前在 develop 分支，需要合并 feature&#x2F;xxx 分支</span><br><span class="line">git merge --no-ff feature&#x2F;xxx</span><br></pre></td></tr></table></figure>
+
+<p>在解释这个命令之前，先解释下 Git 中的 fast-forward： 举例来说，开发一直在 <code>develop</code> 分支进行，此时有个新功能需要开发，新建一个 <code>feature/a</code> 分支，并在其上进行一系列开发和提交。当完成功能开发时，此时回到 <code>develop</code> 分支，此时 <code>develop</code> 分支在创建 <code>feature/a</code> 分支之后没有产生任何的 commit，那么此时的合并就叫做 fast-forward。</p>
+<p>fast-forward 合并的结果如下图所示，这种 merge 的结果就是一条直线了，无法明确看到切出一个新的 feature 分支，并完成了一个新的功能开发，因此此时比较推荐使用 <code>git merge --no-ff</code>，得到的结果就很明确知道，新的一系列提交是完成了一个新的功能，如果需要对这个功能进行 code review，那么只需要检视叉的那条线上的提交即可。</p>
+<p><img src="https://jaeger.itscoder.com/img/postimg/git_merge_diff.svg" alt="img"></p>
+<h3 id="项目分支操作流程示例"><a href="#项目分支操作流程示例" class="headerlink" title="项目分支操作流程示例"></a>项目分支操作流程示例</h3><p>这部分内容结合日常项目的开发流程，涉及到开发新功能、分支合并、发布新版本以及发布紧急修复版本等操作，展示常用的命令和操作。</p>
+<p><strong>1. 切到 develop 分支，更新 develop 最新代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git pull --rebase</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 新建 feature 分支，开发新功能</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b feature&#x2F;xxx</span><br><span class="line">...</span><br><span class="line">git add &lt;files&gt;</span><br><span class="line">git commit -m &quot;feat(xxx): commit a&quot;</span><br><span class="line">git commit -m &quot;feat(xxx): commit b&quot;</span><br><span class="line"># 其他提交</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>如果此时 develop 分支有一笔提交，影响到你的 feature 开发，可以 rebase develop 分支，前提是 该 feature 分支只有你自己一个在开发，如果多人都在该分支，需要进行协调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 切换到 develop 分支并更新 develop 分支代码</span><br><span class="line">git checkout develop</span><br><span class="line">git pull --rebase</span><br><span class="line"></span><br><span class="line"># 切回 feature 分支</span><br><span class="line">git checkout feature&#x2F;xxx</span><br><span class="line">git rebase develop</span><br><span class="line"></span><br><span class="line"># 如果需要提交到远端，且之前已经提交到远端，此时需要强推(强推需慎重！)</span><br><span class="line">git push --force</span><br></pre></td></tr></table></figure>
+
+<p>上述场景也可以通过 <code>git cherry-pick</code> 来实现，有兴趣的可以去了解一下这个指令。</p>
+<p><strong>3. 完成 feature 分支，合并到 develop 分支</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 切到 develop 分支，更新下代码</span><br><span class="line">git check develop</span><br><span class="line">git pull --rebase</span><br><span class="line"></span><br><span class="line"># 合并 feature 分支</span><br><span class="line">git merge feature&#x2F;xxx --no-ff</span><br><span class="line"></span><br><span class="line"># 删除 feature 分支</span><br><span class="line">git branch -d feature&#x2F;xxx</span><br><span class="line"></span><br><span class="line"># 推到远端</span><br><span class="line">git push origin develop</span><br></pre></td></tr></table></figure>
+
+<p><strong>4. 当某个版本所有的 feature 分支均合并到 develop 分支，就可以切出 release 分支，准备发布新版本，提交测试并进行 bug fix</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 当前在 develop 分支</span><br><span class="line">git checkout -b release&#x2F;xxx</span><br><span class="line"></span><br><span class="line"># 在 release&#x2F;xxx 分支进行 bug fix</span><br><span class="line">git commit -m &quot;fix(xxx): xxxxx&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><strong>5. 所有 bug 修复完成，准备发布新版本</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># master 分支合并 release 分支并添加 tag</span><br><span class="line">git checkout master</span><br><span class="line">git merge --no-ff release&#x2F;xxx --no-ff</span><br><span class="line"># 添加版本标记，这里可以使用版本发布日期或者具体的版本号</span><br><span class="line">git tag 1.0.0</span><br><span class="line"></span><br><span class="line"># develop 分支合并 release 分支</span><br><span class="line">git checkout develop</span><br><span class="line">git merge --no-ff release&#x2F;xxx</span><br><span class="line"></span><br><span class="line"># 删除 release 分支</span><br><span class="line">git branch -d release&#x2F;xxx</span><br></pre></td></tr></table></figure>
+
+<p>至此，一个新版本发布完成。</p>
+<p><strong>6. 线上出现 bug，需要紧急发布修复版本</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 当前在 master 分支</span><br><span class="line">git checkout master</span><br><span class="line"></span><br><span class="line"># 切出 hotfix 分支</span><br><span class="line">git checkout -b hotfix&#x2F;xxx</span><br><span class="line"></span><br><span class="line">... 进行 bug fix 提交</span><br><span class="line"></span><br><span class="line"># master 分支合并 hotfix 分支并添加 tag(紧急版本)</span><br><span class="line">git checkout master</span><br><span class="line">git merge --no-ff hotfix&#x2F;xxx --no-ff</span><br><span class="line"># 添加版本标记，这里可以使用版本发布日期或者具体的版本号</span><br><span class="line">git tag 1.0.1</span><br><span class="line"></span><br><span class="line"># develop 分支合并 hotfix 分支(如果此时存在 release 分支的话，应当合并到 release 分支)</span><br><span class="line">git checkout develop</span><br><span class="line">git merge --no-ff hotfix&#x2F;xxx</span><br><span class="line"></span><br><span class="line"># 删除 hotfix 分支</span><br><span class="line">git branch -d hotfix&#x2F;xxx</span><br></pre></td></tr></table></figure>
+
+<p>至此，紧急版本发布完成。</p>
+<h2 id="提交信息规范"><a href="#提交信息规范" class="headerlink" title="提交信息规范"></a>提交信息规范</h2><h3 id="分支说明和操作"><a href="#分支说明和操作" class="headerlink" title="分支说明和操作"></a>分支说明和操作</h3><p>git commit 格式 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</span><br></pre></td></tr></table></figure>
+
+<p>各个部分的说明如下：</p>
+<ul>
+<li><strong>Type的类别说明：</strong><ul>
+<li><strong>feat</strong>: 新功能</li>
+<li><strong>fix</strong>: 修复 bug</li>
+<li><strong>docs</strong>: 文档变动</li>
+<li><strong>style</strong>: 格式调整，对代码实际运行没有改动，例如添加空行、格式化等</li>
+<li><strong>refactor</strong>: bug 修复和添加新功能之外的代码改动</li>
+<li><strong>perf</strong>: 提升性能的改动</li>
+<li><strong>test</strong>: 添加或修正测试代码</li>
+<li><strong>chore</strong>: 构建过程或辅助工具和库（如文档生成）的更改</li>
+</ul>
+</li>
+<li><strong>scope 修改范围：</strong><ul>
+<li>主要是这次修改涉及到的部分，简单概括，例如 login、train-order</li>
+</ul>
+</li>
+<li><strong>subject 修改的描述：</strong><ul>
+<li>具体的修改描述信息</li>
+</ul>
+</li>
+</ul>
+<p><strong>范例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">feat(detail): 详情页修改样式</span><br><span class="line">fix(login): 登录页面错误处理</span><br><span class="line">test(list): 列表页添加测试代码</span><br></pre></td></tr></table></figure>
+
+<p>这里对提交规范加几点说明：</p>
+<ul>
+<li><code>type + scope</code> 能够控制每笔提交改动的文件尽可能少且集中，避免一次很多文件改动或者多个改动合成一笔。</li>
+<li><code>subject</code> 对于大部分国内项目而已，如果团队整体英文不是较高水平，比较推荐使用中文，方便阅读和检索。</li>
+<li>避免重复的提交信息，如果发现上一笔提交没改完整，可以使用 <code>git commit --amend</code> 指令追加改动，尽量避免重复的提交信息。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/git/git%E5%91%BD%E4%BB%A4%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/09/git/git%E5%91%BD%E4%BB%A4%E9%9B%86/" itemprop="url">git命令集</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-09T14:32:33+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/09/git/git%E5%91%BD%E4%BB%A4%E9%9B%86/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/git/git%E5%91%BD%E4%BB%A4%E9%9B%86/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p><img src="http://www.ruanyifeng.com/blogimg/asset/2015/bg2015120901.png" alt="img"></p>
+<ul>
+<li>Workspace：工作区</li>
+<li>Index / Stage：暂存区</li>
+<li>Repository：仓库区（或本地仓库）</li>
+<li>Remote：远程仓库</li>
+</ul>
+<h3 id="新建代码库"><a href="#新建代码库" class="headerlink" title="新建代码库"></a>新建代码库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录新建一个Git代码库</span></span><br><span class="line">$ git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建一个目录，将其初始化为Git代码库</span></span><br><span class="line">$ git init [project-name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载一个项目和它的整个代码历史</span></span><br><span class="line">$ git <span class="built_in">clone</span> [url]</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加-删除文件"><a href="#增加-删除文件" class="headerlink" title="增加/删除文件"></a>增加/删除文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加指定文件到暂存区</span></span><br><span class="line">$ git add [file1] [file2] ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加指定目录到暂存区，包括子目录</span></span><br><span class="line">$ git add [dir]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加当前目录的所有文件到暂存区</span></span><br><span class="line">$ git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加每个变化前，都会要求确认</span></span><br><span class="line"><span class="comment"># 对于同一个文件的多处变化，可以实现分次提交</span></span><br><span class="line">$ git add -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除工作区文件，并且将这次删除放入暂存区</span></span><br><span class="line">$ git rm [file1] [file2] ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归删除</span></span><br><span class="line">git rm -r *  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止追踪指定文件，但该文件会保留在工作区</span></span><br><span class="line">$ git rm --cached [file]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 改名文件，并且将这个改名放入暂存区</span></span><br><span class="line">$ git mv [file-original] [file-renamed]</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码提交"><a href="#代码提交" class="headerlink" title="代码提交"></a>代码提交</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提交暂存区到仓库区</span></span><br><span class="line">$ git commit -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交暂存区的指定文件到仓库区</span></span><br><span class="line">$ git commit [file1] [file2] ... -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交工作区自上次commit之后的变化，直接到仓库区</span></span><br><span class="line">$ git commit -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交时显示所有diff信息</span></span><br><span class="line">$ git commit -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用一次新的commit，替代上一次提交</span></span><br><span class="line"><span class="comment"># 如果代码没有任何新变化，则用来改写上一次commit的提交信息</span></span><br><span class="line">$ git commit --amend -m [message]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重做上一次commit，并包括指定文件的新变化</span></span><br><span class="line">$ git commit --amend [file1] [file2] ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有本地分支</span><br><span class="line">$ git branch</span><br><span class="line"></span><br><span class="line"># 列出所有远程分支</span><br><span class="line">$ git branch -r</span><br><span class="line"></span><br><span class="line"># 列出所有本地分支和远程分支</span><br><span class="line">$ git branch -a</span><br><span class="line"></span><br><span class="line"># 新建一个分支，但依然停留在当前分支</span><br><span class="line">$ git branch [branch-name]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，并切换到该分支</span><br><span class="line">$ git checkout -b [branch]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，指向指定commit</span><br><span class="line">$ git branch [branch] [commit]</span><br><span class="line"></span><br><span class="line"># 新建一个分支，与指定的远程分支建立追踪关系</span><br><span class="line">$ git branch --track [branch] [remote-branch]</span><br><span class="line"></span><br><span class="line"># 切换到指定分支，并更新工作区</span><br><span class="line">$ git checkout [branch-name]</span><br><span class="line"></span><br><span class="line"># 切换到上一个分支</span><br><span class="line">$ git checkout -</span><br><span class="line"></span><br><span class="line"># 建立追踪关系，在现有分支与指定的远程分支之间</span><br><span class="line">$ git branch --set-upstream [branch] [remote-branch]</span><br><span class="line"></span><br><span class="line"># 合并指定分支到当前分支</span><br><span class="line">$ git merge [branch]</span><br><span class="line"></span><br><span class="line">#使用--no-ff参数后，会执行正常合并，在Master分支上生成一个新节点，为了保证版本演进的清晰。</span><br><span class="line">git merge --no-ff</span><br><span class="line"></span><br><span class="line"># 选择一个commit，合并进当前分支</span><br><span class="line">$ git cherry-pick [commit]</span><br><span class="line"># 一次转移多个提交</span><br><span class="line">$ git cherry-pick &lt;HashA&gt; &lt;HashB&gt;</span><br><span class="line">#如果想要转移一系列的连续提交，可以使用下面的简便语法。不包括A</span><br><span class="line">$ git cherry-pick A..B </span><br><span class="line">#注意，使用上面的命令，提交 A 将不会包含在 Cherry pick 中。如果要包含提交 A，可以使用下面的语法。</span><br><span class="line">git cherry-pick A^..B </span><br><span class="line"></span><br><span class="line"># 删除分支</span><br><span class="line">$ git branch -d [branch-name]</span><br><span class="line"></span><br><span class="line"># 删除远程分支</span><br><span class="line">$ git push origin --delete [branch-name]</span><br><span class="line">$ git branch -dr [remote&#x2F;branch]</span><br></pre></td></tr></table></figure>
+
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 列出所有tag</span><br><span class="line">$ git tag</span><br><span class="line"></span><br><span class="line"># 新建一个tag在当前commit</span><br><span class="line">$ git tag [tag]</span><br><span class="line"></span><br><span class="line"># 新建一个tag在指定commit</span><br><span class="line">$ git tag [tag] [commit]</span><br><span class="line"></span><br><span class="line"># 删除本地tag</span><br><span class="line">$ git tag -d [tag]</span><br><span class="line"></span><br><span class="line"># 删除远程tag</span><br><span class="line">$ git push origin :refs&#x2F;tags&#x2F;[tagName]</span><br><span class="line"></span><br><span class="line"># 查看tag信息</span><br><span class="line">$ git show [tag]</span><br><span class="line"></span><br><span class="line"># 提交指定tag</span><br><span class="line">$ git push [remote] [tag]</span><br><span class="line"></span><br><span class="line"># 提交所有tag</span><br><span class="line">$ git push [remote] --tags</span><br><span class="line"></span><br><span class="line"># 新建一个分支，指向某个tag</span><br><span class="line">$ git checkout -b [branch] [tag]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"># 显示有变更的文件</span><br><span class="line">$ git status</span><br><span class="line"></span><br><span class="line"># 显示当前分支的版本历史</span><br><span class="line">$ git log</span><br><span class="line"></span><br><span class="line"># 显示commit历史，以及每次commit发生变更的文件</span><br><span class="line">$ git log --stat</span><br><span class="line"></span><br><span class="line"># 搜索提交历史，根据关键词</span><br><span class="line">$ git log -S [keyword]</span><br><span class="line"></span><br><span class="line"># 显示某个commit之后的所有变动，每个commit占据一行</span><br><span class="line">$ git log [tag] HEAD --pretty&#x3D;format:%s</span><br><span class="line"></span><br><span class="line"># 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件</span><br><span class="line">$ git log [tag] HEAD --grep feature</span><br><span class="line"></span><br><span class="line"># 显示某个文件的版本历史，包括文件改名</span><br><span class="line">$ git log --follow [file]</span><br><span class="line">$ git whatchanged [file]</span><br><span class="line"></span><br><span class="line"># 显示指定文件相关的每一次diff</span><br><span class="line">$ git log -p [file]</span><br><span class="line"></span><br><span class="line"># 显示过去5次提交</span><br><span class="line">$ git log -5 --pretty --oneline</span><br><span class="line"></span><br><span class="line"># 显示所有提交过的用户，按提交次数排序</span><br><span class="line">$ git shortlog -sn</span><br><span class="line"></span><br><span class="line"># 显示指定文件是什么人在什么时间修改过</span><br><span class="line">$ git blame [file]</span><br><span class="line"></span><br><span class="line"># 显示暂存区和工作区的差异</span><br><span class="line">$ git diff</span><br><span class="line"></span><br><span class="line"># 显示暂存区和上一个commit的差异</span><br><span class="line">$ git diff --cached [file]</span><br><span class="line"></span><br><span class="line"># 显示工作区与当前分支最新commit之间的差异</span><br><span class="line">$ git diff HEAD</span><br><span class="line"></span><br><span class="line"># 显示两次提交之间的差异</span><br><span class="line">$ git diff [first-branch]...[second-branch]</span><br><span class="line"></span><br><span class="line"># 显示今天你写了多少行代码</span><br><span class="line">$ git diff --shortstat &quot;@&#123;0 day ago&#125;&quot;</span><br><span class="line"></span><br><span class="line"># 显示某次提交的元数据和内容变化</span><br><span class="line">$ git show [commit]</span><br><span class="line"></span><br><span class="line"># 显示某次提交发生变化的文件</span><br><span class="line">$ git show --name-only [commit]</span><br><span class="line"></span><br><span class="line"># 显示某次提交时，某个文件的内容</span><br><span class="line">$ git show [commit]:[filename]</span><br><span class="line"></span><br><span class="line"># 显示当前分支的最近几次提交</span><br><span class="line">$ git reflog</span><br></pre></td></tr></table></figure>
+
+<h3 id="远程同步"><a href="#远程同步" class="headerlink" title="远程同步"></a>远程同步</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载远程仓库的所有变动</span></span><br><span class="line">$ git fetch [remote]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示所有远程仓库</span></span><br><span class="line">$ git remote -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示某个远程仓库的信息</span></span><br><span class="line">$ git remote show [remote]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加一个新的远程仓库，并命名</span></span><br><span class="line">$ git remote add [shortname] [url]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取回远程仓库的变化，并与本地分支合并</span></span><br><span class="line">$ git pull [remote] [branch]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上传本地指定分支到远程仓库</span></span><br><span class="line">$ git push [remote] [branch]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强行推送当前分支到远程仓库，即使有冲突</span></span><br><span class="line">$ git push [remote] --force</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送所有分支到远程仓库</span></span><br><span class="line">$ git push [remote] --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 恢复暂存区的指定文件到工作区</span><br><span class="line">$ git checkout [file]</span><br><span class="line"></span><br><span class="line"># 恢复某个commit的指定文件到暂存区和工作区</span><br><span class="line">$ git checkout [commit] [file]</span><br><span class="line"></span><br><span class="line"># 恢复暂存区的所有文件到工作区</span><br><span class="line">$ git checkout .</span><br><span class="line"></span><br><span class="line"># 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</span><br><span class="line">$ git reset [file]</span><br><span class="line"></span><br><span class="line"># 重置暂存区与工作区，与上一次commit保持一致</span><br><span class="line">$ git reset --hard</span><br><span class="line"></span><br><span class="line"># 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</span><br><span class="line">$ git reset [commit]</span><br><span class="line"></span><br><span class="line"># 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</span><br><span class="line">$ git reset --hard [commit]</span><br><span class="line"></span><br><span class="line"># 重置当前HEAD为指定commit，但保持暂存区和工作区不变</span><br><span class="line">$ git reset --keep [commit]</span><br><span class="line"></span><br><span class="line"># 新建一个commit，用来撤销指定commit</span><br><span class="line"># 后者的所有变化都将被前者抵消，并且应用到当前分支</span><br><span class="line">$ git revert [commit]</span><br><span class="line"></span><br><span class="line"># 查看所有暂存</span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line"># 暂时将未提交的变化移除，稍后再移入</span><br><span class="line">$ git stash</span><br><span class="line">$ git stash pop</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a>配置相关</h2><p>Git的设置文件为<code>.gitconfig</code>，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 显示当前的Git配置</span><br><span class="line">$ git config --list</span><br><span class="line"></span><br><span class="line"># 编辑Git配置文件 global是全局配置</span><br><span class="line">$ git config -e [--global]</span><br><span class="line"></span><br><span class="line"># 设置提交代码时的用户信息</span><br><span class="line">$ git config [--global] user.name &quot;[name]&quot;</span><br><span class="line">$ git config [--global] user.email &quot;[email address]&quot;</span><br><span class="line"></span><br><span class="line"># 为某个分支单独设置，这里是设置 dev 分支</span><br><span class="line">git config branch.dev.rebase true</span><br><span class="line"># 全局设置，所有的分支 git pull 均使用 --rebase</span><br><span class="line">git config --global pull.rebase true</span><br><span class="line">git config --global branch.autoSetupRebase always</span><br><span class="line"></span><br><span class="line"># 删除全局代理</span><br><span class="line">git config --global --unset http.proxy</span><br></pre></td></tr></table></figure>
+
+<h2 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h2><h3 id="提交数统计"><a href="#提交数统计" class="headerlink" title="提交数统计"></a>提交数统计</h3><p>统计提交(commit)次数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --oneline | wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="统计每个人增删行数"><a href="#统计每个人增删行数" class="headerlink" title="统计每个人增删行数"></a>统计每个人增删行数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --format&#x3D;&#39;%aN&#39; | sort -u | while read name; do echo -en &quot;$name\t&quot;; git log --author&#x3D;&quot;$name&quot; --pretty&#x3D;tformat: --numstat | awk &#39;&#123; add +&#x3D; $1; subs +&#x3D; $2; loc +&#x3D; $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#39; -; done</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fengxing	added lines: 56705, removed lines: 21012, total lines: 35693</span><br><span class="line">jiaozhegang	added lines: 10477, removed lines: 10156, total lines: 321</span><br><span class="line">unknown	added lines: 10469, removed lines: 14, total lines: 10455</span><br><span class="line">wangkai	added lines: 5, removed lines: 4, total lines: 1</span><br><span class="line">zhangyun	added lines: 33495, removed lines: 8966, total lines: 24529</span><br><span class="line">zrj	added lines: 7841, removed lines: 15648, total lines: -7807</span><br><span class="line">冯海超	added lines: 2, removed lines: 1, total lines: 1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">71012679	added lines: 2, removed lines: 2, total lines: 0</span><br><span class="line">chouyanhejiutangtou	added lines: 8979, removed lines: 1925, total lines: 7054</span><br><span class="line">fengxing	added lines: 26709, removed lines: 7520, total lines: 19189</span><br><span class="line">unknown	added lines: , removed lines: , total lines:</span><br><span class="line">wangkai	added lines: 17284, removed lines: 8779, total lines: 8505</span><br><span class="line">zhangyun	added lines: 22444, removed lines: 6506, total lines: 15938</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>git log 参数说明：<br>–author 指定作者<br>–stat 显示每次更新的文件修改统计信息，会列出具体文件列表<br>–shortstat 统计每个commit 的文件修改行数，包括增加，删除，但不列出文件列表：<br>–numstat 统计每个commit 的文件修改行数，包括增加，删除，并列出文件列表：<br>-p 选项展开显示每次提交的内容差异，用 -2 则仅显示最近的两次更新<br>例如：git log -p -2<br>–name-only 仅在提交信息后显示已修改的文件清单<br>–name-status 显示新增、修改、删除的文件清单<br>–abbrev-commit 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符<br>–relative-date 使用较短的相对时间显示（比如，“2 weeks ago”）<br>–graph 显示 ASCII 图形表示的分支合并历史<br>–pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）<br>例如： git log –pretty=oneline ; git log –pretty=short ; git log –pretty=full ; git log –pretty=fuller<br>–pretty=tformat: 可以定制要显示的记录格式，这样的输出便于后期编程提取分析<br>例如：git log –pretty=format:””%h - %an, %ar : %s””<br>下面列出了常用的格式占位符写法及其代表的意义。<br>选项 说明<br>%H 提交对象（commit）的完整哈希字串<br>%h 提交对象的简短哈希字串<br>%T 树对象（tree）的完整哈希字串<br>%t 树对象的简短哈希字串<br>%P 父对象（parent）的完整哈希字串<br>%p 父对象的简短哈希字串<br>%an 作者（author）的名字<br>%ae 作者的电子邮件地址<br>%ad 作者修订日期（可以用 -date= 选项定制格式）<br>%ar 作者修订日期，按多久以前的方式显示<br>%cn 提交者(committer)的名字<br>%ce 提交者的电子邮件地址<br>%cd 提交日期<br>%cr 提交日期，按多久以前的方式显示<br>%s 提交说明<br>–since 限制显示输出的范围，<br>例如： git log –since=2.weeks 显示最近两周的提交<br>选项 说明<br>-(n) 仅显示最近的 n 条提交<br>–since, –after 仅显示指定时间之后的提交。<br>–until, –before 仅显示指定时间之前的提交。<br>–author 仅显示指定作者相关的提交。<br>–committer 仅显示指定提交者相关的提交。</p>
+</blockquote>
+<h3 id="查看git上的个人代码量："><a href="#查看git上的个人代码量：" class="headerlink" title="查看git上的个人代码量："></a>查看git上的个人代码量：</h3><p>使用的使用把<code>fengxing</code>换成自己的用户名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --author&#x3D;&quot;fengxing&quot; --pretty&#x3D;tformat: --numstat | awk &#39;&#123; add +&#x3D; $1; subs +&#x3D; $2; loc +&#x3D; $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#39; -</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码总行数"><a href="#代码总行数" class="headerlink" title="代码总行数"></a>代码总行数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . &quot;(&quot; -name &quot;*.java&quot; &quot;)&quot; -print | xargs wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="贡献者统计"><a href="#贡献者统计" class="headerlink" title="贡献者统计"></a>贡献者统计</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty&#x3D;&#39;%aN&#39; | sort -u | wc -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看仓库提交者排名前-5"><a href="#查看仓库提交者排名前-5" class="headerlink" title="查看仓库提交者排名前 5"></a>查看仓库提交者排名前 5</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty&#x3D;&#39;%aN&#39; | sort | uniq -c | sort -k1 -n -r | head -n 5</span><br></pre></td></tr></table></figure>
+
+<h3 id="显示所有提交过的用户，按提交次数排序"><a href="#显示所有提交过的用户，按提交次数排序" class="headerlink" title="显示所有提交过的用户，按提交次数排序"></a>显示所有提交过的用户，按提交次数排序</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git shortlog -sn</span><br></pre></td></tr></table></figure>
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/Java/%E7%BA%A2%E9%BB%91%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1850,158 +2631,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="url">Android面试基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T23:03:36+08:00">
-                2020-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
-                    <span itemprop="name">面试</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Android基础面试题详解"><a href="#Android基础面试题详解" class="headerlink" title="Android基础面试题详解"></a>Android基础面试题详解</h1><p><img src="https://img-blog.csdnimg.cn/2020041121370949.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70#pic_center" alt="Android面试知识框架"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Java/Java%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3096,7 +3725,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%83%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯星">
@@ -3115,7 +3744,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%83%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" itemprop="url">七大设计原则</a></h1>
+                <a class="post-title-link" href="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="url">Android面试基础</a></h1>
         
 
         <div class="post-meta">
@@ -3150,8 +3779,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
+                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
+                    <span itemprop="name">面试</span>
                   </a>
                 </span>
 
@@ -3168,8 +3797,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%83%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%83%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" itemprop="commentCount"></span>
+                <a href="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/Android/Android%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -3199,223 +3828,7 @@
       
         
           
-            <h1 id="七大设计原则"><a href="#七大设计原则" class="headerlink" title="七大设计原则"></a>七大设计原则</h1><h2 id="单一原则"><a href="#单一原则" class="headerlink" title="单一原则"></a>单一原则</h2><p>一个类做一件事情，避免职责过多。就一个类来说，应该只有一个引起它变化的原因（只负责担任一个职责）</p>
-<blockquote>
-<p>如果一个类承担的职责过多，即耦合性太高一个职责的变化可能会影响到其他的职责</p>
-</blockquote>
-<h3 id="问题由来："><a href="#问题由来：" class="headerlink" title="问题由来："></a>问题由来：</h3><p>类T负责两个不同的职责：职责P1，职责P2。当由于职责P1需求发生改变而需要修改类T时，有可能会导致原本运行正常的职责P2功能发生故障。</p>
-<h3 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h3><p>遵循单一职责原则。分别建立两个类T1、T2，使T1完成职责P1功能，T2完成职责P2功能。这样，当修改类T1时，不会使职责P2发生故障风险；同理，当修改T2时，也不会使职责P1发生故障风险。</p>
-<p>遵循单一职责原的优点有：</p>
-<ul>
-<li>可以降低类的复杂度，一个类只负责一项职责，其逻辑肯定要比负责多项职责简单的多；</li>
-<li>提高类的可读性，提高系统的可维护性；</li>
-<li>变更引起的风险降低，变更是必然的，如果单一职责原则遵守的好，当修改一个功能时，可以显著降低对其他功能的影响。</li>
-</ul>
-<h2 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h2><p>一个实体（类、函数、模块等）应该对外扩展开放，对内修改关闭</p>
-<blockquote>
-<p>对于扩展是开放的，对于修改是封闭的。尽量做到面对需求的改变时，我们的代码能保持相对稳定，通过扩展的方式应对变化，而不是修改原有代码实现</p>
-<p>符合开放封闭原则的最好方式是提供一个固有的接口，然后让所有可能发生变化的类实现该接口，让固定的接口与相关对象进行交互。</p>
-</blockquote>
-<h3 id="问题由来"><a href="#问题由来" class="headerlink" title="问题由来"></a>问题由来</h3><p>在软件的生命周期内，因为变化、升级和维护等原因需要对软件原有代码进行修改时，可能会给旧代码中引入错误，也可能会使我们不得不对整个功能进行重构，并且需要原有代码经过重新测试。</p>
-<h3 id="解决方案：-1"><a href="#解决方案：-1" class="headerlink" title="解决方案："></a>解决方案：</h3><p>当软件需要变化时，尽量通过扩展软件实体的行为来实现变化，而不是通过修改已有的代码来实现变化。</p>
-<h2 id="里氏代替原则"><a href="#里氏代替原则" class="headerlink" title="里氏代替原则"></a>里氏代替原则</h2><p>里氏替换原则通俗的来讲就是：<strong>子类可以扩展父类的功能，但不能改变父类原有的功能。</strong>它包含以下4层含义：</p>
-<ul>
-<li>子类可以实现父类的抽象方法，但不能覆盖父类的非抽象方法。</li>
-<li>子类中可以增加自己特有的方法。</li>
-<li>当子类的方法重载父类的方法时，方法的前置条件（即方法的形参）要比父类方法的输入参数更宽松。</li>
-<li>当子类的方法实现父类的抽象方法时，方法的后置条件（即方法的返回值）要比父类更严格。</li>
-</ul>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p><strong>定义1：</strong>如果对每一个类型为 T1的对象 o1，都有类型为 T2 的对象o2，使得以 T1定义的所有程序 P 在所有的对象 o1 都代换成 o2 时，程序 P 的行为没有发生变化，那么类型 T2 是类型 T1 的子类型。</p>
-<p><strong>定义2：</strong>所有引用基类的地方必须能透明地使用其子类的对象。</p>
-<h3 id="问题由来-1"><a href="#问题由来-1" class="headerlink" title="问题由来"></a>问题由来</h3><p>有一功能P1，由类A完成。现需要将功能P1进行扩展，扩展后的功能为P，其中P由原有功能P1与新功能P2组成。新功能P由类A的子类B来完成，则子类B在完成新功能P2的同时，有可能会导致原有功能P1发生故障。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p><strong>解决方案：</strong>当使用继承时，遵循里氏替换原则。类B继承类A时，除添加新的方法完成新增功能P2外，尽量不要重写父类A的方法，也尽量不要重载父类A的方法。</p>
-<p>继承包含这样一层含义：父类中凡是已经实现好的方法（相对于抽象方法而言），实际上是在设定一系列的规范和契约，虽然它不强制要求所有的子类必须遵从这些契约，但是如果子类对这些非抽象方法任意修改，就会对整个继承体系造成破坏。而里氏替换原则就是表达了这一层含义。</p>
-<h3 id="多态是不是违背了里氏替换原则？"><a href="#多态是不是违背了里氏替换原则？" class="headerlink" title="多态是不是违背了里氏替换原则？"></a>多态是不是违背了里氏替换原则？</h3><p>里氏替换原则是针对继承而言的，<strong>如果继承是为了实现代码重用</strong>，也就是为了共享方法，那么共享的父类方法就应该保持不变，不能被子类重新定义。子类只能通过新添加方法来扩展功能，父类和子类都可以实例化，而子类继承的方法和父类是一样的，父类调用方法的地方，子类也可以调用同一个继承得来的，逻辑和父类一致的方法，这时用子类对象将父类对象替换掉时，当然逻辑一致，相安无事。</p>
-<p> <strong>如果继承的目的是为了多态</strong>，而多态的前提就是子类覆盖并重新定义父类的方法，为了符合LSP，我们应该将父类定义为抽象类，并定义抽象方法，让子类重新定义这些方法，当父类是抽象类时，父类就是不能实例化，所以也不存在可实例化的父类对象在程序里。也就不存在子类替换父类实例（根本不存在父类实例了）时逻辑不一致的可能。</p>
-<p>不符合LSP的最常见的情况是，父类和子类都是可实例化的非抽象类，且父类的方法被子类重新定义，这一类的实现继承会造成父类和子类间的强耦合，也就是实际上并不相关的属性和方法牵强附会在一起，不利于程序扩展和维护。</p>
-<p><strong>如何符合LSP？总结一句话</strong> <strong>——</strong> <strong>就是尽量不要从可实例化的父类中继承，而是要使用基于抽象类和接口的继承。</strong></p>
-<h2 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h2><p>依赖倒置原则的核心思想是<strong>面向接口编程，</strong></p>
-<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p><strong>高层模块不应该依赖低层模块，二者都应该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象。</strong></p>
-<h3 id="问题由来：-1"><a href="#问题由来：-1" class="headerlink" title="问题由来："></a>问题由来：</h3><p>类A直接依赖类B，假如要将类A改为依赖类C，则必须通过修改类A的代码来达成。这种场景下，类A一般是高层模块，负责复杂的业务逻辑；类B和类C是低层模块，负责基本的原子操作；假如修改类A，会给程序带来不必要的风险。</p>
-<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><p>将类A修改为依赖接口I，类B和类C各自实现接口I，类A通过接口I间接与类B或者类C发生联系，则会大大降低修改类A的几率。</p>
-<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>用一个例子来说明面向接口编程比相对于面向实现编程好在什么地方。场景是这样的，母亲给孩子讲故事，只要给她一本书，她就可以照着书给孩子讲故事了。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Book&#123;</span><br><span class="line">	public String getContent()&#123;</span><br><span class="line">		return &quot;很久很久以前有一个阿拉伯的故事……&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class Mother&#123;</span><br><span class="line">	public void narrate(Book book)&#123;</span><br><span class="line">		System.out.println(&quot;妈妈开始讲故事&quot;);</span><br><span class="line">		System.out.println(book.getContent());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public class Client&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Mother mother &#x3D; new Mother();</span><br><span class="line">		mother.narrate(new Book());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">运行结果：</span><br><span class="line"></span><br><span class="line">妈妈开始讲故事</span><br><span class="line">很久很久以前有一个阿拉伯的故事……</span><br></pre></td></tr></table></figure>
-
-<p>​    运行良好，假如有一天，需求变成这样：不是给书而是给一份报纸，让这位母亲讲一下报纸上的故事，报纸的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Newspaper</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getContent</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"林书豪38+7领导尼克斯击败湖人……"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这位母亲却办不到，因为她居然不会读报纸上的故事，这太荒唐了，只是将书换成报纸，居然必须要修改Mother才能读。假如以后需求换成杂志呢？换成网页呢？还要不断地修改Mother，这显然不是好的设计。原因就是Mother与Book之间的耦合性太高了，必须降低他们之间的耦合度才行。</p>
-<p>我们引入一个抽象的接口IReader。读物，只要是带字的都属于读物：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IReader</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getContent</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Mother类与接口IReader发生依赖关系，而Book和Newspaper都属于读物的范畴，他们各自都去实现IReader接口，这样就符合依赖倒置原则了，代码修改为：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Newspaper</span> <span class="keyword">implements</span> <span class="title">IReader</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getContent</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"林书豪17+9助尼克斯击败老鹰……"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span> <span class="keyword">implements</span> <span class="title">IReader</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getContent</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"很久很久以前有一个阿拉伯的故事……"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mother</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">narrate</span><span class="params">(IReader reader)</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"妈妈开始讲故事"</span>);</span><br><span class="line">		System.out.println(reader.getContent());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Mother mother = <span class="keyword">new</span> Mother();</span><br><span class="line">		mother.narrate(<span class="keyword">new</span> Book());</span><br><span class="line">		mother.narrate(<span class="keyword">new</span> Newspaper());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">运行结果：</span><br><span class="line"></span><br><span class="line">妈妈开始讲故事</span><br><span class="line">很久很久以前有一个阿拉伯的故事……</span><br><span class="line">妈妈开始讲故事</span><br><span class="line">林书豪17+9助尼克斯击败老鹰……</span><br></pre></td></tr></table></figure>
-
-<p>这样修改后，无论以后怎样扩展Client类，都不需要再修改Mother类了。这只是一个简单的例子，实际情况中，代表高层模块的Mother类将负责完成主要的业务逻辑，一旦需要对它进行修改，引入错误的风险极大。所以遵循依赖倒置原则可以降低类之间的耦合性，提高系统的稳定性，降低修改程序造成的风险。</p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>在实际编程中，我们一般需要做到如下3点：</p>
-<ul>
-<li>低层模块尽量都要有抽象类或接口，或者两者都有。</li>
-<li>变量的声明类型尽量是抽象类或接口。</li>
-<li>使用继承时遵循里氏替换原则。</li>
-</ul>
-<h3 id="什么是依赖"><a href="#什么是依赖" class="headerlink" title="什么是依赖"></a>什么是依赖</h3><p>依赖是一种关系，通俗来讲就是一种需要。  </p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-69e25239dbeb6ab9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">程序员需要电脑，因为没有电脑程序员就没有办法编写代码，所以说程序员<strong>依赖</strong>电脑，电脑被程序员依赖。  </p>
-<h3 id="控制反转-Inversion-of-Control"><a href="#控制反转-Inversion-of-Control" class="headerlink" title="控制反转(Inversion of Control)"></a>控制反转(Inversion of Control)</h3><p><a href="https://cloud.tencent.com/developer/article/1383115这篇文章对依赖、依赖倒置、控制反转、依赖注入的解释。" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1383115这篇文章对依赖、依赖倒置、控制反转、依赖注入的解释。</a></p>
-<p>IoC 是一种新的设计模式，它对上层模块与底层模块进行了更进一步的解耦。*<em>意思就是对于控制权的转移。它对上层模块与底层模块进行了更进一步的解耦。反转了上层模块对于底层模块的依赖控制。 *</em></p>
-<p>应用程序本身不负责依赖对象的创建和维护，而是将它交给一个外部容器（比如Unity）来负责，这样控制权就由应用程序转移到了外部IoC 容器，即控制权实现了所谓的反转。例如在类型A中需要使用类型B的实例，而B 实例的创建并不由A 来负责，而是通过外部容器来创建。</p>
-<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>我们到餐厅去叫外卖，餐厅有专门送外卖的外卖员，他们的使命就是及时送达外卖食品。</p>
-<p>依照<strong>依赖倒置原则</strong>，我们可以创建这样一个类。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public abstract class WaimaiYuan &#123;</span><br><span class="line"></span><br><span class="line">    protected Food food;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public WaimaiYuan(Food food) &#123;</span><br><span class="line">        this.food &#x3D; food;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    abstract void songWaiMai();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Xiaohuozi extends WaimaiYuan &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public Xiaohuozi(Food food) &#123;</span><br><span class="line">        super(food);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void songWaiMai() &#123;</span><br><span class="line">        System.out.println(&quot;我是小伙子,为您送的外卖是：&quot;+food);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class XiaoGuniang extends WaimaiYuan &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public XiaoGuniang(Food food) &#123;</span><br><span class="line">        super(food);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    void songWaiMai() &#123;</span><br><span class="line">        System.out.println(&quot;我是小姑娘,为您送的外卖是：&quot;+food);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>WaimaiYuan 是抽象类，代表送外卖的，Xiaohuozi 和 XiaoGuniang 是它的继承者，说明他们都可以送外卖。WaimaiYuan 都依赖于 Food，但是它没有实例化 Food 的权力。</p>
-<p>再编写食物类代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Food &#123;</span><br><span class="line">    protected String name;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class PijiuYa extends Food &#123;</span><br><span class="line"></span><br><span class="line">    public PijiuYa() &#123;</span><br><span class="line">        name &#x3D; &quot;啤酒鸭&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class DuojiaoYutou extends Food &#123;</span><br><span class="line"></span><br><span class="line">    public DuojiaoYutou() &#123;</span><br><span class="line">        name &#x3D; &quot;剁椒鱼头&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Food 是抽象类，PijiuYa 和 DuojiaoYutou 都是实现细节。  </p>
-<p>IoC 少不了 IoC 容器，也就是实例化抽象的地方。我们编写一个餐厅类。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Restaurant &#123;</span><br><span class="line"></span><br><span class="line">    public static void peican(int orderid,int flowid) &#123;</span><br><span class="line">        WaimaiYuan person;</span><br><span class="line">        Food food;</span><br><span class="line"></span><br><span class="line">        if ( orderid &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            food &#x3D; new PijiuYa();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            food &#x3D; new DuojiaoYutou();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if ( flowid % 2 &#x3D;&#x3D; 0 ) &#123;</span><br><span class="line">            person &#x3D; new Xiaohuozi(food);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            person &#x3D; new XiaoGuniang(food);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        person.songWaiMai();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>orderid 代表菜品编号，0 是啤酒鸭，其它则是剁椒鱼头。  </p>
-<p> flowid 是订单的流水号码。 餐厅根据流水编码的不同来指派小伙子或者小姑娘来送外卖，编写测试代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class IocTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Restaurant.peican(0, 0);</span><br><span class="line">        Restaurant.peican(0, 1);</span><br><span class="line">        Restaurant.peican(1, 2);</span><br><span class="line">        Restaurant.peican(0, 3);</span><br><span class="line">        Restaurant.peican(1, 4);</span><br><span class="line">        Restaurant.peican(1, 5);</span><br><span class="line">        Restaurant.peican(1, 6);</span><br><span class="line">        Restaurant.peican(0, 7);</span><br><span class="line">        Restaurant.peican(0, 8);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>餐厅一次性送了 9 份外卖。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">我是小伙子,为您送的外卖是：啤酒鸭</span><br><span class="line">我是小姑娘,为您送的外卖是：啤酒鸭</span><br><span class="line">我是小伙子,为您送的外卖是：剁椒鱼头</span><br><span class="line">我是小姑娘,为您送的外卖是：啤酒鸭</span><br><span class="line">我是小伙子,为您送的外卖是：剁椒鱼头</span><br><span class="line">我是小姑娘,为您送的外卖是：剁椒鱼头</span><br><span class="line">我是小伙子,为您送的外卖是：剁椒鱼头</span><br><span class="line">我是小姑娘,为您送的外卖是：啤酒鸭</span><br><span class="line">我是小伙子,为您送的外卖是：啤酒鸭</span><br></pre></td></tr></table></figure>
-
-<p>可以看到的是，因为有 Restaurant 这个 IoC 容器存在，大大地解放了外卖员的生产力，外卖员不再依赖具体的食物，具体的食物也不再依赖于特定的外卖员。也就是说，只要是食物外卖员就可以送，任何一种食物可以被任何一位外卖员送。  </p>
-<p>大家细细体会这是怎么样一种灵活性。如果非要外卖员自己决定配送什么食物，人少则还行，人多的时候，订单多的时候肯定会乱成一锅粥。</p>
-<p><strong>IoC 模式最核心的地方就是在于依赖方与被依赖方之间，也就是上文中说的上层模块与底层模块之间引入了第三方，这个第三方统称为 IoC 容器，因为 IoC 容器的介入，导致上层模块对于它的依赖的实例化控制权发生变化，也就是所谓的控制反转的意思。</strong></p>
-<h3 id="依赖注入-Dependency-injection"><a href="#依赖注入-Dependency-injection" class="headerlink" title="依赖注入(Dependency injection)"></a>依赖注入(Dependency injection)</h3><p>依赖注入，被简称为 DI，它是一种实现 IoC 的手段。</p>
-<p>实现依赖注入有 3 种方式：</p>
-<ul>
-<li>构造函数中注入</li>
-<li>setter 方式注入</li>
-<li>接口注入</li>
-</ul>
-<h4 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person(Driveable driveable) &#123;</span><br><span class="line"></span><br><span class="line">        this.mDriveable &#x3D; driveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void chumen() &#123;</span><br><span class="line">        System.out.println(&quot;出门了&quot;);</span><br><span class="line"></span><br><span class="line">        mDriveable.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>优点：在 Person 一开始创建的时候就确定好了依赖。  </p>
-</li>
-<li><p>缺点：后期无法更改依赖。  </p>
-</li>
-</ul>
-<h4 id="setter-方式注入"><a href="#setter-方式注入" class="headerlink" title="setter 方式注入"></a>setter 方式注入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Person &#123;</span><br><span class="line"></span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public Person() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void chumen() &#123;</span><br><span class="line">        System.out.println(&quot;出门了&quot;);</span><br><span class="line"></span><br><span class="line">        mDriveable.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void setDriveable(Driveable mDriveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>优点：Person 对象在运行过程中可以灵活地更改依赖。 </p>
-</li>
-<li><p>缺点：Person 对象运行时，可能会存在依赖项为 null 的情况，所以需要检测依赖项的状态。</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public void chumen() &#123;</span><br><span class="line"></span><br><span class="line">    if ( mDriveable !&#x3D; null ) &#123;</span><br><span class="line">        System.out.println(&quot;出门了&quot;);</span><br><span class="line">        mDriveable.drive();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="接口方式注入"><a href="#接口方式注入" class="headerlink" title="接口方式注入"></a>接口方式注入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public interface DepedencySetter &#123;</span><br><span class="line">    void set(Driveable driveable);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Person implements DepedencySetter&#123;</span><br><span class="line">    private Driveable mDriveable;</span><br><span class="line"></span><br><span class="line">    public void chumen() &#123;</span><br><span class="line"></span><br><span class="line">        if ( mDriveable !&#x3D; null ) &#123;</span><br><span class="line">            System.out.println(&quot;出门了&quot;);</span><br><span class="line">            mDriveable.drive();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void set(Driveable driveable) &#123;</span><br><span class="line">        this.mDriveable &#x3D; mDriveable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这种方式和 Setter 方式很相似。有很多同学可能有疑问那么加入一个接口是不是多此一举呢？</p>
-<p>答案肯定是不是的，这涉及到一个角色的问题。还是以前面的餐厅为例，除了外卖员之外还有厨师和服务员，那么如果只有外卖员实现了一个送外卖的接口的话，那么餐厅配餐的时候就只会把外卖配置给外卖员。  </p>
-<p><strong>接口的存在，表明了一种依赖配置的能力。</strong> </p>
-<p>在软件框架中，读取 xml 配置文件，或者是利用反射技术读取注解，然后根据配置信息，框架动态将一些依赖配置给特定接口的类，<strong>我们也可以说 Injector 也依赖于接口，而不是特定的实现类</strong>，这样进一步提高了准确性与灵活性。 </p>
-<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>依赖倒置是面向对象开发领域中的软件设计原则，它倡导上层模块不依赖于底层模块，抽象不依赖细节。</li>
-<li>依赖反转是遵守依赖倒置这个原则而提出来的一种设计模式，它引入了 IoC 容器的概念。</li>
-<li>依赖注入是为了实现依赖反转的一种手段之一。</li>
-<li>它们的本质是为了代码更加的<strong>“高内聚,低耦合”</strong>。   </li>
-<li>Android 开发中很出名的依赖注入框架 Dagger2。  </li>
-</ul>
-<h2 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h2><p><strong>定义：</strong>客户端不应该依赖它不需要的接口；一个类对另一个类的依赖应该建立在最小的接口上。</p>
-<p><strong>问题由来：</strong>类A通过接口I依赖类B，类C通过接口I依赖类D，如果接口I对于类A和类B来说不是最小接口，则类B和类D必须去实现他们不需要的方法。</p>
-<p><strong>解决方案：</strong>将臃肿的接口I拆分为独立的几个接口，类A和类C分别与他们需要的接口建立依赖关系。也就是采用接口隔离原则。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-798818b195d11913.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">这个图的意思是：类A依赖接口I中的方法1、方法2、方法3，类B是对类A依赖的实现。类C依赖接口I中的方法1、方法4、方法5，类D是对类C依赖的实现。对于类B和类D来说，虽然他们都存在着用不到的方法（也就是图中红色字体标记的方法），但由于实现了接口I，所以也必须要实现这些用不到的方法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">interface I &#123;</span><br><span class="line">	public void method1();</span><br><span class="line">	public void method2();</span><br><span class="line">	public void method3();</span><br><span class="line">	public void method4();</span><br><span class="line">	public void method5();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class A&#123;</span><br><span class="line">	public void depend1(I i)&#123;</span><br><span class="line">		i.method1();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend2(I i)&#123;</span><br><span class="line">		i.method2();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend3(I i)&#123;</span><br><span class="line">		i.method3();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class B implements I&#123;</span><br><span class="line">	public void method1() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I的方法1&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method2() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I的方法2&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method3() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I的方法3&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	&#x2F;&#x2F;对于类B来说，method4和method5不是必需的，但是由于接口A中有这两个方法，</span><br><span class="line">	&#x2F;&#x2F;所以在实现过程中即使这两个方法的方法体为空，也要将这两个没有作用的方法进行实现。</span><br><span class="line">	public void method4() &#123;&#125;</span><br><span class="line">	public void method5() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class C&#123;</span><br><span class="line">	public void depend1(I i)&#123;</span><br><span class="line">		i.method1();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend2(I i)&#123;</span><br><span class="line">		i.method4();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend3(I i)&#123;</span><br><span class="line">		i.method5();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class D implements I&#123;</span><br><span class="line">	public void method1() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I的方法1&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	&#x2F;&#x2F;对于类D来说，method2和method3不是必需的，但是由于接口A中有这两个方法，</span><br><span class="line">	&#x2F;&#x2F;所以在实现过程中即使这两个方法的方法体为空，也要将这两个没有作用的方法进行实现。</span><br><span class="line">	public void method2() &#123;&#125;</span><br><span class="line">	public void method3() &#123;&#125;</span><br><span class="line"> </span><br><span class="line">	public void method4() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I的方法4&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method5() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I的方法5&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public class Client&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		A a &#x3D; new A();</span><br><span class="line">		a.depend1(new B());</span><br><span class="line">		a.depend2(new B());</span><br><span class="line">		a.depend3(new B());</span><br><span class="line">		</span><br><span class="line">		C c &#x3D; new C();</span><br><span class="line">		c.depend1(new D());</span><br><span class="line">		c.depend2(new D());</span><br><span class="line">		c.depend3(new D());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    可以看到，如果接口过于臃肿，只要接口中出现的方法，不管对依赖于它的类有没有用处，实现类中都必须去实现这些方法，这显然不是好的设计。如果将这个设计修改为符合接口隔离原则，就必须对接口I进行拆分。在这里我们将原有的接口I拆分为三个接口，拆分后的设计如图2所示：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-798818b195d11913.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">interface I1 &#123;</span><br><span class="line">	public void method1();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">interface I2 &#123;</span><br><span class="line">	public void method2();</span><br><span class="line">	public void method3();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">interface I3 &#123;</span><br><span class="line">	public void method4();</span><br><span class="line">	public void method5();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class A&#123;</span><br><span class="line">	public void depend1(I1 i)&#123;</span><br><span class="line">		i.method1();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend2(I2 i)&#123;</span><br><span class="line">		i.method2();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend3(I2 i)&#123;</span><br><span class="line">		i.method3();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class B implements I1, I2&#123;</span><br><span class="line">	public void method1() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I1的方法1&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method2() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I2的方法2&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method3() &#123;</span><br><span class="line">		System.out.println(&quot;类B实现接口I2的方法3&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class C&#123;</span><br><span class="line">	public void depend1(I1 i)&#123;</span><br><span class="line">		i.method1();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend2(I3 i)&#123;</span><br><span class="line">		i.method4();</span><br><span class="line">	&#125;</span><br><span class="line">	public void depend3(I3 i)&#123;</span><br><span class="line">		i.method5();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class D implements I1, I3&#123;</span><br><span class="line">	public void method1() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I1的方法1&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method4() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I3的方法4&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	public void method5() &#123;</span><br><span class="line">		System.out.println(&quot;类D实现接口I3的方法5&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>接口隔离原则的含义是：</strong>建立单一接口，不要建立庞大臃肿的接口，尽量细化接口，接口中的方法尽量少。也就是说，我们要为各个类建立专用的接口，而不要试图去建立一个很庞大的接口供所有依赖它的类去调用。本文例子中，将一个庞大的接口变更为3个专用的接口所采用的就是接口隔离原则。在程序设计中，依赖几个专用的接口要比依赖一个综合的接口更灵活。接口是设计时对外部设定的“契约”，通过分散定义多个接口，可以预防外来变更的扩散，提高系统的灵活性和可维护性。</p>
-<p> 采用接口隔离原则对接口进行约束时，要注意以下几点：</p>
-<ul>
-<li>接口尽量小，但是要有限度。对接口进行细化可以提高程序设计灵活性是不挣的事实，但是如果过小，则会造成接口数量过多，使设计复杂化。所以一定要适度。</li>
-<li>为依赖接口的类定制服务，只暴露给调用的类它需要的方法，它不需要的方法则隐藏起来。只有专注地为一个模块提供定制服务，才能建立最小的依赖关系。</li>
-<li>提高内聚，减少对外交互。使接口用最少的方法去完成最多的事情。</li>
-</ul>
-<p>运用接口隔离原则，一定要适度，接口设计的过大或过小都不好。设计接口的时候，只有多花些时间去思考和筹划，才能准确地实践这一原则。</p>
-<h2 id="迪米特法则（最少知道原则）"><a href="#迪米特法则（最少知道原则）" class="headerlink" title="迪米特法则（最少知道原则）"></a>迪米特法则（最少知道原则）</h2><p><strong>定义：</strong>一个对象应该对其他对象保持最少的了解。</p>
-<p><strong>问题由来：</strong>类与类之间的关系越密切，耦合度越大，当一个类发生改变时，对另一个类的影响也越大。</p>
-<p><strong>解决方案：</strong>尽量降低类与类之间的耦合。</p>
-<p>迪米特法则又叫最少知道原则，就是一个类对自己依赖的类知道的越少越好。对于被依赖的类来说，无论逻辑多么复杂，都尽量地的将逻辑封装在类的内部，对外除了提供的public方法，不对外泄漏任何信息。</p>
-<p>迪米特法则还有一个更简单的定义：<strong>只与直接的朋友通信</strong>。首先来解释一下什么是直接的朋友：每个对象都会与其他对象有耦合关系，只要两个对象之间有耦合关系，我们就说这两个对象之间是朋友关系。<strong>耦合的方式很多，依赖、关联、组合、聚合等</strong>。其中，我们称<strong>出现成员变量、方法参数、方法返回值中的类为直接的朋友</strong>，而<strong>出现在局部变量中的类则不是直接的朋友</strong>。也就是说，<strong>陌生的类最好不要作为局部变量的形式出现在类的内部。</strong></p>
-<p>举一个例子：有一个集团公司，下属单位有分公司和直属部门，现在要求打印出所有下属单位的员工ID。先来看一下违反迪米特法则的设计。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//总公司员工</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String id;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//分公司员工</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SubEmployee</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String id;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SubCompanyManager</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;SubEmployee&gt; <span class="title">getAllEmployee</span><span class="params">()</span></span>&#123;</span><br><span class="line">		List&lt;SubEmployee&gt; list = <span class="keyword">new</span> ArrayList&lt;SubEmployee&gt;();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++)&#123;</span><br><span class="line">			SubEmployee emp = <span class="keyword">new</span> SubEmployee();</span><br><span class="line">			<span class="comment">//为分公司人员按顺序分配一个ID</span></span><br><span class="line">			emp.setId(<span class="string">"分公司"</span>+i);</span><br><span class="line">			list.add(emp);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> list;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CompanyManager</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Employee&gt; <span class="title">getAllEmployee</span><span class="params">()</span></span>&#123;</span><br><span class="line">		List&lt;Employee&gt; list = <span class="keyword">new</span> ArrayList&lt;Employee&gt;();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">30</span>; i++)&#123;</span><br><span class="line">			Employee emp = <span class="keyword">new</span> Employee();</span><br><span class="line">			<span class="comment">//为总公司人员按顺序分配一个ID</span></span><br><span class="line">			emp.setId(<span class="string">"总公司"</span>+i);</span><br><span class="line">			list.add(emp);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> list;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printAllEmployee</span><span class="params">(SubCompanyManager sub)</span></span>&#123;</span><br><span class="line">		List&lt;SubEmployee&gt; list1 = sub.getAllEmployee();</span><br><span class="line">		<span class="keyword">for</span>(SubEmployee e:list1)&#123;</span><br><span class="line">			System.out.println(e.getId());</span><br><span class="line">		&#125;</span><br><span class="line"> </span><br><span class="line">		List&lt;Employee&gt; list2 = <span class="keyword">this</span>.getAllEmployee();</span><br><span class="line">		<span class="keyword">for</span>(Employee e:list2)&#123;</span><br><span class="line">			System.out.println(e.getId());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		CompanyManager e = <span class="keyword">new</span> CompanyManager();</span><br><span class="line">		e.printAllEmployee(<span class="keyword">new</span> SubCompanyManager());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>现在这个设计的主要问题出在CompanyManager中，根据迪米特法则，只与直接的朋友发生通信，而SubEmployee类并不是CompanyManager类的直接朋友（以局部变量出现的耦合不属于直接朋友），从逻辑上讲总公司只与他的分公司耦合就行了，与分公司的员工并没有任何联系，这样设计显然是增加了不必要的耦合。按照迪米特法则，应该避免类中出现这样非直接朋友关系的耦合。修改后的代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">class SubCompanyManager&#123;</span><br><span class="line">	public List&lt;SubEmployee&gt; getAllEmployee()&#123;</span><br><span class="line">		List&lt;SubEmployee&gt; list &#x3D; new ArrayList&lt;SubEmployee&gt;();</span><br><span class="line">		for(int i&#x3D;0; i&lt;100; i++)&#123;</span><br><span class="line">			SubEmployee emp &#x3D; new SubEmployee();</span><br><span class="line">			&#x2F;&#x2F;为分公司人员按顺序分配一个ID</span><br><span class="line">			emp.setId(&quot;分公司&quot;+i);</span><br><span class="line">			list.add(emp);</span><br><span class="line">		&#125;</span><br><span class="line">		return list;</span><br><span class="line">	&#125;</span><br><span class="line">	public void printEmployee()&#123;</span><br><span class="line">		List&lt;SubEmployee&gt; list &#x3D; this.getAllEmployee();</span><br><span class="line">		for(SubEmployee e:list)&#123;</span><br><span class="line">			System.out.println(e.getId());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class CompanyManager&#123;</span><br><span class="line">	public List&lt;Employee&gt; getAllEmployee()&#123;</span><br><span class="line">		List&lt;Employee&gt; list &#x3D; new ArrayList&lt;Employee&gt;();</span><br><span class="line">		for(int i&#x3D;0; i&lt;30; i++)&#123;</span><br><span class="line">			Employee emp &#x3D; new Employee();</span><br><span class="line">			&#x2F;&#x2F;为总公司人员按顺序分配一个ID</span><br><span class="line">			emp.setId(&quot;总公司&quot;+i);</span><br><span class="line">			list.add(emp);</span><br><span class="line">		&#125;</span><br><span class="line">		return list;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void printAllEmployee(SubCompanyManager sub)&#123;</span><br><span class="line">		sub.printEmployee();</span><br><span class="line">		List&lt;Employee&gt; list2 &#x3D; this.getAllEmployee();</span><br><span class="line">		for(Employee e:list2)&#123;</span><br><span class="line">			System.out.println(e.getId());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改后，为分公司增加了打印人员ID的方法，总公司直接调用来打印，从而避免了与分公司的员工发生耦合。</p>
-<p>迪米特法则的初衷是降低类之间的耦合，由于每个类都减少了不必要的依赖，因此的确可以降低耦合关系。但是凡事都有度，虽然可以避免与非直接的类通信，但是要通信，必然会通过一个“中介”来发生联系，例如本例中，总公司就是通过分公司这个“中介”来与分公司的员工发生联系的。过分的使用迪米特原则，会产生大量这样的中介和传递类，导致系统复杂度变大。所以在采用迪米特法则时要反复权衡，既做到结构清晰，又要高内聚低耦合。</p>
-<h2 id="合成复用原则"><a href="#合成复用原则" class="headerlink" title="合成复用原则"></a>合成复用原则</h2><p><strong>定义：</strong>尽量使用对象<strong>组合，而不是继承</strong>来达到复用的目的。</p>
-<p>合成复用原则就是在一个新的对象里通过关联关系（包括组合关系和聚合关系）来使用一些已有的对象，使之成为新对象的一部分；新对象通过委派调用已有对象的方法达到复用功能的目的。简言之：<strong>复用时要尽量使用组合\聚合关系（关联关系），少用继承</strong>。</p>
-<h3 id="实现复用的两种方式"><a href="#实现复用的两种方式" class="headerlink" title="实现复用的两种方式"></a>实现复用的两种方式</h3><p>在面向对象设计中，可以通过两种方法在不同的环境中复用已有的设计和实现，即<strong>通过组合/聚合关系或通过继承</strong>，但<strong>首先应该考虑使用组合/聚合，组合/聚合可以使系统更加灵活，降低类与类之间的耦合度，一个类的变化对其他类造成的影响相对较少</strong>；其次才考虑继承，<strong>在使用继承时，需要严格遵循里氏代换原则，有效使用继承会有助于对问题的理解，降低复杂度，而滥用继承反而会增加系统构建和维护的难度以及系统的复杂度，因此需要慎重使用继承复用。</strong></p>
-<h4 id="组合聚合复用"><a href="#组合聚合复用" class="headerlink" title="组合聚合复用"></a>组合聚合复用</h4><ul>
-<li>新对象存取成分对象的唯一方法是通过成分对象的接口。</li>
-<li>这种复用是黑箱复用，因为成分对象的内部细节是新对象所看不见的。</li>
-<li>这种复用支持包装。</li>
-<li>这种复用所需要的依赖较少。</li>
-<li>每一个新的类可以将焦点集中到一个任务上。</li>
-<li>这种复用可以在运行时间动态进行，新对象可以动态的引用与成分对象类型相同的对象。</li>
-</ul>
-<p>由于组合或聚合关系可以将已有的对象（也可称为成员对象）纳入到新对象中，使之成为新对象的一部分，因此新对象可以调用已有对象的功能，这样做可以使得成员对象的内部实现细节对于新对象不可见，所以这种复用又称为“黑箱”复用，相对继承关系而言，其耦合度相对较低，成员对象的变化对新对象的影响不大，可以在新对象中根据实际需要有选择性地调用成员对象的操作；合成复用可以在运行时动态进行，新对象可以动态地引用与成员对象类型相同的其他对象。</p>
-<p><strong>缺点：</strong>组合复用建造的系统会有较多的对象需要管理。</p>
-<h4 id="继承复用"><a href="#继承复用" class="headerlink" title="继承复用"></a>继承复用</h4><p>继承复用通过扩展一个已有对象的实现来得到新的功能，基类明显的捕获共同的属性和方法，而子类通过增加新的属性和方法来扩展超类的实现。</p>
-<p>通过继承来进行复用的主要问题在于继承复用会破坏系统的封装性，因为继承会将基类的实现细节暴露给子类，由于基类的内部细节通常对子类来说是可见的，所以这种复用又称“白箱”复用，如果基类发生改变，那么子类的实现也不得不发生改变；从基类继承而来的实现是静态的，不可能在运行时发生改变，没有足够的灵活性；而且继承只能在有限的环境中使用（如类没有声明为不能被继承）。</p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>新的实现比较容易，因为基类的大部分功能都可以通过继承自动的进入子类。</li>
-<li>修改或扩展继承而来的实现较为容易。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>继承复用破坏了包装，因为继承超类的的实现细节暴露给子类。由于超类的内部细节常常对子类是透明的，因此这种复用是透明的复用，又称“白箱”复用。</li>
-<li>如果超类的实现发生改变，那么子类的实现也不得不发生改变。因此，当一个基类发生改变时，这种改变就会像水中投入石子引起的水波一样，将变化一圈又一圈的传导到一级又一级的子类，使设计师不得不相应地改变这些子类，以适应超类的变化。</li>
-<li>从超类继承而来的实现是静态的，不可能在运行时间内发生改变，因此没有足够的灵活性。</li>
-</ul>
-<h4 id="使用组合还是继承"><a href="#使用组合还是继承" class="headerlink" title="使用组合还是继承"></a>使用组合还是继承</h4><p>按照组合复用原则我们应该首选组合，然后才是继承，使用继承时应该严格的遵守里氏替换原则，必须满足“Is-A”的关系是才能使用继承，而组合却是一种“Has-A”的关系。导致错误的使用继承而不是使用组合的一个重要原因可能就是错误的把“Has-A”当成了“Is-A”。</p>
-<h1 id="设计模式的分类"><a href="#设计模式的分类" class="headerlink" title="设计模式的分类"></a>设计模式的分类</h1><h2 id="创建型设计模式"><a href="#创建型设计模式" class="headerlink" title="创建型设计模式"></a>创建型设计模式</h2><ul>
-<li>括单例模式</li>
-<li>工厂方法模式</li>
-<li>抽象工厂模式</li>
-<li>建造者模式</li>
-<li>原型模式</li>
-</ul>
-<h2 id="结构型设计模式"><a href="#结构型设计模式" class="headerlink" title="结构型设计模式"></a>结构型设计模式</h2><p>结构性设计模式是从程序的结构上解决模块之间的耦合问题。</p>
-<ul>
-<li>包括适配器模式</li>
-<li>代理模式</li>
-<li>装饰模式</li>
-<li>外观模式</li>
-<li>桥接模式</li>
-<li>组合模式</li>
-<li>享元模式</li>
-</ul>
-<h2 id="行为型设计模式"><a href="#行为型设计模式" class="headerlink" title="行为型设计模式"></a>行为型设计模式</h2><p>主要处理类或对象如何交互及如何分配职责。</p>
-<ul>
-<li>策略模式</li>
-<li>模板方法模式</li>
-<li>观察者模式</li>
-<li>迭代器模式</li>
-<li>责任链模式</li>
-<li>命令模式</li>
-<li>备忘录模式</li>
-<li>状态模式</li>
-<li>访问者模式</li>
-<li>中介模式</li>
-<li>解析器模式</li>
-</ul>
+            <h1 id="Android基础面试题详解"><a href="#Android基础面试题详解" class="headerlink" title="Android基础面试题详解"></a>Android基础面试题详解</h1><p><img src="https://img-blog.csdnimg.cn/2020041121370949.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70#pic_center" alt="Android面试知识框架"></p>
 
           
         
@@ -3455,7 +3868,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -3501,7 +3914,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -3512,7 +3925,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -3523,7 +3936,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
