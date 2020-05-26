@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Binder,多进程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="像图片选择这样的多进程需求，可能并不需要我们额外编写进程通讯的代码，使用四大组件传输Bundle就行了，但是像推送服务这种需求，进程与进程之间需要高度的交互，此时就绕不过进程通讯这一步了。 下面我们就用即时聊天软件为例，手动去实现一个多进程的推送例子，具体需求如下：  UI和消息推送的Service分两个进程； UI进程用于展示具体的消息数据，把用户发送的消息，传递到消息Service，然后发送到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用AIDL实现一个多进程消息推送(3)">
+<meta property="og:url" content="http://yoursite.com/2020/05/22/Android/Binder/%E4%BD%BF%E7%94%A8AIDL%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="像图片选择这样的多进程需求，可能并不需要我们额外编写进程通讯的代码，使用四大组件传输Bundle就行了，但是像推送服务这种需求，进程与进程之间需要高度的交互，此时就绕不过进程通讯这一步了。 下面我们就用即时聊天软件为例，手动去实现一个多进程的推送例子，具体需求如下：  UI和消息推送的Service分两个进程； UI进程用于展示具体的消息数据，把用户发送的消息，传递到消息Service，然后发送到">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://jsh180.net/blog_aidl_img_flow_1.jpg">
+<meta property="og:image" content="http://jsh180.net/image/jpg/blog_aidl_flowchart.jpg">
+<meta property="article:published_time" content="2020-05-21T16:19:00.000Z">
+<meta property="article:modified_time" content="2020-05-22T07:04:31.951Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Binder">
+<meta property="article:tag" content="多进程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://jsh180.net/blog_aidl_img_flow_1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/22/Android/Binder/使用AIDL实现一个多进程消息推送/"/>
+
+
+
+
+
+  <title>使用AIDL实现一个多进程消息推送(3) | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/22/Android/Binder/%E4%BD%BF%E7%94%A8AIDL%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用AIDL实现一个多进程消息推送(3)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-22T00:19:00+08:00">
+                2020-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Binder/" itemprop="url" rel="index">
+                    <span itemprop="name">Binder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/22/Android/Binder/%E4%BD%BF%E7%94%A8AIDL%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/22/Android/Binder/%E4%BD%BF%E7%94%A8AIDL%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>像图片选择这样的多进程需求，可能并不需要我们额外编写进程通讯的代码，使用四大组件传输Bundle就行了，但是像推送服务这种需求，进程与进程之间需要高度的交互，此时就绕不过进程通讯这一步了。</p>
+<p>下面我们就用即时聊天软件为例，手动去实现一个多进程的推送例子，具体需求如下：</p>
+<ol>
+<li>UI和消息推送的Service分两个进程；</li>
+<li>UI进程用于展示具体的消息数据，把用户发送的消息，传递到消息Service，然后发送到远程服务器；</li>
+<li>Service负责收发消息，并和远程服务器保持长连接，UI进程可通过Service发送消息到远程服务器，Service收到远程服务器消息通知UI进程；</li>
+<li>即使UI进程退出了，Service仍需要保持运行，收取服务器消息。</li>
+</ol>
+<p><strong>实现思路</strong></p>
+<ol>
+<li><p>创建UI进程（下文统称为客户端）；</p>
+</li>
+<li><p>创建消息Service（下文统称为服务端）；</p>
+</li>
+<li><p>把服务端配置到独立的进程(AndroidManifest.xml中指定process标签)；</p>
+</li>
+<li><p>客户端和服务端进行绑定（bindService）；</p>
+</li>
+<li><p>让客户端和服务端具备交互的能力。(AIDL使用)</p>
+</li>
+</ol>
+<h1 id="例子具体实现"><a href="#例子具体实现" class="headerlink" title="例子具体实现"></a>例子具体实现</h1><h2 id="AIDL调用流程概览"><a href="#AIDL调用流程概览" class="headerlink" title="AIDL调用流程概览"></a>AIDL调用流程概览</h2><p>开始之前，我们先来概括一下使用AIDL进行多进程调用的整个流程：</p>
+<ol>
+<li>客户端使用bindService方法绑定服务端；</li>
+<li>服务端在onBind方法返回Binder对象；</li>
+<li>客户端拿到服务端返回的Binder对象进行跨进程方法调用；</li>
+</ol>
+<p><img src="http://jsh180.net/blog_aidl_img_flow_1.jpg" alt="AIDL调用过程"></p>
+<p><strong>整个AIDL调用过程概括起来就以上3个步骤，下文中我们使用上面描述的例子，来逐步分解这些步骤，并讲述其中的细节。</strong></p>
+<h2 id="客户端使用bindService方法绑定服务端"><a href="#客户端使用bindService方法绑定服务端" class="headerlink" title="客户端使用bindService方法绑定服务端"></a>客户端使用bindService方法绑定服务端</h2><h3 id="创建客户端和服务端，把服务端配置到另外的进程"><a href="#创建客户端和服务端，把服务端配置到另外的进程" class="headerlink" title="创建客户端和服务端，把服务端配置到另外的进程"></a>创建客户端和服务端，把服务端配置到另外的进程</h3><ol>
+<li>创建客户端 -&gt; MainActivity；</li>
+<li>创建服务端 -&gt; MessageService;</li>
+<li>把服务端配置到另外的进程 -&gt; android:process=”:remote”</li>
+</ol>
+<p>上面描述的客户端、服务端、以及把服务端配置到另外进程，体现在AndroidManifest.xml中，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;manifest ...&gt;</span><br><span class="line">    &lt;application ...&gt;</span><br><span class="line">        &lt;activity android:name&#x3D;&quot;.test.test_aidl.TestAidlMessageActivity&quot; &#x2F;&gt;</span><br><span class="line">        &lt;service</span><br><span class="line">            android:name&#x3D;&quot;.test.test_aidl.MessageService&quot;</span><br><span class="line">            android:enabled&#x3D;&quot;true&quot;</span><br><span class="line">            android:exported&#x3D;&quot;true&quot;</span><br><span class="line">            android:process&#x3D;&quot;:remote&quot; &#x2F;&gt;</span><br><span class="line">    &lt;&#x2F;application&gt;</span><br><span class="line">&lt;&#x2F;manifest&gt;</span><br></pre></td></tr></table></figure>
+
+<p>开启多进程的方法很简单，只需要给四大组件指定android:process标签。</p>
+<h3 id="绑定MessageService到MainActivity"><a href="#绑定MessageService到MainActivity" class="headerlink" title="绑定MessageService到MainActivity"></a>绑定MessageService到MainActivity</h3><p><strong>创建MessageService</strong></p>
+<p>此时的MessageService就是刚创建的模样，onBind中返回了null，下一步中我们将返回一个可操作的对象给客户端。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.app.Service;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line"></span><br><span class="line">public class MessageService extends Service &#123;</span><br><span class="line">    </span><br><span class="line">    public MessageService() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端MainActivity调用bindService方法绑定MessageService</strong></p>
+<p>这一步其实是属于Service组件相关的知识，在这里就比较简单地说一下，启动服务可以通过以下两种方式：</p>
+<ul>
+<li>使用bindService方法 -&gt; bindService(Intent service, ServiceConnection conn, int flags)；</li>
+<li>使用startService方法 -&gt; startService(Intent service);</li>
+</ul>
+<p><strong>bindService &amp; startService区别：</strong></p>
+<p>使用bindService方式，多个Client可以同时bind一个Service，但是当所有Client unbind后，Service会退出，通常情况下，如果希望和Service交互，一般使用bindService方法，使用onServiceConnected中的IBinder对象可以和Service进行交互，不需要和Service交互的情况下，使用startService方法即可。</p>
+<p>正如上面所说，我们是要和Service交互的，所以我们需要使用bindService方法，<strong>但是我们希望unbind后Service仍保持运行，这样的情况下，可以同时调用bindService和startService</strong>（比如像本例子中的消息服务，退出UI进程，Service仍需要接收到消息），代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.content.ComponentName;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.content.ServiceConnection;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.R;</span><br><span class="line"></span><br><span class="line">public class TestAidlMessageActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;TestAidlMessageActivity&quot;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.test_aidl_message_activity);</span><br><span class="line">        setupService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void setupService() &#123;</span><br><span class="line">        Intent intent &#x3D; new Intent(this, MessageService.class);</span><br><span class="line">        bindService(intent, connection, Context.BIND_AUTO_CREATE);</span><br><span class="line">        startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private ServiceConnection connection &#x3D; new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: name &#x3D; &quot; + name);</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: service &#x3D; &quot; + service);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line">            Log.d(TAG, &quot;onServiceDisconnected: name &#x3D; &quot; + name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        unbindService(connection);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="服务端在onBind方法返回Binder对象"><a href="#服务端在onBind方法返回Binder对象" class="headerlink" title="服务端在onBind方法返回Binder对象"></a>服务端在onBind方法返回Binder对象</h2><h3 id="首先，什么是Binder"><a href="#首先，什么是Binder" class="headerlink" title="首先，什么是Binder?"></a>首先，什么是Binder?</h3><p>要说Binder，首先要说一下IBinder这个接口，IBinder是远程对象的基础接口，轻量级的远程过程调用机制的核心部分，该接口描述了与远程对象交互的抽象协议，而Binder实现了IBinder接口，简单说，Binder就是Android SDK中内置的一个多进程通讯实现类，在使用的时候，我们不用也不要去实现IBinder，而是继承Binder这个类即可实现多进程通讯。</p>
+<h3 id="其次，这个需要在onBind方法返回的Binder对象从何而来？"><a href="#其次，这个需要在onBind方法返回的Binder对象从何而来？" class="headerlink" title="其次，这个需要在onBind方法返回的Binder对象从何而来？"></a>其次，这个需要在onBind方法返回的Binder对象从何而来？</h3><p><strong>在这里就要引出本文中的主题了——AIDL</strong></p>
+<p>多进程中使用的Binder对象，一般通过我们定义好的 .adil 接口文件自动生成，当然你可以走野路子，直接手动编写这个跨进程通讯所需的Binder类，其本质无非就是一个继承了Binder的类，鉴于野路子走起来麻烦，而且都是重复步骤的工作，Google提供了 AIDL 接口来帮我们自动生成Binder这条正路，下文中我们围绕 AIDL 这条正路继续展开讨论</p>
+<h3 id="定义AIDL接口"><a href="#定义AIDL接口" class="headerlink" title="定义AIDL接口"></a>定义AIDL接口</h3><p>很明显，接下来我们需要搞一波上面说的Binder，让客户端可以调用到服务端的方法，而这个Binder又是通过AIDL接口自动生成，那我们就先从AIDL搞起，搞之前先看看注意事项，以免出事故：</p>
+<p>AIDL支持的数据类型：</p>
+<ul>
+<li>Java 编程语言中的所有基本数据类型（如 int、long、char、boolean 等等）</li>
+<li>String和CharSequence</li>
+<li>Parcelable：实现了Parcelable接口的对象</li>
+<li>List：其中的元素需要被AIDL支持，另一端实际接收的具体类始终是 ArrayList，但生成的方法使用的是 List 接口</li>
+<li>Map：其中的元素需要被AIDL支持，包括 key 和 value，另一端实际接收的具体类始终是 HashMap，但生成的方法使用的是 Map 接口</li>
+</ul>
+<p>其他注意事项：</p>
+<ul>
+<li>在AIDL中传递的对象，必须实现Parcelable序列化接口；</li>
+<li>在AIDL中传递的对象，需要在类文件相同路径下，创建同名、但是后缀为.aidl的文件，并在文件中使用parcelable关键字声明这个类；</li>
+<li>跟普通接口的区别：只能声明方法，不能声明变量；</li>
+<li>所有非基础数据类型参数都需要标出数据走向的方向标记。可以是 in、out 或 inout，基础数据类型默认只能是 in，不能是其他方向。</li>
+</ul>
+<h3 id="创建一个AIDL接口"><a href="#创建一个AIDL接口" class="headerlink" title="创建一个AIDL接口"></a>创建一个AIDL接口</h3><p>接口中提供发送消息的方法（Android Studio创建AIDL：项目右键 -&gt; New -&gt; AIDL -&gt; AIDL File），代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; MessageSender.aidl</span><br><span class="line">package com.zhyen.android;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">interface MessageSender &#123;</span><br><span class="line">    void sendMessage(in MessageModel messageModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>被“in”标记的参数，就是接收实际数据的参数，这个跟我们普通参数传递一样的含义。在AIDL中，“out” 指定了一个仅用于输出的参数，换而言之，这个参数不关心调用方传递了什么数据过来，但是这个参数的值可以在方法被调用后填充（无论调用方传递了什么值过来，在方法执行的时候，这个参数的初始值总是空的），这就是“out”的含义，仅用于输出。而“inout”显然就是“in”和“out”的合体了，输入和输出的参数。区分“in”、“out”有什么用？这是非常重要的，因为每个参数的内容必须编组（序列化，传输，接收和反序列化）。in/out标签允许Binder跳过编组步骤以获得更好的性能。</p>
+</blockquote>
+<p>上述的MessageModel为消息的实体类，该类在AIDL中传递，实现了Parcelable序列化接口，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.model;</span><br><span class="line"></span><br><span class="line">import android.os.Parcel;</span><br><span class="line">import android.os.Parcelable;</span><br><span class="line"></span><br><span class="line">public class MessageModel implements Parcelable &#123;</span><br><span class="line"></span><br><span class="line">    private String from;</span><br><span class="line">    private String to;</span><br><span class="line">    private String content;</span><br><span class="line"></span><br><span class="line">    public MessageModel() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public MessageModel(String from, String to, String content) &#123;</span><br><span class="line">        this.from &#x3D; from;</span><br><span class="line">        this.to &#x3D; to;</span><br><span class="line">        this.content &#x3D; content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected MessageModel(Parcel in) &#123;</span><br><span class="line">        from &#x3D; in.readString();</span><br><span class="line">        to &#x3D; in.readString();</span><br><span class="line">        content &#x3D; in.readString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Creator&lt;MessageModel&gt; CREATOR &#x3D; new Creator&lt;MessageModel&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public MessageModel createFromParcel(Parcel in) &#123;</span><br><span class="line">            return new MessageModel(in);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public MessageModel[] newArray(int size) &#123;</span><br><span class="line">            return new MessageModel[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public String getFrom() &#123;</span><br><span class="line">        return from;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setFrom(String from) &#123;</span><br><span class="line">        this.from &#x3D; from;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getTo() &#123;</span><br><span class="line">        return to;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setTo(String to) &#123;</span><br><span class="line">        this.to &#x3D; to;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getContent() &#123;</span><br><span class="line">        return content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setContent(String content) &#123;</span><br><span class="line">        this.content &#x3D; content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;MessageModel&#123;&quot; +</span><br><span class="line">                &quot;from&#x3D;&#39;&quot; + from + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, to&#x3D;&#39;&quot; + to + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, content&#x3D;&#39;&quot; + content + &#39;\&#39;&#39; +</span><br><span class="line">                &#39;&#125;&#39;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int describeContents() &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void writeToParcel(Parcel dest, int flags) &#123;</span><br><span class="line">        dest.writeString(from);</span><br><span class="line">        dest.writeString(to);</span><br><span class="line">        dest.writeString(content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建完MessageModel这个实体类，别忘了还有一件事要做：”在AIDL中传递的对象，需要在类文件相同路径下，创建同名、但是后缀为.aidl的文件，并在文件中使用parcelable关键字声明这个类“。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; MessageModel.aidl</span><br><span class="line">package com.zhyen.android.model;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">parcelable MessageModel;</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<ul>
+<li>MessageSender.aidl -&gt; 定义了发送消息的方法，会自动生成名为MessageSender.Stub的Binder类，在服务端实现，返回给客户端调用</li>
+<li>MessageModel.java -&gt; 消息实体类，由客户端传递到服务端，实现了Parcelable序列化</li>
+<li>MessageModel.aidl -&gt; 声明了MessageModel可在AIDL中传递，放在跟MessageModel.java相同的包路径下</li>
+</ul>
+<h3 id="服务端MessageService"><a href="#服务端MessageService" class="headerlink" title="服务端MessageService"></a>服务端MessageService</h3><p>在服务端创建MessageSender.aidl这个AIDL接口自动生成的Binder对象，并返回给客户端调用，服务端MessageService代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.app.Service;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.MessageSender;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line"></span><br><span class="line">public class MessageService extends Service &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;MessageService&quot;;</span><br><span class="line"></span><br><span class="line">    public MessageService() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return stub;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private MessageSender.Stub stub &#x3D; new MessageSender.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void sendMessage(MessageModel messageModel) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel);</span><br><span class="line">            if (messageModel &#x3D;&#x3D; null) return;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MessageSender.Stub是Android Studio根据我们MessageSender.aidl文件自动生成的Binder对象（至于是怎样生成的，下文会有答案），我们需要把这个Binder对象返回给客户端。</p>
+<h2 id="客户端拿到Binder对象后调用远程方法"><a href="#客户端拿到Binder对象后调用远程方法" class="headerlink" title="客户端拿到Binder对象后调用远程方法"></a>客户端拿到Binder对象后调用远程方法</h2><p>调用步骤如下：</p>
+<ol>
+<li>在客户端的onServiceConnected方法中，拿到服务端返回的Binder对象；</li>
+<li>使用MessageSender.Stub.asInterface方法，取得MessageSender.aidl对应的操作接口；</li>
+<li>取得MessageSender对象后，像普通接口一样调用方法即可。</li>
+</ol>
+<p>此时客户端代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.content.ComponentName;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.content.ServiceConnection;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.View;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.MessageSender;</span><br><span class="line">import com.zhyen.android.R;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line"></span><br><span class="line">public class TestAidlMessageActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;TestAidlMessageActivity&quot;;</span><br><span class="line">    private MessageSender messageSender;</span><br><span class="line">    private boolean connected;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.test_aidl_message_activity);</span><br><span class="line">        findViewById(R.id.btn_send_msg).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (!connected) return;</span><br><span class="line">                &#x2F;&#x2F;使用asInterface方法取得AIDL对应的操作接口</span><br><span class="line">                MessageModel messageModel &#x3D; new MessageModel();</span><br><span class="line">                messageModel.setFrom(&quot;client user id&quot;);</span><br><span class="line">                messageModel.setTo(&quot;receiver user id&quot;);</span><br><span class="line">                messageModel.setContent(&quot;This is message content&quot;);</span><br><span class="line">                &#x2F;&#x2F;调用远程Service的sendMessage方法，并传递消息实体对象</span><br><span class="line">                try &#123;</span><br><span class="line">                    messageSender.sendMessage(messageModel);</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        setupService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void setupService() &#123;</span><br><span class="line">        Intent intent &#x3D; new Intent(this, MessageService.class);</span><br><span class="line">        bindService(intent, connection, Context.BIND_AUTO_CREATE);</span><br><span class="line">        startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private ServiceConnection connection &#x3D; new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            connected &#x3D; true;</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: name &#x3D; &quot; + name);</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: service &#x3D; &quot; + service);</span><br><span class="line">            messageSender &#x3D; MessageSender.Stub.asInterface(service);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line">            connected &#x3D; false;</span><br><span class="line">            Log.d(TAG, &quot;onServiceDisconnected: name &#x3D; &quot; + name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        unbindService(connection);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在客户端中我们调用了MessageSender的sendMessage方法，向服务端发送了一条消息，并把生成的MessageModel对象作为参数传递到了服务端，最终服务端打印的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2020-05-22 10:53:25.747 22509-22545&#x2F;com.zhyen.android:remote D&#x2F;MessageService: sendMessage: MessageModel&#123;from&#x3D;&#39;client user id&#39;, to&#x3D;&#39;receiver user id&#39;, content&#x3D;&#39;This is message content&#39;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里有两点要说：</p>
+<ul>
+<li>服务端已经接收到客户端发送过来的消息，并正确打印；</li>
+<li>服务端和客户端区分两个进程，PID不一样，进程名也不一样；</li>
+</ul>
+<h1 id="分析Binder上层机制"><a href="#分析Binder上层机制" class="headerlink" title="分析Binder上层机制"></a>分析Binder上层机制</h1><p>我们通过上述的调用流程，看看从客户端到服务端，都经历了些什么事，看看Binder的上层是如何工作的，至于Binder的底层，这是一个非常复杂的话题，本文不深究。（如果看到这里你又想问什么是Binder的话，请手动倒带往上看…）</p>
+<p>我们先来回顾一下从客户端发起的调用流程：</p>
+<ul>
+<li>MessageSender messageSender = MessageSender.Stub.asInterface(service);</li>
+<li>messageSender.sendMessage(messageModel);</li>
+</ul>
+<p>抛开其它无关代码，客户端调跨进程方法就这两个步骤，而这两个步骤都封装在 MessageSender.aidl 最终生成的 MessageSender.java 源码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * This file is auto-generated.  DO NOT MODIFY.</span><br><span class="line"> *&#x2F;</span><br><span class="line">package com.zhyen.android;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">public interface MessageSender extends android.os.IInterface &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Local-side IPC implementation stub class.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static abstract class Stub extends android.os.Binder implements com.zhyen.android.MessageSender &#123;</span><br><span class="line">		    &#x2F;&#x2F;描述符，该值为全类名</span><br><span class="line">        private static final java.lang.String DESCRIPTOR &#x3D; &quot;com.zhyen.android.MessageSender&quot;;</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * Construct the stub at attach it to the interface.</span><br><span class="line">         根据AIDL的使用流程，Server会在onBind的时候返回一个Stub实例，</span><br><span class="line">         调用了Stub的构造器内部调用Binder的attachInterface方法将当前实例以及描述符存到Binder实例中</span><br><span class="line">         *&#x2F;</span><br><span class="line">        public Stub() &#123;</span><br><span class="line">            this.attachInterface(this, DESCRIPTOR);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * 把IBinder对象转换为MessageSender 接口</span><br><span class="line">         * 判断IBinder是否处于相同进程，相同进程返回Stub实现的MessageSender接口</span><br><span class="line">         * 不同进程，则返回Stub.Proxy实现的MessageSender接口</span><br><span class="line">         *&#x2F;</span><br><span class="line">        public static com.zhyen.android.MessageSender asInterface(android.os.IBinder obj) &#123;</span><br><span class="line">            if ((obj &#x3D;&#x3D; null)) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            android.os.IInterface iin &#x3D; obj.queryLocalInterface(DESCRIPTOR);</span><br><span class="line">            if (((iin !&#x3D; null) &amp;&amp; (iin instanceof com.zhyen.android.MessageSender))) &#123;</span><br><span class="line">                return ((com.zhyen.android.MessageSender) iin);</span><br><span class="line">            &#125;</span><br><span class="line">            return new com.zhyen.android.MessageSender.Stub.Proxy(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public android.os.IBinder asBinder() &#123;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * 同一进程时，不会触发</span><br><span class="line">         *</span><br><span class="line">         * 不同进程时，asInterface会返回Stub.Proxy，客户端调用 messageSender.sendMessage(messageModel)</span><br><span class="line">         * 实质是调用了 Stub.Proxy 的 sendMessage 方法，从而触发跨进程数据传递，</span><br><span class="line">         * 最终Binder底层将处理好的数据回调到此方法，并调用我们真正的sendMessage方法</span><br><span class="line">         *&#x2F;</span><br><span class="line">        @Override</span><br><span class="line">        public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException &#123;</span><br><span class="line">            java.lang.String descriptor &#x3D; DESCRIPTOR;</span><br><span class="line">            switch (code) &#123;</span><br><span class="line">                case INTERFACE_TRANSACTION: &#123;</span><br><span class="line">                    reply.writeString(descriptor);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_sendMessage: &#123;</span><br><span class="line">                    data.enforceInterface(descriptor);</span><br><span class="line">                    com.zhyen.android.model.MessageModel _arg0;</span><br><span class="line">                    if ((0 !&#x3D; data.readInt())) &#123;</span><br><span class="line">                        _arg0 &#x3D; com.zhyen.android.model.MessageModel.CREATOR.createFromParcel(data);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _arg0 &#x3D; null;</span><br><span class="line">                    &#125;</span><br><span class="line">                    this.sendMessage(_arg0);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                default: &#123;</span><br><span class="line">                    return super.onTransact(code, data, reply, flags);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private static class Proxy implements com.zhyen.android.MessageSender &#123;</span><br><span class="line">            private android.os.IBinder mRemote;</span><br><span class="line"></span><br><span class="line">            Proxy(android.os.IBinder remote) &#123;</span><br><span class="line">                mRemote &#x3D; remote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public android.os.IBinder asBinder() &#123;</span><br><span class="line">                return mRemote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            public java.lang.String getInterfaceDescriptor() &#123;</span><br><span class="line">                return DESCRIPTOR;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;**</span><br><span class="line">             * Proxy中的sendMessage方法，并不是直接调用我们定义的sendMessage方法，而是经过一顿的Parcel读写，</span><br><span class="line">             * 然后调用mRemote.transact方法，把数据交给Binder处理，transact处理完毕后会调用上方的onTransact方法，</span><br><span class="line">             * onTransact拿到最终得到的参数数据，调用由我们真正的sendMessage方法</span><br><span class="line">             *&#x2F;</span><br><span class="line">            @Override</span><br><span class="line">            public void sendMessage(com.zhyen.android.model.MessageModel messageModel) throws android.os.RemoteException &#123;</span><br><span class="line">                android.os.Parcel _data &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                android.os.Parcel _reply &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    if ((messageModel !&#x3D; null)) &#123;</span><br><span class="line">                        _data.writeInt(1);</span><br><span class="line">                        messageModel.writeToParcel(_data, 0);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _data.writeInt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                    &#x2F;&#x2F;调用Binder的transact方法进行多进程数据传输，处理完毕后调用上方的onTransact方法</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_sendMessage, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        static final int TRANSACTION_sendMessage &#x3D; (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void sendMessage(com.zhyen.android.model.MessageModel messageModel) throws android.os.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只看代码的话，可能会有点懵逼，相信结合代码再看下方的流程图会更好理解：</p>
+<p><img src="http://jsh180.net/image/jpg/blog_aidl_flowchart.jpg" alt="flow chart"></p>
+<p>从客户端的sendMessage开始，整个AIDL的调用过程如上图所示，asInterface方法，将会判断onBind方法返回的Binder是否存处于同一进程，在同一进程中，则进行常规的方法调用，若处于不同进程，整个数据传递的过程则需要通过Binder底层去进行编组（序列化，传输，接收和反序列化），得到最终的数据后再进行常规的方法调用。</p>
+<p><strong>对象跨进程传输的本质就是 序列化，传输，接收和反序列化 这样一个过程，这也是为什么跨进程传输的对象必须实现Parcelable接口</strong></p>
+<h1 id="跨进程的回调接口"><a href="#跨进程的回调接口" class="headerlink" title="跨进程的回调接口"></a>跨进程的回调接口</h1><p>在上面我们已经实现了从客户端发送消息到跨进程服务端的功能，接下来我们还需要将服务端接收到的远程服务器消息，传递到客户端。有同学估计会说：“这不就是一个回调接口的事情嘛”，设置回调接口思路是对的，但是在这里使用的回调接口有点不一样，在AIDL中传递的接口，不能是普通的接口，只能是AIDL接口，所以我们需要新建一个AIDL接口传到服务端，作为回调接口。</p>
+<p>新建消息收取的AIDL接口MessageReceiver.aidl：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; MessageReceiver.aidl</span><br><span class="line">package com.zhyen.android;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line">&#x2F;&#x2F;消息回调接口</span><br><span class="line">interface MessageReceiver &#123;</span><br><span class="line">    void onMessageReceived(in MessageModel receivedMessage);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们把回调接口注册到服务端去，修改我们的MessageSender.aidl:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; MessageSender.aidl</span><br><span class="line">package com.zhyen.android;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line">import com.zhyen.android.MessageReceiver;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">interface MessageSender &#123;</span><br><span class="line">    void sendMessage(in MessageModel messageModel);</span><br><span class="line"></span><br><span class="line">    void registerReceiveListener(MessageReceiver messageReceiver);</span><br><span class="line"></span><br><span class="line">    void unregisterReceiveListener(MessageReceiver messageReceiver);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上就是我们最终修改好的aidl接口，接下来我们需要做出对应的变更：</p>
+<ul>
+<li><p>在服务端中增加MessageSender的注册和反注册接口的方法；</p>
+</li>
+<li><p>在客户端中实现MessageReceiver接口，并通过MessageSender注册到服务端。</p>
+</li>
+</ul>
+<p>客户端变更，修改MainActivity：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.content.ComponentName;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.content.ServiceConnection;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.View;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.MessageReceiver;</span><br><span class="line">import com.zhyen.android.MessageSender;</span><br><span class="line">import com.zhyen.android.R;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line"></span><br><span class="line">public class TestAidlMessageActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;TestAidlMessageActivity&quot;;</span><br><span class="line">    private MessageSender messageSender;</span><br><span class="line">    private boolean connected;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.test_aidl_message_activity);</span><br><span class="line">        findViewById(R.id.btn_send_msg).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (!connected) return;</span><br><span class="line">                &#x2F;&#x2F;使用asInterface方法取得AIDL对应的操作接口</span><br><span class="line">                MessageModel messageModel &#x3D; new MessageModel();</span><br><span class="line">                messageModel.setFrom(&quot;client user id&quot;);</span><br><span class="line">                messageModel.setTo(&quot;receiver user id&quot;);</span><br><span class="line">                messageModel.setContent(&quot;This is message content&quot;);</span><br><span class="line">                &#x2F;&#x2F;调用远程Service的sendMessage方法，并传递消息实体对象</span><br><span class="line">                try &#123;</span><br><span class="line">                    messageSender.sendMessage(messageModel);</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (connected) return;</span><br><span class="line">                try &#123;</span><br><span class="line">                    messageSender.registerReceiveListener(messageReceiver);</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        setupService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void setupService() &#123;</span><br><span class="line">        Intent intent &#x3D; new Intent(this, MessageService.class);</span><br><span class="line">        bindService(intent, connection, Context.BIND_AUTO_CREATE);</span><br><span class="line">        startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;消息监听回调接口</span><br><span class="line">    private MessageReceiver.Stub messageReceiver &#x3D; new MessageReceiver.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onMessageReceived(MessageModel receivedMessage) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;onMessageReceived: &quot; + receivedMessage.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    private ServiceConnection connection &#x3D; new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            connected &#x3D; true;</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: name &#x3D; &quot; + name);</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: service &#x3D; &quot; + service);</span><br><span class="line">            messageSender &#x3D; MessageSender.Stub.asInterface(service);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line">            connected &#x3D; false;</span><br><span class="line">            Log.d(TAG, &quot;onServiceDisconnected: name &#x3D; &quot; + name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        &#x2F;&#x2F;解除消息监听接口</span><br><span class="line">        if (messageSender !&#x3D; null &amp;&amp; messageSender.asBinder().isBinderAlive()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                messageSender.unregisterReceiveListener(messageReceiver);</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        unbindService(connection);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端主要有3个变更：</p>
+<ol>
+<li>增加了messageReceiver对象，用于监听服务端的消息通知；</li>
+<li>onServiceConnected方法中，把messageReceiver注册到Service中去；</li>
+<li>onDestroy时候解除messageReceiver的注册。</li>
+</ol>
+<p><strong>下面对服务端MessageServie进行变更：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.app.Service;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteCallbackList;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.MessageReceiver;</span><br><span class="line">import com.zhyen.android.MessageSender;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line"></span><br><span class="line">import java.util.concurrent.atomic.AtomicBoolean;</span><br><span class="line"></span><br><span class="line">public class MessageService extends Service &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;MessageService&quot;;</span><br><span class="line">    private AtomicBoolean serviceStop &#x3D; new AtomicBoolean();</span><br><span class="line">    &#x2F;&#x2F;RemoteCallbackList专门用来管理多进程回调接口</span><br><span class="line">    private RemoteCallbackList&lt;MessageReceiver&gt; listenerList &#x3D; new RemoteCallbackList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public MessageService() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return stub;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private MessageSender.Stub stub &#x3D; new MessageSender.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void sendMessage(MessageModel messageModel) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel);</span><br><span class="line">            if (messageModel &#x3D;&#x3D; null) return;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel.toString());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void registerReceiveListener(MessageReceiver messageReceiver) throws RemoteException &#123;</span><br><span class="line">            listenerList.register(messageReceiver);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void unregisterReceiveListener(MessageReceiver messageReceiver) throws RemoteException &#123;</span><br><span class="line">            listenerList.unregister(messageReceiver);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        new Thread(new FakeTCPTask()).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onDestroy() &#123;</span><br><span class="line">        serviceStop.set(true);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;模拟长连接，通知客户端有新消息到达</span><br><span class="line">    private class FakeTCPTask implements Runnable &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (!serviceStop.get()) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(3000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                MessageModel messageModel &#x3D; new MessageModel();</span><br><span class="line">                messageModel.setFrom(&quot;Service&quot;);</span><br><span class="line">                messageModel.setTo(&quot;Client&quot;);</span><br><span class="line">                messageModel.setContent(String.valueOf(System.currentTimeMillis()));</span><br><span class="line">                &#x2F;**</span><br><span class="line">                 * RemoteCallbackList的遍历方式</span><br><span class="line">                 * beginBroadcast和finishBroadcast一定要配对使用</span><br><span class="line">                 *&#x2F;</span><br><span class="line">                final int listenerCount &#x3D; listenerList.beginBroadcast();</span><br><span class="line">                Log.d(TAG, &quot;listenerCount &#x3D;&#x3D; &quot; + listenerCount);</span><br><span class="line">                for (int i &#x3D; 0; i &lt; listenerCount; i++) &#123;</span><br><span class="line">                    MessageReceiver messageReceiver &#x3D; listenerList.getBroadcastItem(i);</span><br><span class="line">                    if (messageReceiver !&#x3D; null) &#123;</span><br><span class="line">                        try &#123;</span><br><span class="line">                            messageReceiver.onMessageReceived(messageModel);</span><br><span class="line">                        &#125; catch (RemoteException e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                listenerList.finishBroadcast();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端主要变更：</p>
+<ol>
+<li>MessageSender.Stub实现了注册和反注册回调接口的方法；</li>
+<li>增加了RemoteCallbackList来管理AIDL远程接口；</li>
+<li>FakeTCPTask模拟了长连接通知客户端有新消息到达。</li>
+</ol>
+<p>这里还有一个需要讲一下的，就是RemoteCallbackList，为什么要用RemoteCallbackList，普通ArrayList不行吗？当然不行，不然干嘛又整一个RemoteCallbackList 🙃，registerReceiveListener 和 unregisterReceiveListener在客户端传输过来的对象，经过Binder处理，在服务端接收到的时候其实是一个新的对象，这样导致在 unregisterReceiveListener 的时候，普通的ArrayList是无法找到在 registerReceiveListener 时候添加到List的那个对象的，但是它们底层使用的Binder对象是同一个，RemoteCallbackList利用这个特性做到了可以找到同一个对象，这样我们就可以顺利反注册客户端传递过来的接口对象了。RemoteCallbackList在客户端进程终止后，它能自动移除客户端所注册的listener，它内部还实现了线程同步，所以我们在注册和反注册都不需要考虑线程同步，的确是个666的类。（至于使用ArrayList的幺蛾子现象，大家可以自己试试，篇幅问题，这里就不演示了）</p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>客户端结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2020-05-22 12:15:07.405 31763-31868&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120907403&#39;&#125;</span><br><span class="line">2020-05-22 12:15:10.408 31763-31868&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120910406&#39;&#125;</span><br><span class="line">2020-05-22 12:15:13.409 31763-31868&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120913408&#39;&#125;</span><br><span class="line">2020-05-22 12:15:16.411 31763-31868&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120916410&#39;&#125;</span><br><span class="line">2020-05-22 12:15:19.413 31763-31868&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120919412&#39;&#125;</span><br><span class="line">2020-05-22 12:15:22.415 31763-32268&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120922414&#39;&#125;</span><br><span class="line">2020-05-22 12:15:25.419 31763-32268&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120925417&#39;&#125;</span><br><span class="line">2020-05-22 12:15:28.422 31763-32268&#x2F;com.zhyen.android D&#x2F;TestAidlMessageActivity: onMessageReceived: MessageModel&#123;from&#x3D;&#39;Service&#39;, to&#x3D;&#39;Client&#39;, content&#x3D;&#39;1590120928420&#39;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">2020-05-22 12:14:37.395 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:39.397 32152-32152&#x2F;com.zhyen.android:remote D&#x2F;AwareBitmapCacher: handleInit disable com.zhyen.android:remote</span><br><span class="line">2020-05-22 12:14:40.395 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:43.397 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:46.398 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:49.399 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:52.400 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:55.400 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:14:56.750 32152-32191&#x2F;com.zhyen.android:remote D&#x2F;MessageService: sendMessage: MessageModel&#123;from&#x3D;&#39;client user id&#39;, to&#x3D;&#39;receiver user id&#39;, content&#x3D;&#39;This is message content&#39;&#125;</span><br><span class="line">2020-05-22 12:14:56.751 32152-32191&#x2F;com.zhyen.android:remote D&#x2F;MessageService: sendMessage: MessageModel&#123;from&#x3D;&#39;client user id&#39;, to&#x3D;&#39;receiver user id&#39;, content&#x3D;&#39;This is message content&#39;&#125;</span><br><span class="line">2020-05-22 12:14:58.401 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:15:01.402 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:15:04.402 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 0</span><br><span class="line">2020-05-22 12:15:07.403 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 1</span><br><span class="line">2020-05-22 12:15:10.407 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 1</span><br><span class="line">2020-05-22 12:15:13.408 32152-32192&#x2F;com.zhyen.android:remote D&#x2F;MessageService: listenerCount &#x3D;&#x3D; 1</span><br></pre></td></tr></table></figure>
+
+<h1 id="DeathRecipient"><a href="#DeathRecipient" class="headerlink" title="DeathRecipient"></a>DeathRecipient</h1><p>不知道你有没有感觉到，两个进程交互总是觉得缺乏那么一点安全感…比如说服务端进程Crash了，而客户端进程想要调用服务端方法，这样就调用不到了。此时我们可以给Binder设置一个DeathRecipient对象，当Binder意外挂了的时候，我们可以在DeathRecipient接口的回调方法中收到通知，并作出相应的操作，比如重连服务等等。</p>
+<p>DeathRecipient的使用如下：</p>
+<ul>
+<li>声明DeathRecipient对象，实现其binderDied方法，当binder死亡时，会回调binderDied方法；</li>
+<li>给Binder对象设置DeathRecipient对象。</li>
+</ul>
+<p>在客户端MainActivity声明DeathRecipient：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test.test_aidl;</span><br><span class="line"></span><br><span class="line">import android.content.ComponentName;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.content.ServiceConnection;</span><br><span class="line">import android.os.Binder;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.View;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.MessageReceiver;</span><br><span class="line">import com.zhyen.android.MessageSender;</span><br><span class="line">import com.zhyen.android.R;</span><br><span class="line">import com.zhyen.android.model.MessageModel;</span><br><span class="line"></span><br><span class="line">public class TestAidlMessageActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;TestAidlMessageActivity&quot;;</span><br><span class="line">    private MessageSender messageSender;</span><br><span class="line">    private boolean connected;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.test_aidl_message_activity);</span><br><span class="line">        findViewById(R.id.btn_send_msg).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (!connected) return;</span><br><span class="line">                &#x2F;&#x2F;使用asInterface方法取得AIDL对应的操作接口</span><br><span class="line">                MessageModel messageModel &#x3D; new MessageModel();</span><br><span class="line">                messageModel.setFrom(&quot;client user id&quot;);</span><br><span class="line">                messageModel.setTo(&quot;receiver user id&quot;);</span><br><span class="line">                messageModel.setContent(&quot;This is message content&quot;);</span><br><span class="line">                &#x2F;&#x2F;调用远程Service的sendMessage方法，并传递消息实体对象</span><br><span class="line">                try &#123;</span><br><span class="line">                    messageSender.sendMessage(messageModel);</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (!connected) return;</span><br><span class="line">                try &#123;</span><br><span class="line">                    messageSender.registerReceiveListener(messageReceiver);</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        setupService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void setupService() &#123;</span><br><span class="line">        Intent intent &#x3D; new Intent(this, MessageService.class);</span><br><span class="line">        bindService(intent, connection, Context.BIND_AUTO_CREATE);</span><br><span class="line">        startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Binder可能会意外死忙（比如Service Crash），Client监听到Binder死忙后可以进行重连服务等操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private Binder.DeathRecipient deathRecipient &#x3D; new IBinder.DeathRecipient() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void binderDied() &#123;</span><br><span class="line">            Log.d(TAG, &quot;binderDied: &quot;);</span><br><span class="line">            if (messageSender !&#x3D; null) &#123;</span><br><span class="line">                messageSender.asBinder().unlinkToDeath(this, 0);</span><br><span class="line">                messageSender &#x3D; null;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;重连服务或其他操作</span><br><span class="line">            setupService();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;消息监听回调接口</span><br><span class="line">    private MessageReceiver.Stub messageReceiver &#x3D; new MessageReceiver.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onMessageReceived(MessageModel receivedMessage) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;onMessageReceived: &quot; + receivedMessage.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    private ServiceConnection connection &#x3D; new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            connected &#x3D; true;</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: name &#x3D; &quot; + name);</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: service &#x3D; &quot; + service);</span><br><span class="line">            messageSender &#x3D; MessageSender.Stub.asInterface(service);</span><br><span class="line">            &#x2F;&#x2F;设置Binder死亡监听</span><br><span class="line">            try &#123;</span><br><span class="line">                messageReceiver.asBinder().linkToDeath(deathRecipient, 0);</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line">            connected &#x3D; false;</span><br><span class="line">            Log.d(TAG, &quot;onServiceDisconnected: name &#x3D; &quot; + name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        &#x2F;&#x2F;解除消息监听接口</span><br><span class="line">        if (messageSender !&#x3D; null &amp;&amp; messageSender.asBinder().isBinderAlive()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                messageSender.unregisterReceiveListener(messageReceiver);</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        unbindService(connection);</span><br><span class="line">        super.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Binder中两个重要方法：</p>
+<ol>
+<li>linkToDeath -&gt; 设置死亡代理 DeathRecipient 对象；</li>
+<li>unlinkToDeath -&gt; Binder死亡的情况下，解除该代理。</li>
+</ol>
+<p>此外，Binder中的isBinderAlive也可以判断Binder是否死亡。</p>
+<h1 id="权限验证"><a href="#权限验证" class="headerlink" title="权限验证"></a>权限验证</h1><p>就算是公交车，上车也得嘀卡对不，如果希望我们的服务进程不想像公交车一样谁想上就上，那么我们可以加入权限验证。</p>
+<p>介绍两种常用验证方法：</p>
+<ul>
+<li>在服务端的onBind中校验自定义permission，如果通过了我们的校验，正常返回Binder对象，校验不通过返回null，返回null的情况下客户端无法绑定到我们的服务；</li>
+<li>在服务端的onTransact方法校验客户端包名，不通过校验直接return false，校验通过执行正常的流程。</li>
+</ul>
+<p>自定义permission，在Androidmanifest.xml中增加自定义的权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;permission</span><br><span class="line">        android:name&#x3D;&quot;com.zhyen.android.permission.REMOTE_SERVICE_PERMISSION&quot;</span><br><span class="line">        android:protectionLevel&#x3D;&quot;normal&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;uses-permission android:name&#x3D;&quot;com.zhyen.android.permission.REMOTE_SERVICE_PERMISSION&quot; &#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>服务端检查权限的方法：</p>
+<ul>
+<li>校验权限的方式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        &#x2F;&#x2F;自定义permission方式检查权限</span><br><span class="line">        if (checkCallingOrSelfPermission(&quot;com.zhyen.android.permission.REMOTE_SERVICE_PERMISSION&quot;) &#x3D;&#x3D; PackageManager.PERMISSION_DENIED) &#123;</span><br><span class="line">            Log.d(TAG, &quot;onBind: 没有设置权限&quot;);</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        return stub;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>判断包名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">private MessageSender.Stub stub &#x3D; new MessageSender.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void sendMessage(MessageModel messageModel) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel);</span><br><span class="line">            if (messageModel &#x3D;&#x3D; null) return;</span><br><span class="line">            Log.d(TAG, &quot;sendMessage: &quot; + messageModel.toString());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void registerReceiveListener(MessageReceiver messageReceiver) throws RemoteException &#123;</span><br><span class="line">            listenerList.register(messageReceiver);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void unregisterReceiveListener(MessageReceiver messageReceiver) throws RemoteException &#123;</span><br><span class="line">            listenerList.unregister(messageReceiver);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException &#123;</span><br><span class="line">            &#x2F;**</span><br><span class="line">             * 包名验证方式</span><br><span class="line">             *&#x2F;</span><br><span class="line">            String packageName &#x3D; null;</span><br><span class="line">            String[] packages &#x3D; getPackageManager().getPackagesForUid(getCallingUid());</span><br><span class="line">            if (packages !&#x3D; null &amp;&amp; packages.length &gt; 0) &#123;</span><br><span class="line">                packageName &#x3D; packages[0];</span><br><span class="line">            &#125;</span><br><span class="line">            if (packageName &#x3D;&#x3D; null || !packageName.startsWith(&quot;com.zhyen.android&quot;)) &#123;</span><br><span class="line">                Log.d(&quot;onTransact&quot;, &quot;拒绝调用：&quot; + packageName);</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            return super.onTransact(code, data, reply, flags);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="根据不同进程，做不同的初始化工作"><a href="#根据不同进程，做不同的初始化工作" class="headerlink" title="根据不同进程，做不同的初始化工作"></a>根据不同进程，做不同的初始化工作</h1><p>相信前一两年很多朋友还在使用Android-Universal-Image-Loader来加载图片，它是需要在Application类进行初始化的。打个比如，我们用它来加载图片，而且还有一个图片选择进程，那么我们希望分配更多的缓存给图片选择进程，又或者是一些其他的初始化工作，不需要在图片选择进程初始化怎么办？</p>
+<p>这里提供一个简单粗暴的方法，博主也是这么干的…直接拿到进程名判断，作出相应操作即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android;</span><br><span class="line"></span><br><span class="line">import android.app.ActivityManager;</span><br><span class="line">import android.app.Application;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.nfc.Tag;</span><br><span class="line">import android.os.Process;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class ZhyenApplication extends Application &#123;</span><br><span class="line">    private static final String TAG &#x3D; &quot;ZhyenApplication&quot;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        Log.d(TAG, getProcessName(getApplicationContext()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;取得进程名</span><br><span class="line">    public static String getProcessName(Context context) &#123;</span><br><span class="line">        ActivityManager am &#x3D; (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);</span><br><span class="line">        List&lt;ActivityManager.RunningAppProcessInfo&gt; runningApps &#x3D; am.getRunningAppProcesses();</span><br><span class="line">        if (runningApps &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        for (ActivityManager.RunningAppProcessInfo procInfo : runningApps) &#123;</span><br><span class="line">            if (procInfo.pid &#x3D;&#x3D; Process.myPid()) &#123;</span><br><span class="line">                return procInfo.processName;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>每个进程创建，都会调用Application的onCreate方法，这是一个需要注意的地方，我们也可以根据当前进程的pid，拿到当前进程的名字去做判断，然后做一些我们需要的逻辑，我们这个例子，拿到的两个进程名分别是：</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2020-05-22 13:54:17.090 16347-16347&#x2F;com.zhyen.android:remote D&#x2F;ZhyenApplication: com.zhyen.android:remote</span><br><span class="line"></span><br><span class="line">2020-05-22 13:54:08.698 16280-16280&#x2F;? D&#x2F;ZhyenApplication: com.zhyen.android</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Binder/" rel="tag"># Binder</a>
+          
+            <a href="/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/" rel="tag"># 多进程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/21/adb%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="adb常用命令">
+                <i class="fa fa-chevron-left"></i> adb常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/22/%E5%A6%82%E4%BD%95%E5%81%9A%E5%A5%BDppt/" rel="prev" title="如何做好ppt">
+                如何做好ppt <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#例子具体实现"><span class="nav-number">1.</span> <span class="nav-text">例子具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AIDL调用流程概览"><span class="nav-number">1.1.</span> <span class="nav-text">AIDL调用流程概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端使用bindService方法绑定服务端"><span class="nav-number">1.2.</span> <span class="nav-text">客户端使用bindService方法绑定服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建客户端和服务端，把服务端配置到另外的进程"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建客户端和服务端，把服务端配置到另外的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定MessageService到MainActivity"><span class="nav-number">1.2.2.</span> <span class="nav-text">绑定MessageService到MainActivity</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端在onBind方法返回Binder对象"><span class="nav-number">1.3.</span> <span class="nav-text">服务端在onBind方法返回Binder对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先，什么是Binder"><span class="nav-number">1.3.1.</span> <span class="nav-text">首先，什么是Binder?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其次，这个需要在onBind方法返回的Binder对象从何而来？"><span class="nav-number">1.3.2.</span> <span class="nav-text">其次，这个需要在onBind方法返回的Binder对象从何而来？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义AIDL接口"><span class="nav-number">1.3.3.</span> <span class="nav-text">定义AIDL接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个AIDL接口"><span class="nav-number">1.3.4.</span> <span class="nav-text">创建一个AIDL接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端MessageService"><span class="nav-number">1.3.5.</span> <span class="nav-text">服务端MessageService</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端拿到Binder对象后调用远程方法"><span class="nav-number">1.4.</span> <span class="nav-text">客户端拿到Binder对象后调用远程方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析Binder上层机制"><span class="nav-number">2.</span> <span class="nav-text">分析Binder上层机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#跨进程的回调接口"><span class="nav-number">3.</span> <span class="nav-text">跨进程的回调接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">3.1.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DeathRecipient"><span class="nav-number">4.</span> <span class="nav-text">DeathRecipient</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限验证"><span class="nav-number">5.</span> <span class="nav-text">权限验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据不同进程，做不同的初始化工作"><span class="nav-number">6.</span> <span class="nav-text">根据不同进程，做不同的初始化工作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

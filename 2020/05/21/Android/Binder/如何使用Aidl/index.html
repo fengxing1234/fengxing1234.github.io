@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Binder,AIDL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Aidl是什么它全称是Android Interface Definition Language，即Android接口定义语言，为了使其他的进程也可以访问本进程提供的服务，Android使用AIDL来公开服务的接口，它里面定义了本进程可以为其他进程提供什么服务，即定义了一些方法，其他进程就可以通过RPC（远程调用）来调用这些方法，从而获得服务，其中提供服务的进程称为服务端，获取服务的进程称为客户端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用Aidl">
+<meta property="og:url" content="http://yoursite.com/2020/05/21/Android/Binder/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Aidl/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="Aidl是什么它全称是Android Interface Definition Language，即Android接口定义语言，为了使其他的进程也可以访问本进程提供的服务，Android使用AIDL来公开服务的接口，它里面定义了本进程可以为其他进程提供什么服务，即定义了一些方法，其他进程就可以通过RPC（远程调用）来调用这些方法，从而获得服务，其中提供服务的进程称为服务端，获取服务的进程称为客户端">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://gityuan.com/images/binder/prepare/binder_interprocess_communication.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-5aeb537d22344755.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-f2595f3330c66dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://gityuan.com/images/binder/AIDL/MyServer_java_binder.jpg">
+<meta property="article:published_time" content="2020-05-21T03:58:35.000Z">
+<meta property="article:modified_time" content="2020-05-24T08:18:20.270Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Binder">
+<meta property="article:tag" content="AIDL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://gityuan.com/images/binder/prepare/binder_interprocess_communication.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/21/Android/Binder/如何使用Aidl/"/>
+
+
+
+
+
+  <title>如何使用Aidl | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/Android/Binder/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Aidl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何使用Aidl</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-21T11:58:35+08:00">
+                2020-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Binder/" itemprop="url" rel="index">
+                    <span itemprop="name">Binder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/21/Android/Binder/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Aidl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/21/Android/Binder/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Aidl/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Aidl是什么"><a href="#Aidl是什么" class="headerlink" title="Aidl是什么"></a>Aidl是什么</h1><p>它全称是Android Interface Definition Language，即Android接口定义语言，为了使其他的进程也可以访问本进程提供的服务，Android使用AIDL来公开服务的接口，它里面定义了本进程可以为其他进程提供什么服务，即定义了一些方法，其他进程就可以通过RPC（远程调用）来调用这些方法，从而获得服务，其中提供服务的进程称为服务端，获取服务的进程称为客户端。</p>
+<p><img src="http://gityuan.com/images/binder/prepare/binder_interprocess_communication.png" alt="binder_interprocess_communication"></p>
+<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><p>AIDL的语法十分简单，与Java语言基本保持一致，需要记住的规则有以下几点：</p>
+<ol>
+<li>AIDL文件以 <strong>.aidl</strong> 为后缀名</li>
+<li>AIDL支持的数据类型分为如下几种： <ul>
+<li>八种基本数据类型：byte、char、short、int、long、float、double、boolean</li>
+<li>String，CharSequence</li>
+<li>实现了Parcelable接口的数据类型</li>
+<li>List 类型。List承载的数据必须是AIDL支持的类型，或者是其它声明的AIDL对象</li>
+<li>Map类型。Map承载的数据必须是AIDL支持的类型，或者是其它声明的AIDL对象</li>
+</ul>
+</li>
+<li>AIDL文件可以分为两类。一类用来声明实现了Parcelable接口的数据类型，以供其他AIDL文件使用那些非默认支持的数据类型。还有一类是用来定义接口方法，声明要暴露哪些接口给客户端调用，定向Tag就是用来标注这些方法的参数值</li>
+<li>定向Tag。定向Tag表示在跨进程通信中数据的流向，用于标注方法的参数值，分为 in、out、inout 三种。其中 in 表示数据只能由客户端流向服务端， out 表示数据只能由服务端流向客户端，而 inout 则表示数据可在服务端与客户端之间双向流通。此外，如果AIDL方法接口的参数值类型是：基本数据类型、String、CharSequence或者其他AIDL文件定义的方法接口，那么这些参数值的定向 Tag 默认是且只能是 in，所以除了这些类型外，其他参数值都需要明确标注使用哪种定向Tag。</li>
+<li>明确导包。在AIDL文件中需要明确标明引用到的数据类型所在的包名，即使两个文件处在同个包名下。</li>
+</ol>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>客户端绑定服务端的service调用服务端的方法，实现应用数据共享</p>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>创建aidl接口定义外暴露方法，以及需要的传递的实体。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-5aeb537d22344755.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>对外接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; TestAidl.aidl</span><br><span class="line">package com.zhyen.test;</span><br><span class="line">import com.zhyen.test.Book;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">interface TestAidl &#123;</span><br><span class="line">       List&lt;Book&gt; getBookList();</span><br><span class="line"></span><br><span class="line">       void addBookInOut(inout Book book);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将Book改为声明Parcelable数据类型的AIDL文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Book.aidl</span><br><span class="line">package com.zhyen.test;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">parcelable Book;</span><br></pre></td></tr></table></figure>
+
+<p>java类型实体类，注意包的结构相同。此处都是<code>com.zhyen.test</code></p>
+<p>自定义数据类型，用于进程间通信的话，必须实现Parcelable接口，Parcelable是类似于Java中的Serializable，Android中定义了Parcelable，用于进程间数据传递，对传输数据进行分解，编组的工作，相对于Serializable，他对于进程间通信更加高效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.test;</span><br><span class="line"></span><br><span class="line">import android.os.Parcel;</span><br><span class="line">import android.os.Parcelable;</span><br><span class="line"></span><br><span class="line">public class Book implements Parcelable &#123;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public Book(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;book name：&quot; + name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int describeContents() &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void writeToParcel(Parcel dest, int flags) &#123;</span><br><span class="line">        dest.writeString(this.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void readFromParcel(Parcel dest) &#123;</span><br><span class="line">        name &#x3D; dest.readString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected Book(Parcel in) &#123;</span><br><span class="line">        this.name &#x3D; in.readString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Creator&lt;Book&gt; CREATOR &#x3D; new Creator&lt;Book&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Book createFromParcel(Parcel source) &#123;</span><br><span class="line">            return new Book(source);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Book[] newArray(int size) &#123;</span><br><span class="line">            return new Book[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编写服务端service</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.test;</span><br><span class="line"></span><br><span class="line">import android.app.Service;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class AidlBookService extends Service &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;AidlService&quot;;</span><br><span class="line">    private List&lt;Book&gt; books;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        books &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        Book book1 &#x3D; new Book(&quot;活着&quot;);</span><br><span class="line">        Book book2 &#x3D; new Book(&quot;或者&quot;);</span><br><span class="line">        Book book3 &#x3D; new Book(&quot;叶应是叶&quot;);</span><br><span class="line">        Book book4 &#x3D; new Book(&quot;https:&#x2F;&#x2F;github.com&#x2F;leavesC&quot;);</span><br><span class="line">        Book book5 &#x3D; new Book(&quot;http:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9df45b87cfdf&quot;);</span><br><span class="line">        Book book6 &#x3D; new Book(&quot;http:&#x2F;&#x2F;blog.csdn.net&#x2F;new_one_object&quot;);</span><br><span class="line">        books.add(book1);</span><br><span class="line">        books.add(book2);</span><br><span class="line">        books.add(book3);</span><br><span class="line">        books.add(book4);</span><br><span class="line">        books.add(book5);</span><br><span class="line">        books.add(book6);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private TestAidl.Stub stub &#x3D; new TestAidl.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public List&lt;Book&gt; getBookList() throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;getBookList: &quot;);</span><br><span class="line">            return books;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void addBookInOut(Book book) throws RemoteException &#123;</span><br><span class="line">            Log.d(TAG, &quot;addBookInOut: &quot; + book);</span><br><span class="line">            books.add(book);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return stub;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>service配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">            android:name&#x3D;&quot;.AidlBookService&quot;</span><br><span class="line">            android:enabled&#x3D;&quot;true&quot;</span><br><span class="line">            android:exported&#x3D;&quot;true&quot;&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name&#x3D;&quot;com.zhyen.test.action&quot; &#x2F;&gt;</span><br><span class="line">                &lt;category android:name&#x3D;&quot;android.intent.category.DEFAULT&quot; &#x2F;&gt;</span><br><span class="line">            &lt;&#x2F;intent-filter&gt;</span><br><span class="line">        &lt;&#x2F;service&gt;</span><br></pre></td></tr></table></figure>
+
+<p>服务端已经做好了</p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p><img src="https://upload-images.jianshu.io/upload_images/4118241-f2595f3330c66dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>客户端连带着aidl目录全都复制到main目录下，负责java类Book，注意包的结构。</p>
+<p>编写客户端代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">package com.zhyen.android.test;</span><br><span class="line"></span><br><span class="line">import android.content.ComponentName;</span><br><span class="line">import android.content.Context;</span><br><span class="line">import android.content.Intent;</span><br><span class="line">import android.content.ServiceConnection;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.os.IBinder;</span><br><span class="line">import android.os.RemoteException;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import android.view.View;</span><br><span class="line">import android.widget.Button;</span><br><span class="line"></span><br><span class="line">import androidx.annotation.Nullable;</span><br><span class="line">import androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line">import com.zhyen.android.R;</span><br><span class="line">import com.zhyen.base.IMyService;</span><br><span class="line">import com.zhyen.base.Student;</span><br><span class="line">import com.zhyen.test.Book;</span><br><span class="line">import com.zhyen.test.TestAidl;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class TestAIDLActivity extends AppCompatActivity &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private static final String TAG &#x3D; &quot;TestAIDLActivity&quot;;</span><br><span class="line">    private boolean bookConnected;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">    private ServiceConnection connectionBook &#x3D; new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            Log.d(TAG, &quot;onServiceConnected: &quot; + name);</span><br><span class="line">            bookConnected &#x3D; true;</span><br><span class="line">            testAidl &#x3D; TestAidl.Stub.asInterface(service);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line">            bookConnected &#x3D; false;</span><br><span class="line">            Log.d(TAG, &quot;onServiceDisconnected: &quot; + name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    private TestAidl testAidl;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.test_aidl_activity);</span><br><span class="line">        findViewById(R.id.btn_add_book).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if (!bookConnected) return;</span><br><span class="line">                    testAidl.addBookInOut(new Book(&quot;呵呵哒&quot;));</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        findViewById(R.id.btn_book_list).setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View v) &#123;</span><br><span class="line">                if (!bookConnected) return;</span><br><span class="line">                try &#123;</span><br><span class="line">                    List&lt;Book&gt; bookList &#x3D; testAidl.getBookList();</span><br><span class="line">                    for (Book book : bookList) &#123;</span><br><span class="line">                        Log.d(TAG, &quot;onClick: &quot; + book.getName());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; catch (RemoteException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        bindServiceBook();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void bindServiceBook() &#123;</span><br><span class="line">        Intent intent &#x3D; new Intent();</span><br><span class="line">        intent.setPackage(&quot;com.zhyen.test&quot;);</span><br><span class="line">        intent.setAction(&quot;com.zhyen.test.action&quot;);</span><br><span class="line">        bindService(intent, connectionBook, Context.BIND_AUTO_CREATE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onDestroy() &#123;</span><br><span class="line">        super.onDestroy();</span><br><span class="line">        unbindService(connectionBook);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: 活着</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: 或者</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: 叶应是叶</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: https:&#x2F;&#x2F;github.com&#x2F;leavesC</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: http:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9df45b87cfdf</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: http:&#x2F;&#x2F;blog.csdn.net&#x2F;new_one_object</span><br><span class="line">2020-05-21 18:33:13.678 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: 呵呵哒</span><br><span class="line">2020-05-21 18:33:13.679 31931-31931&#x2F;com.zhyen.android I&#x2F;chatty: uid&#x3D;10206(com.zhyen.android) identical 6 lines</span><br><span class="line">2020-05-21 18:33:13.679 31931-31931&#x2F;com.zhyen.android D&#x2F;TestAIDLActivity: onClick: 呵呵哒</span><br></pre></td></tr></table></figure>
+
+<h2 id="aidl编译后的样子"><a href="#aidl编译后的样子" class="headerlink" title="aidl编译后的样子"></a>aidl编译后的样子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * This file is auto-generated.  DO NOT MODIFY.</span><br><span class="line"> *&#x2F;</span><br><span class="line">package com.zhyen.test;</span><br><span class="line">&#x2F;&#x2F; Declare any non-default types here with import statements</span><br><span class="line"></span><br><span class="line">public interface TestAidl extends android.os.IInterface &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Local-side IPC implementation stub class.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static abstract class Stub extends android.os.Binder implements com.zhyen.test.TestAidl &#123;</span><br><span class="line">        private static final java.lang.String DESCRIPTOR &#x3D; &quot;com.zhyen.test.TestAidl&quot;;</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * Construct the stub at attach it to the interface.</span><br><span class="line">         *&#x2F;</span><br><span class="line">        public Stub() &#123;</span><br><span class="line">            this.attachInterface(this, DESCRIPTOR);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * Cast an IBinder object into an com.zhyen.test.TestAidl interface,</span><br><span class="line">         * generating a proxy if needed.</span><br><span class="line">         *&#x2F;</span><br><span class="line">        public static com.zhyen.test.TestAidl asInterface(android.os.IBinder obj) &#123;</span><br><span class="line">            if ((obj &#x3D;&#x3D; null)) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            android.os.IInterface iin &#x3D; obj.queryLocalInterface(DESCRIPTOR);</span><br><span class="line">            if (((iin !&#x3D; null) &amp;&amp; (iin instanceof com.zhyen.test.TestAidl))) &#123;</span><br><span class="line">                return ((com.zhyen.test.TestAidl) iin);</span><br><span class="line">            &#125;</span><br><span class="line">            return new com.zhyen.test.TestAidl.Stub.Proxy(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public android.os.IBinder asBinder() &#123;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException &#123;</span><br><span class="line">            java.lang.String descriptor &#x3D; DESCRIPTOR;</span><br><span class="line">            switch (code) &#123;</span><br><span class="line">                case INTERFACE_TRANSACTION: &#123;</span><br><span class="line">                    reply.writeString(descriptor);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_getBookList: &#123;</span><br><span class="line">                    data.enforceInterface(descriptor);</span><br><span class="line">                    java.util.List&lt;com.zhyen.test.Book&gt; _result &#x3D; this.getBookList();</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    reply.writeTypedList(_result);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                case TRANSACTION_addBookInOut: &#123;</span><br><span class="line">                    data.enforceInterface(descriptor);</span><br><span class="line">                    com.zhyen.test.Book _arg0;</span><br><span class="line">                    if ((0 !&#x3D; data.readInt())) &#123;</span><br><span class="line">                        _arg0 &#x3D; com.zhyen.test.Book.CREATOR.createFromParcel(data);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _arg0 &#x3D; null;</span><br><span class="line">                    &#125;</span><br><span class="line">                    this.addBookInOut(_arg0);</span><br><span class="line">                    reply.writeNoException();</span><br><span class="line">                    if ((_arg0 !&#x3D; null)) &#123;</span><br><span class="line">                        reply.writeInt(1);</span><br><span class="line">                        _arg0.writeToParcel(reply, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        reply.writeInt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">                default: &#123;</span><br><span class="line">                    return super.onTransact(code, data, reply, flags);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private static class Proxy implements com.zhyen.test.TestAidl &#123;</span><br><span class="line">            private android.os.IBinder mRemote;</span><br><span class="line"></span><br><span class="line">            Proxy(android.os.IBinder remote) &#123;</span><br><span class="line">                mRemote &#x3D; remote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public android.os.IBinder asBinder() &#123;</span><br><span class="line">                return mRemote;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            public java.lang.String getInterfaceDescriptor() &#123;</span><br><span class="line">                return DESCRIPTOR;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public java.util.List&lt;com.zhyen.test.Book&gt; getBookList() throws android.os.RemoteException &#123;</span><br><span class="line">                android.os.Parcel _data &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                android.os.Parcel _reply &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                java.util.List&lt;com.zhyen.test.Book&gt; _result;</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_getBookList, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                    _result &#x3D; _reply.createTypedArrayList(com.zhyen.test.Book.CREATOR);</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">                return _result;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void addBookInOut(com.zhyen.test.Book book) throws android.os.RemoteException &#123;</span><br><span class="line">                android.os.Parcel _data &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                android.os.Parcel _reply &#x3D; android.os.Parcel.obtain();</span><br><span class="line">                try &#123;</span><br><span class="line">                    _data.writeInterfaceToken(DESCRIPTOR);</span><br><span class="line">                    if ((book !&#x3D; null)) &#123;</span><br><span class="line">                        _data.writeInt(1);</span><br><span class="line">                        book.writeToParcel(_data, 0);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        _data.writeInt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                    mRemote.transact(Stub.TRANSACTION_addBookInOut, _data, _reply, 0);</span><br><span class="line">                    _reply.readException();</span><br><span class="line">                    if ((0 !&#x3D; _reply.readInt())) &#123;</span><br><span class="line">                        book.readFromParcel(_reply);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    _reply.recycle();</span><br><span class="line">                    _data.recycle();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        static final int TRANSACTION_getBookList &#x3D; (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);</span><br><span class="line">        static final int TRANSACTION_addBookInOut &#x3D; (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public java.util.List&lt;com.zhyen.test.Book&gt; getBookList() throws android.os.RemoteException;</span><br><span class="line"></span><br><span class="line">    public void addBookInOut(com.zhyen.test.Book book) throws android.os.RemoteException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://gityuan.com/images/binder/AIDL/MyServer_java_binder.jpg" alt="aidl image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Binder/" rel="tag"># Binder</a>
+          
+            <a href="/tags/AIDL/" rel="tag"># AIDL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/20/Android/Binder/%E8%87%AA%E5%AE%9A%E4%B9%89binder%E6%9E%B6%E6%9E%84%E7%9A%84C-S%E7%BB%84%E4%BB%B6/" rel="next" title="自定义binder架构的C/S组件">
+                <i class="fa fa-chevron-left"></i> 自定义binder架构的C/S组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/21/Android/Binder/%E5%A4%9A%E8%BF%9B%E7%A8%8B(1)/" rel="prev" title="多进程(1)">
+                多进程(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Aidl是什么"><span class="nav-number">1.</span> <span class="nav-text">Aidl是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语法"><span class="nav-number">2.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">3.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端"><span class="nav-number">3.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">3.2.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aidl编译后的样子"><span class="nav-number">3.3.</span> <span class="nav-text">aidl编译后的样子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

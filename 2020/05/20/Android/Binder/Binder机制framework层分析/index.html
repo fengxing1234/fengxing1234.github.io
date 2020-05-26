@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Binder," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="相关源码基于6.0.0_r1地址源码地址 123456789101112131415161718framework&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;  - IInterface.java  - IServiceManager.java  - ServiceManager.java  - ServiceManagerNa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Binder机制framework层分析">
+<meta property="og:url" content="http://yoursite.com/2020/05/20/Android/Binder/Binder%E6%9C%BA%E5%88%B6framework%E5%B1%82%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="相关源码基于6.0.0_r1地址源码地址 123456789101112131415161718framework&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;  - IInterface.java  - IServiceManager.java  - ServiceManager.java  - ServiceManagerNa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://gityuan.com/images/binder/java_binder/java_binder.jpg">
+<meta property="og:image" content="http://gityuan.com/images/binder/java_binder/class_ServiceManager.jpg">
+<meta property="og:image" content="http://gityuan.com/images/binder/java_binder_framework.jpg">
+<meta property="article:published_time" content="2020-05-20T05:42:10.000Z">
+<meta property="article:modified_time" content="2020-05-20T09:47:39.900Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Binder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://gityuan.com/images/binder/java_binder/java_binder.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/20/Android/Binder/Binder机制framework层分析/"/>
+
+
+
+
+
+  <title>Binder机制framework层分析 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/20/Android/Binder/Binder%E6%9C%BA%E5%88%B6framework%E5%B1%82%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Binder机制framework层分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-20T13:42:10+08:00">
+                2020-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Binder/" itemprop="url" rel="index">
+                    <span itemprop="name">Binder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/20/Android/Binder/Binder%E6%9C%BA%E5%88%B6framework%E5%B1%82%E5%88%86%E6%9E%90/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/20/Android/Binder/Binder%E6%9C%BA%E5%88%B6framework%E5%B1%82%E5%88%86%E6%9E%90/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="相关源码"><a href="#相关源码" class="headerlink" title="相关源码"></a>相关源码</h1><p>基于6.0.0_r1地址<a href="https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-6.0.0_r1/core/java/android/os/" target="_blank" rel="noopener">源码地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">framework&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;</span><br><span class="line">  - IInterface.java</span><br><span class="line">  - IServiceManager.java</span><br><span class="line">  - ServiceManager.java</span><br><span class="line">  - ServiceManagerNative.java(内含ServiceManagerProxy类)</span><br><span class="line"></span><br><span class="line">framework&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;</span><br><span class="line">  - IBinder.java</span><br><span class="line">  - Binder.java(内含BinderProxy类)</span><br><span class="line">  - Parcel.java</span><br><span class="line"></span><br><span class="line">framework&#x2F;base&#x2F;core&#x2F;java&#x2F;com&#x2F;android&#x2F;internal&#x2F;os&#x2F;</span><br><span class="line">  - BinderInternal.java</span><br><span class="line"></span><br><span class="line">framework&#x2F;base&#x2F;core&#x2F;jni&#x2F;</span><br><span class="line">  - AndroidRuntime.cpp</span><br><span class="line">  - android_os_Parcel.cpp</span><br><span class="line">  - android_util_Binder.cpp</span><br></pre></td></tr></table></figure>
+
+<p><strong>IInterface</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Base class for Binder interfaces.  When defining a new interface,</span><br><span class="line"> * you must derive it from IInterface.</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IInterface</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Retrieve the Binder object associated with this interface.</span><br><span class="line">     * You must use this instead of a plain cast, so that proxy objects</span><br><span class="line">     * can return the correct result.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public IBinder asBinder();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>IServiceManager</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Basic interface for finding and publishing system services.</span><br><span class="line"> * </span><br><span class="line"> * An implementation of this interface is usually published as the</span><br><span class="line"> * global context object, which can be retrieved via</span><br><span class="line"> * BinderNative.getContextObject().  An easy way to retrieve this</span><br><span class="line"> * is with the static method BnServiceManager.getDefault().</span><br><span class="line"> * </span><br><span class="line"> * @hide</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IServiceManager extends IInterface</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Retrieve an existing service called @a name from the</span><br><span class="line">     * service manager.  Blocks for a few seconds waiting for it to be</span><br><span class="line">     * published if it does not already exist.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public IBinder getService(String name) throws RemoteException;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Retrieve an existing service called @a name from the</span><br><span class="line">     * service manager.  Non-blocking.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public IBinder checkService(String name) throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Place a new @a service called @a name into the service</span><br><span class="line">     * manager.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addService(String name, IBinder service, boolean allowIsolated)</span><br><span class="line">                throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Return a list of all currently running services.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public String[] listServices() throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Assign a permission controller to the service manager.  After set, this</span><br><span class="line">     * interface is checked before any services are added.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void setPermissionController(IPermissionController controller)</span><br><span class="line">            throws RemoteException;</span><br><span class="line">    </span><br><span class="line">    static final String descriptor &#x3D; &quot;android.os.IServiceManager&quot;;</span><br><span class="line">    int GET_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION;</span><br><span class="line">    int CHECK_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+1;</span><br><span class="line">    int ADD_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+2;</span><br><span class="line">    int LIST_SERVICES_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+3;</span><br><span class="line">    int CHECK_SERVICES_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+4;</span><br><span class="line">    int SET_PERMISSION_CONTROLLER_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>ServiceManager</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;** @hide *&#x2F;</span><br><span class="line">public final class ServiceManager &#123;</span><br><span class="line">    private static final String TAG &#x3D; &quot;ServiceManager&quot;;</span><br><span class="line">    private static IServiceManager sServiceManager;</span><br><span class="line">    private static HashMap&lt;String, IBinder&gt; sCache &#x3D; new HashMap&lt;String, IBinder&gt;();</span><br><span class="line">    private static IServiceManager getIServiceManager() &#123;</span><br><span class="line">        if (sServiceManager !&#x3D; null) &#123;</span><br><span class="line">            return sServiceManager;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; Find the service manager</span><br><span class="line">        sServiceManager &#x3D; ServiceManagerNative.asInterface(BinderInternal.getContextObject());</span><br><span class="line">        return sServiceManager;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Returns a reference to a service with the given name.</span><br><span class="line">     * </span><br><span class="line">     * @param name the name of the service to get</span><br><span class="line">     * @return a reference to the service, or &lt;code&gt;null&lt;&#x2F;code&gt; if the service doesn&#39;t exist</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static IBinder getService(String name) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            IBinder service &#x3D; sCache.get(name);</span><br><span class="line">            if (service !&#x3D; null) &#123;</span><br><span class="line">                return service;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                return getIServiceManager().getService(name);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in getService&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Place a new @a service called @a name into the service</span><br><span class="line">     * manager.</span><br><span class="line">     * </span><br><span class="line">     * @param name the name of the new service</span><br><span class="line">     * @param service the service object</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static void addService(String name, IBinder service) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            getIServiceManager().addService(name, service, false);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in addService&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Place a new @a service called @a name into the service</span><br><span class="line">     * manager.</span><br><span class="line">     * </span><br><span class="line">     * @param name the name of the new service</span><br><span class="line">     * @param service the service object</span><br><span class="line">     * @param allowIsolated set to true to allow isolated sandboxed processes</span><br><span class="line">     * to access this service</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static void addService(String name, IBinder service, boolean allowIsolated) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            getIServiceManager().addService(name, service, allowIsolated);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in addService&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Retrieve an existing service called @a name from the</span><br><span class="line">     * service manager.  Non-blocking.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static IBinder checkService(String name) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            IBinder service &#x3D; sCache.get(name);</span><br><span class="line">            if (service !&#x3D; null) &#123;</span><br><span class="line">                return service;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                return getIServiceManager().checkService(name);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in checkService&quot;, e);</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Return a list of all currently running services.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static String[] listServices() throws RemoteException &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            return getIServiceManager().listServices();</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in listServices&quot;, e);</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * This is only intended to be called when the process is first being brought</span><br><span class="line">     * up and bound by the activity manager. There is only one thread in the process</span><br><span class="line">     * at that time, so no locking is done.</span><br><span class="line">     * </span><br><span class="line">     * @param cache the cache of service references</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static void initServiceCache(Map&lt;String, IBinder&gt; cache) &#123;</span><br><span class="line">        if (sCache.size() !&#x3D; 0) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;setServiceCache may only be called once&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        sCache.putAll(cache);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>ServiceManagerNative</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Native implementation of the service manager.  Most clients will only</span><br><span class="line"> * care about getDefault() and possibly asInterface().</span><br><span class="line"> * @hide</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class ServiceManagerNative extends Binder implements IServiceManager</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Cast a Binder object into a service manager interface, generating</span><br><span class="line">     * a proxy if needed.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    static public IServiceManager asInterface(IBinder obj)</span><br><span class="line">    &#123;</span><br><span class="line">        if (obj &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        IServiceManager in &#x3D;</span><br><span class="line">            (IServiceManager)obj.queryLocalInterface(descriptor);</span><br><span class="line">        if (in !&#x3D; null) &#123;</span><br><span class="line">            return in;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return new ServiceManagerProxy(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public ServiceManagerNative()</span><br><span class="line">    &#123;</span><br><span class="line">        attachInterface(this, descriptor);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public boolean onTransact(int code, Parcel data, Parcel reply, int flags)</span><br><span class="line">    &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            switch (code) &#123;</span><br><span class="line">            case IServiceManager.GET_SERVICE_TRANSACTION: &#123;</span><br><span class="line">                data.enforceInterface(IServiceManager.descriptor);</span><br><span class="line">                String name &#x3D; data.readString();</span><br><span class="line">                IBinder service &#x3D; getService(name);</span><br><span class="line">                reply.writeStrongBinder(service);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            case IServiceManager.CHECK_SERVICE_TRANSACTION: &#123;</span><br><span class="line">                data.enforceInterface(IServiceManager.descriptor);</span><br><span class="line">                String name &#x3D; data.readString();</span><br><span class="line">                IBinder service &#x3D; checkService(name);</span><br><span class="line">                reply.writeStrongBinder(service);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            case IServiceManager.ADD_SERVICE_TRANSACTION: &#123;</span><br><span class="line">                data.enforceInterface(IServiceManager.descriptor);</span><br><span class="line">                String name &#x3D; data.readString();</span><br><span class="line">                IBinder service &#x3D; data.readStrongBinder();</span><br><span class="line">                boolean allowIsolated &#x3D; data.readInt() !&#x3D; 0;</span><br><span class="line">                addService(name, service, allowIsolated);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            case IServiceManager.LIST_SERVICES_TRANSACTION: &#123;</span><br><span class="line">                data.enforceInterface(IServiceManager.descriptor);</span><br><span class="line">                String[] list &#x3D; listServices();</span><br><span class="line">                reply.writeStringArray(list);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            case IServiceManager.SET_PERMISSION_CONTROLLER_TRANSACTION: &#123;</span><br><span class="line">                data.enforceInterface(IServiceManager.descriptor);</span><br><span class="line">                IPermissionController controller</span><br><span class="line">                        &#x3D; IPermissionController.Stub.asInterface(</span><br><span class="line">                                data.readStrongBinder());</span><br><span class="line">                setPermissionController(controller);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    public IBinder asBinder()</span><br><span class="line">    &#123;</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class ServiceManagerProxy implements IServiceManager &#123;</span><br><span class="line">    public ServiceManagerProxy(IBinder remote) &#123;</span><br><span class="line">        mRemote &#x3D; remote;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public IBinder asBinder() &#123;</span><br><span class="line">        return mRemote;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public IBinder getService(String name) throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">        data.writeString(name);</span><br><span class="line">        mRemote.transact(GET_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">        IBinder binder &#x3D; reply.readStrongBinder();</span><br><span class="line">        reply.recycle();</span><br><span class="line">        data.recycle();</span><br><span class="line">        return binder;</span><br><span class="line">    &#125;</span><br><span class="line">    public IBinder checkService(String name) throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">        data.writeString(name);</span><br><span class="line">        mRemote.transact(CHECK_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">        IBinder binder &#x3D; reply.readStrongBinder();</span><br><span class="line">        reply.recycle();</span><br><span class="line">        data.recycle();</span><br><span class="line">        return binder;</span><br><span class="line">    &#125;</span><br><span class="line">    public void addService(String name, IBinder service, boolean allowIsolated)</span><br><span class="line">            throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">        data.writeString(name);</span><br><span class="line">        data.writeStrongBinder(service);</span><br><span class="line">        data.writeInt(allowIsolated ? 1 : 0);</span><br><span class="line">        mRemote.transact(ADD_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">        reply.recycle();</span><br><span class="line">        data.recycle();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public String[] listServices() throws RemoteException &#123;</span><br><span class="line">        ArrayList&lt;String&gt; services &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line">        int n &#x3D; 0;</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">            Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">            data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">            data.writeInt(n);</span><br><span class="line">            n++;</span><br><span class="line">            try &#123;</span><br><span class="line">                boolean res &#x3D; mRemote.transact(LIST_SERVICES_TRANSACTION, data, reply, 0);</span><br><span class="line">                if (!res) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; catch (RuntimeException e) &#123;</span><br><span class="line">                &#x2F;&#x2F; The result code that is returned by the C++ code can</span><br><span class="line">                &#x2F;&#x2F; cause the call to throw an exception back instead of</span><br><span class="line">                &#x2F;&#x2F; returning a nice result...  so eat it here and go on.</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            services.add(reply.readString());</span><br><span class="line">            reply.recycle();</span><br><span class="line">            data.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">        String[] array &#x3D; new String[services.size()];</span><br><span class="line">        services.toArray(array);</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setPermissionController(IPermissionController controller)</span><br><span class="line">            throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">        data.writeStrongBinder(controller.asBinder());</span><br><span class="line">        mRemote.transact(SET_PERMISSION_CONTROLLER_TRANSACTION, data, reply, 0);</span><br><span class="line">        reply.recycle();</span><br><span class="line">        data.recycle();</span><br><span class="line">    &#125;</span><br><span class="line">    private IBinder mRemote;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>IBinder</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><span class="line">public interface IBinder &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * The first transaction code available for user commands.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int FIRST_CALL_TRANSACTION  &#x3D; 0x00000001;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * The last transaction code available for user commands.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int LAST_CALL_TRANSACTION   &#x3D; 0x00ffffff;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * IBinder protocol transaction code: pingBinder().</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int PING_TRANSACTION        &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;P&#39;&lt;&lt;16)|(&#39;N&#39;&lt;&lt;8)|&#39;G&#39;;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * IBinder protocol transaction code: dump internal state.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int DUMP_TRANSACTION        &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;D&#39;&lt;&lt;16)|(&#39;M&#39;&lt;&lt;8)|&#39;P&#39;;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * IBinder protocol transaction code: interrogate the recipient side</span><br><span class="line">     * of the transaction for its canonical interface descriptor.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int INTERFACE_TRANSACTION   &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;N&#39;&lt;&lt;16)|(&#39;T&#39;&lt;&lt;8)|&#39;F&#39;;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * IBinder protocol transaction code: send a tweet to the target</span><br><span class="line">     * object.  The data in the parcel is intended to be delivered to</span><br><span class="line">     * a shared messaging service associated with the object; it can be</span><br><span class="line">     * anything, as long as it is not more than 130 UTF-8 characters to</span><br><span class="line">     * conservatively fit within common messaging services.  As part of</span><br><span class="line">     * &#123;@link Build.VERSION_CODES#HONEYCOMB_MR2&#125;, all Binder objects are</span><br><span class="line">     * expected to support this protocol for fully integrated tweeting</span><br><span class="line">     * across the platform.  To support older code, the default implementation</span><br><span class="line">     * logs the tweet to the main log as a simple emulation of broadcasting</span><br><span class="line">     * it publicly over the Internet.</span><br><span class="line">     * </span><br><span class="line">     * &lt;p&gt;Also, upon completing the dispatch, the object must make a cup</span><br><span class="line">     * of tea, return it to the caller, and exclaim &quot;jolly good message</span><br><span class="line">     * old boy!&quot;.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int TWEET_TRANSACTION   &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;T&#39;&lt;&lt;16)|(&#39;W&#39;&lt;&lt;8)|&#39;T&#39;;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * IBinder protocol transaction code: tell an app asynchronously that the</span><br><span class="line">     * caller likes it.  The app is responsible for incrementing and maintaining</span><br><span class="line">     * its own like counter, and may display this value to the user to indicate the</span><br><span class="line">     * quality of the app.  This is an optional command that applications do not</span><br><span class="line">     * need to handle, so the default implementation is to do nothing.</span><br><span class="line">     * </span><br><span class="line">     * &lt;p&gt;There is no response returned and nothing about the</span><br><span class="line">     * system will be functionally affected by it, but it will improve the</span><br><span class="line">     * app&#39;s self-esteem.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int LIKE_TRANSACTION   &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;L&#39;&lt;&lt;16)|(&#39;I&#39;&lt;&lt;8)|&#39;K&#39;;</span><br><span class="line">    &#x2F;** @hide *&#x2F;</span><br><span class="line">    int SYSPROPS_TRANSACTION &#x3D; (&#39;_&#39;&lt;&lt;24)|(&#39;S&#39;&lt;&lt;16)|(&#39;P&#39;&lt;&lt;8)|&#39;R&#39;;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Flag to &#123;@link #transact&#125;: this is a one-way call, meaning that the</span><br><span class="line">     * caller returns immediately, without waiting for a result from the</span><br><span class="line">     * callee. Applies only if the caller and callee are in different</span><br><span class="line">     * processes.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int FLAG_ONEWAY             &#x3D; 0x00000001;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Limit that should be placed on IPC sizes to keep them safely under the</span><br><span class="line">     * transaction buffer limit.</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final int MAX_IPC_SIZE &#x3D; 64 * 1024;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Get the canonical name of the interface supported by this binder.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public String getInterfaceDescriptor() throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Check to see if the object still exists.</span><br><span class="line">     * </span><br><span class="line">     * @return Returns false if the</span><br><span class="line">     * hosting process is gone, otherwise the result (always by default</span><br><span class="line">     * true) returned by the pingBinder() implementation on the other</span><br><span class="line">     * side.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean pingBinder();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Check to see if the process that the binder is in is still alive.</span><br><span class="line">     *</span><br><span class="line">     * @return false if the process is not alive.  Note that if it returns</span><br><span class="line">     * true, the process may have died while the call is returning.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean isBinderAlive();</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Attempt to retrieve a local implementation of an interface</span><br><span class="line">     * for this Binder object.  If null is returned, you will need</span><br><span class="line">     * to instantiate a proxy class to marshall calls through</span><br><span class="line">     * the transact() method.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public IInterface queryLocalInterface(String descriptor);</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Print the object&#39;s state into the given stream.</span><br><span class="line">     * </span><br><span class="line">     * @param fd The raw file descriptor that the dump is being sent to.</span><br><span class="line">     * @param args additional arguments to the dump request.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void dump(FileDescriptor fd, String[] args) throws RemoteException;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Like &#123;@link #dump(FileDescriptor, String[])&#125; but always executes</span><br><span class="line">     * asynchronously.  If the object is local, a new thread is created</span><br><span class="line">     * to perform the dump.</span><br><span class="line">     *</span><br><span class="line">     * @param fd The raw file descriptor that the dump is being sent to.</span><br><span class="line">     * @param args additional arguments to the dump request.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void dumpAsync(FileDescriptor fd, String[] args) throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Perform a generic operation with the object.</span><br><span class="line">     * </span><br><span class="line">     * @param code The action to perform.  This should</span><br><span class="line">     * be a number between &#123;@link #FIRST_CALL_TRANSACTION&#125; and</span><br><span class="line">     * &#123;@link #LAST_CALL_TRANSACTION&#125;.</span><br><span class="line">     * @param data Marshalled data to send to the target.  Must not be null.</span><br><span class="line">     * If you are not sending any data, you must create an empty Parcel</span><br><span class="line">     * that is given here.</span><br><span class="line">     * @param reply Marshalled data to be received from the target.  May be</span><br><span class="line">     * null if you are not interested in the return value.</span><br><span class="line">     * @param flags Additional operation flags.  Either 0 for a normal</span><br><span class="line">     * RPC, or &#123;@link #FLAG_ONEWAY&#125; for a one-way RPC.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean transact(int code, Parcel data, Parcel reply, int flags)</span><br><span class="line">        throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Interface for receiving a callback when the process hosting an IBinder</span><br><span class="line">     * has gone away.</span><br><span class="line">     * </span><br><span class="line">     * @see #linkToDeath</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public interface DeathRecipient &#123;</span><br><span class="line">        public void binderDied();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Register the recipient for a notification if this binder</span><br><span class="line">     * goes away.  If this binder object unexpectedly goes away</span><br><span class="line">     * (typically because its hosting process has been killed),</span><br><span class="line">     * then the given &#123;@link DeathRecipient&#125;&#39;s</span><br><span class="line">     * &#123;@link DeathRecipient#binderDied DeathRecipient.binderDied()&#125; method</span><br><span class="line">     * will be called.</span><br><span class="line">     * </span><br><span class="line">     * &lt;p&gt;You will only receive death notifications for remote binders,</span><br><span class="line">     * as local binders by definition can&#39;t die without you dying as well.</span><br><span class="line">     * </span><br><span class="line">     * @throws RemoteException if the target IBinder&#39;s</span><br><span class="line">     * process has already died.</span><br><span class="line">     * </span><br><span class="line">     * @see #unlinkToDeath</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void linkToDeath(DeathRecipient recipient, int flags)</span><br><span class="line">            throws RemoteException;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Remove a previously registered death notification.</span><br><span class="line">     * The recipient will no longer be called if this object</span><br><span class="line">     * dies.</span><br><span class="line">     * </span><br><span class="line">     * @return &#123;@code true&#125; if the &lt;var&gt;recipient&lt;&#x2F;var&gt; is successfully</span><br><span class="line">     * unlinked, assuring you that its</span><br><span class="line">     * &#123;@link DeathRecipient#binderDied DeathRecipient.binderDied()&#125; method</span><br><span class="line">     * will not be called;  &#123;@code false&#125; if the target IBinder has already</span><br><span class="line">     * died, meaning the method has been (or soon will be) called.</span><br><span class="line">     * </span><br><span class="line">     * @throws java.util.NoSuchElementException if the given</span><br><span class="line">     * &lt;var&gt;recipient&lt;&#x2F;var&gt; has not been registered with the IBinder, and</span><br><span class="line">     * the IBinder is still alive.  Note that if the &lt;var&gt;recipient&lt;&#x2F;var&gt;</span><br><span class="line">     * was never registered, but the IBinder has already died, then this</span><br><span class="line">     * exception will &lt;em&gt;not&lt;&#x2F;em&gt; be thrown, and you will receive a false</span><br><span class="line">     * return value instead.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean unlinkToDeath(DeathRecipient recipient, int flags);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Binder</strong></p>
+<p>BinderProxy是Binder的内部类实现IBinder接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br></pre></td><td class="code"><pre><span class="line">public class Binder implements IBinder &#123;</span><br><span class="line">    &#x2F;*</span><br><span class="line">     * Set this flag to true to detect anonymous, local or member classes</span><br><span class="line">     * that extend this Binder class and that are not static. These kind</span><br><span class="line">     * of classes can potentially create leaks.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private static final boolean FIND_POTENTIAL_LEAKS &#x3D; false;</span><br><span class="line">    private static final boolean CHECK_PARCEL_SIZE &#x3D; false;</span><br><span class="line">    static final String TAG &#x3D; &quot;Binder&quot;;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Control whether dump() calls are allowed.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private static String sDumpDisabled &#x3D; null;</span><br><span class="line">    &#x2F;* mObject is used by native code, do not remove or rename *&#x2F;</span><br><span class="line">    private long mObject;</span><br><span class="line">    private IInterface mOwner;</span><br><span class="line">    private String mDescriptor;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Return the ID of the process that sent you the current transaction</span><br><span class="line">     * that is being processed.  This pid can be used with higher-level</span><br><span class="line">     * system services to determine its identity and check permissions.</span><br><span class="line">     * If the current thread is not currently executing an incoming transaction,</span><br><span class="line">     * then its own pid is returned.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native int getCallingPid();</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Return the Linux uid assigned to the process that sent you the</span><br><span class="line">     * current transaction that is being processed.  This uid can be used with</span><br><span class="line">     * higher-level system services to determine its identity and check</span><br><span class="line">     * permissions.  If the current thread is not currently executing an</span><br><span class="line">     * incoming transaction, then its own uid is returned.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native int getCallingUid();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Return the UserHandle assigned to the process that sent you the</span><br><span class="line">     * current transaction that is being processed.  This is the user</span><br><span class="line">     * of the caller.  It is distinct from &#123;@link #getCallingUid()&#125; in that a</span><br><span class="line">     * particular user will have multiple distinct apps running under it each</span><br><span class="line">     * with their own uid.  If the current thread is not currently executing an</span><br><span class="line">     * incoming transaction, then its own UserHandle is returned.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final UserHandle getCallingUserHandle() &#123;</span><br><span class="line">        return new UserHandle(UserHandle.getUserId(getCallingUid()));</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Reset the identity of the incoming IPC on the current thread.  This can</span><br><span class="line">     * be useful if, while handling an incoming call, you will be calling</span><br><span class="line">     * on interfaces of other objects that may be local to your process and</span><br><span class="line">     * need to do permission checks on the calls coming into them (so they</span><br><span class="line">     * will check the permission of your own local process, and not whatever</span><br><span class="line">     * process originally called you).</span><br><span class="line">     *</span><br><span class="line">     * @return Returns an opaque token that can be used to restore the</span><br><span class="line">     * original calling identity by passing it to</span><br><span class="line">     * &#123;@link #restoreCallingIdentity(long)&#125;.</span><br><span class="line">     *</span><br><span class="line">     * @see #getCallingPid()</span><br><span class="line">     * @see #getCallingUid()</span><br><span class="line">     * @see #restoreCallingIdentity(long)</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native long clearCallingIdentity();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Restore the identity of the incoming IPC on the current thread</span><br><span class="line">     * back to a previously identity that was returned by &#123;@link</span><br><span class="line">     * #clearCallingIdentity&#125;.</span><br><span class="line">     *</span><br><span class="line">     * @param token The opaque token that was previously returned by</span><br><span class="line">     * &#123;@link #clearCallingIdentity&#125;.</span><br><span class="line">     *</span><br><span class="line">     * @see #clearCallingIdentity</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native void restoreCallingIdentity(long token);</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Sets the native thread-local StrictMode policy mask.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;The StrictMode settings are kept in two places: a Java-level</span><br><span class="line">     * threadlocal for libcore&#x2F;Dalvik, and a native threadlocal (set</span><br><span class="line">     * here) for propagation via Binder calls.  This is a little</span><br><span class="line">     * unfortunate, but necessary to break otherwise more unfortunate</span><br><span class="line">     * dependencies either of Dalvik on Android, or Android</span><br><span class="line">     * native-only code on Dalvik.</span><br><span class="line">     *</span><br><span class="line">     * @see StrictMode</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native void setThreadStrictModePolicy(int policyMask);</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Gets the current native thread-local StrictMode policy mask.</span><br><span class="line">     *</span><br><span class="line">     * @see #setThreadStrictModePolicy</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native int getThreadStrictModePolicy();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Flush any Binder commands pending in the current thread to the kernel</span><br><span class="line">     * driver.  This can be</span><br><span class="line">     * useful to call before performing an operation that may block for a long</span><br><span class="line">     * time, to ensure that any pending object references have been released</span><br><span class="line">     * in order to prevent the process from holding on to objects longer than</span><br><span class="line">     * it needs to.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native void flushPendingCommands();</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Add the calling thread to the IPC thread pool.  This function does</span><br><span class="line">     * not return until the current process is exiting.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native void joinThreadPool();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Returns true if the specified interface is a proxy.</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final boolean isProxy(IInterface iface) &#123;</span><br><span class="line">        return iface.asBinder() !&#x3D; iface;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Call blocks until the number of executing binder threads is less</span><br><span class="line">     * than the maximum number of binder threads allowed for this process.</span><br><span class="line">     * @hide</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native void blockUntilThreadAvailable();</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Default constructor initializes the object.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Binder() &#123;</span><br><span class="line">        init();</span><br><span class="line">        if (FIND_POTENTIAL_LEAKS) &#123;</span><br><span class="line">            final Class&lt;? extends Binder&gt; klass &#x3D; getClass();</span><br><span class="line">            if ((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &amp;&amp;</span><br><span class="line">                    (klass.getModifiers() &amp; Modifier.STATIC) &#x3D;&#x3D; 0) &#123;</span><br><span class="line">                Log.w(TAG, &quot;The following Binder class should be static or leaks might occur: &quot; +</span><br><span class="line">                    klass.getCanonicalName());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Convenience method for associating a specific interface with the Binder.</span><br><span class="line">     * After calling, queryLocalInterface() will be implemented for you</span><br><span class="line">     * to return the given owner IInterface when the corresponding</span><br><span class="line">     * descriptor is requested.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void attachInterface(IInterface owner, String descriptor) &#123;</span><br><span class="line">        mOwner &#x3D; owner;</span><br><span class="line">        mDescriptor &#x3D; descriptor;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Default implementation returns an empty interface name.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public String getInterfaceDescriptor() &#123;</span><br><span class="line">        return mDescriptor;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Default implementation always returns true -- if you got here,</span><br><span class="line">     * the object is alive.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean pingBinder() &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * &#123;@inheritDoc&#125;</span><br><span class="line">     *</span><br><span class="line">     * Note that if you&#39;re calling on a local binder, this always returns true</span><br><span class="line">     * because your process is alive if you&#39;re calling it.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean isBinderAlive() &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Use information supplied to attachInterface() to return the</span><br><span class="line">     * associated IInterface if it matches the requested</span><br><span class="line">     * descriptor.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public IInterface queryLocalInterface(String descriptor) &#123;</span><br><span class="line">        if (mDescriptor.equals(descriptor)) &#123;</span><br><span class="line">            return mOwner;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Control disabling of dump calls in this process.  This is used by the system</span><br><span class="line">     * process watchdog to disable incoming dump calls while it has detecting the system</span><br><span class="line">     * is hung and is reporting that back to the activity controller.  This is to</span><br><span class="line">     * prevent the controller from getting hung up on bug reports at this point.</span><br><span class="line">     * @hide</span><br><span class="line">     *</span><br><span class="line">     * @param msg The message to show instead of the dump; if null, dumps are</span><br><span class="line">     * re-enabled.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static void setDumpDisabled(String msg) &#123;</span><br><span class="line">        synchronized (Binder.class) &#123;</span><br><span class="line">            sDumpDisabled &#x3D; msg;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Default implementation is a stub that returns false.  You will want</span><br><span class="line">     * to override this to do the appropriate unmarshalling of transactions.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt;If you want to call this, call transact().</span><br><span class="line">     *&#x2F;</span><br><span class="line">    protected boolean onTransact(int code, Parcel data, Parcel reply,</span><br><span class="line">            int flags) throws RemoteException &#123;</span><br><span class="line">        if (code &#x3D;&#x3D; INTERFACE_TRANSACTION) &#123;</span><br><span class="line">            reply.writeString(getInterfaceDescriptor());</span><br><span class="line">            return true;</span><br><span class="line">        &#125; else if (code &#x3D;&#x3D; DUMP_TRANSACTION) &#123;</span><br><span class="line">            ParcelFileDescriptor fd &#x3D; data.readFileDescriptor();</span><br><span class="line">            String[] args &#x3D; data.readStringArray();</span><br><span class="line">            if (fd !&#x3D; null) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    dump(fd.getFileDescriptor(), args);</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    try &#123;</span><br><span class="line">                        fd.close();</span><br><span class="line">                    &#125; catch (IOException e) &#123;</span><br><span class="line">                        &#x2F;&#x2F; swallowed, not propagated back to the caller</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; Write the StrictMode header.</span><br><span class="line">            if (reply !&#x3D; null) &#123;</span><br><span class="line">                reply.writeNoException();</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                StrictMode.clearGatheredViolations();</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Implemented to call the more convenient version</span><br><span class="line">     * &#123;@link #dump(FileDescriptor, PrintWriter, String[])&#125;.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void dump(FileDescriptor fd, String[] args) &#123;</span><br><span class="line">        FileOutputStream fout &#x3D; new FileOutputStream(fd);</span><br><span class="line">        PrintWriter pw &#x3D; new FastPrintWriter(fout);</span><br><span class="line">        try &#123;</span><br><span class="line">            final String disabled;</span><br><span class="line">            synchronized (Binder.class) &#123;</span><br><span class="line">                disabled &#x3D; sDumpDisabled;</span><br><span class="line">            &#125;</span><br><span class="line">            if (disabled &#x3D;&#x3D; null) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    dump(fd, pw, args);</span><br><span class="line">                &#125; catch (SecurityException e) &#123;</span><br><span class="line">                    pw.println(&quot;Security exception: &quot; + e.getMessage());</span><br><span class="line">                    throw e;</span><br><span class="line">                &#125; catch (Throwable e) &#123;</span><br><span class="line">                    &#x2F;&#x2F; Unlike usual calls, in this case if an exception gets thrown</span><br><span class="line">                    &#x2F;&#x2F; back to us we want to print it back in to the dump data, since</span><br><span class="line">                    &#x2F;&#x2F; that is where the caller expects all interesting information to</span><br><span class="line">                    &#x2F;&#x2F; go.</span><br><span class="line">                    pw.println();</span><br><span class="line">                    pw.println(&quot;Exception occurred while dumping:&quot;);</span><br><span class="line">                    e.printStackTrace(pw);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                pw.println(sDumpDisabled);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            pw.flush();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Like &#123;@link #dump(FileDescriptor, String[])&#125;, but ensures the target</span><br><span class="line">     * executes asynchronously.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void dumpAsync(final FileDescriptor fd, final String[] args) &#123;</span><br><span class="line">        final FileOutputStream fout &#x3D; new FileOutputStream(fd);</span><br><span class="line">        final PrintWriter pw &#x3D; new FastPrintWriter(fout);</span><br><span class="line">        Thread thr &#x3D; new Thread(&quot;Binder.dumpAsync&quot;) &#123;</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    dump(fd, pw, args);</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    pw.flush();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        thr.start();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Print the object&#39;s state into the given stream.</span><br><span class="line">     * </span><br><span class="line">     * @param fd The raw file descriptor that the dump is being sent to.</span><br><span class="line">     * @param fout The file to which you should dump your state.  This will be</span><br><span class="line">     * closed for you after you return.</span><br><span class="line">     * @param args additional arguments to the dump request.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    protected void dump(FileDescriptor fd, PrintWriter fout, String[] args) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Default implementation rewinds the parcels and calls onTransact.  On</span><br><span class="line">     * the remote side, transact calls into the binder to do the IPC.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public final boolean transact(int code, Parcel data, Parcel reply,</span><br><span class="line">            int flags) throws RemoteException &#123;</span><br><span class="line">        if (false) Log.v(&quot;Binder&quot;, &quot;Transact: &quot; + code + &quot; to &quot; + this);</span><br><span class="line">        if (data !&#x3D; null) &#123;</span><br><span class="line">            data.setDataPosition(0);</span><br><span class="line">        &#125;</span><br><span class="line">        boolean r &#x3D; onTransact(code, data, reply, flags);</span><br><span class="line">        if (reply !&#x3D; null) &#123;</span><br><span class="line">            reply.setDataPosition(0);</span><br><span class="line">        &#125;</span><br><span class="line">        return r;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Local implementation is a no-op.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void linkToDeath(DeathRecipient recipient, int flags) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Local implementation is a no-op.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean unlinkToDeath(DeathRecipient recipient, int flags) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    protected void finalize() throws Throwable &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            destroy();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            super.finalize();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    static void checkParcel(IBinder obj, int code, Parcel parcel, String msg) &#123;</span><br><span class="line">        if (CHECK_PARCEL_SIZE &amp;&amp; parcel.dataSize() &gt;&#x3D; 800*1024) &#123;</span><br><span class="line">            &#x2F;&#x2F; Trying to send &gt; 800k, this is way too much</span><br><span class="line">            StringBuilder sb &#x3D; new StringBuilder();</span><br><span class="line">            sb.append(msg);</span><br><span class="line">            sb.append(&quot;: on &quot;);</span><br><span class="line">            sb.append(obj);</span><br><span class="line">            sb.append(&quot; calling &quot;);</span><br><span class="line">            sb.append(code);</span><br><span class="line">            sb.append(&quot; size &quot;);</span><br><span class="line">            sb.append(parcel.dataSize());</span><br><span class="line">            sb.append(&quot; (data: &quot;);</span><br><span class="line">            parcel.setDataPosition(0);</span><br><span class="line">            sb.append(parcel.readInt());</span><br><span class="line">            sb.append(&quot;, &quot;);</span><br><span class="line">            sb.append(parcel.readInt());</span><br><span class="line">            sb.append(&quot;, &quot;);</span><br><span class="line">            sb.append(parcel.readInt());</span><br><span class="line">            sb.append(&quot;)&quot;);</span><br><span class="line">            Slog.wtfStack(TAG, sb.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    private native final void init();</span><br><span class="line">    private native final void destroy();</span><br><span class="line">    &#x2F;&#x2F; Entry point from android_util_Binder.cpp&#39;s onTransact</span><br><span class="line">    private boolean execTransact(int code, long dataObj, long replyObj,</span><br><span class="line">            int flags) &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain(dataObj);</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain(replyObj);</span><br><span class="line">        &#x2F;&#x2F; theoretically, we should call transact, which will call onTransact,</span><br><span class="line">        &#x2F;&#x2F; but all that does is rewind it, and we just got these from an IPC,</span><br><span class="line">        &#x2F;&#x2F; so we&#39;ll just call it directly.</span><br><span class="line">        boolean res;</span><br><span class="line">        &#x2F;&#x2F; Log any exceptions as warnings, don&#39;t silently suppress them.</span><br><span class="line">        &#x2F;&#x2F; If the call was FLAG_ONEWAY then these exceptions disappear into the ether.</span><br><span class="line">        try &#123;</span><br><span class="line">            res &#x3D; onTransact(code, data, reply, flags);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            if ((flags &amp; FLAG_ONEWAY) !&#x3D; 0) &#123;</span><br><span class="line">                Log.w(TAG, &quot;Binder call failed.&quot;, e);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                reply.setDataPosition(0);</span><br><span class="line">                reply.writeException(e);</span><br><span class="line">            &#125;</span><br><span class="line">            res &#x3D; true;</span><br><span class="line">        &#125; catch (RuntimeException e) &#123;</span><br><span class="line">            if ((flags &amp; FLAG_ONEWAY) !&#x3D; 0) &#123;</span><br><span class="line">                Log.w(TAG, &quot;Caught a RuntimeException from the binder stub implementation.&quot;, e);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                reply.setDataPosition(0);</span><br><span class="line">                reply.writeException(e);</span><br><span class="line">            &#125;</span><br><span class="line">            res &#x3D; true;</span><br><span class="line">        &#125; catch (OutOfMemoryError e) &#123;</span><br><span class="line">            &#x2F;&#x2F; Unconditionally log this, since this is generally unrecoverable.</span><br><span class="line">            Log.e(TAG, &quot;Caught an OutOfMemoryError from the binder stub implementation.&quot;, e);</span><br><span class="line">            RuntimeException re &#x3D; new RuntimeException(&quot;Out of memory&quot;, e);</span><br><span class="line">            reply.setDataPosition(0);</span><br><span class="line">            reply.writeException(re);</span><br><span class="line">            res &#x3D; true;</span><br><span class="line">        &#125;</span><br><span class="line">        checkParcel(this, code, reply, &quot;Unreasonably large binder reply buffer&quot;);</span><br><span class="line">        reply.recycle();</span><br><span class="line">        data.recycle();</span><br><span class="line">        &#x2F;&#x2F; Just in case -- we are done with the IPC, so there should be no more strict</span><br><span class="line">        &#x2F;&#x2F; mode violations that have gathered for this thread.  Either they have been</span><br><span class="line">        &#x2F;&#x2F; parceled and are now in transport off to the caller, or we are returning back</span><br><span class="line">        &#x2F;&#x2F; to the main transaction loop to wait for another incoming transaction.  Either</span><br><span class="line">        &#x2F;&#x2F; way, strict mode begone!</span><br><span class="line">        StrictMode.clearGatheredViolations();</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">final class BinderProxy implements IBinder &#123;</span><br><span class="line">    public native boolean pingBinder();</span><br><span class="line">    public native boolean isBinderAlive();</span><br><span class="line">    public IInterface queryLocalInterface(String descriptor) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean transact(int code, Parcel data, Parcel reply, int flags) throws RemoteException &#123;</span><br><span class="line">        Binder.checkParcel(this, code, data, &quot;Unreasonably large binder buffer&quot;);</span><br><span class="line">        return transactNative(code, data, reply, flags);</span><br><span class="line">    &#125;</span><br><span class="line">    public native String getInterfaceDescriptor() throws RemoteException;</span><br><span class="line">    public native boolean transactNative(int code, Parcel data, Parcel reply,</span><br><span class="line">            int flags) throws RemoteException;</span><br><span class="line">    public native void linkToDeath(DeathRecipient recipient, int flags)</span><br><span class="line">            throws RemoteException;</span><br><span class="line">    public native boolean unlinkToDeath(DeathRecipient recipient, int flags);</span><br><span class="line">    public void dump(FileDescriptor fd, String[] args) throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeFileDescriptor(fd);</span><br><span class="line">        data.writeStringArray(args);</span><br><span class="line">        try &#123;</span><br><span class="line">            transact(DUMP_TRANSACTION, data, reply, 0);</span><br><span class="line">            reply.readException();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            data.recycle();</span><br><span class="line">            reply.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void dumpAsync(FileDescriptor fd, String[] args) throws RemoteException &#123;</span><br><span class="line">        Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">        Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">        data.writeFileDescriptor(fd);</span><br><span class="line">        data.writeStringArray(args);</span><br><span class="line">        try &#123;</span><br><span class="line">            transact(DUMP_TRANSACTION, data, reply, FLAG_ONEWAY);</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            data.recycle();</span><br><span class="line">            reply.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    BinderProxy() &#123;</span><br><span class="line">        mSelf &#x3D; new WeakReference(this);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    @Override</span><br><span class="line">    protected void finalize() throws Throwable &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            destroy();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            super.finalize();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private native final void destroy();</span><br><span class="line">    </span><br><span class="line">    private static final void sendDeathNotice(DeathRecipient recipient) &#123;</span><br><span class="line">        if (false) Log.v(&quot;JavaBinder&quot;, &quot;sendDeathNotice to &quot; + recipient);</span><br><span class="line">        try &#123;</span><br><span class="line">            recipient.binderDied();</span><br><span class="line">        &#125;</span><br><span class="line">        catch (RuntimeException exc) &#123;</span><br><span class="line">            Log.w(&quot;BinderNative&quot;, &quot;Uncaught exception from death notification&quot;,</span><br><span class="line">                    exc);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    final private WeakReference mSelf;</span><br><span class="line">    private long mObject;</span><br><span class="line">    private long mOrgue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Binder概述"><a href="#Binder概述" class="headerlink" title="Binder概述"></a>Binder概述</h1><h2 id="Binder架构"><a href="#Binder架构" class="headerlink" title="Binder架构"></a>Binder架构</h2><p>binder在framework层，采用JNI技术来调用native(C/C++)层的binder架构，从而为上层应用程序提供服务。 看过binder系列之前的文章，我们知道native层中，binder是C/S架构，分为Bn端(Server)和Bp端(Client)。对于java层在命名与架构上非常相近，同样实现了一套IPC通信架构。</p>
+<p><img src="http://gityuan.com/images/binder/java_binder/java_binder.jpg" alt="java_binder"></p>
+<ul>
+<li>图中红色代表整个framework层 binder架构相关组件；<ul>
+<li>Binder类代表Server端，BinderProxy类代码Client端；</li>
+</ul>
+</li>
+<li>图中蓝色代表Native层Binder架构相关组件；</li>
+<li>上层framework层的Binder逻辑是建立在Native层架构基础之上的，核心逻辑都是交予Native层方法来处理。</li>
+<li>framework层的ServiceManager类与Native层的功能并不完全对应，framework层的ServiceManager类的实现最终是通过BinderProxy传递给Native层来完成的，后面会详细说明。</li>
+</ul>
+<h2 id="Binder类图"><a href="#Binder类图" class="headerlink" title="Binder类图"></a>Binder类图</h2><p><img src="http://gityuan.com/images/binder/java_binder/class_ServiceManager.jpg" alt="class_java_binder"></p>
+<ul>
+<li><strong>ServiceManager：</strong>通过getIServiceManager方法获取的是ServiceManagerProxy对象； ServiceManager的addService, getService实际工作都交由ServiceManagerProxy的相应方法来处理；</li>
+<li><strong>ServiceManagerProxy：</strong>其成员变量mRemote指向BinderProxy对象，ServiceManagerProxy的addService, getService方法最终是交由mRemote来完成。</li>
+<li><strong>ServiceManagerNative</strong>：其方法asInterface()返回的是ServiceManagerProxy对象，ServiceManager便是借助ServiceManagerNative类来找到ServiceManagerProxy；</li>
+<li><strong>Binder：</strong>其成员变量mObject和方法execTransact()用于native方法</li>
+<li><strong>BinderInternal：</strong>内部有一个GcWatcher类，用于处理和调试与Binder相关的垃圾回收。</li>
+<li><strong>IBinder：</strong>接口中常量FLAG_ONEWAY：客户端利用binder跟服务端通信是阻塞式的，但如果设置了FLAG_ONEWAY，这成为非阻塞的调用方式，客户端能立即返回，服务端采用回调方式来通知客户端完成情况。另外IBinder接口有一个内部接口DeathDecipient(死亡通告)。</li>
+</ul>
+<h2 id="Binder类分层"><a href="#Binder类分层" class="headerlink" title="Binder类分层"></a>Binder类分层</h2><p>整个Binder从kernel至，native，JNI，Framework层所涉及的全部类</p>
+<p><img src="http://gityuan.com/images/binder/java_binder_framework.jpg" alt="java_binder_framework"></p>
+<h1 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h1><h2 id="SM-addService"><a href="#SM-addService" class="headerlink" title="SM.addService"></a>SM.addService</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static void addService(String name, IBinder service) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            getIServiceManager().addService(name, service, false);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            Log.e(TAG, &quot;error in addService&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>先来看看getIServiceManager()过程，如下：</p>
+<h2 id="getIServiceManager"><a href="#getIServiceManager" class="headerlink" title="getIServiceManager"></a>getIServiceManager</h2><p><strong>ServiceManager.java</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private static IServiceManager getIServiceManager() &#123;</span><br><span class="line">        if (sServiceManager !&#x3D; null) &#123;</span><br><span class="line">            return sServiceManager;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; Find the service manager</span><br><span class="line">        sServiceManager &#x3D; ServiceManagerNative.asInterface(BinderInternal.getContextObject());</span><br><span class="line">        return sServiceManager;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>采用了单例模式获取ServiceManager getIServiceManager()返回的是ServiceManagerProxy(简称SMP)对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">static public IServiceManager asInterface(IBinder obj)</span><br><span class="line">    &#123;</span><br><span class="line">        if (obj &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        IServiceManager in &#x3D;</span><br><span class="line">            (IServiceManager)obj.queryLocalInterface(descriptor);</span><br><span class="line">        if (in !&#x3D; null) &#123;</span><br><span class="line">            return in;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return new ServiceManagerProxy(obj);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>ServiceManagerProxy</code> 是<code>ServiceManagerNative</code>的内部类，实现IServiceManager接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class ServiceManagerProxy implements IServiceManager &#123;</span><br><span class="line">    public ServiceManagerProxy(IBinder remote) &#123;</span><br><span class="line">        mRemote &#x3D; remote;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public IBinder asBinder() &#123;</span><br><span class="line">        return mRemote;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public IBinder getService(String name) throws RemoteException &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public IBinder checkService(String name) throws RemoteException &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void addService(String name, IBinder service, boolean allowIsolated, int dumpPriority)</span><br><span class="line">            throws RemoteException &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String[] listServices(int dumpPriority) throws RemoteException &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setPermissionController(IPermissionController controller)</span><br><span class="line">            throws RemoteException &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private IBinder mRemote;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="getContextObject"><a href="#getContextObject" class="headerlink" title="getContextObject()"></a>getContextObject()</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line">     * Return the global &quot;context object&quot; of the system.  This is usually</span><br><span class="line">     * an implementation of IServiceManager, which you can use to find</span><br><span class="line">     * other services.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static final native IBinder getContextObject();</span><br></pre></td></tr></table></figure>
+
+<p>调用jni中方法<code>android_os_BinderInternal_getContextObject</code>返回IBinder对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static jobject android_os_BinderInternal_getContextObject(JNIEnv* env, jobject clazz)</span><br><span class="line">&#123;</span><br><span class="line">    sp&lt;IBinder&gt; b &#x3D; ProcessState::self()-&gt;getContextObject(NULL);</span><br><span class="line">    return javaObjectForIBinder(env, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于ProcessState::self()-&gt;getContextObject()，在<a href="http://gityuan.com/2015/11/08/binder-get-sm/" target="_blank" rel="noopener">获取ServiceManager</a>的第3节已详细解决，即<code>ProcessState::self()-&gt;getContextObject()</code>等价于 <code>new BpBinder(0)</code>;</p>
+<h4 id="javaObjectForIBinder"><a href="#javaObjectForIBinder" class="headerlink" title="javaObjectForIBinder"></a>javaObjectForIBinder</h4><p>[-&gt; android_util_binder.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">jobject javaObjectForIBinder(JNIEnv* env, const sp&lt;IBinder&gt;&amp; val) &#123;</span><br><span class="line">    if (val &#x3D;&#x3D; NULL) return NULL;</span><br><span class="line"></span><br><span class="line">    if (val-&gt;checkSubclass(&amp;gBinderOffsets)) &#123; &#x2F;&#x2F;返回false</span><br><span class="line">        jobject object &#x3D; static_cast&lt;JavaBBinder*&gt;(val.get())-&gt;object();</span><br><span class="line">        return object;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    AutoMutex _l(mProxyLock);</span><br><span class="line"></span><br><span class="line">    jobject object &#x3D; (jobject)val-&gt;findObject(&amp;gBinderProxyOffsets);</span><br><span class="line">    if (object !&#x3D; NULL) &#123; &#x2F;&#x2F;第一次object为null</span><br><span class="line">        jobject res &#x3D; jniGetReferent(env, object);</span><br><span class="line">        if (res !&#x3D; NULL) &#123;</span><br><span class="line">            return res;</span><br><span class="line">        &#125;</span><br><span class="line">        android_atomic_dec(&amp;gNumProxyRefs);</span><br><span class="line">        val-&gt;detachObject(&amp;gBinderProxyOffsets);</span><br><span class="line">        env-&gt;DeleteGlobalRef(object);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;创建BinderProxy对象</span><br><span class="line">    object &#x3D; env-&gt;NewObject(gBinderProxyOffsets.mClass, gBinderProxyOffsets.mConstructor);</span><br><span class="line">    if (object !&#x3D; NULL) &#123;</span><br><span class="line">        &#x2F;&#x2F;BinderProxy.mObject成员变量记录BpBinder对象</span><br><span class="line">        env-&gt;SetLongField(object, gBinderProxyOffsets.mObject, (jlong)val.get());</span><br><span class="line">        val-&gt;incStrong((void*)javaObjectForIBinder);</span><br><span class="line"></span><br><span class="line">        jobject refObject &#x3D; env-&gt;NewGlobalRef(</span><br><span class="line">                env-&gt;GetObjectField(object, gBinderProxyOffsets.mSelf));</span><br><span class="line">        &#x2F;&#x2F;将BinderProxy对象信息附加到BpBinder的成员变量mObjects中</span><br><span class="line">        val-&gt;attachObject(&amp;gBinderProxyOffsets, refObject,</span><br><span class="line">                jnienv_to_javavm(env), proxy_cleanup);</span><br><span class="line"></span><br><span class="line">        sp&lt;DeathRecipientList&gt; drl &#x3D; new DeathRecipientList;</span><br><span class="line">        drl-&gt;incStrong((void*)javaObjectForIBinder);</span><br><span class="line">        &#x2F;&#x2F;BinderProxy.mOrgue成员变量记录死亡通知对象</span><br><span class="line">        env-&gt;SetLongField(object, gBinderProxyOffsets.mOrgue, reinterpret_cast&lt;jlong&gt;(drl.get()));</span><br><span class="line"></span><br><span class="line">        android_atomic_inc(&amp;gNumProxyRefs);</span><br><span class="line">        incRefsCreated(env);</span><br><span class="line">    &#125;</span><br><span class="line">    return object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据BpBinder(C++)生成BinderProxy(Java)对象. 主要工作是创建BinderProxy对象,并把BpBinder对象地址保存到BinderProxy.mObject成员变量. 到此，可知</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ServiceManagerNative.asInterface(BinderInternal.getContextObject()) </span><br><span class="line">等价于</span><br><span class="line">ServiceManagerNative.asInterface(new BinderProxy())</span><br></pre></td></tr></table></figure>
+
+<h2 id="SMN-asInterface"><a href="#SMN-asInterface" class="headerlink" title="SMN.asInterface"></a>SMN.asInterface</h2><p>[-&gt; ServiceManagerNative.java]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> static public IServiceManager asInterface(IBinder obj)</span><br><span class="line">&#123;</span><br><span class="line">    if (obj &#x3D;&#x3D; null) &#123; &#x2F;&#x2F;obj为BpBinder</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;由于obj为BpBinder，该方法默认返回null</span><br><span class="line">    IServiceManager in &#x3D; (IServiceManager)obj.queryLocalInterface(descriptor);</span><br><span class="line">    if (in !&#x3D; null) &#123;</span><br><span class="line">        return in;</span><br><span class="line">    &#125;</span><br><span class="line">    return new ServiceManagerProxy(obj); &#x2F;&#x2F;【见小节3.3.1】</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由此，可知</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ServiceManagerNative.asInterface(new BinderProxy()) </span><br><span class="line">等价于</span><br><span class="line">new ServiceManagerProxy(new BinderProxy())</span><br></pre></td></tr></table></figure>
+
+<p> 为了方便，ServiceManagerProxy简称为SMP。</p>
+<h3 id="ServiceManagerProxy初始化"><a href="#ServiceManagerProxy初始化" class="headerlink" title="ServiceManagerProxy初始化"></a>ServiceManagerProxy初始化</h3><p>[-&gt; ServiceManagerNative.java ::ServiceManagerProxy]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class ServiceManagerProxy implements IServiceManager &#123;</span><br><span class="line">    public ServiceManagerProxy(IBinder remote) &#123;</span><br><span class="line">        mRemote &#x3D; remote;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>mRemote为BinderProxy对象，该BinderProxy对象对应于BpBinder(0)，其作为binder代理端，指向native层大管家service Manager。</p>
+<p><code>ServiceManager.getIServiceManager</code>最终等价于<code>new ServiceManagerProxy(new BinderProxy())</code>,意味着【3.1】中的getIServiceManager().addService()，等价于SMP.addService().</p>
+<p>framework层的ServiceManager的调用实际的工作确实交给SMP的成员变量BinderProxy；而BinderProxy通过jni方式，最终会调用BpBinder对象；可见上层binder架构的核心功能依赖native架构的服务来完成的。</p>
+<h2 id="ServiceManagerProxy-addService"><a href="#ServiceManagerProxy-addService" class="headerlink" title="ServiceManagerProxy.addService"></a>ServiceManagerProxy.addService</h2><p>[-&gt; ServiceManagerNative.java ::ServiceManagerProxy]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public void addService(String name, IBinder service, boolean allowIsolated) throws RemoteException &#123;</span><br><span class="line">    Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">    Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">    data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">    data.writeString(name);</span><br><span class="line">    &#x2F;&#x2F;【见小节3.5】</span><br><span class="line">    data.writeStrongBinder(service);</span><br><span class="line">    data.writeInt(allowIsolated ? 1 : 0);</span><br><span class="line">    &#x2F;&#x2F;mRemote为BinderProxy【见小节3.7】</span><br><span class="line">    mRemote.transact(ADD_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">    reply.recycle();</span><br><span class="line">    data.recycle();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="data-writeStrongBinder-service-Java"><a href="#data-writeStrongBinder-service-Java" class="headerlink" title="data.writeStrongBinder(service)Java"></a>data.writeStrongBinder(service)Java</h2><p>[-&gt; Parcel.java]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public writeStrongBinder(IBinder val)&#123;</span><br><span class="line">    &#x2F;&#x2F;此处为Native调用【见3.5.1】</span><br><span class="line">    nativewriteStrongBinder(mNativePtr, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="nativeWriteStrongBinder-JNI"><a href="#nativeWriteStrongBinder-JNI" class="headerlink" title="nativeWriteStrongBinder()JNI"></a>nativeWriteStrongBinder()JNI</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private static native void nativeWriteStrongBinder(long nativePtr, IBinder val);</span><br></pre></td></tr></table></figure>
+
+<p>[-&gt; android_os_Parcel.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">static void android_os_Parcel_writeStrongBinder(JNIEnv* env, jclass clazz, jlong nativePtr, jobject object) &#123;</span><br><span class="line">    &#x2F;&#x2F;将java层Parcel转换为native层Parcel</span><br><span class="line">    Parcel* parcel &#x3D; reinterpret_cast&lt;Parcel*&gt;(nativePtr);</span><br><span class="line">    if (parcel !&#x3D; NULL) &#123;</span><br><span class="line">        &#x2F;&#x2F;【见3.5.2】</span><br><span class="line">        const status_t err &#x3D; parcel-&gt;writeStrongBinder(ibinderForJavaObject(env, object));</span><br><span class="line">        if (err !&#x3D; NO_ERROR) &#123;</span><br><span class="line">            signalExceptionForError(env, clazz, err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ibinderForJavaObject"><a href="#ibinderForJavaObject" class="headerlink" title="ibinderForJavaObject"></a>ibinderForJavaObject</h4><p>[-&gt; android_util_Binder.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sp&lt;IBinder&gt; ibinderForJavaObject(JNIEnv* env, jobject obj)</span><br><span class="line">&#123;</span><br><span class="line">    if (obj &#x3D;&#x3D; NULL) return NULL;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;Java层的Binder对象</span><br><span class="line">    if (env-&gt;IsInstanceOf(obj, gBinderOffsets.mClass)) &#123;</span><br><span class="line">        JavaBBinderHolder* jbh &#x3D; (JavaBBinderHolder*)</span><br><span class="line">            env-&gt;GetLongField(obj, gBinderOffsets.mObject);</span><br><span class="line">        return jbh !&#x3D; NULL ? jbh-&gt;get(env, obj) : NULL; &#x2F;&#x2F;【见3.5.3】</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;Java层的BinderProxy对象</span><br><span class="line">    if (env-&gt;IsInstanceOf(obj, gBinderProxyOffsets.mClass)) &#123;</span><br><span class="line">        return (IBinder*)env-&gt;GetLongField(obj, gBinderProxyOffsets.mObject);</span><br><span class="line">    &#125;</span><br><span class="line">    return NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据Binde(Java)生成JavaBBinderHolder(C++)对象. 主要工作是创建JavaBBinderHolder对象,并把JavaBBinderHolder对象地址保存到Binder.mObject成员变量.</p>
+<h4 id="JavaBBinderHolder-get"><a href="#JavaBBinderHolder-get" class="headerlink" title="JavaBBinderHolder.get()"></a>JavaBBinderHolder.get()</h4><p>[-&gt; android_util_Binder.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;JavaBBinder&gt; get(JNIEnv* env, jobject obj)</span><br><span class="line">&#123;</span><br><span class="line">    AutoMutex _l(mLock);</span><br><span class="line">    sp&lt;JavaBBinder&gt; b &#x3D; mBinder.promote();</span><br><span class="line">    if (b &#x3D;&#x3D; NULL) &#123;</span><br><span class="line">        &#x2F;&#x2F;首次进来，创建JavaBBinder对象【见3.5.4】</span><br><span class="line">        b &#x3D; new JavaBBinder(env, obj);</span><br><span class="line">        mBinder &#x3D; b;</span><br><span class="line">    &#125;</span><br><span class="line">    return b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JavaBBinderHolder有一个成员变量mBinder，保存当前创建的JavaBBinder对象，这是一个wp类型的，可能会被垃圾回收器给回收，所以每次使用前，都需要先判断是否存在。</p>
+<h4 id="JavaBBinder初始化"><a href="#JavaBBinder初始化" class="headerlink" title="JavaBBinder初始化"></a>JavaBBinder初始化</h4><p>==&gt; [-&gt; android_util_Binder.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">JavaBBinder(JNIEnv* env, jobject object)</span><br><span class="line">    : mVM(jnienv_to_javavm(env)), mObject(env-&gt;NewGlobalRef(object))</span><br><span class="line">&#123;</span><br><span class="line">    android_atomic_inc(&amp;gNumLocalRefs);</span><br><span class="line">    incRefsCreated(env);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建JavaBBinder，该对象继承于BBinder对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data.writeStrongBinder(service)</span><br><span class="line">最终等价于&#96;parcel-&gt;</span><br><span class="line">writeStrongBinder(new JavaBBinder(env, obj))&#96;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="writeStrongBinder-C"><a href="#writeStrongBinder-C" class="headerlink" title="writeStrongBinder()C++"></a>writeStrongBinder()C++</h3><p>[-&gt; parcel.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">status_t Parcel::writeStrongBinder(const sp&lt;IBinder&gt;&amp; val)</span><br><span class="line">&#123;</span><br><span class="line">    return flatten_binder(ProcessState::self(), val, this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="flatten-binder"><a href="#flatten-binder" class="headerlink" title="flatten_binder"></a>flatten_binder</h4><p>[-&gt; parcel.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">status_t flatten_binder(const sp&lt;ProcessState&gt;&amp; &#x2F;*proc*&#x2F;,</span><br><span class="line">    const sp&lt;IBinder&gt;&amp; binder, Parcel* out)</span><br><span class="line">&#123;</span><br><span class="line">    flat_binder_object obj;</span><br><span class="line"></span><br><span class="line">    obj.flags &#x3D; 0x7f | FLAT_BINDER_FLAG_ACCEPTS_FDS;</span><br><span class="line">    if (binder !&#x3D; NULL) &#123;</span><br><span class="line">        IBinder *local &#x3D; binder-&gt;localBinder();</span><br><span class="line">        if (!local) &#123;</span><br><span class="line">            BpBinder *proxy &#x3D; binder-&gt;remoteBinder();</span><br><span class="line">            const int32_t handle &#x3D; proxy ? proxy-&gt;handle() : 0;</span><br><span class="line">            obj.type &#x3D; BINDER_TYPE_HANDLE; &#x2F;&#x2F;远程Binder</span><br><span class="line">            obj.binder &#x3D; 0;</span><br><span class="line">            obj.handle &#x3D; handle;</span><br><span class="line">            obj.cookie &#x3D; 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            obj.type &#x3D; BINDER_TYPE_BINDER; &#x2F;&#x2F;本地Binder，进入该分支</span><br><span class="line">            obj.binder &#x3D; reinterpret_cast&lt;uintptr_t&gt;(local-&gt;getWeakRefs());</span><br><span class="line">            obj.cookie &#x3D; reinterpret_cast&lt;uintptr_t&gt;(local);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        obj.type &#x3D; BINDER_TYPE_BINDER;  &#x2F;&#x2F;本地Binder</span><br><span class="line">        obj.binder &#x3D; 0;</span><br><span class="line">        obj.cookie &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;【见小节3.6.2】</span><br><span class="line">    return finish_flatten_binder(binder, obj, out);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将Binder对象扁平化，转换成flat_binder_object对象。</p>
+<ul>
+<li>对于Binder实体，则cookie记录Binder实体的指针；</li>
+<li>对于Binder代理，则用handle记录Binder代理的句柄；</li>
+</ul>
+<p>关于localBinder，代码见Binder.cpp。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BBinder* BBinder::localBinder()</span><br><span class="line">&#123;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">BBinder* IBinder::localBinder()</span><br><span class="line">&#123;</span><br><span class="line">    return NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="finish-flatten-binder"><a href="#finish-flatten-binder" class="headerlink" title="finish_flatten_binder"></a>finish_flatten_binder</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inline static status_t finish_flatten_binder(</span><br><span class="line">    const sp&lt;IBinder&gt;&amp; , const flat_binder_object&amp; flat, Parcel* out)</span><br><span class="line">&#123;</span><br><span class="line">    return out-&gt;writeObject(flat, false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会带Java代码addService过程，则接下来进入transact</p>
+<h2 id="BinderProxy-transact"><a href="#BinderProxy-transact" class="headerlink" title="BinderProxy.transact"></a>BinderProxy.transact</h2><p>[-&gt; Binder.java ::BinderProxy]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public boolean transact(int code, Parcel data, Parcel reply, int flags) throws RemoteException &#123;</span><br><span class="line">    &#x2F;&#x2F;用于检测Parcel大小是否大于800k</span><br><span class="line">    Binder.checkParcel(this, code, data, &quot;Unreasonably large binder buffer&quot;);</span><br><span class="line">    return transactNative(code, data, reply, flags); &#x2F;&#x2F;【见3.8】</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回到ServiceManagerProxy.addService，其成员变量mRemote是BinderProxy。transactNative经过jni调用，进入下面的方法</p>
+<h3 id="android-os-BinderProxy-transact"><a href="#android-os-BinderProxy-transact" class="headerlink" title="android_os_BinderProxy_transact"></a>android_os_BinderProxy_transact</h3><p>[-&gt; android_util_Binder.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">static jboolean android_os_BinderProxy_transact(JNIEnv* env, jobject obj,</span><br><span class="line">    jint code, jobject dataObj, jobject replyObj, jint flags)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &#x2F;&#x2F;java Parcel转为native Parcel</span><br><span class="line">    Parcel* data &#x3D; parcelForJavaObject(env, dataObj);</span><br><span class="line">    Parcel* reply &#x3D; parcelForJavaObject(env, replyObj);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;gBinderProxyOffsets.mObject中保存的是new BpBinder(0)对象</span><br><span class="line">    IBinder* target &#x3D; (IBinder*)</span><br><span class="line">        env-&gt;GetLongField(obj, gBinderProxyOffsets.mObject);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;此处便是BpBinder::transact(), 经过native层，进入Binder驱动程序</span><br><span class="line">    status_t err &#x3D; target-&gt;transact(code, *data, reply, flags);</span><br><span class="line">    ...</span><br><span class="line">    return JNI_FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Java层的BinderProxy.transact()最终交由Native层的BpBinder::transact()完成。Native Binder的<a href="http://gityuan.com/2015/11/14/binder-add-service/" target="_blank" rel="noopener">注册服务(addService)</a>中有详细说明BpBinder执行过程。另外，该方法可抛出RemoteException。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>addService的核心过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void addService(String name, IBinder service, boolean allowIsolated) throws RemoteException &#123;</span><br><span class="line">    ...</span><br><span class="line">    Parcel data &#x3D; Parcel.obtain(); &#x2F;&#x2F;此处还需要将java层的Parcel转为Native层的Parcel</span><br><span class="line">    data-&gt;writeStrongBinder(new JavaBBinder(env, obj));</span><br><span class="line">    BpBinder::transact(ADD_SERVICE_TRANSACTION, *data, reply, 0); &#x2F;&#x2F;与Binder驱动交互</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注册服务过程就是通过BpBinder来发送<code>ADD_SERVICE_TRANSACTION</code>命令，与实现与binder驱动进行数据交互。</p>
+<h1 id="获取服务"><a href="#获取服务" class="headerlink" title="获取服务"></a>获取服务</h1><h2 id="SM-getService"><a href="#SM-getService" class="headerlink" title="SM.getService"></a>SM.getService</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static IBinder getService(String name) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        IBinder service &#x3D; sCache.get(name); &#x2F;&#x2F;先从缓存中查看HashMap</span><br><span class="line">        if (service !&#x3D; null) &#123;</span><br><span class="line">            return service;</span><br><span class="line">        &#125; else &#123;</span><br></pre></td></tr></table></figure>
+<pre><code>        return getIServiceManager().getService(name); 【见4.2】
+    }
+} catch (RemoteException e) {
+    Log.e(TAG, &quot;error in getService&quot;, e);
+}
+return null;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">关于getIServiceManager()，在前面已经讲述了，等价于new ServiceManagerProxy(new BinderProxy())。 其中sCache &#x3D; new HashMap&lt;String, IBinder&gt;()以hashmap格式缓存已组成的名称。请求获取服务过程中，先从缓存中查询是否存在，如果缓存中不存在的话，再通过binder交互来查询相应的服务。</span><br><span class="line"></span><br><span class="line">## ServiceManagerProxy.getService()</span><br></pre></td></tr></table></figure>
+<p>class ServiceManagerProxy implements IServiceManager {<br>    public IBinder getService(String name) throws RemoteException {<br>        Parcel data = Parcel.obtain();<br>        Parcel reply = Parcel.obtain();<br>        data.writeInterfaceToken(IServiceManager.descriptor);<br>        data.writeString(name);<br>        //mRemote为BinderProxy 【见4.3】<br>        mRemote.transact(GET_SERVICE_TRANSACTION, data, reply, 0);<br>        //从reply里面解析出获取的IBinder对象【见4.8】<br>        IBinder binder = reply.readStrongBinder();<br>        reply.recycle();<br>        data.recycle();<br>        return binder;<br>    }<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## BinderProxy.transact</span><br><span class="line"></span><br><span class="line">[-&gt; Binder.java]</span><br></pre></td></tr></table></figure>
+<p>final class BinderProxy implements IBinder {<br>    public boolean transact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {<br>        Binder.checkParcel(this, code, data, “Unreasonably large binder buffer”);<br>        return transactNative(code, data, reply, flags);<br>    }<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## android_os_BinderProxy_transact</span><br><span class="line"></span><br><span class="line">[-&gt; android_util_Binder.cpp]</span><br></pre></td></tr></table></figure>
+<p>static jboolean android_os_BinderProxy_transact(JNIEnv* env, jobject obj,<br>    jint code, jobject dataObj, jobject replyObj, jint flags)<br>{<br>    …<br>    //java Parcel转为native Parcel<br>    Parcel* data = parcelForJavaObject(env, dataObj);<br>    Parcel* reply = parcelForJavaObject(env, replyObj);<br>    …</p>
+<pre><code>//gBinderProxyOffsets.mObject中保存的是new BpBinder(0)对象
+IBinder* target = (IBinder*)
+    env-&gt;GetLongField(obj, gBinderProxyOffsets.mObject);
+...
+
+//此处便是BpBinder::transact(), 经过native层[见小节4.5]
+status_t err = target-&gt;transact(code, *data, reply, flags);
+...
+return JNI_FALSE;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## BpBinder.transact</span><br></pre></td></tr></table></figure>
+<p>status_t BpBinder::transact(<br>    uint32_t code, const Parcel&amp; data, Parcel* reply, uint32_t flags)<br>{<br>    if (mAlive) {<br>        // [见小节4.6]<br>        status_t status = IPCThreadState::self()-&gt;transact(<br>            mHandle, code, data, reply, flags);<br>        if (status == DEAD_OBJECT) mAlive = 0;<br>        return status;<br>    }</p>
+<pre><code>return DEAD_OBJECT;</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## IPC.transact</span><br><span class="line"></span><br><span class="line">[-&gt; IPCThreadState.cpp]</span><br></pre></td></tr></table></figure>
+<p>status_t IPCThreadState::transact(int32_t handle,<br>                                  uint32_t code, const Parcel&amp; data,<br>                                  Parcel* reply, uint32_t flags)<br>{<br>    status_t err = data.errorCheck(); //数据错误检查<br>    flags |= TF_ACCEPT_FDS;<br>    ….<br>    if (err == NO_ERROR) {<br>         // 传输数据<br>        err = writeTransactionData(BC_TRANSACTION, flags, handle, code, data, NULL);<br>    }<br>    …</p>
+<pre><code>// 默认情况下,都是采用非oneway的方式, 也就是需要等待服务端的返回结果
+if ((flags &amp; TF_ONE_WAY) == 0) {
+    if (reply) {
+        //等待回应事件
+        err = waitForResponse(reply);
+    }else {
+        Parcel fakeReply;
+        err = waitForResponse(&amp;fakeReply);
+    }
+} else {
+    err = waitForResponse(NULL, NULL);
+}
+return err;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">##  IPC.waitForResponse</span><br></pre></td></tr></table></figure>
+<p>status_t IPCThreadState::transact(int32_t handle,<br>                                  uint32_t code, const Parcel&amp; data,<br>                                  Parcel* reply, uint32_t flags)<br>{<br>    status_t err = data.errorCheck(); //数据错误检查<br>    flags |= TF_ACCEPT_FDS;<br>    ….<br>    if (err == NO_ERROR) {<br>         // 传输数据<br>        err = writeTransactionData(BC_TRANSACTION, flags, handle, code, data, NULL);<br>    }<br>    …</p>
+<pre><code>// 默认情况下,都是采用非oneway的方式, 也就是需要等待服务端的返回结果
+if ((flags &amp; TF_ONE_WAY) == 0) {
+    if (reply) {
+        //等待回应事件
+        err = waitForResponse(reply);
+    }else {
+        Parcel fakeReply;
+        err = waitForResponse(&amp;fakeReply);
+    }
+} else {
+    err = waitForResponse(NULL, NULL);
+}
+return err;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">##  IPC.waitForResponse</span><br></pre></td></tr></table></figure>
+<p>status_t IPCThreadState::waitForResponse(Parcel <em>reply, status_t *acquireResult)<br>{<br>    int32_t cmd;<br>    int32_t err;<br>    while (1) {<br>        if ((err=talkWithDriver()) &lt; NO_ERROR) break;<br>        …<br>        cmd = mIn.readInt32();<br>        switch (cmd) {<br>          case BR_REPLY:<br>          {<br>            binder_transaction_data tr;<br>            err = mIn.read(&amp;tr, sizeof(tr));<br>            if (reply) {<br>                if ((tr.flags &amp; TF_STATUS_CODE) == 0) {<br>                    //当reply对象回收时，则会调用freeBuffer来回收内存<br>                    reply-&gt;ipcSetDataReference(<br>                        reinterpret_cast&lt;const uint8_t</em>&gt;(tr.data.ptr.buffer),<br>                        tr.data_size,<br>                        reinterpret_cast&lt;const binder_size_t*&gt;(tr.data.ptr.offsets),<br>                        tr.offsets_size/sizeof(binder_size_t),<br>                        freeBuffer, this);<br>                } else {<br>                    …<br>                }<br>            }<br>          }<br>          case :…<br>        }<br>    }<br>    …<br>    return err;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">那么这个reply是哪来的呢，在文章[Binder系列3—启动ServiceManager](http:&#x2F;&#x2F;gityuan.com&#x2F;2015&#x2F;11&#x2F;07&#x2F;binder-start-sm&#x2F;)</span><br><span class="line"></span><br><span class="line">### binder_send_reply</span><br><span class="line"></span><br><span class="line">[-&gt; servicemanager&#x2F;binder.c]</span><br></pre></td></tr></table></figure>
+<p>void binder_send_reply(struct binder_state *bs, struct binder_io *reply, binder_uintptr_t buffer_to_free, int status) {<br>    struct {<br>        uint32_t cmd_free;<br>        binder_uintptr_t buffer;<br>        uint32_t cmd_reply;<br>        struct binder_transaction_data txn;<br>    } <strong>attribute</strong>((packed)) data;</p>
+<pre><code>data.cmd_free = BC_FREE_BUFFER; //free buffer命令
+data.buffer = buffer_to_free;
+data.cmd_reply = BC_REPLY; // reply命令
+data.txn.target.ptr = 0;
+data.txn.cookie = 0;
+data.txn.code = 0;
+if (status) {
+    ...
+} else {=
+
+    data.txn.flags = 0;
+    data.txn.data_size = reply-&gt;data - reply-&gt;data0;
+    data.txn.offsets_size = ((char*) reply-&gt;offs) - ((char*) reply-&gt;offs0);
+    data.txn.data.ptr.buffer = (uintptr_t)reply-&gt;data0;
+    data.txn.data.ptr.offsets = (uintptr_t)reply-&gt;offs0;
+}
+//向Binder驱动通信
+binder_write(bs, &amp;data, sizeof(data));</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">binder_write将BC_FREE_BUFFER和BC_REPLY命令协议发送给驱动，进入驱动。binder_ioctl -&gt; binder_ioctl_write_read -&gt; binder_thread_write，由于是BC_REPLY命令协议，则进入binder_transaction， 该方法会向请求服务的线程Todo队列插入事务。</span><br><span class="line"></span><br><span class="line">接下来，请求服务的进程在执行talkWithDriver的过程执行到binder_thread_read()，处理Todo队列的事务。</span><br><span class="line"></span><br><span class="line">## readStrongBinder</span><br><span class="line"></span><br><span class="line">[-&gt; Parcel.java]</span><br><span class="line"></span><br><span class="line">readStrongBinder的过程基本是writeStrongBinder逆过程。</span><br></pre></td></tr></table></figure>
+<p>static jobject android_os_Parcel_readStrongBinder(JNIEnv* env, jclass clazz, jlong nativePtr) {<br>    Parcel* parcel = reinterpret_cast&lt;Parcel*&gt;(nativePtr);<br>    if (parcel != NULL) {<br>        //【见小节4.8.1】<br>        return javaObjectForIBinder(env, parcel-&gt;readStrongBinder());<br>    }<br>    return NULL;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">javaObjectForIBinder 将native层BpBinder对象转换为Java层BinderProxy对象。</span><br><span class="line"></span><br><span class="line">### readStrongBinder(C++)</span><br><span class="line"></span><br><span class="line">[-&gt; Parcel.cpp]</span><br></pre></td></tr></table></figure>
+<p>sp<IBinder> Parcel::readStrongBinder() const<br>{<br>    sp<IBinder> val;<br>    //【见小节4.8.2】<br>    unflatten_binder(ProcessState::self(), *this, &amp;val);<br>    return val;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### unflatten_binder</span><br></pre></td></tr></table></figure>
+<p>status_t unflatten_binder(const sp<ProcessState>&amp; proc,<br>    const Parcel&amp; in, sp<IBinder>* out)<br>{<br>    const flat_binder_object* flat = in.readObject(false);<br>    if (flat) {<br>        switch (flat-&gt;type) {<br>            case BINDER_TYPE_BINDER:<br>                <em>out = reinterpret_cast&lt;IBinder</em>&gt;(flat-&gt;cookie);<br>                return finish_unflatten_binder(NULL, <em>flat, in);<br>            case BINDER_TYPE_HANDLE:<br>                //进入该分支【见4.8.3】<br>                *out = proc-&gt;getStrongProxyForHandle(flat-&gt;handle);<br>                //创建BpBinder对象<br>                return finish_unflatten_binder(<br>                    static_cast&lt;BpBinder</em>&gt;(out-&gt;get()), *flat, in);<br>        }<br>    }<br>    return BAD_TYPE;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### getStrongProxyForHandle</span><br></pre></td></tr></table></figure>
+<p>sp<IBinder> ProcessState::getStrongProxyForHandle(int32_t handle)<br>{<br>    sp<IBinder> result;</p>
+<pre><code>AutoMutex _l(mLock);
+//查找handle对应的资源项
+handle_entry* e = lookupHandleLocked(handle);
+
+if (e != NULL) {
+    IBinder* b = e-&gt;binder;
+    if (b == NULL || !e-&gt;refs-&gt;attemptIncWeak(this)) {
+        ...
+        //当handle值所对应的IBinder不存在或弱引用无效时，则创建BpBinder对象
+        b = new BpBinder(handle);
+        e-&gt;binder = b;
+        if (b) e-&gt;refs = b-&gt;getWeakRefs();
+        result = b;
+    } else {
+        result.force_set(b);
+        e-&gt;refs-&gt;decWeak(this);
+    }
+}
+return result;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">经过该方法，最终创建了指向Binder服务端的BpBinder代理对象。回到[小节4.8] 经过javaObjectForIBinder将native层BpBinder对象转换为Java层BinderProxy对象。 也就是说通过getService()最终获取了指向目标Binder服务端的代理对象BinderProxy。</span><br><span class="line"></span><br><span class="line">## 小结</span><br><span class="line"></span><br><span class="line">getService的核心过程：</span><br></pre></td></tr></table></figure>
+<p>public static IBinder getService(String name) {<br>    …<br>    Parcel reply = Parcel.obtain(); //此处还需要将java层的Parcel转为Native层的Parcel<br>    BpBinder::transact(GET_SERVICE_TRANSACTION, *data, reply, 0);  //与Binder驱动交互<br>    IBinder binder = javaObjectForIBinder(env, new BpBinder(handle));<br>    …<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">javaObjectForIBinder作用是创建BinderProxy对象，并将BpBinder对象的地址保存到BinderProxy对象的mObjects中。 获取服务过程就是通过BpBinder来发送&#96;GET_SERVICE_TRANSACTION&#96;命令，与实现与binder驱动进行数据交互。</span><br><span class="line"></span><br><span class="line"># 实例</span><br><span class="line"></span><br><span class="line">以IWindowManager为例</span><br></pre></td></tr></table></figure>
+<p>public interface IWindowManager extends android.os.IInterface {</p>
+<pre><code>public static abstract class Stub extends android.os.Binder implements android.view.IWindowManager {
+    private static final java.lang.String DESCRIPTOR = &quot;android.view.IWindowManager&quot;;
+
+    public Stub() {
+        this.attachInterface(this, DESCRIPTOR);
+    }
+
+    public static android.view.IWindowManager asInterface(android.os.IBinder obj) {
+        if ((obj == null)) {
+            return null;
+        }
+        android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+        if (((iin != null) &amp;&amp; (iin instanceof android.view.IWindowManager))) {
+            return ((android.view.IWindowManager) iin);
+        }
+        return new android.view.IWindowManager.Stub.Proxy(obj);
+    }
+
+    public android.os.IBinder asBinder() {
+        return this;
+    }
+
+    private static class Proxy implements android.view.IWindowManager {
+        private android.os.IBinder mRemote;
+
+        Proxy(android.os.IBinder remote) {
+            mRemote = remote;
+        }
+
+        public android.os.IBinder asBinder() {
+            return mRemote;
+        }
+    }
+    ...
+}</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## Binder</span><br></pre></td></tr></table></figure>
+<p>public class Binder implements IBinder {<br>    public void attachInterface(IInterface owner, String descriptor) {<br>        mOwner = owner;<br>        mDescriptor = descriptor;<br>    }</p>
+<pre><code>public IInterface queryLocalInterface(String descriptor) {
+    if (mDescriptor.equals(descriptor)) {
+        return mOwner;
+    }
+    return null;
+}</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## BinderProxy</span><br></pre></td></tr></table></figure>
+<p>final class BinderProxy implements IBinder {<br>    public IInterface queryLocalInterface(String descriptor) {<br>        return null;<br>    }<br>}</p>
+<pre><code>
+
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Binder/" rel="tag"># Binder</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/19/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/%E4%B8%B4%E6%97%B6/" rel="next" title="项目管理/临时">
+                <i class="fa fa-chevron-left"></i> 项目管理/临时
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/20/Android/Binder/%E8%87%AA%E5%AE%9A%E4%B9%89binder%E6%9E%B6%E6%9E%84%E7%9A%84C-S%E7%BB%84%E4%BB%B6/" rel="prev" title="自定义binder架构的C/S组件">
+                自定义binder架构的C/S组件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#相关源码"><span class="nav-number">1.</span> <span class="nav-text">相关源码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Binder概述"><span class="nav-number">2.</span> <span class="nav-text">Binder概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Binder架构"><span class="nav-number">2.1.</span> <span class="nav-text">Binder架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Binder类图"><span class="nav-number">2.2.</span> <span class="nav-text">Binder类图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Binder类分层"><span class="nav-number">2.3.</span> <span class="nav-text">Binder类分层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注册服务"><span class="nav-number">3.</span> <span class="nav-text">注册服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SM-addService"><span class="nav-number">3.1.</span> <span class="nav-text">SM.addService</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getIServiceManager"><span class="nav-number">3.2.</span> <span class="nav-text">getIServiceManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getContextObject"><span class="nav-number">3.2.1.</span> <span class="nav-text">getContextObject()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#javaObjectForIBinder"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">javaObjectForIBinder</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMN-asInterface"><span class="nav-number">3.3.</span> <span class="nav-text">SMN.asInterface</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ServiceManagerProxy初始化"><span class="nav-number">3.3.1.</span> <span class="nav-text">ServiceManagerProxy初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServiceManagerProxy-addService"><span class="nav-number">3.4.</span> <span class="nav-text">ServiceManagerProxy.addService</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-writeStrongBinder-service-Java"><span class="nav-number">3.5.</span> <span class="nav-text">data.writeStrongBinder(service)Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nativeWriteStrongBinder-JNI"><span class="nav-number">3.5.1.</span> <span class="nav-text">nativeWriteStrongBinder()JNI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ibinderForJavaObject"><span class="nav-number">3.5.1.1.</span> <span class="nav-text">ibinderForJavaObject</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JavaBBinderHolder-get"><span class="nav-number">3.5.1.2.</span> <span class="nav-text">JavaBBinderHolder.get()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JavaBBinder初始化"><span class="nav-number">3.5.1.3.</span> <span class="nav-text">JavaBBinder初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeStrongBinder-C"><span class="nav-number">3.5.2.</span> <span class="nav-text">writeStrongBinder()C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#flatten-binder"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">flatten_binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#finish-flatten-binder"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">finish_flatten_binder</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BinderProxy-transact"><span class="nav-number">3.6.</span> <span class="nav-text">BinderProxy.transact</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#android-os-BinderProxy-transact"><span class="nav-number">3.6.1.</span> <span class="nav-text">android_os_BinderProxy_transact</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.7.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取服务"><span class="nav-number">4.</span> <span class="nav-text">获取服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SM-getService"><span class="nav-number">4.1.</span> <span class="nav-text">SM.getService</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
