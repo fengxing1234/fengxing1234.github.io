@@ -262,6 +262,416 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A1%A5%E6%8E%A5%EF%BC%88Bridge%EF%BC%89%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A1%A5%E6%8E%A5%EF%BC%88Bridge%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">桥接（Bridge）模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-14T21:43:17+08:00">
+                2020-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">结构型设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A1%A5%E6%8E%A5%EF%BC%88Bridge%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A1%A5%E6%8E%A5%EF%BC%88Bridge%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在现实生活中，某些类具有两个或多个维度的变化，如图形既可按形状分，又可按颜色分。如何设计类似于 Photoshop 这样的软件，能画不同形状和不同颜色的图形呢？如果用继承方式，m 种形状和 n 种颜色的图形就有 m×n 种，不但对应的子类很多，而且扩展困难。</p>
+<p>当然，这样的例子还有很多，如不同颜色和字体的文字、不同品牌和功率的汽车、不同性别和职业的男女、支持不同平台和不同文件格式的媒体播放器等。如果用桥接模式就能很好地解决这些问题。</p>
+<p><strong>定义：</strong></p>
+<p>桥接（Bridge）模式的定义如下：将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</p>
+<p><strong>类图：</strong></p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q115125253H1.gif" alt="桥接模式的结构图"></p>
+<p><strong>模式的结构：</strong></p>
+<ul>
+<li>抽象化（Abstraction）角色：定义抽象类，并包含一个对实现化对象的引用。</li>
+<li>扩展抽象化（Refined  Abstraction）角色：是抽象化角色的子类，实现父类中的业务方法，并通过组合关系调用实现化角色中的业务方法。</li>
+<li>实现化（Implementor）角色：定义实现化角色的接口，供扩展抽象化角色调用。</li>
+<li>具体实现化（Concrete Implementor）角色：给出实现化角色接口的具体实现。</li>
+</ul>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>由于抽象与实现分离，所以扩展能力强；</li>
+<li>其实现细节对客户透明。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>由于聚合关系建立在抽象层，要求开发者针对抽象化进行设计与编程，这增加了系统的理解与设计难度。</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>当一个类存在两个独立变化的维度，且这两个维度都需要进行扩展时。</li>
+<li>当一个系统不希望使用继承或因为多层次继承导致系统类的个数急剧增加时。</li>
+<li>当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例1】用桥接（Bridge）模式模拟女士皮包的选购。</p>
+<p>分析：女士皮包有很多种，可以按用途分、按皮质分、按品牌分、按颜色分、按大小分等，存在多个维度的变化，所以采用桥接模式来实现女士皮包的选购比较合适。</p>
+<p>本实例按用途分可选钱包（Wallet）和挎包（HandBag），按颜色分可选黄色（Yellow）和红色（Red）。可以按两个维度定义为颜色类和包类。</p>
+<p>颜色类（Color）是一个维度，定义为实现化角色，它有两个具体实现化角色：黄色和红色，通过 getColor() 方法可以选择颜色；包类（Bag）是另一个维度，定义为抽象化角色，它有两个扩展抽象化角色：挎包和钱包，它包含了颜色类对象，通过 getName() 方法可以选择相关颜色的挎包和钱包。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q11512532X54.gif" alt="女士皮包选购的结构图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">public interface IColor &#123;</span><br><span class="line">    String getColor();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public abstract class Bag &#123;</span><br><span class="line">    protected IColor color;</span><br><span class="line"></span><br><span class="line">    public void setColor(IColor color) &#123;</span><br><span class="line">        this.color &#x3D; color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract String getName();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Wallet extends Bag &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return color.getColor() + &quot;钱包&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package com.zhyen.base.design_mode.bridge_mode;</span><br><span class="line"></span><br><span class="line">public class Red implements IColor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String getColor() &#123;</span><br><span class="line">        return &quot;红色&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.zhyen.base.design_mode.bridge_mode;</span><br><span class="line"></span><br><span class="line">public class Yellow implements IColor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String getColor() &#123;</span><br><span class="line">        return &quot;黄色&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package com.zhyen.base.design_mode.bridge_mode;</span><br><span class="line"></span><br><span class="line">public class HandBag extends Bag &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return color.getColor() + &quot;挎包&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端</span><br><span class="line">Wallet wallet &#x3D; new Wallet();</span><br><span class="line">        wallet.setColor(new Red());</span><br><span class="line">        System.out.println(wallet.getName());</span><br><span class="line">        HandBag handBag &#x3D; new HandBag();</span><br><span class="line">        handBag.setColor(new Yellow());</span><br><span class="line">        handBag.getName();</span><br><span class="line">        System.out.println(handBag.getName());</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">红色钱包</span><br><span class="line">黄色挎包</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter%EF%BC%89/" itemprop="url">适配器模式（Adapter）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-14T20:17:58+08:00">
+                2020-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">结构型设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter%EF%BC%89/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter%EF%BC%89/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在现实生活中，经常出现两个对象因接口不兼容而不能在一起工作的实例，这时需要第三者进行适配。例如，讲中文的人同讲英文的人对话时需要一个翻译，用直流电的笔记本电脑接交流电源时需要一个电源适配器，用计算机访问照相机的 SD 内存卡时需要一个读卡器等。</p>
+<p>在软件设计中也可能出现：需要开发的具有某种业务功能的组件在现有的组件库中已经存在，但它们与当前系统的接口规范不兼容，如果重新开发这些组件成本又很高，这时用适配器模式能很好地解决这些问题。</p>
+<p><strong>定义：</strong>将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。</p>
+<p>适配器模式分为类结构型模式和对象结构型模式两种，前者类之间的耦合度比后者高，且要求程序员了解现有组件库中的相关组件的内部结构，所以应用相对较少些。</p>
+<p><strong>类图：</strong></p>
+<ul>
+<li>类适配器模式的结构图</li>
+</ul>
+<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q1151045351c.gif" alt="类适配器模式的结构图"></p>
+<ul>
+<li>对象适配器模式的结构图</li>
+</ul>
+<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q1151046105A.gif" alt="对象适配器模式的结构图"></p>
+<p><strong>模式的结构：</strong></p>
+<ul>
+<li>目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。</li>
+<li>适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。</li>
+<li>适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。</li>
+</ul>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>客户端通过适配器可以透明地调用目标接口。</li>
+<li>复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。</li>
+<li>将目标类和适配者类解耦，解决了目标类和适配者类接口不一致的问题。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>对类适配器来说，更换适配器的实现过程比较复杂。</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致。</li>
+<li>使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;目标接口</span><br><span class="line">public interface ITarget &#123;</span><br><span class="line">    void request();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;适配者</span><br><span class="line">public class Adapter &#123;</span><br><span class="line">    public void specificRequest() &#123;</span><br><span class="line">        System.out.println(&quot;适配者中的业务代码被调用！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;适配器</span><br><span class="line">public class ClassAdapter extends Adapter implements ITarget &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        specificRequest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;客户端</span><br><span class="line">private static void adapterMode() &#123;</span><br><span class="line">        ClassAdapter adapter &#x3D; new ClassAdapter();</span><br><span class="line">        adapter.request();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">适配者中的业务代码被调用!</span><br></pre></td></tr></table></figure>
+
+<h3 id="用适配器模式（Adapter）模拟新能源汽车的发动机。"><a href="#用适配器模式（Adapter）模拟新能源汽车的发动机。" class="headerlink" title="用适配器模式（Adapter）模拟新能源汽车的发动机。"></a>用适配器模式（Adapter）模拟新能源汽车的发动机。</h3><p>分析：新能源汽车的发动机有电能发动机（Electric Motor）和光能发动机（Optical Motor）等，各种发动机的驱动方法不同，例如，电能发动机的驱动方法 electricDrive() 是用电能驱动，而光能发动机的驱动方法 opticalDrive() 是用光能驱动，它们是适配器模式中被访问的适配者。</p>
+<p>客户端希望用统一的发动机驱动方法 drive() 访问这两种发动机，所以必须定义一个统一的目标接口 Motor，然后再定义电能适配器（Electric Adapter）和光能适配器（Optical Adapter）去适配这两种发动机。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q115104I22F.gif" alt="发动机适配器的结构图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 目标：发动机</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface Motor &#123;</span><br><span class="line">    void drive();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;适配者1：电能发动机</span><br><span class="line">public class ElectricMotor &#123;</span><br><span class="line">    public void electricDrive() &#123;</span><br><span class="line">        System.out.println(&quot;电能发动机驱动汽车！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;适配者2：光能发动机</span><br><span class="line">public class OpticalMotor &#123;</span><br><span class="line"></span><br><span class="line">    public void opticalMotor() &#123;</span><br><span class="line">        System.out.println(&quot;光能发动机驱动汽车！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;电能适配器</span><br><span class="line">public class ElectricAdapter implements Motor &#123;</span><br><span class="line">    private ElectricMotor electricMotor;</span><br><span class="line"></span><br><span class="line">    public ElectricAdapter() &#123;</span><br><span class="line">        electricMotor &#x3D; new ElectricMotor();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void drive() &#123;</span><br><span class="line">        electricMotor.electricDrive();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;光能适配器</span><br><span class="line">public class OpticalAdapter implements Motor &#123;</span><br><span class="line">    private OpticalMotor opticalMotor;</span><br><span class="line"></span><br><span class="line">    public OpticalAdapter() &#123;</span><br><span class="line">        opticalMotor &#x3D; new OpticalMotor();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void drive() &#123;</span><br><span class="line">        opticalMotor.opticalMotor();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端</span><br><span class="line">        ElectricAdapter adapter &#x3D; new ElectricAdapter();</span><br><span class="line">        adapter.drive();</span><br><span class="line">        OpticalAdapter opticalAdapter &#x3D; new OpticalAdapter();</span><br><span class="line">        opticalAdapter.drive();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">电能发动机驱动汽车！</span><br><span class="line">光能发动机驱动汽车！</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2028,481 +2438,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%EF%BC%88Command%EF%BC%89%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%EF%BC%88Command%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">命令（Command）模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T23:36:32+08:00">
-                2020-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">行为型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%EF%BC%88Command%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%91%BD%E4%BB%A4%EF%BC%88Command%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在软件开发系统中，常常出现“方法的请求者”与“方法的实现者”之间存在紧密的耦合关系。这不利于软件功能的扩展与维护。例如，想对行为进行“撤销、重做、记录”等处理都很不方便，因此“如何将方法的请求者与方法的实现者解耦？”变得很重要，命令模式能很好地解决这个问题。</p>
-<p>在现实生活中，这样的例子也很多，例如，电视机遥控器（命令发送者）通过按钮（具体命令）来遥控电视机（命令接收者），还有计算机键盘上的“功能键”等。</p>
-<p><strong>定义：</strong></p>
-<p>命令（Command）模式的定义如下：将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行储存、传递、调用、增加与管理。</p>
-<p><strong>类型：</strong>行为类模式</p>
-<p><strong>类图：</strong></p>
-<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q11611335E44.gif" alt="命令模式的结构图"></p>
-<p><strong>模式的结构：</strong></p>
-<ul>
-<li>抽象命令类（Command）角色：声明执行命令的接口，拥有执行命令的抽象方法 execute()。</li>
-<li>具体命令角色（Concrete  Command）角色：是抽象命令类的具体实现类，它拥有接收者对象，并通过调用接收者的功能来完成命令要执行的操作。</li>
-<li>实现者/接收者（Receiver）角色：执行命令功能的相关操作，是具体命令对象业务的真正实现者。</li>
-<li>调用者/请求者（Invoker）角色：是请求的发送者，它通常拥有很多的命令对象，并通过访问命令对象来执行相关请求，它不直接访问接收者。</li>
-</ul>
-<p>所谓对命令的封装，说白了，无非就是把一系列的操作写到一个方法中，然后供客户端调用就行了，反映到类图上，只需要一个ConcreteCommand类和Client类就可以完成对命令的封装，即使再进一步，为了增加灵活性，可以再增加一个Command类进行适当地抽象，这个调用者和接收者到底是什么作用呢？其实大家可以换一个角度去想：假如仅仅是简单地把一些操作封装起来作为一条命令供别人调用，怎么能称为一种模式呢？命令模式作为一种行为类模式，首先要做到低耦合，耦合度低了才能提高灵活性，而加入调用者和接收者两个角色的目的也正是为此。</p>
-<p><strong>Android中</strong>：</p>
-<p><strong>PackageManagerService</strong>是Android系统的Service之一，主要功能是实现对应用包的解析、管理、卸载等操作。我们来看下具体的结构。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-5207a689f3ee1d3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><strong>HandlerParams是命令接口，即我们的Command角色。</strong></p>
-<p><strong>具体的包的安装、移动以及包大小的测量分别在3个具体子类InstallParams、MoveParams和MeasureParams中实现。</strong></p>
-<p><strong>而PackageHandler是Handler的子类，用来负责包相关消息的处理，不同的请求对应不同的命令对象，然后通过命令对象来执行具体操作。</strong></p>
-<p><strong>解决的问题：</strong></p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>降低系统的耦合度。命令模式能将调用操作的对象与实现该操作的对象解耦。</li>
-<li>增加或删除命令非常方便。采用命令模式增加与删除命令不会影响其他类，它满足“开闭原则”，对扩展比较灵活。</li>
-<li>可以实现宏命令。命令模式可以与组合模式结合，将多个命令装配成一个组合命令，即宏命令。</li>
-<li>方便实现 Undo 和 Redo 操作。命令模式可以与备忘录模式结合，实现命令的撤销与恢复。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>可能产生大量具体命令类。因为计对每一个具体操作都需要设计一个具体命令类，这将增加系统的复杂性。</li>
-</ul>
-<p><strong>适用场景：</strong></p>
-<p>​    对于大多数请求-响应模式的功能，比较适合使用命令模式，正如命令模式定义说的那样，命令模式对实现记录日志、撤销操作等功能比较方便。</p>
-<ul>
-<li>当系统需要将请求调用者与请求接收者解耦时，命令模式使得调用者和接收者不直接交互。</li>
-<li>当系统需要随机请求命令或经常增加或删除命令时，命令模式比较方便实现这些功能。</li>
-<li>当系统需要执行一组操作时，命令模式可以定义宏命令来实现该功能。</li>
-<li>当系统需要支持命令的撤销（Undo）操作和恢复（Redo）操作时，可以将命令对象存储起来，采用备忘录模式来实现。</li>
-</ul>
-<p>对于一个场合到底用不用模式，这对所有的开发人员来说都是一个很纠结的问题。有时候，因为预见到需求上会发生的某些变化，为了系统的灵活性和可扩展性而使用了某种设计模式，但这个预见的需求偏偏没有，相反，没预见到的需求倒是来了不少，导致在修改代码的时候，使用的设计模式反而起了相反的作用，以至于整个项目组怨声载道。这样的例子，我相信每个程序设计者都遇到过。所以，基于敏捷开发的原则，我们在设计程序的时候，如果按照目前的需求，不使用某种模式也能很好地解决，那么我们就不要引入它，因为要引入一种设计模式并不困难，我们大可以在真正需要用到的时候再对系统进行一下，引入这个设计模式。</p>
-<p>拿命令模式来说吧，我们开发中，请求-响应模式的功能非常常见，一般来说，我们会把对请求的响应操作封装到一个方法中，这个封装的方法可以称之为命令，但不是命令模式。到底要不要把这种设计上升到模式的高度就要另行考虑了，因为，如果使用命令模式，就要引入调用者、接收者两个角色，原本放在一处的逻辑分散到了三个类中，设计时，必须考虑这样的代价是否值得。</p>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="UML实现"><a href="#UML实现" class="headerlink" title="UML实现"></a>UML实现</h3><p><strong>抽象命令：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface ICommand &#123;</span><br><span class="line">    void execute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体命令：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteCommandA implements ICommand &#123;</span><br><span class="line">    private ReceiverA receiverA &#x3D; new ReceiverA();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void execute() &#123;</span><br><span class="line">        System.out.println(&quot;具体命名A execute ...&quot;);</span><br><span class="line">        receiverA.action();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ConcreteCommandB implements ICommand &#123;</span><br><span class="line">    private ReceiverB receiverB &#x3D; new ReceiverB();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void execute() &#123;</span><br><span class="line">        System.out.println(&quot;具体命名B execute ...&quot;);</span><br><span class="line">        receiverB.action();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>接受者A</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ReceiverA &#123;</span><br><span class="line"></span><br><span class="line">    public void action() &#123;</span><br><span class="line">        System.out.println(&quot;接受者Receiver A action&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>接收者B</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ReceiverB &#123;</span><br><span class="line"></span><br><span class="line">    public void action() &#123;</span><br><span class="line">        System.out.println(&quot;Receiver B action&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>执行者</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Invoke &#123;</span><br><span class="line"></span><br><span class="line">    private ICommand command;</span><br><span class="line"></span><br><span class="line">    public Invoke(ICommand command) &#123;</span><br><span class="line">        this.command &#x3D; command;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCommand(ICommand command) &#123;</span><br><span class="line">        this.command &#x3D; command;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void cell() &#123;</span><br><span class="line">        System.out.println(&quot;调用者执行命令cell...&quot;);</span><br><span class="line">        command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>客户端</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private static void commandMode() &#123;</span><br><span class="line">        ConcreteCommandA commandA &#x3D; new ConcreteCommandA();</span><br><span class="line">        Invoke invoke &#x3D; new Invoke(commandA);</span><br><span class="line">        invoke.cell();</span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        ConcreteCommandB commandB &#x3D; new ConcreteCommandB();</span><br><span class="line">        invoke.setCommand(commandB);</span><br><span class="line">        invoke.cell();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">调用者执行命令cell...</span><br><span class="line">具体命名A execute ...</span><br><span class="line">接受者Receiver A action</span><br><span class="line">--------------</span><br><span class="line">调用者执行命令cell...</span><br><span class="line">具体命名B execute ...</span><br><span class="line">Receiver B action</span><br></pre></td></tr></table></figure>
-
-<h3 id="用命令模式实现客户去餐馆吃早餐的实例。"><a href="#用命令模式实现客户去餐馆吃早餐的实例。" class="headerlink" title="用命令模式实现客户去餐馆吃早餐的实例。"></a>用命令模式实现客户去餐馆吃早餐的实例。</h3><p>分析：客户去餐馆可选择的早餐有肠粉、河粉和馄饨等，客户可向服务员选择以上早餐中的若干种，服务员将客户的请求交给相关的厨师去做。这里的<strong>点早餐相当于“命令”</strong>，<strong>服务员相当于“调用者”</strong>，<strong>厨师相当于“接收者”，</strong>所以用命令模式实现比较合适。</p>
-<p>首先，定义一个早餐类（Breakfast），它是抽象命令类，有抽象方法 cooking()，说明要做什么；再定义其子类肠粉类（ChangFen）、馄饨类（HunTun）和河粉类（HeFen），它们是具体命令类，实现早餐类的 cooking() 方法，但它们不会具体做，而是交给具体的厨师去做；具体厨师类有肠粉厨师（ChangFenChef）、馄蚀厨师（HunTunChef）和河粉厨师（HeFenChef），他们是命令的接收者，最后，定义服务员类（Waiter），它接收客户的做菜请求，并发出做菜的命令。客户类是通过服务员类来点菜的。</p>
-<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q1161134341E.gif" alt="客户在餐馆吃早餐的结构图"></p>
-<p><strong>定义接收者厨师接口，同一接到命令后做什么事：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 厨师接口</span><br><span class="line"> * 接收者通用接口：表示接受到命令做什么操作</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IChef &#123;</span><br><span class="line">    void cooking();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体接收者 河粉厨师，馄饨厨师，肠粉厨师：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 接收者：肠粉厨师</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ChangFenChef implements IChef &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;我是肠粉厨师 接到命令--- 我给你做肠粉&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 接收者：馄饨厨师</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class HunTunChef implements IChef &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;我是馄饨厨师 接收到命令--- 我给你做馄饨&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 接收者：河粉厨师</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class HeFenChef implements IChef &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;我是河粉厨师 接到命令--- 我给你做河粉&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>*<em>定义抽象命令：点餐 *</em></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 点餐命令抽象类</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IBreakfastCommand &#123;</span><br><span class="line">    void cooking();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体命令：点了什么东西</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 河粉的具体命令</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class HeFenCommand implements IBreakfastCommand &#123;</span><br><span class="line">    private HeFenChef heFenChef &#x3D; new HeFenChef();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;命令河粉厨师 做河粉 &quot;);</span><br><span class="line">        heFenChef.cooking();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 肠粉的具体命令</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ChangHenCommand implements IBreakfastCommand &#123;</span><br><span class="line">    private ChangFenChef changFenChef &#x3D; new ChangFenChef();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;命令肠粉厨师 做肠粉 &quot;);</span><br><span class="line">        changFenChef.cooking();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 馄饨的具体命令</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class HunTunCommand implements IBreakfastCommand &#123;</span><br><span class="line">    private HunTunChef hunTunChef &#x3D; new HunTunChef();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void cooking() &#123;</span><br><span class="line">        System.out.println(&quot;命令馄饨厨师 做馄饨 &quot;);</span><br><span class="line">        hunTunChef.cooking();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>*<em>调用者：服务员 *</em></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 服务员调用者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class Waiter &#123;</span><br><span class="line">    private IBreakfastCommand heFenCommand, changFenCommand, hunTunCommand;</span><br><span class="line"></span><br><span class="line">    public Waiter() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setHeFenCommand(IBreakfastCommand heFenCommand) &#123;</span><br><span class="line">        this.heFenCommand &#x3D; heFenCommand;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setChangFenCommand(IBreakfastCommand changFenCommand) &#123;</span><br><span class="line">        this.changFenCommand &#x3D; changFenCommand;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setHunTunCommand(IBreakfastCommand hunTunCommand) &#123;</span><br><span class="line">        this.hunTunCommand &#x3D; hunTunCommand;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void chooseHeFen() &#123;</span><br><span class="line">        System.out.println(&quot;服务员：这小子点了一份河粉 快点上菜&quot;);</span><br><span class="line">        heFenCommand.cooking();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void chooseChangFen() &#123;</span><br><span class="line">        System.out.println(&quot;服务员：这小子点了一份肠粉 快点上菜&quot;);</span><br><span class="line">        changFenCommand.cooking();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void chooseHunTun() &#123;</span><br><span class="line">        System.out.println(&quot;服务员：这小子点了一份馄饨 快点上菜&quot;);</span><br><span class="line">        hunTunCommand.cooking();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>客户端：我吃早餐</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private static void commandDemo() &#123;</span><br><span class="line">        System.out.println(&quot;过来服务员&quot;);</span><br><span class="line">        Waiter waiter &#x3D; new Waiter();</span><br><span class="line">        System.out.println(&quot;给我来份肠粉&quot;);</span><br><span class="line">        waiter.setChangFenCommand(new ChangHenCommand());</span><br><span class="line">        waiter.chooseChangFen();</span><br><span class="line">        System.out.println(&quot;给我来份河粉&quot;);</span><br><span class="line">        waiter.setHeFenCommand(new HeFenCommand());</span><br><span class="line">        waiter.chooseHeFen();</span><br><span class="line">        System.out.println(&quot;听说你家馄饨不错 来份尝尝&quot;);</span><br><span class="line">        waiter.setHunTunCommand(new HunTunCommand());</span><br><span class="line">        waiter.chooseHunTun();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">过来服务员</span><br><span class="line">给我来份肠粉</span><br><span class="line">服务员：这小子点了一份肠粉 快点上菜</span><br><span class="line">命令肠粉厨师 做肠粉 </span><br><span class="line">我是肠粉厨师 接到命令--- 我给你做肠粉</span><br><span class="line">给我来份河粉</span><br><span class="line">服务员：这小子点了一份河粉 快点上菜</span><br><span class="line">命令河粉厨师 做河粉 </span><br><span class="line">我是河粉厨师 接到命令--- 我给你做河粉</span><br><span class="line">听说你家馄饨不错 来份尝尝</span><br><span class="line">服务员：这小子点了一份馄饨 快点上菜</span><br><span class="line">命令馄饨厨师 做馄饨 </span><br><span class="line">我是馄饨厨师 接收到命令--- 我给你做馄饨</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BF%E9%97%AE%E8%80%85%EF%BC%88Visitor%EF%BC%89%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BF%E9%97%AE%E8%80%85%EF%BC%88Visitor%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">访问者（Visitor）模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T20:08:21+08:00">
-                2020-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">行为型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BF%E9%97%AE%E8%80%85%EF%BC%88Visitor%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BF%E9%97%AE%E8%80%85%EF%BC%88Visitor%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在现实生活中，有些集合对象中存在多种不同的元素，且每种元素也存在多种不同的访问者和处理方式。例如，公园中存在多个景点，也存在多个游客，不同的游客对同一个景点的评价可能不同；医院医生开的处方单中包含多种药元素，査看它的划价员和药房工作人员对它的处理方式也不同，划价员根据处方单上面的药品名和数量进行划价，药房工作人员根据处方单的内容进行抓药。</p>
-<p>这样的例子还有很多，例如，电影或电视剧中的人物角色，不同的观众对他们的评价也不同；还有顾客在商场购物时放在“购物车”中的商品，顾客主要关心所选商品的性价比，而收银员关心的是商品的价格和数量。</p>
-<p>这些被处理的数据元素相对稳定而访问方式多种多样的数据结构，如果用“访问者模式”来处理比较方便。访问者模式能把处理方法从数据结构中分离出来，并可以根据需要增加新的处理方法，且不用修改原来的程序代码与数据结构，这提高了程序的扩展性和灵活性。</p>
-<p><strong>定义：</strong></p>
-<p>访问者（Visitor）模式的定义：<strong>将作用于某种数据结构中的各元素的操作分离出来封装成独立的类，使其在不改变数据结构的前提下可以添加作用于这些元素的新的操作，为数据结构中的每个元素提供多种访问方式。</strong>它将对数据的操作与数据结构进行分离，是行为类模式中最复杂的一种模式。</p>
-<p><strong>类型：</strong>行为型模式</p>
-<p><strong>类图：</strong></p>
-<p><img src="http://c.biancheng.net/uploads/allimg/181119/3-1Q11910135Y25.gif" alt="访问者（Visitor）模式的结构图"></p>
-<p><strong>模式的结构：</strong></p>
-<p><strong>访问者（Visitor）模式实现的关键是如何将作用于元素的操作分离出来封装成独立的类</strong>，其基本结构与实现方法如下。</p>
-<ul>
-<li><strong>抽象访问者：</strong>抽象类或者接口，声明访问者可以访问哪些元素，具体到程序中就是visit方法中的参数定义哪些对象是可以被访问的。</li>
-<li><strong>访问者：</strong>实现抽象访问者所声明的方法，它影响到访问者访问到一个类后该干什么，要做什么事情。</li>
-<li><strong>抽象元素类：</strong>接口或者抽象类，声明接受哪一类访问者访问，程序上是通过accept方法中的参数来定义的。抽象元素一般有两类方法，一部分是本身的业务逻辑，另外就是允许接收哪类访问者来访问。</li>
-<li><strong>元素类：</strong>实现抽象元素类所声明的accept方法，通常都是visitor.visit(this)，基本上已经形成一种定式了。</li>
-<li><strong>结构对象：</strong>一个元素的容器，一般包含一个容纳多个不同类、不同接口的容器，如List、Set、Map等，在项目中一般很少抽象出这个角色。</li>
-</ul>
-<p><strong>解决的问题：</strong></p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>扩展性好。能够在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能。</li>
-<li>复用性好。可以通过访问者来定义整个对象结构通用的功能，从而提高系统的复用程度。</li>
-<li>灵活性好。访问者模式将数据结构与作用于结构上的操作解耦，使得操作集合可相对自由地演化而不影响系统的数据结构。</li>
-<li><strong>符合单一职责原则：</strong>凡是适用访问者模式的场景中，元素类中需要封装在访问者中的操作必定是与元素类本身关系不大且是易变的操作，使用访问者模式一方面符合单一职责原则，另一方面，因为被封装的操作通常来说都是易变的，所以当发生变化时，就可以在不改变元素类本身的前提下，实现对变化部分的扩展。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>增加新的元素类很困难。在访问者模式中，每增加一个新的元素类，都要在每一个具体访问者类中增加相应的具体操作，这违背了“开闭原则”。</li>
-<li>破坏封装。访问者模式中具体元素对访问者公布细节，这破坏了对象的封装性。</li>
-<li>违反了依赖倒置原则。访问者模式依赖了具体类，而没有依赖抽象类。</li>
-</ul>
-<p><strong>适用场景：</strong></p>
-<ul>
-<li><p>对象结构相对稳定，但其操作算法经常变化的程序。</p>
-</li>
-<li><p>假如一个对象中存在着一些与本对象不相干（或者关系较弱）的操作，为了避免这些操作污染这个对象，则可以使用访问者模式来把这些操作封装到访问者中去。</p>
-</li>
-<li><p>假如一组对象中，存在着相似的操作，为了避免出现大量重复的代码，也可以将这些重复的操作封装到访问者中去。</p>
-</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><strong>抽象元素类：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象元素类</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IElement &#123;</span><br><span class="line">    void accept(IVisitor visitor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>具体元素类：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteElementA implements IElement &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void accept(IVisitor visitor) &#123;</span><br><span class="line">        visitor.visitor(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String operation() &#123;</span><br><span class="line">        return &quot; 访问元素 A&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class ConcreteElementB implements IElement &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void accept(IVisitor visitor) &#123;</span><br><span class="line">        visitor.visitor(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String operation() &#123;</span><br><span class="line">        return &quot; 访问元素 B&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>抽象访问者：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象访问者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public interface IVisitor &#123;</span><br><span class="line">    void visitor(ConcreteElementA concreteElementA);</span><br><span class="line"></span><br><span class="line">    void visitor(ConcreteElementB concreteElementB);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体访问者：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 具体访问者A</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteVisitorA implements IVisitor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void visitor(ConcreteElementA concreteElementA) &#123;</span><br><span class="line">        String operation &#x3D; concreteElementA.operation();</span><br><span class="line">        System.out.println(&quot;具体访问者 A&quot; + operation);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void visitor(ConcreteElementB concreteElementB) &#123;</span><br><span class="line">        String operation &#x3D; concreteElementB.operation();</span><br><span class="line">        System.out.println(&quot;具体访问者 A&quot; + operation);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ConcreteVisitorB implements IVisitor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void visitor(ConcreteElementA concreteElementA) &#123;</span><br><span class="line">        String operation &#x3D; concreteElementA.operation();</span><br><span class="line">        System.out.println(&quot;具体访问者 B&quot; + operation);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void visitor(ConcreteElementB concreteElementB) &#123;</span><br><span class="line">        String operation &#x3D; concreteElementB.operation();</span><br><span class="line">        System.out.println(&quot;具体访问者 B&quot; + operation);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结构对象：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 对象结构类</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ObjectStructure &#123;</span><br><span class="line">    private List&lt;IElement&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public void accept(IVisitor visitor) &#123;</span><br><span class="line">        Iterator&lt;IElement&gt; iterator &#x3D; list.iterator();</span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            IElement next &#x3D; iterator.next();</span><br><span class="line">            next.accept(visitor);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void add(IElement element) &#123;</span><br><span class="line">        list.add(element);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void remote(IElement element) &#123;</span><br><span class="line">        list.remove(element);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>客户端调用：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ObjectStructure structure &#x3D; new ObjectStructure();</span><br><span class="line">        structure.add(new ConcreteElementA());</span><br><span class="line">        structure.add(new ConcreteElementB());</span><br><span class="line">        IVisitor concreteVisitorA &#x3D; new ConcreteVisitorA();</span><br><span class="line">        structure.accept(concreteVisitorA);</span><br><span class="line">        System.out.println(&quot;------------------------&quot;);</span><br><span class="line">        ConcreteVisitorB visitorB &#x3D; new ConcreteVisitorB();</span><br><span class="line">        structure.accept(visitorB);</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">具体访问者 A 访问元素 A</span><br><span class="line">具体访问者 A 访问元素 B</span><br><span class="line">------------------------</span><br><span class="line">具体访问者 B 访问元素 A</span><br><span class="line">具体访问者 B 访问元素 B</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2553,7 +2488,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2564,7 +2499,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
