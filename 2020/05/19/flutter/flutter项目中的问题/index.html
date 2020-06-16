@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="如何保证flutter sdk版本统一与自动化管理  Flutter四种工程类型Flutter工程中，通常有以下几种工程类型，下面分别简单概述下：1. Flutter Application标准的Flutter App工程，包含标准的Dart层与Native平台层2. Flutter ModuleFlutter组件工程，仅包含Dart层实现，Native平台层子工程为通过Flutter自动生成的">
+<meta name="description" content="Scaffold MaterialApp route学习 Isolate使用 intl国际化和本地化 PreferredSizeWidget AnimatedWidget InkWell IntrinsicHeight CircleAvatar https:&#x2F;&#x2F;proandroiddev.com&#x2F;flutter-for-android-developers-how-to-design-linea">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flutter项目中的问题">
 <meta property="og:url" content="http://yoursite.com/2020/05/19/flutter/flutter%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="冯星的博客">
-<meta property="og:description" content="如何保证flutter sdk版本统一与自动化管理  Flutter四种工程类型Flutter工程中，通常有以下几种工程类型，下面分别简单概述下：1. Flutter Application标准的Flutter App工程，包含标准的Dart层与Native平台层2. Flutter ModuleFlutter组件工程，仅包含Dart层实现，Native平台层子工程为通过Flutter自动生成的">
+<meta property="og:description" content="Scaffold MaterialApp route学习 Isolate使用 intl国际化和本地化 PreferredSizeWidget AnimatedWidget InkWell IntrinsicHeight CircleAvatar https:&#x2F;&#x2F;proandroiddev.com&#x2F;flutter-for-android-developers-how-to-design-linea">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-05-19T04:38:57.000Z">
-<meta property="article:modified_time" content="2020-05-19T04:47:00.678Z">
+<meta property="article:modified_time" content="2020-06-11T10:49:16.748Z">
 <meta property="article:author" content="冯星">
 <meta property="article:tag" content="flutter">
 <meta name="twitter:card" content="summary">
@@ -362,10 +362,20 @@
       
 
       
-        <ul>
-<li>如何保证flutter sdk版本统一与自动化管理</li>
-</ul>
-<h1 id="Flutter四种工程类型"><a href="#Flutter四种工程类型" class="headerlink" title="Flutter四种工程类型"></a>Flutter四种工程类型</h1><p>Flutter工程中，通常有以下几种工程类型，下面分别简单概述下：<br><strong>1. Flutter Application</strong><br>标准的Flutter App工程，包含标准的Dart层与Native平台层<br><strong>2. Flutter Module</strong><br>Flutter组件工程，仅包含Dart层实现，Native平台层子工程为通过Flutter自动生成的隐藏工程<br><strong>3. Flutter Plugin</strong><br>Flutter平台插件工程，包含Dart层与Native平台层的实现<br><strong>4. Flutter Package</strong><br>Flutter纯Dart插件工程，仅包含Dart层的实现，往往定义一些公共Widget</p>
+        <ol>
+<li>Scaffold</li>
+<li>MaterialApp</li>
+<li>route学习</li>
+<li>Isolate使用</li>
+<li>intl国际化和本地化</li>
+<li>PreferredSizeWidget</li>
+<li>AnimatedWidget</li>
+<li>InkWell</li>
+<li>IntrinsicHeight</li>
+<li>CircleAvatar</li>
+<li><a href="https://proandroiddev.com/flutter-for-android-developers-how-to-design-linearlayout-in-flutter-5d819c0ddf1a" target="_blank" rel="noopener">https://proandroiddev.com/flutter-for-android-developers-how-to-design-linearlayout-in-flutter-5d819c0ddf1a</a></li>
+<li></li>
+</ol>
 
       
     </div>
@@ -465,17 +475,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -490,7 +491,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -501,7 +502,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -512,7 +513,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -535,22 +536,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flutter四种工程类型"><span class="nav-number">1.</span> <span class="nav-text">Flutter四种工程类型</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

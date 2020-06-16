@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="动画," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="作为Android开发者，动画是非常重要的知识点，本文主要从入门角度来探索动画。  一、概述Android的动画主要包括三大类：逐帧动画Frame、补间动画Tween、属性动画，其中属性动画功能非常强大，也是最常用的动画方法。 下面先列举一下这3类动画的实例代码，已形成初步印象： 123456789101112131415&#x2F;&#x2F;逐帧动画，需资源文件frame_animation.xmlImageV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android三种动画实现">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E4%B8%89%E7%A7%8D%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="作为Android开发者，动画是非常重要的知识点，本文主要从入门角度来探索动画。  一、概述Android的动画主要包括三大类：逐帧动画Frame、补间动画Tween、属性动画，其中属性动画功能非常强大，也是最常用的动画方法。 下面先列举一下这3类动画的实例代码，已形成初步印象： 123456789101112131415&#x2F;&#x2F;逐帧动画，需资源文件frame_animation.xmlImageV">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://gityuan.com/images/animator/3.jpg">
+<meta property="article:published_time" content="2020-06-05T13:45:37.000Z">
+<meta property="article:modified_time" content="2020-06-05T13:46:39.427Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="动画">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://gityuan.com/images/animator/3.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/05/Android/开发/动画/Android三种动画实现/"/>
+
+
+
+
+
+  <title>Android三种动画实现 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E4%B8%89%E7%A7%8D%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android三种动画实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-05T21:45:37+08:00">
+                2020-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index">
+                    <span itemprop="name">开发</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/" itemprop="url" rel="index">
+                    <span itemprop="name">动画</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/05/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E4%B8%89%E7%A7%8D%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/05/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E4%B8%89%E7%A7%8D%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>作为Android开发者，动画是非常重要的知识点，本文主要从入门角度来探索动画。</p>
+</blockquote>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Android的动画主要包括三大类：逐帧动画Frame、补间动画Tween、属性动画，其中属性动画功能非常强大，也是最常用的动画方法。 下面先列举一下这3类动画的实例代码，已形成初步印象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//逐帧动画，需资源文件frame_animation.xml</span></span><br><span class="line">ImageView img = (ImageView)findViewById(R.id.wheel_image);</span><br><span class="line">img.setBackgroundResource(R.drawable.frame_animation);</span><br><span class="line">AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();</span><br><span class="line">frameAnimation.start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//补间动画，需资源文件tween_animation.xml</span></span><br><span class="line">ImageView img = (ImageView)findViewById(R.id.wheel_image);</span><br><span class="line">Animation tweenAnimation = AnimationUtils.loadAnimation(<span class="keyword">this</span>, R.anim.tween_animation);</span><br><span class="line">img.startAnimation(tweenAnimation);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性动画，不需资源文件</span></span><br><span class="line">ObjectAnimator anim = ObjectAnimator.ofFloat(targetObject, <span class="string">"alpha"</span>, <span class="number">0f</span>, <span class="number">1f</span>);</span><br><span class="line">anim.setDuration(<span class="number">1000</span>);</span><br><span class="line">anim.start();</span><br></pre></td></tr></table></figure>
+
+<p>接下来，再来细说各种动画。</p>
+<h2 id="二、逐帧动画Frame"><a href="#二、逐帧动画Frame" class="headerlink" title="二、逐帧动画Frame"></a>二、逐帧动画Frame</h2><p>逐帧动画是最容易理解，最简单的动画。但需要把动画过程的每一帧静态图片都放到资源文件夹<code>res/drawbale</code>下，然后由Android来控制依次显示这些静态图片，利用人眼“视觉暂留”的原理，从而产生“动画”的错觉。实现方式与电影、动漫的原理一样。</p>
+<p>每一帧的图片，可以是比如.jpg, .png格式的图片文件，也可以是通过xml定义的图形。下面通过一个实例来讲解逐帧动画的使用。</p>
+<h4 id="2-1-动画资源文件"><a href="#2-1-动画资源文件" class="headerlink" title="2.1 动画资源文件"></a>2.1 动画资源文件</h4><p><code>frame_animation.xml</code>放在文件夹<code>res/drawable/</code>下，该逐帧动画包含3张图片wheel0.png, wheel1.png, wheel2.png:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;animation-list android:id&#x3D;&quot;@+id&#x2F;selected&quot; android:oneshot&#x3D;&quot;false&quot;&gt;</span><br><span class="line">   &lt;item android:drawable&#x3D;&quot;@drawable&#x2F;wheel0&quot; android:duration&#x3D;&quot;50&quot; &#x2F;&gt;</span><br><span class="line">   &lt;item android:drawable&#x3D;&quot;@drawable&#x2F;wheel1&quot; android:duration&#x3D;&quot;50&quot; &#x2F;&gt;</span><br><span class="line">   &lt;item android:drawable&#x3D;&quot;@drawable&#x2F;wheel2&quot; android:duration&#x3D;&quot;50&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;animation-list&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-代码实现"><a href="#2-2-代码实现" class="headerlink" title="2.2 代码实现"></a>2.2 代码实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ImageView img &#x3D; (ImageView)findViewById(R.id.wheel_image);</span><br><span class="line">img.setBackgroundResource(R.drawable.frame_animation);</span><br><span class="line">AnimationDrawable frameAnimation &#x3D; (AnimationDrawable) img.getBackground();</span><br><span class="line">frameAnimation.start();</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明</strong></p>
+<ul>
+<li>android:oneshot， 其值为true则动画只播放一遍, false则循环播放;</li>
+<li>android:duration，代表该帧时长，单位ms(毫秒)。</li>
+</ul>
+<h2 id="三、补间动画Tween"><a href="#三、补间动画Tween" class="headerlink" title="三、补间动画Tween"></a>三、补间动画Tween</h2><p>补间动画，只需指定动画开始帧、结束帧，而对于动画中间的过程，都有系统计算来填充的，而无需定义中间的每一帧。 动画变化主要包括4类型：</p>
+<ul>
+<li>Alpha：透明度动画</li>
+<li>Scale：缩放动画</li>
+<li>Translate：位移动画</li>
+<li>RotateAnaimation：旋转动画</li>
+</ul>
+<h4 id="3-1-动画资源文件"><a href="#3-1-动画资源文件" class="headerlink" title="3.1 动画资源文件"></a>3.1 动画资源文件</h4><p><code>tween_animation.xml</code>放在文件夹<code>res/anim/</code>下, 该动画同时包括透明度，缩放，位移，旋转4种变化，当然也可以是其中一种，或几种变化的组合。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;set xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:interpolator=<span class="string">"@[package:]anim/interpolator_resource"</span></span><br><span class="line">    android:shareInterpolator=<span class="string">"true"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:fromAlpha=<span class="string">"0.5"</span></span><br><span class="line">        android:toAlpha=<span class="string">"1.0"</span></span><br><span class="line">        android:duration=<span class="string">"1000"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;scale</span><br><span class="line">        android:fromXScale=<span class="string">"0.01"</span></span><br><span class="line">        android:toXScale=<span class="string">"1.0"</span></span><br><span class="line">        android:fromYScale=<span class="string">"0.01"</span></span><br><span class="line">        android:toYScale=<span class="string">"1.0"</span></span><br><span class="line">        android:pivotX=<span class="string">"50%"</span></span><br><span class="line">        android:pivotY=<span class="string">"50%"</span></span><br><span class="line">        android:fillAfter=<span class="string">"true"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;translate</span><br><span class="line">        android:fromXDelta=<span class="string">"0.01"</span></span><br><span class="line">        android:toXDelta=<span class="string">"0.95"</span></span><br><span class="line">        android:fromYDelta=<span class="string">"0.01"</span></span><br><span class="line">        android:toYDelta=<span class="string">"0.95"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;rotate</span><br><span class="line">        android:fromDegrees=<span class="string">"0.01"</span></span><br><span class="line">        android:toDegrees=<span class="string">"360"</span></span><br><span class="line">        android:pivotX=<span class="string">"50%"</span></span><br><span class="line">        android:pivotY=<span class="string">"50%"</span> /&gt;</span><br><span class="line">&lt;/set&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-代码实现"><a href="#3-2-代码实现" class="headerlink" title="3.2 代码实现"></a>3.2 代码实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ImageView img &#x3D; (ImageView)findViewById(R.id.wheel_image);</span><br><span class="line">Animation tweenAnimation &#x3D; AnimationUtils.loadAnimation(this, R.anim.tween_animation);</span><br><span class="line">img.startAnimation(tweenAnimation);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-参数说明"><a href="#3-3-参数说明" class="headerlink" title="3.3 参数说明"></a>3.3 参数说明</h4><ul>
+<li>android:interpolator 插值器，指定动画的效果，见<a href="http://gityuan.com/2015/09/05/android-anaimator-3/" target="_blank" rel="noopener"><strong>Android动画插值器</strong></a>；</li>
+<li>android:shareInterpolator， true：所有子元素共享同一插值器；false不共享；</li>
+<li>android:fillBefore， true：动画执行完成后停留在动画的第一帧；</li>
+<li>android:fillAfter ， true：动画执行完成后停留在动画的最后一帧；</li>
+<li>android:fillEnabled，true：fillBefore/fillAfter才能生效</li>
+<li>android:duration， 动画持续时长，每一个动画都可以单独指定duration，单位ms(毫秒)</li>
+<li>alpha，透明度动画，其中0表示完全透明，1表示完全不透明：<ul>
+<li>fromAlpha： 起始透明度</li>
+<li>toAlpha ： 结束透明度</li>
+</ul>
+</li>
+<li>scale，缩放动画，其中0表示收缩到无，1表示正常无缩放：<ul>
+<li>fromXScale： 起始X坐标的缩放比例</li>
+<li>toXScale ： 结束X坐标的缩放比例</li>
+<li>fromYScale： 起始Y坐标的缩放比例</li>
+<li>toYScale ： 结束Y坐标的缩放比例</li>
+<li>pivotX ： 轴中点X坐标的位置比例</li>
+<li>pivotY ： 轴中点Y坐标的位置比例</li>
+</ul>
+</li>
+<li>translate，位移动画：<ul>
+<li>fromXDelta： 起始X方向位置比例</li>
+<li>toXDelta ： 结束X方向位置比例</li>
+<li>fromYDelta： 起始Y方向位置比例</li>
+<li>toYDelta ： 结束Y方向位置比例</li>
+</ul>
+</li>
+<li>rotate， 旋转动画：<ul>
+<li>fromDegrees： 起始角度，单位度</li>
+<li>toDegrees ： 结束角度，单位度</li>
+<li>pivotX ： 旋转中点X坐标的位置比例</li>
+<li>pivotY ： 旋转中点Y坐标的位置比例</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、属性动画"><a href="#四、属性动画" class="headerlink" title="四、属性动画"></a>四、属性动画</h2><p>属性动画，是补间动画的增强版，但更加灵活。可直接修改任何属性，使之形成动画，功能非常强大，也是最常用的动画。 属性动画自定义如下属性：</p>
+<ul>
+<li>动画时间（Duration）：指定动画总共完成所需要的时间，默认为300ms;</li>
+<li>时间插值器（Time interpolation）： 是一个基于当前动画已消耗时间的函数，用来计算属性的值；</li>
+<li>重复次数（Repeat count）：指定动画是否重复执行，重复执行的次数，也可以指定动画向反方向地回退操作；</li>
+<li>动画集（Animator sets）：将一系列动画放进一个组，可以设置同时执行或者按序执行；</li>
+<li>延迟刷新时间（Frame refresh delay）：指定动画刷新的频率，默认为每10ms刷新一帧，但应用程序的帧的刷新频率最终取决于整个系统的忙闲程序与系统的时钟频率。</li>
+</ul>
+<h3 id="4-1-属性动画类"><a href="#4-1-属性动画类" class="headerlink" title="4.1 属性动画类"></a>4.1 属性动画类</h3><p><img src="http://gityuan.com/images/animator/3.jpg" alt="animations work"></p>
+<p>上图描述了属性动画在绘制动画过程的相关类：</p>
+<ul>
+<li>ValueAnimator：记录动画的运行时间，位移，当前将要绘制的属性</li>
+<li>TimeInterpolator：时间插值器，用于根据随着时间的变化来计算当前属性变化的百分比</li>
+<li>TypeEvaluator：估值器，用于根据属性改变的百分比来计算改变后的属性值</li>
+</ul>
+<p>属性动画设置好起始值和结束值，执行总时间等参数。当调用start()动画开始， 在整个动画期间，ValueAnimator计算已绘制的时间比(elapsed fraction)，区间[0,1]，代表动画的完成率。动画运行过程中，通过调用onAnimationUpdate方法来更新画面，getAnimatedValue()获取当前动画的property。</p>
+<h4 id="4-1-1-ValueAnimator"><a href="#4-1-1-ValueAnimator" class="headerlink" title="4.1.1 ValueAnimator"></a>4.1.1 ValueAnimator</h4><p>Animator类提供了关于创造动画的一系列基本的结构，是一个抽象类。ValueAnimator是整个属性动画框架的核心类，使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ValueAnimator valueAnim &#x3D; ValueAnimator.ofFloat(0f, 1f);</span><br><span class="line">valueAnim.setDuration(250);</span><br><span class="line">fadeAnim.start();</span><br></pre></td></tr></table></figure>
+
+<p>再通过动画的<code>AnimatorUpdateListener</code>获取动画每一帧的返回值，如果有需要还可以增加<code>AnimatorListenerAdapter</code>来指定动画开始、结束、取消、重复等事件发生时的处理方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">valueAnim.addUpdateListener(new AnimatorUpdateListener() &#123;</span><br><span class="line">    @Override</span><br><span class="line">        public void onAnimationUpdate(ValueAnimator animation) &#123;</span><br><span class="line">        int frameValue &#x3D; (Integer)animation.getAnimatedValue();</span><br><span class="line">        &#x2F;&#x2F;根据frameValue指定相应的透明度，位移，旋转，缩放等相应的动画</span><br><span class="line">        balls.setAlpha(frameValue);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">valueAnim.addListener(new AnimatorListenerAdapter() &#123;</span><br><span class="line">    public void onAnimationEnd(Animator animation) &#123;</span><br><span class="line">        &#x2F;&#x2F;当动画结束时移除相应对象</span><br><span class="line">        balls.remove(((ObjectAnimator)animation).getTarget());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-1-2-ObjectAnimator"><a href="#4-1-2-ObjectAnimator" class="headerlink" title="4.1.2 ObjectAnimator"></a>4.1.2 ObjectAnimator</h4><p>对象动画，继承<code>ValueAnimator</code>, 允许指定<code>target object</code>，并且<code>target object</code>需要有setter方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ObjectAnimator anim &#x3D; ObjectAnimator.ofFloat(targetObject, &quot;alpha&quot;, 0f, 1f);</span><br><span class="line">anim.setDuration(1000);</span><br><span class="line">anim.start();</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-1-3-AnimatorSet"><a href="#4-1-3-AnimatorSet" class="headerlink" title="4.1.3 AnimatorSet"></a>4.1.3 AnimatorSet</h4><p>动画的集合，用于组合一系列动画。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AnimatorSet  animatorSet &#x3D; new AnimatorSet();</span><br><span class="line">animatorSet.play(bounceAnim).before(squashAnim1);</span><br><span class="line">animatorSet.play(squashAnim1).with(squashAnim2);</span><br><span class="line">animatorSet.play(bounceBackAnim).after(stretchAnim2);</span><br><span class="line">animatorSet.start();</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-代码实现"><a href="#4-2-代码实现" class="headerlink" title="4.2 代码实现"></a>4.2 代码实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 属性动画，不需资源文件</span><br><span class="line">ObjectAnimator anim &#x3D; ObjectAnimator.ofFloat(targetObject, &quot;alpha&quot;, 0f, 1f);</span><br><span class="line">anim.setDuration(1000);</span><br><span class="line">anim.start();</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-插值器（Interpolators）"><a href="#4-3-插值器（Interpolators）" class="headerlink" title="4.3 插值器（Interpolators）"></a>4.3 插值器（Interpolators）</h3><p>时间插值器，定义了一个时间的映射关系，可能为如下的插值器：</p>
+<table>
+<thead>
+<tr>
+<th align="left">插值器</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">LinearInterpolator</td>
+<td align="left">线性插值</td>
+</tr>
+<tr>
+<td align="left">AccelerateInterpolator</td>
+<td align="left">加速</td>
+</tr>
+<tr>
+<td align="left">DecelerateInterpolator</td>
+<td align="left">减速</td>
+</tr>
+<tr>
+<td align="left">AccelerateDecelerateInterpolator</td>
+<td align="left">先加速，后减速</td>
+</tr>
+<tr>
+<td align="left">AnticipateInterpolator</td>
+<td align="left">先向后，再向前抛向终点</td>
+</tr>
+<tr>
+<td align="left">OvershootInterpolator</td>
+<td align="left">向前抛出终点，再回到终点</td>
+</tr>
+<tr>
+<td align="left">AnticipateOvershootInterpolator</td>
+<td align="left">先向后，再向前抛出终点，再回到终点</td>
+</tr>
+<tr>
+<td align="left">BounceInterpolator</td>
+<td align="left">结束时反弹</td>
+</tr>
+<tr>
+<td align="left">CycleInterpolator</td>
+<td align="left">循环播放</td>
+</tr>
+<tr>
+<td align="left">TimeInterpolator</td>
+<td align="left">用于自定义</td>
+</tr>
+</tbody></table>
+<p>所有插值器都实现了TimeInterpolator接口，需要自定义插值器，只需实现如下接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface TimeInterpolator &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;* * @param input 代表动画的已执行的时间，∈[0,1] * @return 插值转换后的值 *&#x2F;</span><br><span class="line">    float getInterpolation(float input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>想要更加深入地了解插值器，可查看<a href="http://gityuan.com/2015/09/05/android-anaimator-3/" target="_blank" rel="noopener"><strong>Android动画插值器</strong></a>。</p>
+<h3 id="4-4-估值器（Evaluators）"><a href="#4-4-估值器（Evaluators）" class="headerlink" title="4.4 估值器（Evaluators）"></a>4.4 估值器（Evaluators）</h3><p>估值器，用于计算属性动画的给定属性的取值。与属性的起始值，结束值，<code>fraction</code>三个值相关。</p>
+<table>
+<thead>
+<tr>
+<th align="left">估值器</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">IntEvaluator</td>
+<td align="left">用于评估int型的属性值</td>
+</tr>
+<tr>
+<td align="left">FloatEvaluator</td>
+<td align="left">用于评估float型的属性值</td>
+</tr>
+<tr>
+<td align="left">ArgbEvaluator</td>
+<td align="left">用于评估颜色的属性值，采用16进制</td>
+</tr>
+<tr>
+<td align="left">TypeEvaluator</td>
+<td align="left">用于自定义估值器的接口</td>
+</tr>
+</tbody></table>
+<p>所有的估值器都实现了TypeEvaluator接口，自定义估值器，只需实现如下接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TypeEvaluator&lt;T&gt; &#123;</span><br><span class="line">    &#x2F;* * * @param fraction 插值器计算转换后的值 * @param startValue 属性起始值 * @param endValue 属性结束值 * @return 转换后的值 *&#x2F;</span><br><span class="line">    public T evaluate(float fraction, T startValue, T endValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、小结"><a href="#五、小结" class="headerlink" title="五、小结"></a>五、小结</h2><p>相信读者，通过阅读动画入门这两篇文章，对逐帧动画，补间动画，属性动画有了一个大致的概念与理解，能明白动画的基本用法。 相关资料：<a href="http://developer.android.com/intl/zh-cn/guide/topics/graphics/prop-animation.html" target="_blank" rel="noopener">http://developer.android.com/intl/zh-cn/guide/topics/graphics/prop-animation.html</a></p>
+<p>如果有兴趣深入了解动画的机制，可查看<a href="http://gityuan.com/2015/09/06/android-anaimator-4/" target="_blank" rel="noopener"><strong>Android动画之原理篇（四）</strong></a>，从源码的视角来进一步阐述动画的原理。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%8A%A8%E7%94%BB/" rel="tag"># 动画</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/05/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" rel="next" title="Android事件分发机制">
+                <i class="fa fa-chevron-left"></i> Android事件分发机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/06/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E5%8A%A8%E7%94%BB%E6%8F%92%E5%80%BC%E5%99%A8/" rel="prev" title="Android动画插值器">
+                Android动画插值器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、逐帧动画Frame"><span class="nav-number">2.</span> <span class="nav-text">二、逐帧动画Frame</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-动画资源文件"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 动画资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-代码实现"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、补间动画Tween"><span class="nav-number">3.</span> <span class="nav-text">三、补间动画Tween</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-动画资源文件"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 动画资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-代码实现"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-参数说明"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 参数说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、属性动画"><span class="nav-number">4.</span> <span class="nav-text">四、属性动画</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-属性动画类"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 属性动画类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-ValueAnimator"><span class="nav-number">4.1.1.</span> <span class="nav-text">4.1.1 ValueAnimator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-ObjectAnimator"><span class="nav-number">4.1.2.</span> <span class="nav-text">4.1.2 ObjectAnimator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-3-AnimatorSet"><span class="nav-number">4.1.3.</span> <span class="nav-text">4.1.3 AnimatorSet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-代码实现"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-插值器（Interpolators）"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 插值器（Interpolators）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-估值器（Evaluators）"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 估值器（Evaluators）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、小结"><span class="nav-number">5.</span> <span class="nav-text">五、小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="动画," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关于动画有两个非常重要的类，那就是插值器(Interpolators)与 估值器（Evaluators），下面将详细讲解。 一、 差值器概述先来看看不同差值器对动画的效果影响。 1.1 线性插值的动画图1是在屏幕上进行水平位移的动画，总时间是40ms，移动总距离为40pixels(像素)，每10ms刷新一帧，同时移动10pixels。在第40ms动画结束，停止在水平位置40pixels的位置。整个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android动画插值器">
+<meta property="og:url" content="http://yoursite.com/2020/06/06/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E5%8A%A8%E7%94%BB%E6%8F%92%E5%80%BC%E5%99%A8/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="关于动画有两个非常重要的类，那就是插值器(Interpolators)与 估值器（Evaluators），下面将详细讲解。 一、 差值器概述先来看看不同差值器对动画的效果影响。 1.1 线性插值的动画图1是在屏幕上进行水平位移的动画，总时间是40ms，移动总距离为40pixels(像素)，每10ms刷新一帧，同时移动10pixels。在第40ms动画结束，停止在水平位置40pixels的位置。整个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://gityuan.com/images/animator/1.png">
+<meta property="og:image" content="http://gityuan.com/images/animator/2.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/1.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/2.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/3.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/4.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/5.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/6.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/7.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/8.png">
+<meta property="og:image" content="http://gityuan.com/images/interpolator/9.png">
+<meta property="article:published_time" content="2020-06-06T02:24:12.000Z">
+<meta property="article:modified_time" content="2020-06-06T02:25:36.032Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="动画">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://gityuan.com/images/animator/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/06/Android/开发/动画/Android动画插值器/"/>
+
+
+
+
+
+  <title>Android动画插值器 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/06/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E5%8A%A8%E7%94%BB%E6%8F%92%E5%80%BC%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android动画插值器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-06T10:24:12+08:00">
+                2020-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index">
+                    <span itemprop="name">开发</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/" itemprop="url" rel="index">
+                    <span itemprop="name">动画</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/06/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E5%8A%A8%E7%94%BB%E6%8F%92%E5%80%BC%E5%99%A8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/06/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E5%8A%A8%E7%94%BB%E6%8F%92%E5%80%BC%E5%99%A8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>关于动画有两个非常重要的类，那就是插值器(Interpolators)与 估值器（Evaluators），下面将详细讲解。</p>
+<h2 id="一、-差值器概述"><a href="#一、-差值器概述" class="headerlink" title="一、 差值器概述"></a>一、 差值器概述</h2><p>先来看看不同差值器对动画的效果影响。</p>
+<h4 id="1-1-线性插值的动画"><a href="#1-1-线性插值的动画" class="headerlink" title="1.1 线性插值的动画"></a>1.1 线性插值的动画</h4><p>图1是在屏幕上进行水平位移的动画，总时间是40ms，移动总距离为40pixels(像素)，每10ms刷新一帧，同时移动10pixels。在第40ms动画结束，停止在水平位置40pixels的位置。整个动画过程采用的是线程插值器（ linear interpolation），意味着以匀速移动。</p>
+<p><img src="http://gityuan.com/images/animator/1.png" alt="linear animation"></p>
+<h4 id="1-2-非线性插值的动画"><a href="#1-2-非线性插值的动画" class="headerlink" title="1.2 非线性插值的动画"></a>1.2 非线性插值的动画</h4><p>当然，也可以指定差值器是非线性的，图2采用的是先加速，再减速的差值器。同样是在40ms内移动40pixels。在开始的时候，动画一直加速到一半的距离（20pixels）,然后在减速剩下的一半距离直到动画结束。从图2可以看出，动画的两头的位移量低于中间部门的位移量。</p>
+<p><img src="http://gityuan.com/images/animator/2.png" alt="non-linear animation"></p>
+<h2 id="二、-插值器"><a href="#二、-插值器" class="headerlink" title="二、 插值器"></a>二、 插值器</h2><p>时间插值器，定义了一个时间的函数：y = f(t),其中t=<code>elapsed time</code> / <code>duration</code>.</p>
+<p>每个插值器的源码流程都相同，下面以AccelerateInterpolator为例，说明插值器的内部原理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;系统自带的所有插值器都继承了BaseInterpolator</span><br><span class="line">public class AccelerateInterpolator extends BaseInterpolator implements NativeInterpolatorFactory &#123;</span><br><span class="line">    private final float mFactor;</span><br><span class="line">    private final double mDoubleFactor;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;无参数的构造方法, factor默认为1</span><br><span class="line">    public AccelerateInterpolator() &#123;</span><br><span class="line">        mFactor &#x3D; 1.0f;</span><br><span class="line">        mDoubleFactor &#x3D; 2.0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;有参数的构造方法</span><br><span class="line">    public AccelerateInterpolator(float factor) &#123;</span><br><span class="line">        mFactor &#x3D; factor;</span><br><span class="line">        mDoubleFactor &#x3D; 2 * mFactor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F;构造方法，通过资源文件获取参数</span><br><span class="line">    public AccelerateInterpolator(Context context, AttributeSet attrs) &#123;</span><br><span class="line">        this(context.getResources(), context.getTheme(), attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;** @hide 隐藏方法，真正用来解析资源文件的方法*&#x2F;</span><br><span class="line">    public AccelerateInterpolator(Resources res, Theme theme, AttributeSet attrs) &#123;</span><br><span class="line">        TypedArray a;</span><br><span class="line">        if (theme !&#x3D; null) &#123;</span><br><span class="line">            a &#x3D; theme.obtainStyledAttributes(attrs, R.styleable.AccelerateInterpolator, 0, 0);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            a &#x3D; res.obtainAttributes(attrs, R.styleable.AccelerateInterpolator);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;资源文件未定义factor时，默认为1.0f</span><br><span class="line">        mFactor &#x3D; a.getFloat(R.styleable.AccelerateInterpolator_factor, 1.0f);</span><br><span class="line">        mDoubleFactor &#x3D; 2 * mFactor;</span><br><span class="line">        setChangingConfiguration(a.getChangingConfigurations());</span><br><span class="line">        &#x2F;&#x2F; 回收TypedArray，释放相应的内存资源</span><br><span class="line">        a.recycle();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;插值计算的核心方法，定义了插值的映射关系</span><br><span class="line">    public float getInterpolation(float input) &#123;</span><br><span class="line">        if (mFactor &#x3D;&#x3D; 1.0f) &#123;</span><br><span class="line">            return input * input;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return (float)Math.pow(input, mDoubleFactor);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;** @hide *&#x2F;</span><br><span class="line">    @Override</span><br><span class="line">    public long createNativeInterpolator() &#123;</span><br><span class="line">        return NativeInterpolatorFactoryHelper.createAccelerateInterpolator(mFactor);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>BaseInterpolaor</code>实现了<code>Interpolator</code>接口，而<code>Interpolator</code>接口并没有定义任何方法和属性，只是单纯地继承了<code>TimeInterpolator</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">abstract public class BaseInterpolator implements Interpolator &#123;</span><br><span class="line">    private int mChangingConfiguration;</span><br><span class="line">    &#x2F;** * @hide *&#x2F;</span><br><span class="line">    public int getChangingConfiguration() &#123;</span><br><span class="line">        return mChangingConfiguration;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;** * @hide *&#x2F;</span><br><span class="line">    void setChangingConfiguration(int changingConfiguration) &#123;</span><br><span class="line">        mChangingConfiguration &#x3D; changingConfiguration;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>TimeInterpolator</code>接口自定义了一个方法<code>getInterpolation</code>,这就是所有插值器最为核心的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface TimeInterpolator &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;* * @param input 代表动画的已执行的时间，∈[0,1] * @return 插值转换后的值 *&#x2F;</span><br><span class="line">    float getInterpolation(float input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过分析每一个插值器的插值方法的源码，下面总结了所有插值器的插值函数：</p>
+<h4 id="2-1-Linear"><a href="#2-1-Linear" class="headerlink" title="2.1 Linear"></a>2.1 Linear</h4><ul>
+<li>资源ID: @android:anim/linear_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public LinearInterpolator()</code>; //没有任何可调参数</li>
+</ul>
+</li>
+<li>插值函数：<ul>
+<li>公式：<code>y=t</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/1.png" alt="Linear Interpolator"></li>
+</ul>
+<h4 id="2-2-Accelerate"><a href="#2-2-Accelerate" class="headerlink" title="2.2 Accelerate"></a>2.2 Accelerate</h4><ul>
+<li>资源ID: @android:anim/accelerate_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public AccelerateInterpolator()</code>；//默认factor=1</li>
+<li><code>public AccelerateInterpolator(float factor)</code>；</li>
+<li><code>public AccelerateInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取factor值，默认为1。</li>
+</ul>
+</li>
+<li>插值函数：factor为加速因子，记为f, 默认值为1<ul>
+<li>公式：<code>y=t^(2f)</code></li>
+<li>缺省：<code>y=t^2</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/2.png" alt="Accelerate Interpolator"></li>
+</ul>
+<h4 id="2-3-Decelerate"><a href="#2-3-Decelerate" class="headerlink" title="2.3 Decelerate"></a>2.3 Decelerate</h4><ul>
+<li>资源ID: @android:anim/decelerate_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public AccelerateInterpolator()</code>；//默认factor=1</li>
+<li><code>public AccelerateInterpolator(float factor)</code>；</li>
+<li><code>public AccelerateInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取factor值，默认为1。</li>
+</ul>
+</li>
+<li>插值函数：factor为减速因子，记为f, 默认值为1<ul>
+<li>公式：<code>y= 1-(1-t）^(2f)</code>,</li>
+<li>缺省：<code>y= 2t-t^2</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/3.png" alt="Decelerate Interpolator"></li>
+</ul>
+<h4 id="2-4-AccelerateDecelerate"><a href="#2-4-AccelerateDecelerate" class="headerlink" title="2.4 AccelerateDecelerate"></a>2.4 AccelerateDecelerate</h4><ul>
+<li>资源ID: @android:anim/accelerate_decelerate_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public AccelerateDecelerateInterpolator()</code>； //没有任何可调参数 资源文件获取factor值。</li>
+</ul>
+</li>
+<li>插值函数：<ul>
+<li>公式：<code>y = 0.5cos((t+1)π)+0.5</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/4.png" alt="AccelerateDecelerate Interpolator"></li>
+</ul>
+<h4 id="2-5-Anticipate"><a href="#2-5-Anticipate" class="headerlink" title="2.5 Anticipate"></a>2.5 Anticipate</h4><ul>
+<li>资源ID: @android:anim/anticipate_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public AnticipateInterpolator()</code>；//默认tension=2</li>
+<li><code>public AnticipateInterpolator(float tension)</code>；</li>
+<li><code>public AnticipateInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取tension值。</li>
+</ul>
+</li>
+<li>插值函数：tension`为张力因子，记为s, 默认值为2<ul>
+<li>公式：<code>y = t*t*((s+1)t-s)</code>,</li>
+<li>缺省：<code>y = t*t*(3t-2)</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/5.png" alt="Anticipate Interpolator"></li>
+</ul>
+<h4 id="2-6-Overshoot"><a href="#2-6-Overshoot" class="headerlink" title="2.6 Overshoot"></a>2.6 Overshoot</h4><ul>
+<li>资源ID: @android:anim/overshoot_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public OvershootInterpolator()</code>；//默认tension=2</li>
+<li><code>public OvershootInterpolator(float tension)</code>；</li>
+<li><code>public OvershootInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取tension值。</li>
+</ul>
+</li>
+<li>插值函数：tension`为张力因子，记为s, 默认值为2<ul>
+<li>公式：<code>y = (t-1)(t-1)((s+1)(t-1)+s) + 1</code>,</li>
+<li>缺省：<code>y = (t-1)(t-1)(3t-1) + 1</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/6.png" alt=" Overshoot Interpolator"></li>
+</ul>
+<h4 id="2-7-AnticipateOvershoot"><a href="#2-7-AnticipateOvershoot" class="headerlink" title="2.7 AnticipateOvershoot"></a>2.7 AnticipateOvershoot</h4><ul>
+<li>资源ID: @android:anim/anticipate_overshoot_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public AnticipateOvershootInterpolator()</code>；//默认tension=3</li>
+<li><code>public AnticipateOvershootInterpolator(float tension)</code>； //tension = 1.5*tension</li>
+<li><code>public AnticipateOvershootInterpolator(float tension, float extraTension)</code>; //tension = tension * extraTension</li>
+<li><code>public AnticipateOvershootInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取tension值。</li>
+</ul>
+</li>
+<li>插值函数：tension`为张力因子，记为s<ul>
+<li>公式：<ul>
+<li><code>y = 2t*t*(2t*s+2t-s), 当t &lt; 0.5时</code>,</li>
+<li><code>y = 2(t-1)(t-1)(2(s+1)(t-1)+s) + 1 , 当t &gt;= 0.5时</code>,</li>
+</ul>
+</li>
+<li>缺省：<ul>
+<li><code>y = 2t*t*(8t-3), 当t &lt; 0.5时</code>,</li>
+<li><code>y = 2(t-1)(t-1)(8t-5) + 1 , 当t &gt;= 0.5时</code>,</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/7.png" alt=" AnticipateOvershoot Interpolator"></li>
+</ul>
+<h4 id="2-8-Bounce"><a href="#2-8-Bounce" class="headerlink" title="2.8 Bounce"></a>2.8 Bounce</h4><ul>
+<li>资源ID: @android:anim/bounce_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public BounceInterpolator()</code>；//没有任何可调参数</li>
+</ul>
+</li>
+<li>插值函数：<ul>
+<li>公式：<ul>
+<li>y = 8*(1.1226t)^2 ，当 t &lt; 0.3535</li>
+<li>y = 8*(1.1226t - 0.54719)^2 + 0.7 ，当 t &lt; 0.7408</li>
+<li>y = 8*(1.1226t - 0.8526)^2 + 0.9 ，当 t &lt; 0.9644</li>
+<li>y = 8*(1.1226t - 1.0435)^2 + 0.95 ，当 t &lt;= 1.0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/8.png" alt="Bounce Interpolator"></li>
+</ul>
+<h4 id="2-9-Cycle"><a href="#2-9-Cycle" class="headerlink" title="2.9 Cycle"></a>2.9 Cycle</h4><ul>
+<li>资源ID: @android:anim/cycle_interpolator</li>
+<li>构造方法：<ul>
+<li><code>public CycleInterpolator(float cycles)</code>；</li>
+<li><code>public CycleInterpolator(Context context, AttributeSet attrs)</code>; //通过资源文件获取cycles值，默认为1。</li>
+</ul>
+</li>
+<li>插值函数：cycles`为循环次数，记为c<ul>
+<li>公式：<code>y = sin（2*c*t*π）</code>,</li>
+<li>缺省：<code>y = sin（2*t*π）</code></li>
+</ul>
+</li>
+<li>插值曲线：<img src="http://gityuan.com/images/interpolator/9.png" alt=" Cycle Interpolator"></li>
+</ul>
+<hr>
+<h2 id="三、-估值器"><a href="#三、-估值器" class="headerlink" title="三、 估值器"></a>三、 估值器</h2><p>估值器，用于计算属性动画的给定属性的取值，与属性的起始值，结束值，<code>fraction</code>三个值相关。</p>
+<p>每个估值器的源码流程都相似，所有的估值器都实现了TypeEvaluator接口，接口采用泛型，可自定义各种类型的估值器，只需实现如下接口即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TypeEvaluator&lt;T&gt; &#123;</span><br><span class="line">    &#x2F;* * * @param fraction 插值器计算转换后的值 * @param startValue 属性起始值 * @param endValue 属性结束值 * @return 转换后的值 *&#x2F;</span><br><span class="line">    public T evaluate(float fraction, T startValue, T endValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-IntEvaluator"><a href="#3-1-IntEvaluator" class="headerlink" title="3.1 IntEvaluator"></a>3.1 IntEvaluator</h4><p>用于评估Integer型的属性值，起始值与结束值，以及evaluate返回值都是Integer类型。评估的返回值与fraction成一次函数，即线性关系。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class IntEvaluator implements TypeEvaluator&lt;Integer&gt; &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;** * 函数关系：result &#x3D; x0 + t * (x1 - x0) * * @param fraction * @param startValue 属性起始值，Integer类型 * @param endValue 属性结束值，Integer类型 * @return 与fraction成线性关系。 *&#x2F;</span><br><span class="line">    public Integer evaluate(float fraction, Integer startValue, Integer endValue) &#123;</span><br><span class="line">        int startInt &#x3D; startValue;</span><br><span class="line">        return (int)(startInt + fraction * (endValue - startInt));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-FloatEvaluator"><a href="#3-2-FloatEvaluator" class="headerlink" title="3.2 FloatEvaluator"></a>3.2 FloatEvaluator</h4><p>用于评估Float型的属性值，起始值与结束值，以及evaluate返回值都是Float类型，同样也是线程关系。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class FloatEvaluator implements TypeEvaluator&lt;Number&gt; &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;** * @param fraction * @param startValue 属性起始值，float类型 * @param endValue 属性结束值，float类型 * @return 与fraction成线性关系。 *&#x2F;</span><br><span class="line">    public Float evaluate(float fraction, Number startValue, Number endValue) &#123;</span><br><span class="line">    float startFloat &#x3D; startValue.floatValue();</span><br><span class="line">    return startFloat + fraction * (endValue.floatValue() - startFloat);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-ArgbEvaluator"><a href="#3-3-ArgbEvaluator" class="headerlink" title="3.3 ArgbEvaluator"></a>3.3 ArgbEvaluator</h4><p>用于评估颜色的属性值，采用16进制。将ARGB四个量，同步进行动画渐变，同样也是采用线性的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class ArgbEvaluator implements TypeEvaluator &#123;</span><br><span class="line">    private static final ArgbEvaluator sInstance &#x3D; new ArgbEvaluator();</span><br><span class="line"></span><br><span class="line">   &#x2F;* * @hide * 貌似采用单例的方式，可该方法确实@hide隐藏方法，同时并没有将构造方法定义为private。 * 意味着单例对于上层开发者来说是不可见的，这样单例就没有起效果，google难道只是为了framework * 的单例使用，很诡异的设计。 *&#x2F;</span><br><span class="line">    public static ArgbEvaluator getInstance() &#123;</span><br><span class="line">        return sInstance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Object evaluate(float fraction, Object startValue, Object endValue) &#123;</span><br><span class="line">        int startInt &#x3D; (Integer) startValue;</span><br><span class="line">        int startA &#x3D; (startInt &gt;&gt; 24) &amp; 0xff;</span><br><span class="line">        int startR &#x3D; (startInt &gt;&gt; 16) &amp; 0xff;</span><br><span class="line">        int startG &#x3D; (startInt &gt;&gt; 8) &amp; 0xff;</span><br><span class="line">        int startB &#x3D; startInt &amp; 0xff;</span><br><span class="line"></span><br><span class="line">        int endInt &#x3D; (Integer) endValue;</span><br><span class="line">        int endA &#x3D; (endInt &gt;&gt; 24) &amp; 0xff;</span><br><span class="line">        int endR &#x3D; (endInt &gt;&gt; 16) &amp; 0xff;</span><br><span class="line">        int endG &#x3D; (endInt &gt;&gt; 8) &amp; 0xff;</span><br><span class="line">        int endB &#x3D; endInt &amp; 0xff;</span><br><span class="line"></span><br><span class="line">        return (int)((startA + (int)(fraction * (endA - startA))) &lt;&lt; 24) |</span><br><span class="line">                (int)((startR + (int)(fraction * (endR - startR))) &lt;&lt; 16) |</span><br><span class="line">                (int)((startG + (int)(fraction * (endG - startG))) &lt;&lt; 8) |</span><br><span class="line">                (int)((startB + (int)(fraction * (endB - startB))));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a>四、小结</h2><p>本文主要分两部分，插值器与估值器。通过源码方式概括性分析插值器的代码实现方式；再从数学角度，逐一进行剖析系统自带的9种插值器的插值函数以及其插值曲线。对于3种Evaluators，通过分析源码，其方式较为简单，需要注意的一点是evaluate中的fraction是插值器转换后的值，而不是<code>elapsed time</code>。</p>
+<hr>
+<p><strong>微信公众号</strong> <a href="http://gityuan.com/images/about-me/gityuan_weixin_logo.png" target="_blank" rel="noopener"><strong>Gityuan</strong> </a><strong>| 微博</strong> <a href="http://weibo.com/gityuan" target="_blank" rel="noopener"><strong>weibo.com/gityuan</strong> </a><strong>| 博客</strong> <a href="http://gityuan.com/talk/" target="_blank" rel="noopener"><strong>留言区交流</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%8A%A8%E7%94%BB/" rel="tag"># 动画</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/05/Android/%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/Android%E4%B8%89%E7%A7%8D%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" rel="next" title="Android三种动画实现">
+                <i class="fa fa-chevron-left"></i> Android三种动画实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/06/Java/%E5%9F%BA%E7%A1%80/Java%E6%B3%A8%E8%A7%A3-Annotation/" rel="prev" title="Java注解-Annotation">
+                Java注解-Annotation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、-差值器概述"><span class="nav-number">1.</span> <span class="nav-text">一、 差值器概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-线性插值的动画"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 线性插值的动画</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-非线性插值的动画"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 非线性插值的动画</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、-插值器"><span class="nav-number">2.</span> <span class="nav-text">二、 插值器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-Linear"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 Linear</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Accelerate"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 Accelerate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-Decelerate"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 Decelerate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-AccelerateDecelerate"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 AccelerateDecelerate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-Anticipate"><span class="nav-number">2.0.5.</span> <span class="nav-text">2.5 Anticipate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-Overshoot"><span class="nav-number">2.0.6.</span> <span class="nav-text">2.6 Overshoot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-AnticipateOvershoot"><span class="nav-number">2.0.7.</span> <span class="nav-text">2.7 AnticipateOvershoot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-8-Bounce"><span class="nav-number">2.0.8.</span> <span class="nav-text">2.8 Bounce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-9-Cycle"><span class="nav-number">2.0.9.</span> <span class="nav-text">2.9 Cycle</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、-估值器"><span class="nav-number">3.</span> <span class="nav-text">三、 估值器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-IntEvaluator"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 IntEvaluator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-FloatEvaluator"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 FloatEvaluator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-ArgbEvaluator"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 ArgbEvaluator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、小结"><span class="nav-number">4.</span> <span class="nav-text">四、小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

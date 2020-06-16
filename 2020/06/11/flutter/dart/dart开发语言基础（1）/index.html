@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,dart," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、重要概念 所有变量引用的都是 对象*，每个对象都是一个 *类 的实例。数字、函数以及 null 都是对象。所有的类都继承于 Object 类。  尽管 Dart 是强类型语言，但是在声明变量时指定类型是可选的，因为 Dart 可以进行类型推断。在上述代码中，变量 number 的类型被推断为 int 类型。如果想显式地声明一个不确定的类型，可以使用特殊类型 dynamic。  Dart 支持泛">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dart开发语言基础（1）">
+<meta property="og:url" content="http://yoursite.com/2020/06/11/flutter/dart/dart%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="一、重要概念 所有变量引用的都是 对象*，每个对象都是一个 *类 的实例。数字、函数以及 null 都是对象。所有的类都继承于 Object 类。  尽管 Dart 是强类型语言，但是在声明变量时指定类型是可选的，因为 Dart 可以进行类型推断。在上述代码中，变量 number 的类型被推断为 int 类型。如果想显式地声明一个不确定的类型，可以使用特殊类型 dynamic。  Dart 支持泛">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-11T12:21:02.000Z">
+<meta property="article:modified_time" content="2020-06-11T13:57:52.604Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="dart">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/11/flutter/dart/dart开发语言基础（1）/"/>
+
+
+
+
+
+  <title>dart开发语言基础（1） | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/11/flutter/dart/dart%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dart开发语言基础（1）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-11T20:21:02+08:00">
+                2020-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/dart/" itemprop="url" rel="index">
+                    <span itemprop="name">dart</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/11/flutter/dart/dart%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/11/flutter/dart/dart%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、重要概念"><a href="#一、重要概念" class="headerlink" title="一、重要概念"></a>一、重要概念</h2><ul>
+<li><p>所有变量引用的都是 <em>对象*，每个对象都是一个 *类</em> 的实例。数字、函数以及 <code>null</code> 都是对象。所有的类都继承于 <a href="https://api.dart.dev/stable/dart-core/Object-class.html" target="_blank" rel="noopener">Object</a> 类。</p>
+</li>
+<li><p>尽管 Dart 是强类型语言，但是在声明变量时指定类型是可选的，因为 Dart 可以进行类型推断。在上述代码中，变量 <code>number</code> 的类型被推断为 <code>int</code> 类型。如果想显式地声明一个不确定的类型，可以<a href="https://dart.cn/guides/language/effective-dart/design#do-annotate-with-object-instead-of-dynamic-to-indicate-any-object-is-allowed" target="_blank" rel="noopener">使用特殊类型 <code>dynamic</code></a>。</p>
+</li>
+<li><p>Dart 支持泛型，比如 <code>List&lt;int&gt;</code>（表示一组由 int 对象组成的列表）或 <code>List&lt;dynamic&gt;</code>（表示一组由任何类型对象组成的列表）。</p>
+</li>
+<li><p>Dart 支持顶级函数（例如 <code>main</code> 方法），同时还支持定义属于类或对象的函数（即 <em>静态</em> 和 <em>实例方法<em>）。你还可以在函数中定义函数（</em>嵌套</em> 或 <em>局部函数</em>）。</p>
+</li>
+<li><p>Dart 支持顶级 <em>变量</em>，以及定义属于类或对象的变量（静态和实例变量）。实例变量有时称之为域或属性。</p>
+</li>
+<li><p>Dart 没有类似于 Java 那样的 <code>public</code>、<code>protected</code> 和 <code>private</code> 成员访问限定符。如果一个标识符以下划线 (_) 开头则表示该标识符在库内是私有的。可以查阅 <a href="https://dart.cn/guides/language/language-tour#libraries-and-visibility" target="_blank" rel="noopener">库和可见性</a> 获取更多相关信息。</p>
+</li>
+<li><p><em>标识符</em> 可以以字母或者下划线 (_) 开头，其后可跟字符和数字的组合。</p>
+</li>
+<li><p>Dart 中 <em>表达式</em> 和 <em>语句</em> 是有区别的，表达式有值而语句没有。比如<a href="https://dart.cn/guides/language/language-tour#conditional-expressions" target="_blank" rel="noopener">条件表达式</a> <code>expression condition ? expr1 : expr2</code> 中含有值 <code>expr1</code> 或 <code>expr2</code>。与 <a href="https://dart.cn/guides/language/language-tour#if-and-else" target="_blank" rel="noopener">if-else 分支语句</a>相比，<code>if-else</code> 分支语句则没有值。一个语句通常包含一个或多个表达式，但是一个表达式不能只包含一个语句。</p>
+</li>
+<li><p>Dart 工具可以显示 <em>警告</em> 和 <em>错误</em> 两种类型的问题。警告表明代码可能有问题但不会阻止其运行。错误分为编译时错误和运行时错误；编译时错误代码无法运行；运行时错误会在代码运行时导致<a href="https://dart.cn/guides/language/language-tour#exceptions" target="_blank" rel="noopener">异常</a>。</p>
+</li>
+</ul>
+<h2 id="二、关键字"><a href="#二、关键字" class="headerlink" title="二、关键字"></a>二、关键字</h2><p>下面的表格中列出了 Dart 语言所使用的关键字。</p>
+<table>
+<thead>
+<tr>
+<th><a href="https://dart.cn/guides/language/language-tour#abstract-classes" target="_blank" rel="noopener">abstract</a> 2</th>
+<th><a href="https://dart.cn/guides/language/language-tour#if-and-else" target="_blank" rel="noopener">else</a></th>
+<th><a href="https://dart.cn/guides/language/language-tour#using-libraries" target="_blank" rel="noopener">import</a> 2</th>
+<th><a href="https://dart.cn/guides/language/language-tour#extending-a-class" target="_blank" rel="noopener">super</a></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://dart.cn/guides/language/language-tour#type-test-operators" target="_blank" rel="noopener">as</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#enumerated-types" target="_blank" rel="noopener">enum</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#for-loops" target="_blank" rel="noopener">in</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#switch-and-case" target="_blank" rel="noopener">switch</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#assert" target="_blank" rel="noopener">assert</a></td>
+<td><a href="https://dart.cn/guides/libraries/create-library-packages" target="_blank" rel="noopener">export</a> 2</td>
+<td><a href="https://stackoverflow.com/questions/28595501/was-the-interface-keyword-removed-from-dart" target="_blank" rel="noopener">interface</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#generators" target="_blank" rel="noopener">sync</a> 1</td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#asynchrony-support" target="_blank" rel="noopener">async</a> 1</td>
+<td><a href="https://dart.cn/guides/language/language-tour#extending-a-class" target="_blank" rel="noopener">extends</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#type-test-operators" target="_blank" rel="noopener">is</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#constructors" target="_blank" rel="noopener">this</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#asynchrony-support" target="_blank" rel="noopener">await</a> 3</td>
+<td><a href="https://dart.cn/guides/language/language-tour#extension-methods" target="_blank" rel="noopener">extension</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#libraries-and-visibility" target="_blank" rel="noopener">library</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#throw" target="_blank" rel="noopener">throw</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#break-and-continue" target="_blank" rel="noopener">break</a></td>
+<td><a href="https://stackoverflow.com/questions/24929659/what-does-external-mean-in-dart" target="_blank" rel="noopener">external</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#adding-features-to-a-class-mixins" target="_blank" rel="noopener">mixin</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#booleans" target="_blank" rel="noopener">true</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#switch-and-case" target="_blank" rel="noopener">case</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#factory-constructors" target="_blank" rel="noopener">factory</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#using-constructors" target="_blank" rel="noopener">new</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#catch" target="_blank" rel="noopener">try</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#catch" target="_blank" rel="noopener">catch</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#booleans" target="_blank" rel="noopener">false</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#default-value" target="_blank" rel="noopener">null</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#typedefs" target="_blank" rel="noopener">typedef</a> 2</td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#instance-variables" target="_blank" rel="noopener">class</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#final-and-const" target="_blank" rel="noopener">final</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#catch" target="_blank" rel="noopener">on</a> 1</td>
+<td><a href="https://dart.cn/guides/language/language-tour#variables" target="_blank" rel="noopener">var</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#final-and-const" target="_blank" rel="noopener">const</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#finally" target="_blank" rel="noopener">finally</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#overridable-operators" target="_blank" rel="noopener">operator</a> 2</td>
+<td><a href="https://medium.com/dartlang/dart-2-legacy-of-the-void-e7afb5f44df0" target="_blank" rel="noopener">void</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#break-and-continue" target="_blank" rel="noopener">continue</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#for-loops" target="_blank" rel="noopener">for</a></td>
+<td><a href="https://dart.cn/guides/libraries/create-library-packages#organizing-a-library-package" target="_blank" rel="noopener">part</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#while-and-do-while" target="_blank" rel="noopener">while</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/sound-problems#the-covariant-keyword" target="_blank" rel="noopener">covariant</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#functions" target="_blank" rel="noopener">Function</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#catch" target="_blank" rel="noopener">rethrow</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#adding-features-to-a-class-mixins" target="_blank" rel="noopener">with</a></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#switch-and-case" target="_blank" rel="noopener">default</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#getters-and-setters" target="_blank" rel="noopener">get</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#functions" target="_blank" rel="noopener">return</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#generators" target="_blank" rel="noopener">yield</a> 3</td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#lazily-loading-a-library" target="_blank" rel="noopener">deferred</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#importing-only-part-of-a-library" target="_blank" rel="noopener">hide</a> 1</td>
+<td><a href="https://dart.cn/guides/language/language-tour#getters-and-setters" target="_blank" rel="noopener">set</a> 2</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#while-and-do-while" target="_blank" rel="noopener">do</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#if-and-else" target="_blank" rel="noopener">if</a></td>
+<td><a href="https://dart.cn/guides/language/language-tour#importing-only-part-of-a-library" target="_blank" rel="noopener">show</a> 1</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://dart.cn/guides/language/language-tour#important-concepts" target="_blank" rel="noopener">dynamic</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#implicit-interfaces" target="_blank" rel="noopener">implements</a> 2</td>
+<td><a href="https://dart.cn/guides/language/language-tour#class-variables-and-methods" target="_blank" rel="noopener">static</a> 2</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>应该避免使用这些单词作为标识符。但是，带有上标的单词可以在必要的情况下作为标识符：</p>
+<ul>
+<li>带有上标 <strong>1</strong> 的关键字为 <strong>上下文关键字</strong>，只有在特定的场景才有意义，它们可以在任何地方作为有效的标识符。</li>
+<li>带有上标 <strong>2</strong> 的关键字为 <strong>内置标识符</strong>，其作用只是在JavaScript代码转为Dart代码时更简单，这些关键字在大多数时候都可以作为有效的标识符，但是它们不能用作类名或者类型名或者作为导入前缀使用。</li>
+<li>带有上标 <strong>3</strong> 的关键字为 Dart1.0 发布后用于<a href="https://dart.cn/guides/language/language-tour#asynchrony-support" target="_blank" rel="noopener">支持异步</a>相关的特性新加的。不能在由关键字 <code>async</code>、<code>async*</code> 或 <code>sync*</code> 标识的方法体中使用 <code>await</code> 或 <code>yield</code> 作为标识符。</li>
+</ul>
+<p>其它没有上标的关键字为 <strong>保留字</strong>，均不能用作标识符。</p>
+<h2 id="三、语法"><a href="#三、语法" class="headerlink" title="三、语法"></a>三、语法</h2><h3 id="3-1-gt"><a href="#3-1-gt" class="headerlink" title="3.1 =&gt;"></a>3.1 =&gt;</h3><p>语法 <code>=&gt; *表达式*</code> 是 <code>{ return *表达式*; }</code> 的简写， <code>=&gt;</code> 有时也称之为胖箭头语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool isNoble(int atomicNumber) &#x3D;&gt; _nobleGases[atomicNumber] !&#x3D; null;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-可选参数"><a href="#3-2-可选参数" class="headerlink" title="3.2 可选参数"></a>3.2 可选参数</h3><p>可选参数分为命名参数和位置参数，可在参数列表中任选其一使用，但两者不能同时出现在参数列表中。</p>
+<h4 id="3-2-1-命名参数"><a href="#3-2-1-命名参数" class="headerlink" title="3.2.1 命名参数"></a>3.2.1 命名参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enableFlags(bold: true, hidden: false);</span><br></pre></td></tr></table></figure>
+
+<p>虽然命名参数是可选参数的一种类型，但是你仍然可以使用 <a href="https://pub.flutter-io.cn/documentation/meta/latest/meta/required-constant.html" target="_blank" rel="noopener">@required</a> 注解来标识一个命名参数是必须的参数，此时调用者则必须为该参数提供一个值。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const Scrollbar(&#123;Key key, @required Widget child&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-位置参数"><a href="#3-2-2-位置参数" class="headerlink" title="3.2.2 位置参数"></a>3.2.2 位置参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String say(String from, String msg, [String device]) &#123;</span><br><span class="line">  var result &#x3D; &#39;$from says $msg&#39;;</span><br><span class="line">  if (device !&#x3D; null) &#123;</span><br><span class="line">    result &#x3D; &#39;$result with a $device&#39;;</span><br><span class="line">  &#125;</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-3-默认参数值"><a href="#3-2-3-默认参数值" class="headerlink" title="3.2.3 默认参数值"></a>3.2.3 默认参数值</h4><p>可以用 <code>=</code> 为函数的命名和位置参数定义默认值，默认值必须为编译时常量，没有指定默认值的情况下默认值为 <code>null</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 设置 [bold] 和 [hidden] 标识……</span><br><span class="line">&#x2F;&#x2F;&#x2F; Sets the [bold] and [hidden] flags ...</span><br><span class="line">void enableFlags(&#123;bool bold &#x3D; false, bool hidden &#x3D; false&#125;) &#123;...&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; bold 的值将为 true；而 hidden 将为 false。</span><br><span class="line">enableFlags(bold: true);</span><br></pre></td></tr></table></figure>
+
+<p>下一个示例将向你展示如何为位置参数设置默认值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">String say(String from, String msg,</span><br><span class="line">    [String device &#x3D; &#39;carrier pigeon&#39;, String mood]) &#123;</span><br><span class="line">  var result &#x3D; &#39;$from says $msg&#39;;</span><br><span class="line">  if (device !&#x3D; null) &#123;</span><br><span class="line">    result &#x3D; &#39;$result with a $device&#39;;</span><br><span class="line">  &#125;</span><br><span class="line">  if (mood !&#x3D; null) &#123;</span><br><span class="line">    result &#x3D; &#39;$result (in a $mood mood)&#39;;</span><br><span class="line">  &#125;</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">assert(say(&#39;Bob&#39;, &#39;Howdy&#39;) &#x3D;&#x3D;</span><br><span class="line">    &#39;Bob says Howdy with a carrier pigeon&#39;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-函数作为一级对象"><a href="#3-3-函数作为一级对象" class="headerlink" title="3.3 函数作为一级对象"></a>3.3 函数作为一级对象</h3><p>可以将函数作为参数传递给另一个函数。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void printElement(int element) &#123;</span><br><span class="line">  print(element);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var list &#x3D; [1, 2, 3];</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将 printElement 函数作为参数传递。</span><br><span class="line">list.forEach(printElement);</span><br></pre></td></tr></table></figure>
+
+<p>你也可以将函数赋值给一个变量，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var loudify &#x3D; (msg) &#x3D;&gt; &#39;!!! $&#123;msg.toUpperCase()&#125; !!!&#39;;</span><br><span class="line">assert(loudify(&#39;hello&#39;) &#x3D;&#x3D; &#39;!!! HELLO !!!&#39;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-匿名函数"><a href="#3-4-匿名函数" class="headerlink" title="3.4 匿名函数"></a>3.4 匿名函数</h3><p>大多数方法都是有名字的，比如 <code>main()</code> 或 <code>printElement()</code>。你可以创建一个没有名字的方法，称之为 <em>匿名函数*，或 *Lambda表达式</em> 或 <em>Closure闭包</em>。你可以将匿名方法赋值给一个变量然后使用它，比如将该变量添加到集合或从中删除。</p>
+<p>匿名方法看起来与命名方法类似，在括号之间可以定义参数，参数之间用逗号分割。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">后面大括号中的内容则为函数体：</span><br><span class="line"></span><br><span class="line">([[类型] 参数[, …]]) &#123;</span><br><span class="line">  函数体;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>下面代码定义了只有一个参数 <code>item</code> 且没有参数类型的匿名方法。List 中的每个元素都会调用这个函数，打印元素位置和值的字符串：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var list &#x3D; [&#39;apples&#39;, &#39;bananas&#39;, &#39;oranges&#39;];</span><br><span class="line">list.forEach((item) &#123;</span><br><span class="line">  print(&#39;$&#123;list.indexOf(item)&#125;: $item&#39;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-词法作用域"><a href="#3-5-词法作用域" class="headerlink" title="3.5 词法作用域"></a>3.5 词法作用域</h3><p>Dart 是词法有作用域语言，变量的作用域在写代码的时候就确定了，大括号内定义的变量只能在大括号内访问，与 Java 类似。</p>
+<p>下面是一个嵌套函数中变量在多个作用域中的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">bool topLevel &#x3D; true;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">  var insideMain &#x3D; true;</span><br><span class="line"></span><br><span class="line">  void myFunction() &#123;</span><br><span class="line">    var insideFunction &#x3D; true;</span><br><span class="line"></span><br><span class="line">    void nestedFunction() &#123;</span><br><span class="line">      var insideNestedFunction &#x3D; true;</span><br><span class="line"></span><br><span class="line">      assert(topLevel);</span><br><span class="line">      assert(insideMain);</span><br><span class="line">      assert(insideFunction);</span><br><span class="line">      assert(insideNestedFunction);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意 <code>nestedFunction()</code> 函数可以访问包括顶层变量在内的所有的变量。</p>
+<h3 id="3-5-词法闭包"><a href="#3-5-词法闭包" class="headerlink" title="3.5 词法闭包"></a>3.5 词法闭包</h3><p><em>闭包</em> 即一个函数对象，即使函数对象的调用在它原始作用域之外，依然能够访问在它词法作用域内的变量。</p>
+<p>函数可以封闭定义到它作用域内的变量。接下来的示例中，函数 <code>makeAdder()</code> 捕获了变量 <code>addBy</code>。无论函数在什么时候返回，它都可以使用捕获的 <code>addBy</code> 变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 返回一个将 [addBy] 添加到该函数参数的函数。</span><br><span class="line">&#x2F;&#x2F;&#x2F; Returns a function that adds [addBy] to the</span><br><span class="line">&#x2F;&#x2F;&#x2F; function&#39;s argument.</span><br><span class="line">Function makeAdder(int addBy) &#123;</span><br><span class="line">  return (int i) &#x3D;&gt; addBy + i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">  &#x2F;&#x2F; 生成加 2 的函数。</span><br><span class="line">  var add2 &#x3D; makeAdder(2);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 生成加 4 的函数。</span><br><span class="line">  var add4 &#x3D; makeAdder(4);</span><br><span class="line"></span><br><span class="line">  assert(add2(3) &#x3D;&#x3D; 5);</span><br><span class="line">  assert(add4(3) &#x3D;&#x3D; 7);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-测试函数是否相等"><a href="#3-6-测试函数是否相等" class="headerlink" title="3.6 测试函数是否相等"></a>3.6 测试函数是否相等</h3><p>下面是顶级函数，静态方法和示例方法相等性的测试示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">void foo() &#123;&#125; &#x2F;&#x2F; 定义顶层函数 (A top-level function)</span><br><span class="line"></span><br><span class="line">class A &#123;</span><br><span class="line">  static void bar() &#123;&#125; &#x2F;&#x2F; 定义静态方法</span><br><span class="line">  void baz() &#123;&#125; &#x2F;&#x2F; 定义实例方法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">  var x;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 比较顶层函数是否相等。</span><br><span class="line">  x &#x3D; foo;</span><br><span class="line">  assert(foo &#x3D;&#x3D; x);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 比较静态方法是否相等。</span><br><span class="line">  x &#x3D; A.bar;</span><br><span class="line">  assert(A.bar &#x3D;&#x3D; x);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 比较实例方法是否相等。</span><br><span class="line">  var v &#x3D; A(); &#x2F;&#x2F; A 的实例 #1</span><br><span class="line">  var w &#x3D; A(); &#x2F;&#x2F; A 的实例 #2</span><br><span class="line">  var y &#x3D; w;</span><br><span class="line">  x &#x3D; w.baz;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 这两个闭包引用了相同的实例对象，因此它们相等。</span><br><span class="line">  assert(y.baz &#x3D;&#x3D; x);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 这两个闭包引用了不同的实例对象，因此它们不相等。</span><br><span class="line">  assert(v.baz !&#x3D; w.baz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-7-返回值"><a href="#3-7-返回值" class="headerlink" title="3.7 返回值"></a>3.7 返回值</h3><p>所有的函数都有返回值。没有显示返回语句的函数最后一行默认为执行 <code>return null;</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo() &#123;&#125;</span><br><span class="line"></span><br><span class="line">assert(foo() &#x3D;&#x3D; null);</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、运算符"><a href="#四、运算符" class="headerlink" title="四、运算符"></a>四、运算符</h2><p>Dart定义了下表中显示的运算符。您可以覆盖许多这些运算符，如可覆盖运算符中所述。</p>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一元后缀</td>
+<td><code>*表达式*++</code> <code>*表达式*--</code> <code>()</code> <code>[]</code> <code>.</code> <code>?.</code></td>
+</tr>
+<tr>
+<td>一元前缀</td>
+<td><code>-*表达式*</code> <code>!*表达式*</code> <code>~*表达式*</code> <code>++*表达式*</code> <code>--*表达式*</code></td>
+</tr>
+<tr>
+<td>乘除法</td>
+<td><code>*</code> <code>/</code> <code>%</code> <code>~/</code></td>
+</tr>
+<tr>
+<td>加减法</td>
+<td><code>+</code> <code>-</code></td>
+</tr>
+<tr>
+<td>位运算</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&gt;&gt;&gt;</code></td>
+</tr>
+<tr>
+<td>二进制与</td>
+<td><code>&amp;</code></td>
+</tr>
+<tr>
+<td>二进制异或</td>
+<td><code>^</code></td>
+</tr>
+<tr>
+<td>二进制或</td>
+<td>`</td>
+</tr>
+<tr>
+<td>关系和类型测试</td>
+<td><code>&gt;=</code> <code>&gt;</code> <code>&lt;=</code> <code>&lt;</code> <code>as</code> <code>is</code> <code>is!</code></td>
+</tr>
+<tr>
+<td>相等判断</td>
+<td><code>==</code> <code>!=</code></td>
+</tr>
+<tr>
+<td>逻辑与</td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>逻辑或</td>
+<td>`</td>
+</tr>
+<tr>
+<td>空判断</td>
+<td><code>??</code></td>
+</tr>
+<tr>
+<td>条件表达式</td>
+<td><code>*表达式 1* ? *表达式 2* : *表达式 3*</code></td>
+</tr>
+<tr>
+<td>级联</td>
+<td><code>..</code></td>
+</tr>
+<tr>
+<td>赋值</td>
+<td><code>=</code> <code>*=</code> <code>/=</code> <code>+=</code> <code>-=</code> <code>&amp;=</code> <code>^=</code> <em>等等……</em></td>
+</tr>
+</tbody></table>
+<p>一旦你使用了运算符，就创建了表达式。下面是一些运算符表达式的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a++</span><br><span class="line">a + b</span><br><span class="line">a &#x3D; b</span><br><span class="line">a &#x3D;&#x3D; b</span><br><span class="line">c ? a : b</span><br><span class="line">a is T</span><br></pre></td></tr></table></figure>
+
+<p>在<a href="https://dart.cn/guides/language/language-tour#operators" target="_blank" rel="noopener">运算符表</a> 中，运算符的优先级按先后排列，即第一行优先级最高，最后一行优先级最低，而同一行中，最左边的优先级最高，最右边的优先级最低。例如：<code>%</code> 运算符优先级高于 <code>==</code> ，而 <code>==</code> 高于 <code>&amp;&amp;</code>。根据优先级规则，那么意味着以下两行代码执行的效果相同：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 括号提高了可读性。</span><br><span class="line">&#x2F;&#x2F; Parentheses improve readability.</span><br><span class="line">if ((n % i &#x3D;&#x3D; 0) &amp;&amp; (d % i &#x3D;&#x3D; 0)) ...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 难以理解，但是与上面的代码效果一样。</span><br><span class="line">if (n % i &#x3D;&#x3D; 0 &amp;&amp; d % i &#x3D;&#x3D; 0) ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-1-算术运算符"><a href="#4-1-算术运算符" class="headerlink" title="4.1 算术运算符"></a>4.1 算术运算符</h3><p>Dart 支持常用的算术运算符：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>+</code></td>
+<td>加</td>
+</tr>
+<tr>
+<td><code>–</code></td>
+<td>减</td>
+</tr>
+<tr>
+<td><code>-*表达式*</code></td>
+<td>一元负, 也可以作为反转（反转表达式的符号）</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>乘</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>除</td>
+</tr>
+<tr>
+<td><code>~/</code></td>
+<td>除并取整</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>取模</td>
+</tr>
+</tbody></table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">assert(2 + 3 &#x3D;&#x3D; 5);</span><br><span class="line">assert(2 - 3 &#x3D;&#x3D; -1);</span><br><span class="line">assert(2 * 3 &#x3D;&#x3D; 6);</span><br><span class="line">assert(5 &#x2F; 2 &#x3D;&#x3D; 2.5); &#x2F;&#x2F; 结果是一个浮点数</span><br><span class="line">assert(5 ~&#x2F; 2 &#x3D;&#x3D; 2); &#x2F;&#x2F; 结果是一个整数</span><br><span class="line">assert(5 % 2 &#x3D;&#x3D; 1); &#x2F;&#x2F; 取余</span><br><span class="line"></span><br><span class="line">assert(&#39;5&#x2F;2 &#x3D; $&#123;5 ~&#x2F; 2&#125; r $&#123;5 % 2&#125;&#39; &#x3D;&#x3D; &#39;5&#x2F;2 &#x3D; 2 r 1&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>Dart 还支持自增自减操作。</p>
+<table>
+<thead>
+<tr>
+<th>Operator<code>++*var*</code></th>
+<th><code>*var* = *var* + 1</code> (表达式的值为 <code>*var* + 1</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>*var*++</code></td>
+<td><code>*var* = *var* + 1</code> (表达式的值为 <code>*var*</code>)</td>
+</tr>
+<tr>
+<td><code>--*var*</code></td>
+<td><code>*var* = *var* – 1</code> (表达式的值为 <code>*var* – 1</code>)</td>
+</tr>
+<tr>
+<td><code>*var*--</code></td>
+<td><code>*var* = *var* – 1</code> (表达式的值为 <code>*var*</code>)</td>
+</tr>
+</tbody></table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var a, b;</span><br><span class="line"></span><br><span class="line">a &#x3D; 0;</span><br><span class="line">b &#x3D; ++a; &#x2F;&#x2F; 在 b 赋值前将 a 增加 1。</span><br><span class="line">assert(a &#x3D;&#x3D; b); &#x2F;&#x2F; 1 &#x3D;&#x3D; 1</span><br><span class="line"></span><br><span class="line">a &#x3D; 0;</span><br><span class="line">b &#x3D; a++; &#x2F;&#x2F; 在 b 赋值后将 a 增加 1。</span><br><span class="line">assert(a !&#x3D; b); &#x2F;&#x2F; 1 !&#x3D; 0</span><br><span class="line"></span><br><span class="line">a &#x3D; 0;</span><br><span class="line">b &#x3D; --a; &#x2F;&#x2F; 在 b 赋值前将 a 减少 1。</span><br><span class="line">assert(a &#x3D;&#x3D; b); &#x2F;&#x2F; -1 &#x3D;&#x3D; -1</span><br><span class="line"></span><br><span class="line">a &#x3D; 0;</span><br><span class="line">b &#x3D; a--; &#x2F;&#x2F; 在 b 赋值后将 a 减少 1。</span><br><span class="line">assert(a !&#x3D; b); &#x2F;&#x2F; -1 !&#x3D; 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-关系运算符"><a href="#4-2-关系运算符" class="headerlink" title="4.2 关系运算符"></a>4.2 关系运算符</h3><p>下表列出了关系运算符及含义：</p>
+<table>
+<thead>
+<tr>
+<th>Operator<code>==</code></th>
+<th>相等</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>!=</code></td>
+<td>不等</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>大于</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>小于</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>大于等于</td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>小于等于</td>
+</tr>
+</tbody></table>
+<p>要判断两个对象 x 和 y 是否表示相同的事物使用 <code>==</code> 即可。（在极少数情况下，可能需要使用 <a href="https://api.dart.dev/stable/dart-core/identical.html" target="_blank" rel="noopener">identical()</a> 函数来确定两个对象是否完全相同。）。下面是 <code>==</code> 运算符的一些规则：</p>
+<ol>
+<li>假设有变量 <em>x</em> 和 <em>y</em>，且 x 和 y 至少有一个为 null，则当且仅当 x 和 y 均为 null 时 x == y 才会返回 true，否则只有一个为 null 则返回 false。</li>
+<li><code>*x*.==(*y*)</code> 将会返回值，这里不管有没有 y，即 y 是可选的。也就是说 <code>==</code> 其实是 x 中的一个方法，并且可以被重写。详情请查阅<a href="https://dart.cn/guides/language/language-tour#overridable-operators" target="_blank" rel="noopener">重写运算符</a>。</li>
+</ol>
+<p>下面的代码给出了每一种关系运算符的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">assert(2 &#x3D;&#x3D; 2);</span><br><span class="line">assert(2 !&#x3D; 3);</span><br><span class="line">assert(3 &gt; 2);</span><br><span class="line">assert(2 &lt; 3);</span><br><span class="line">assert(3 &gt;&#x3D; 3);</span><br><span class="line">assert(2 &lt;&#x3D; 3);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-类型判断运算符"><a href="#4-3-类型判断运算符" class="headerlink" title="4.3 类型判断运算符"></a>4.3 类型判断运算符</h3><p><code>as</code>、<code>is</code>、<code>is!</code> 运算符是在运行时判断对象类型的运算符。</p>
+<table>
+<thead>
+<tr>
+<th>Operator<code>as</code></th>
+<th>类型转换（也用作指定<a href="https://dart.cn/guides/language/language-tour#specifying-a-library-prefix" target="_blank" rel="noopener">类前缀</a>)）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>is</code></td>
+<td>如果对象是指定类型则返回 true</td>
+</tr>
+<tr>
+<td><code>is!</code></td>
+<td>如果对象是指定类型则返回 false</td>
+</tr>
+</tbody></table>
+<p>当且仅当 <code>obj</code> 实现了 <code>T</code> 的接口，<code>obj is T</code> 才是 true。例如 <code>obj is Object</code> 总为 true，因为所有类都是 Object 的子类。</p>
+<p>仅当你确定这个对象是该类型的时候，你才可以使用 <code>as</code> 操作符可以把对象转换为特定的类型。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(emp as Person).firstName &#x3D; &#39;Bob&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>如果你不确定这个对象类型是不是 <code>T</code>，请在转型前使用 <code>is T</code> 检查类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (emp is Person) &#123;</span><br><span class="line">  &#x2F;&#x2F; 类型检查</span><br><span class="line">  emp.firstName &#x3D; &#39;Bob&#39;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可以使用 <code>as</code> 运算符进行缩写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(emp as Person).firstName &#x3D; &#39;Bob&#39;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>上述两种方式是有区别的：如果 <code>emp</code> 为 null 或者不为 Person 类型，则第一种方式将会抛出异常，而第二种不会。</p>
+</blockquote>
+<h3 id="4-4-赋值运算符"><a href="#4-4-赋值运算符" class="headerlink" title="4.4 赋值运算符"></a>4.4 赋值运算符</h3><p>可以使用 <code>=</code> 来赋值，同时也可以使用 <code>??=</code> 来为值为 null 的变量赋值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 将 value 赋值给 a (Assign value to a)</span><br><span class="line">a &#x3D; value;</span><br><span class="line">&#x2F;&#x2F; 当且仅当 b 为 null 时才赋值</span><br><span class="line">b ??&#x3D; value;</span><br></pre></td></tr></table></figure>
+
+<p>像 <code>+=</code> 这样的赋值运算符将算数运算符和赋值运算符组合在了一起。</p>
+<table>
+<thead>
+<tr>
+<th><code>=</code></th>
+<th><code>–=</code></th>
+<th><code>/=</code></th>
+<th><code>%=</code></th>
+<th><code>&gt;&gt;=</code></th>
+<th><code>^=</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>+=</code></td>
+<td><code>*=</code></td>
+<td><code>~/=</code></td>
+<td><code>&lt;&lt;=</code></td>
+<td><code>&amp;=</code></td>
+<td>`</td>
+</tr>
+</tbody></table>
+<p>下表解释了符合运算符的原理：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>复合运算</th>
+<th>等效表达式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>假设有运算符 *op*：</strong></td>
+<td><code>a *op*= b</code></td>
+<td><code>a = a *op* b</code></td>
+</tr>
+<tr>
+<td><strong>示例：</strong></td>
+<td><code>a += b</code></td>
+<td><code>a = a + b</code></td>
+</tr>
+</tbody></table>
+<p>下面的例子展示了如何使用赋值以及复合赋值运算符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 2; &#x2F;&#x2F; 使用 &#x3D; 赋值 (Assign using &#x3D;)</span><br><span class="line">a *&#x3D; 3; &#x2F;&#x2F; 赋值并做乘法运算 Assign and multiply: a &#x3D; a * 3</span><br><span class="line">assert(a &#x3D;&#x3D; 6);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-逻辑运算符"><a href="#4-5-逻辑运算符" class="headerlink" title="4.5 逻辑运算符"></a>4.5 逻辑运算符</h3><p>使用逻辑运算符你可以反转或组合布尔表达式。</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>!*表达式*</code></td>
+<td>对表达式结果取反（即将 true 变为 false，false 变为 true）</td>
+</tr>
+<tr>
+<td>`</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>逻辑与</td>
+</tr>
+</tbody></table>
+<p>下面是使用逻辑表达式的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (!done &amp;&amp; (col &#x3D;&#x3D; 0 || col &#x3D;&#x3D; 3)) &#123;</span><br><span class="line">  &#x2F;&#x2F; ...Do something...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6-按位和移位运算符"><a href="#4-6-按位和移位运算符" class="headerlink" title="4.6 按位和移位运算符"></a>4.6 按位和移位运算符</h3><p>在 Dart 中，二进制位运算符可以操作二进制的某一位，但仅适用于整数。</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+</tr>
+<tr>
+<td>`</td>
+<td>`</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td><code>~*表达式*</code></td>
+<td>按位取反（即将 “0” 变为 “1”，“1” 变为 “0”）</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>位左移</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>位右移</td>
+</tr>
+</tbody></table>
+<p>下面是使用按位和移位运算符的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">final value &#x3D; 0x22;</span><br><span class="line">final bitmask &#x3D; 0x0f;</span><br><span class="line"></span><br><span class="line">assert((value &amp; bitmask) &#x3D;&#x3D; 0x02); &#x2F;&#x2F; 按位与 (AND)</span><br><span class="line">assert((value &amp; ~bitmask) &#x3D;&#x3D; 0x20); &#x2F;&#x2F; 取反后按位与 (AND NOT)</span><br><span class="line">assert((value | bitmask) &#x3D;&#x3D; 0x2f); &#x2F;&#x2F; 按位或 (OR)</span><br><span class="line">assert((value ^ bitmask) &#x3D;&#x3D; 0x2d); &#x2F;&#x2F; 按位异或 (XOR)</span><br><span class="line">assert((value &lt;&lt; 4) &#x3D;&#x3D; 0x220); &#x2F;&#x2F; 位左移 (Shift left)</span><br><span class="line">assert((value &gt;&gt; 4) &#x3D;&#x3D; 0x02); &#x2F;&#x2F; 位右移 (Shift right)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-7-条件表达式"><a href="#4-7-条件表达式" class="headerlink" title="4.7 条件表达式"></a>4.7 条件表达式</h3><p>Dart 有两个特殊的运算符可以用来替代 <a href="https://dart.cn/guides/language/language-tour#if-和-else" target="_blank" rel="noopener">if-else</a> 语句：</p>
+<ul>
+<li><p><code>*condition* ? *expr1* : *expr2*</code></p>
+<p><code>*条件* ? *表达式 1* : *表达式 2*</code> ：如果条件为 true，执行表达式 1并返回执行结果，否则执行表达式 2 并返回执行结果。</p>
+</li>
+<li><p><code>*expr1* ?? *expr2*</code></p>
+<p><code>*表达式 1* ?? *表达式 2*</code>：如果表达式 1 为非 null 则返回其值，否则执行表达式 2 并返回其值。</p>
+</li>
+</ul>
+<p><strong>如果赋值是根据布尔表达式则考虑使用 <code>?:</code>。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var visibility &#x3D; isPublic ? &#39;public&#39; : &#39;private&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>如果赋值是根据判定是否为 null 则考虑使用 <code>??</code>。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String playerName(String name) &#x3D;&gt; name ?? &#39;Guest&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>上述示例还可以写成至少下面两种不同的形式，只是不够简洁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 相对使用 ?: 运算符来说稍微长了点。(Slightly longer version uses ?: operator).</span><br><span class="line">String playerName(String name) &#x3D;&gt; name !&#x3D; null ? name : &#39;Guest&#39;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 如果使用 if-else 则更长。</span><br><span class="line">String playerName(String name) &#123;</span><br><span class="line">  if (name !&#x3D; null) &#123;</span><br><span class="line">    return name;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return &#39;Guest&#39;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-8-级联运算符（-）"><a href="#4-8-级联运算符（-）" class="headerlink" title="4.8 级联运算符（..）"></a>4.8 级联运算符（..）</h3><p>级联运算符（<code>..</code>）可以让你在同一个对象上连续调用多个对象的变量或方法。</p>
+<p>比如下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">querySelector(&#39;#confirm&#39;) &#x2F;&#x2F; 获取对象 (Get an object).</span><br><span class="line">  ..text &#x3D; &#39;Confirm&#39; &#x2F;&#x2F; 使用对象的成员 (Use its members).</span><br><span class="line">  ..classes.add(&#39;important&#39;)</span><br><span class="line">  ..onClick.listen((e) &#x3D;&gt; window.alert(&#39;Confirmed!&#39;));</span><br></pre></td></tr></table></figure>
+
+<p>第一个方法 <code>querySelector</code> 返回了一个 Selector 对象，后面的级联操作符都是调用这个 Selector 对象的成员并忽略每个操作的返回值。</p>
+<p>上面的代码相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; querySelector(&#39;#confirm&#39;);</span><br><span class="line">button.text &#x3D; &#39;Confirm&#39;;</span><br><span class="line">button.classes.add(&#39;important&#39;);</span><br><span class="line">button.onClick.listen((e) &#x3D;&gt; window.alert(&#39;Confirmed!&#39;));</span><br></pre></td></tr></table></figure>
+
+<p>级联运算符可以嵌套，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final addressBook &#x3D; (AddressBookBuilder()</span><br><span class="line">      ..name &#x3D; &#39;jenny&#39;</span><br><span class="line">      ..email &#x3D; &#39;jenny@example.com&#39;</span><br><span class="line">      ..phone &#x3D; (PhoneNumberBuilder()</span><br><span class="line">            ..number &#x3D; &#39;415-555-0100&#39;</span><br><span class="line">            ..label &#x3D; &#39;home&#39;)</span><br><span class="line">          .build())</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+
+<p>在返回对象的函数中谨慎使用级联操作符。例如，下面的代码是错误的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var sb &#x3D; StringBuffer();</span><br><span class="line">sb.write(&#39;foo&#39;)</span><br><span class="line">  ..write(&#39;bar&#39;); &#x2F;&#x2F; 出错：void 对象中没有方法 write (Error: method &#39;write&#39; isn&#39;t defined for &#39;void&#39;).</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中的 <code>sb.write()</code> 方法返回的是 void，返回值为 <code>void</code> 的方法则不能使用级联运算符。</p>
+<blockquote>
+<p>严格来说 <code>..</code> 级联操作并非一个运算符而是 Dart 的特殊语法。</p>
+</blockquote>
+<h3 id="4-9-其他运算符"><a href="#4-9-其他运算符" class="headerlink" title="4.9 其他运算符"></a>4.9 其他运算符</h3><p>大多数其它的运算符，已经在其它的示例中使用过：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>名字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>()</code></td>
+<td>使用方法</td>
+<td>代表调用一个方法</td>
+</tr>
+<tr>
+<td><code>[]</code></td>
+<td>访问 List</td>
+<td>访问 List 中特定位置的元素</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>访问成员</td>
+<td>成员访问符</td>
+</tr>
+<tr>
+<td><code>?.</code></td>
+<td>条件访问成员</td>
+<td>与上述成员访问符类似，但是左边的操作对象不能为 null，例如 foo?.bar，如果 foo 为 null 则返回 null ，否则返回 bar</td>
+</tr>
+</tbody></table>
+<p>更多关于 <code>.</code>, <code>?.</code> 和 <code>..</code> 运算符介绍，请参考<a href="https://dart.cn/guides/language/language-tour#classes" target="_blank" rel="noopener">类</a>.</p>
+<h2 id="五、流程控制语句"><a href="#五、流程控制语句" class="headerlink" title="五、流程控制语句"></a>五、流程控制语句</h2><p>你可以使用下面的语句来控制 Dart 代码的执行流程：</p>
+<ul>
+<li><code>if</code> 和 <code>else</code></li>
+<li><code>for</code> 循环</li>
+<li><code>while</code> 和 <code>do</code>-<code>while</code> 循环</li>
+<li><code>break</code> 和 <code>continue</code></li>
+<li><code>switch</code> 和 <code>case</code></li>
+<li><code>assert</code></li>
+</ul>
+<p>使用 <code>try-catch</code> 和 <code>throw</code> 也能影响控制流，详情参考<a href="https://dart.cn/guides/language/language-tour#exceptions" target="_blank" rel="noopener">异常</a>部分。</p>
+<h3 id="5-1-If-和-Else"><a href="#5-1-If-和-Else" class="headerlink" title="5.1 If 和 Else"></a>5.1 If 和 Else</h3><p>Dart 支持 <code>if - else</code> 语句，其中 <code>else</code> 是可选的，比如下面的例子。你也可以参考<a href="https://dart.cn/guides/language/language-tour#conditional-expressions" target="_blank" rel="noopener">条件表达式</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if (isRaining()) &#123;</span><br><span class="line">  you.bringRainCoat();</span><br><span class="line">&#125; else if (isSnowing()) &#123;</span><br><span class="line">  you.wearJacket();</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  car.putTopDown();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与 JavaScript 不同的是，Dart 的 if 语句中的条件必须是一个布尔值，不能是其它类型。详情请查阅<a href="https://dart.cn/guides/language/language-tour#booleans" target="_blank" rel="noopener">布尔值</a>。</p>
+<h3 id="5-2-For-循环"><a href="#5-2-For-循环" class="headerlink" title="5.2 For 循环"></a>5.2 For 循环</h3><p>你可以使用标准的 <code>for</code> 循环进行迭代。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var message &#x3D; StringBuffer(&#39;Dart is fun&#39;);</span><br><span class="line">for (var i &#x3D; 0; i &lt; 5; i++) &#123;</span><br><span class="line">  message.write(&#39;!&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 Dart 语言中，<code>for</code> 循环中的闭包会自动捕获循环的 <strong>索引值</strong> 以避免 JavaScript 中一些常见的陷阱。假设有如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var callbacks &#x3D; [];</span><br><span class="line">for (var i &#x3D; 0; i &lt; 2; i++) &#123;</span><br><span class="line">  callbacks.add(() &#x3D;&gt; print(i));</span><br><span class="line">&#125;</span><br><span class="line">callbacks.forEach((c) &#x3D;&gt; c());</span><br></pre></td></tr></table></figure>
+
+<p>上述代码执行后会输出 <code>0</code> 和 <code>1</code>，但是如果在 JavaScript 中执行同样的代码则会输出两个 <code>2</code>。</p>
+<p>如果要遍历的对象实现了 Iterable 接口，则可以使用 <a href="https://api.dart.dev/stable/dart-core/Iterable/forEach.html" target="_blank" rel="noopener">forEach()</a> 方法，如果不需要使用到索引，则使用 <code>forEach</code> 方法是一个非常好的选择：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">candidates.forEach((candidate) &#x3D;&gt; candidate.interview());</span><br></pre></td></tr></table></figure>
+
+<p>像 List 和 Set 等实现了 Iterable 接口的类还支持 <code>for-in</code> 形式的 <a href="https://dart.cn/guides/libraries/library-tour#iteration" target="_blank" rel="noopener">迭代</a>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var collection &#x3D; [0, 1, 2];</span><br><span class="line">for (var x in collection) &#123;</span><br><span class="line">  print(x); &#x2F;&#x2F; 0 1 2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-While-和-Do-While"><a href="#5-3-While-和-Do-While" class="headerlink" title="5.3 While 和 Do-While"></a>5.3 While 和 Do-While</h3><p><code>while</code> 循环会在执行循环体前先判断条件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while (!isDone()) &#123;</span><br><span class="line">  doSomething();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>do-while</code> 循环则会先执行一遍循环体 <em>再</em> 判断条件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">do &#123;</span><br><span class="line">  printLine();</span><br><span class="line">&#125; while (!atEndOfPage());</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-Break-和-Continue"><a href="#5-4-Break-和-Continue" class="headerlink" title="5.4 Break 和 Continue"></a>5.4 Break 和 Continue</h3><p>使用 <code>break</code> 可以中断循环：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while (true) &#123;</span><br><span class="line">  if (shutDownRequested()) break;</span><br><span class="line">  processIncomingRequests();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>continue</code> 可以跳过本次循环直接进入下一次循环：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (int i &#x3D; 0; i &lt; candidates.length; i++) &#123;</span><br><span class="line">  var candidate &#x3D; candidates[i];</span><br><span class="line">  if (candidate.yearsExperience &lt; 5) &#123;</span><br><span class="line">    continue;</span><br><span class="line">  &#125;</span><br><span class="line">  candidate.interview();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中的 candidates 如果像 List 或 Set 一样实现了 <a href="https://api.dart.dev/stable/dart-core/Iterable-class.html" target="_blank" rel="noopener">Iterable</a> 接口则可以简单地使用下述写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">candidates</span><br><span class="line">    .where((c) &#x3D;&gt; c.yearsExperience &gt;&#x3D; 5)</span><br><span class="line">    .forEach((c) &#x3D;&gt; c.interview());</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-Switch-和-Case"><a href="#5-5-Switch-和-Case" class="headerlink" title="5.5 Switch 和 Case"></a>5.5 Switch 和 Case</h3><p>Switch 语句在 Dart 中使用 <code>==</code> 来比较整数、字符串或编译时常量，比较的两个对象必须是同一个类型且不能是子类并且没有重写 <code>==</code> 操作符。 <a href="https://dart.cn/guides/language/language-tour#enumerated-types" target="_blank" rel="noopener">枚举类型</a>非常适合在 <code>Switch</code> 语句中使用。</p>
+<p> <strong>备忘:</strong></p>
+<blockquote>
+<p>Dart 中的 Switch 语句仅适用于有限的情况，比如使用解释器和扫描器的场景。</p>
+</blockquote>
+<p>每一个非空的 <code>case</code> 子句都必须有一个 <code>break</code> 语句，也可以通过 <code>continue</code>、<code>throw</code> 或者 <code>return</code> 来结束非空 <code>case</code> 语句。</p>
+<p>当没有 <code>case</code> 语句匹配时，可以使用 <code>default</code> 子句来匹配这种情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var command &#x3D; &#39;OPEN&#39;;</span><br><span class="line">switch (command) &#123;</span><br><span class="line">  case &#39;CLOSED&#39;:</span><br><span class="line">    executeClosed();</span><br><span class="line">    break;</span><br><span class="line">  case &#39;PENDING&#39;:</span><br><span class="line">    executePending();</span><br><span class="line">    break;</span><br><span class="line">  case &#39;APPROVED&#39;:</span><br><span class="line">    executeApproved();</span><br><span class="line">    break;</span><br><span class="line">  case &#39;DENIED&#39;:</span><br><span class="line">    executeDenied();</span><br><span class="line">    break;</span><br><span class="line">  case &#39;OPEN&#39;:</span><br><span class="line">    executeOpen();</span><br><span class="line">    break;</span><br><span class="line">  default:</span><br><span class="line">    executeUnknown();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的例子忽略了 <code>case</code> 子句的 <code>break</code> 语句，因此会产生错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var command &#x3D; &#39;OPEN&#39;;</span><br><span class="line">switch (command) &#123;</span><br><span class="line">  case &#39;OPEN&#39;:</span><br><span class="line">    executeOpen();</span><br><span class="line">    &#x2F;&#x2F; 错误: 没有 break</span><br><span class="line"></span><br><span class="line">  case &#39;CLOSED&#39;:</span><br><span class="line">    executeClosed();</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是，Dart 支持空的 <code>case</code> 语句，允许其以 fall-through 的形式执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var command &#x3D; &#39;CLOSED&#39;;</span><br><span class="line">switch (command) &#123;</span><br><span class="line">  case &#39;CLOSED&#39;: &#x2F;&#x2F; case 语句为空时的 fall-through 形式。</span><br><span class="line">  case &#39;NOW_CLOSED&#39;:</span><br><span class="line">    &#x2F;&#x2F; case 条件值为 CLOSED 和 NOW_CLOSED 时均会执行该语句。</span><br><span class="line">    executeNowClosed();</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在非空 <code>case</code> 语句中想要实现 fall-through 的形式，可以使用 <code>continue</code> 语句配合 lable 的方式实现:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var command &#x3D; &#39;CLOSED&#39;;</span><br><span class="line">switch (command) &#123;</span><br><span class="line">  case &#39;CLOSED&#39;:</span><br><span class="line">    executeClosed();</span><br><span class="line">    continue nowClosed;</span><br><span class="line">  &#x2F;&#x2F; 继续执行标签为 nowClosed 的 case 子句。</span><br><span class="line"></span><br><span class="line">  nowClosed:</span><br><span class="line">  case &#39;NOW_CLOSED&#39;:</span><br><span class="line">    &#x2F;&#x2F; case 条件值为 CLOSED 和 NOW_CLOSED 时均会执行该语句。</span><br><span class="line">    executeNowClosed();</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个 <code>case</code> 子句都可以有局部变量且仅在该 case 语句内可见。</p>
+<h3 id="5-6-断言"><a href="#5-6-断言" class="headerlink" title="5.6 断言"></a>5.6 断言</h3><p>在开发过程中，可以在条件表达式为 false 时使用 - <code>assert(*条件*, *可选信息*)</code>; - 语句来打断代码的执行。你可以在本文中找到大量使用 assert 的例子。下面是相关示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 确保变量值不为 null (Make sure the variable has a non-null value)</span><br><span class="line">assert(text !&#x3D; null);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 确保变量值小于 100。</span><br><span class="line">assert(number &lt; 100);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 确保这是一个 https 地址。</span><br><span class="line">assert(urlString.startsWith(&#39;https&#39;));</span><br></pre></td></tr></table></figure>
+
+<p><code>assert</code> 的第二个参数可以为其添加一个字符串消息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">assert(urlString.startsWith(&#39;https&#39;),</span><br><span class="line">    &#39;URL ($urlString) should start with &quot;https&quot;.&#39;);</span><br></pre></td></tr></table></figure>
+
+<p><code>assert</code> 的第一个参数可以是值为布尔值的任何表达式。如果表达式的值为 true，则断言成功，继续执行。如果表达式的值为 false，则断言失败，抛出一个 <a href="https://api.dart.dev/stable/dart-core/AssertionError-class.html" target="_blank" rel="noopener">AssertionError</a> 异常。</p>
+<p>如何判断 assert 是否生效？assert 是否生效依赖开发工具和使用的框架：</p>
+<ul>
+<li>Flutter 在<a href="https://flutter.cn/docs/testing/debugging#debug-mode-assertions" target="_blank" rel="noopener">调试模式</a>时生效。</li>
+<li>一些开发工具比如 <a href="https://dart.cn/tools/dartdevc" target="_blank" rel="noopener">dartdevc</a> 通常情况下是默认生效的。</li>
+<li>其他一些工具，比如 <a href="https://dart.cn/server/tools/dart-vm" target="_blank" rel="noopener">dart</a> 以及 <a href="https://dart.cn/tools/dart2js" target="_blank" rel="noopener">dart2js</a> 通过在运行 Dart 程序时添加命令行参数 <code>--enable-asserts</code> 使 assert 生效。</li>
+</ul>
+<p>在生产环境代码中，断言会被忽略，与此同时传入 <code>assert</code> 的参数不被判断。</p>
+<h2 id="六、异常"><a href="#六、异常" class="headerlink" title="六、异常"></a>六、异常</h2><p>Dart 代码可以抛出和捕获异常。异常表示一些未知的错误情况，如果异常没有捕获则会被抛出从而导致抛出异常的代码终止执行。</p>
+<p>与 Java 不同的是，Dart 的所有异常都是非必检异常，方法不一定会声明其所抛出的异常并且你也不会被要求捕获任何异常。</p>
+<p>Dart 提供了 <a href="https://api.dart.dev/stable/dart-core/Exception-class.html" target="_blank" rel="noopener">Exception</a> 和 <a href="https://api.dart.dev/stable/dart-core/Error-class.html" target="_blank" rel="noopener">Error</a> 两种类型的异常以及它们一系列的子类，你也可以定义自己的异常类型。但是在 Dart 中可以将任何非 null 对象作为异常抛出而不局限于 Exception 或 Error 类型。</p>
+<h3 id="6-1-抛出异常"><a href="#6-1-抛出异常" class="headerlink" title="6.1 抛出异常"></a>6.1 抛出异常</h3><p>下面是关于抛出或者 <em>引发</em> 异常的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">throw FormatException(&#39;Expected at least 1 section&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>你也可以抛出任意的对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">throw &#39;Out of llamas!&#39;;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>备忘:</strong></p>
+<p>优秀的代码通常会抛出 <a href="https://api.dart.dev/stable/dart-core/Error-class.html" target="_blank" rel="noopener">Error</a> 或 <a href="https://api.dart.dev/stable/dart-core/Exception-class.html" target="_blank" rel="noopener">Exception</a> 类型的异常。</p>
+<p>因为抛出异常是一个表达式，所以可以在 =&gt; 语句中使用，也可以在其他使用表达式的地方抛出异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void distanceTo(Point other) &#x3D;&gt; throw UnimplementedError();</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-捕获异常"><a href="#6-2-捕获异常" class="headerlink" title="6.2 捕获异常"></a>6.2 捕获异常</h3><p>捕获异常可以避免异常继续传递（重新抛出异常除外）。捕获一个异常可以给你处理它的机会：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  breedMoreLlamas();</span><br><span class="line">&#125; on OutOfLlamasException &#123;</span><br><span class="line">  buyMoreLlamas();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于可以抛出多种异常类型的代码，也可以指定多个 catch 语句，每个语句分别对应一个异常类型，如果 catch 语句没有指定异常类型则表示可以捕获任意异常类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  breedMoreLlamas();</span><br><span class="line">&#125; on OutOfLlamasException &#123;</span><br><span class="line">  &#x2F;&#x2F; 指定异常</span><br><span class="line">  buyMoreLlamas();</span><br><span class="line">&#125; on Exception catch (e) &#123;</span><br><span class="line">  &#x2F;&#x2F; 其它类型的异常</span><br><span class="line">  print(&#39;Unknown exception: $e&#39;);</span><br><span class="line">&#125; catch (e) &#123;</span><br><span class="line">  &#x2F;&#x2F; &#x2F;&#x2F; 不指定类型，处理其它全部</span><br><span class="line">  print(&#39;Something really unknown: $e&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上述代码所示可以使用 <code>on</code> 或 <code>catch</code> 来捕获异常，使用 <code>on</code> 来指定异常类型，使用 <code>catch</code> 来捕获异常对象，两者可同时使用。</p>
+<p>你可以为 <code>catch</code> 方法指定两个参数，第一个参数为抛出的异常对象，第二个参数为栈信息 <a href="https://api.dart.dev/stable/dart-core/StackTrace-class.html" target="_blank" rel="noopener">StackTrace</a> 对象：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// ···</span></span><br><span class="line">&#125; <span class="keyword">on</span> Exception <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'Exception details:\n <span class="subst">$e</span>'</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (e, s) &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'Exception details:\n <span class="subst">$e</span>'</span>);</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'Stack trace:\n <span class="subst">$s</span>'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键字 <code>rethrow</code> 可以将捕获的异常再次抛出：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> misbehave() &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="built_in">dynamic</span> foo = <span class="keyword">true</span>;</span><br><span class="line">    <span class="built_in">print</span>(foo++); <span class="comment">// 运行时错误</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'misbehave() partially handled <span class="subst">$&#123;e.runtimeType&#125;</span>.'</span>);</span><br><span class="line">    <span class="keyword">rethrow</span>; <span class="comment">// 允许调用者查看异常。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    misbehave();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'main() finished handling <span class="subst">$&#123;e.runtimeType&#125;</span>.'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-Finally"><a href="#6-3-Finally" class="headerlink" title="6.3 Finally"></a>6.3 Finally</h3><p>可以使用 <code>finally</code> 语句来包裹确保不管有没有异常都执行代码，如果没有指定 <code>catch</code> 语句来捕获异常，则在执行完 <code>finally</code> 语句后再抛出异常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  breedMoreLlamas();</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">  &#x2F;&#x2F; 总是清理，即便抛出了异常。</span><br><span class="line">  cleanLlamaStalls();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>finally</code> 语句会在任何匹配的 <code>catch</code> 语句后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  breedMoreLlamas();</span><br><span class="line">&#125; catch (e) &#123;</span><br><span class="line">  print(&#39;Error: $e&#39;); &#x2F;&#x2F; 先处理异常。</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">  cleanLlamaStalls(); &#x2F;&#x2F; 然后清理。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多详情，请参考你可以阅读 Dart 核心库概览的 <a href="https://dart.cn/guides/libraries/library-tour#exceptions" target="_blank" rel="noopener">异常</a> 章节获取更多相关信息。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/dart/" rel="tag"># dart</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/09/Android/%E5%BC%80%E5%8F%91/APP%E4%BC%98%E5%8C%96%E5%B0%8F%E5%BB%BA%E8%AE%AE/" rel="next" title="APP优化小建议">
+                <i class="fa fa-chevron-left"></i> APP优化小建议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/11/flutter/dart/drat%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%EF%BC%882%EF%BC%89/" rel="prev" title="dart开发语言基础（2）">
+                dart开发语言基础（2） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、重要概念"><span class="nav-number">1.</span> <span class="nav-text">一、重要概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、关键字"><span class="nav-number">2.</span> <span class="nav-text">二、关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、语法"><span class="nav-number">3.</span> <span class="nav-text">三、语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-gt"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 &#x3D;&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-可选参数"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 可选参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-命名参数"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 命名参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-位置参数"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 位置参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-默认参数值"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 默认参数值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-函数作为一级对象"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 函数作为一级对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-匿名函数"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 匿名函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-词法作用域"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 词法作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-词法闭包"><span class="nav-number">3.6.</span> <span class="nav-text">3.5 词法闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-测试函数是否相等"><span class="nav-number">3.7.</span> <span class="nav-text">3.6 测试函数是否相等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-返回值"><span class="nav-number">3.8.</span> <span class="nav-text">3.7 返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、运算符"><span class="nav-number">4.</span> <span class="nav-text">四、运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-算术运算符"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-关系运算符"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 关系运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-类型判断运算符"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 类型判断运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-赋值运算符"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 赋值运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-逻辑运算符"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-按位和移位运算符"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 按位和移位运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-条件表达式"><span class="nav-number">4.7.</span> <span class="nav-text">4.7 条件表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-级联运算符（-）"><span class="nav-number">4.8.</span> <span class="nav-text">4.8 级联运算符（..）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-9-其他运算符"><span class="nav-number">4.9.</span> <span class="nav-text">4.9 其他运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、流程控制语句"><span class="nav-number">5.</span> <span class="nav-text">五、流程控制语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-If-和-Else"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 If 和 Else</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-For-循环"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 For 循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-While-和-Do-While"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 While 和 Do-While</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-Break-和-Continue"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 Break 和 Continue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-Switch-和-Case"><span class="nav-number">5.5.</span> <span class="nav-text">5.5 Switch 和 Case</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-断言"><span class="nav-number">5.6.</span> <span class="nav-text">5.6 断言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、异常"><span class="nav-number">6.</span> <span class="nav-text">六、异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-抛出异常"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 抛出异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-捕获异常"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 捕获异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-Finally"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 Finally</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

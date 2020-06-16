@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面试,基础,Java,反射," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于Java使用者来说，反射机制可以说是不得不了解的重要技能之一  一、概述JAVA反射机制，可在运行态直接操作任意类或对象的所有属性和方法，主要有以下几个功能：  在运行时获取任意对象所属的类 在运行时构造类的实例对象 在运行时获取或修改类&#x2F;成员的属性 在运行时调用某个类&#x2F;对象的方法 另外还可获取类的其他信息，比如描述修饰符、父类信息等  针对动态语言，大致认同的一个定义是：“程序运行时，允许">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Java反射机制">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/Java/%E5%8F%8D%E5%B0%84/%E7%90%86%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="对于Java使用者来说，反射机制可以说是不得不了解的重要技能之一  一、概述JAVA反射机制，可在运行态直接操作任意类或对象的所有属性和方法，主要有以下几个功能：  在运行时获取任意对象所属的类 在运行时构造类的实例对象 在运行时获取或修改类&#x2F;成员的属性 在运行时调用某个类&#x2F;对象的方法 另外还可获取类的其他信息，比如描述修饰符、父类信息等  针对动态语言，大致认同的一个定义是：“程序运行时，允许">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-05T06:08:25.000Z">
+<meta property="article:modified_time" content="2020-06-05T06:23:19.483Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="反射">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/05/Java/反射/理解Java反射机制/"/>
+
+
+
+
+
+  <title>理解Java反射机制 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/Java/%E5%8F%8D%E5%B0%84/%E7%90%86%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解Java反射机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-05T14:08:25+08:00">
+                2020-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E5%8F%8D%E5%B0%84/" itemprop="url" rel="index">
+                    <span itemprop="name">反射</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/05/Java/%E5%8F%8D%E5%B0%84/%E7%90%86%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/05/Java/%E5%8F%8D%E5%B0%84/%E7%90%86%E8%A7%A3Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>对于Java使用者来说，反射机制可以说是不得不了解的重要技能之一</p>
+</blockquote>
+<h3 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h3><p>JAVA反射机制，可在运行态直接操作任意类或对象的所有属性和方法，主要有以下几个功能：</p>
+<ul>
+<li>在运行时获取任意对象所属的类</li>
+<li>在运行时构造类的实例对象</li>
+<li>在运行时获取或修改类/成员的属性</li>
+<li>在运行时调用某个类/对象的方法</li>
+<li>另外还可获取类的其他信息，比如描述修饰符、父类信息等</li>
+</ul>
+<p>针对动态语言，大致认同的一个定义是：“程序运行时，允许改变程序结构或变量类型，这种语言称为动态语言”。反射机制在运行时只能调用methods或改变fields内容，却无法修改程序结构或变量类型。从这个观点看，Perl，Python，Ruby是动态语言，C++，Java，C#不是动态语言。</p>
+<h3 id="二、反射原理"><a href="#二、反射原理" class="headerlink" title="二、反射原理"></a>二、反射原理</h3><p>用于操作反射相关的主要有以下5个类：</p>
+<ul>
+<li>java.lang.Class： 代表类</li>
+<li>java.lang.reflect.Constructor: 代表类的构造方法</li>
+<li>java.lang.reflect.Field: 代表类的属性</li>
+<li>java.lang.reflect.Method: 代表类的方法</li>
+<li>java.lang.reflect.Modifier：代表类、方法、属性的描述修饰符。</li>
+</ul>
+<p>Constructor、Field、Method这三个类都继承AccessibleObject，该对象有一个非常重要的方法<code>setAccessible(boolean flag)</code>, 用于保证反射可调用非Public的属性与方法。Modifier是指描述修饰符，包含如下范围： public, protected, private, abstract, static, final, transient, volatile, synchronized, native, strictfp, interface。</p>
+<h4 id="2-1-Constructor"><a href="#2-1-Constructor" class="headerlink" title="2.1 Constructor"></a>2.1 Constructor</h4><p>通过java.lang.reflect.Constructor来操作类的构造方法</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">getConstructors()</td>
+<td align="left">获得类的所有public构造方法</td>
+</tr>
+<tr>
+<td align="left">getDeclaredConstructors()</td>
+<td align="left">获得类的所有构造方法</td>
+</tr>
+<tr>
+<td align="left">getConstructor(Class[] parameterTypes)</td>
+<td align="left">获得类的特定public构造方法</td>
+</tr>
+<tr>
+<td align="left">getDeclaredConstructor(Class[] params)</td>
+<td align="left">获取类的特定构造方法</td>
+</tr>
+</tbody></table>
+<h4 id="2-2-Field"><a href="#2-2-Field" class="headerlink" title="2.2 Field"></a>2.2 Field</h4><p>通过java.lang.reflect.Field来获取和修改成员属性，其中getField和getDeclaredField的核心区别就是是否指定类型为public</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">getFields()</td>
+<td align="left">获得类的所有public属性</td>
+</tr>
+<tr>
+<td align="left">getDeclaredFields()</td>
+<td align="left">获得类的所有属性</td>
+</tr>
+<tr>
+<td align="left">getField(String name)</td>
+<td align="left">获得类的特定public属性</td>
+</tr>
+<tr>
+<td align="left">getDeclaredField(String name)</td>
+<td align="left">获取类的特定属性</td>
+</tr>
+</tbody></table>
+<h4 id="2-3-Method"><a href="#2-3-Method" class="headerlink" title="2.3 Method"></a>2.3 Method</h4><p>通过java.lang.reflect.Method来执行成员方法</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">getMethods()</td>
+<td align="left">获得类的所有public成员方法</td>
+</tr>
+<tr>
+<td align="left">getDeclaredMethods()</td>
+<td align="left">获得类的所有成员方法</td>
+</tr>
+<tr>
+<td align="left">getMethod(String name, Class[] parameterTypes)</td>
+<td align="left">获得类的特定public成员方法</td>
+</tr>
+<tr>
+<td align="left">getDeclaredMethod(String name, Class[] parameterTypes)</td>
+<td align="left">获取类的特定成员方法</td>
+</tr>
+</tbody></table>
+<h4 id="2-4-Class类的原理"><a href="#2-4-Class类的原理" class="headerlink" title="2.4 Class类的原理"></a>2.4 Class类的原理</h4><p>Java所有的类都是继承于类Object，其内声明了多个应该被所有Java类覆写的方法：hashCode()、equals()、clone()、toString()、notify()、wait()、getClass(）等，其中getClass返回的便是一个Class类的对象。Class类也同样是继承Object类，拥有相应的方法。</p>
+<p>Java程序在运行时，运行时系统对每一个对象都有一项类型标识，用于记录对象所属的类。虚拟机使用运行时类型来选择相应方法去执行，保存所有对象类型信息的类便是Class类。Class类没有公共构造方法，Class对象是在加载类时由 Java 虚拟机以及通过调用ClassLoader的defineClass 方法自动构造的，因此不能显式地声明一个Class对象。</p>
+<p>虚拟机为每种类型管理一个独一无二的Class对象。也就是说，每个类型都有一个Class对象。运行程序时，Java虚拟机(JVM)首先检查是否所要加载的类对应的Class对象是否已经加载。如果没有加载，JVM就会根据类名查找.class文件，并将其Class对象载入。</p>
+<p>基本的 Java 类型（boolean、byte、char、short、int、long、float 和 double）和关键字 void 也都对应一个 Class 对象。 每个数组属于被映射为 Class 对象的一个类，所有具有相同元素类型和维数的数组都共享该 Class 对象。一般某个类的Class对象被载入内存，它就用来创建这个类的所有对象。</p>
+<h3 id="三、反射实例"><a href="#三、反射实例" class="headerlink" title="三、反射实例"></a>三、反射实例</h3><p>对于正常方式来调用方法，往往只需要一行到两行代码，即可完成相应工作。而反射则显得比较繁琐，之所以繁琐仍会才用反射方式，是因为反射能干很多正常实例化对象的方式所无法做到的事。比如操作那些private的类、方法、属性，以及@hide标记过的类、方法、属性。</p>
+<p>为了到达即能有反射的功效，同时调用方法简单易用，建议大家自己封装一个反射工具类ReflectUtils。（注：以下实例为了代码精简，忽略Exception以及异常处理逻辑。）</p>
+<h4 id="3-1-创建对象"><a href="#3-1-创建对象" class="headerlink" title="3.1 创建对象"></a>3.1 创建对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据类名来获取类</span></span><br><span class="line">Class clazz = Class.forName(<span class="string">"java.lang.String"</span>);</span><br><span class="line"><span class="comment">//根据对象来获取类</span></span><br><span class="line">Class clazz = object.getClass();</span><br><span class="line"><span class="comment">//根据类来实例化对象</span></span><br><span class="line">Object obj = clazz.newInstance();</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取无参的构造函数</span></span><br><span class="line">Constructor c = clazz.getConstructor(<span class="keyword">null</span>);</span><br><span class="line"><span class="comment">//获取参数为String,int的构造函数</span></span><br><span class="line">Constructor c = clazz.getConstructor(String<span class="class">.<span class="keyword">class</span>, <span class="title">int</span>.<span class="title">class</span>)</span>;</span><br><span class="line"><span class="comment">//用于调用私有构造方法</span></span><br><span class="line">c.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">Object obj = c.newInstance(<span class="string">"gityuan.com"</span>, <span class="number">2015</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-获取-修改属性"><a href="#3-2-获取-修改属性" class="headerlink" title="3.2 获取/修改属性"></a>3.2 获取/修改属性</h4><p>1) 获取对象的属性:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getField</span><span class="params">(Object object, String fieldName)</span> </span>&#123;</span><br><span class="line">    Class clazz = object.getClass();</span><br><span class="line">    Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">return</span> field.get(object)；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2) 修改对象的属性:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">setField</span><span class="params">(Object object, String fieldName, Object fieldValue)</span> </span>&#123;</span><br><span class="line">    Class clazz = object.getClass();</span><br><span class="line">    Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">return</span> field.set(object, fieldValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3) 获取类的静态属性:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static Object getField(Class clazz, String fieldName) &#123;</span><br><span class="line">    Field field &#x3D; clazz.getDeclaredField(fieldName);</span><br><span class="line">    field.setAccessible(true);</span><br><span class="line">    return field.get(null)；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4) 修改类的静态属性:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static boolean setField(Class clazz, String fieldName, Object fieldValue) &#123;</span><br><span class="line">    Field field &#x3D; clazz.getDeclaredField(fieldName);</span><br><span class="line">    field.setAccessible(true);</span><br><span class="line">    return field.set(null, fieldValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-调用方法"><a href="#3-3-调用方法" class="headerlink" title="3.3 调用方法"></a>3.3 调用方法</h4><p>1) 调用对象方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">invokeMethod</span><span class="params">(Object object, String methodName, Class[] argsType, Object... args)</span> </span>&#123;</span><br><span class="line">    Class clazz = object.getClass();</span><br><span class="line">    Method method = clazz.getDeclaredMethod(methodName, argsType);</span><br><span class="line">    <span class="keyword">return</span> method.invoke(object, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2) 调用类的静态方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">invokeMethod</span><span class="params">(Class clazz, String methodName, Class[] argsType, Object... args)</span> </span>&#123;</span><br><span class="line">    Method method = clazz.getDeclaredMethod(methodName, argsType);</span><br><span class="line">    method.setAccessible(<span class="keyword">true</span>);  </span><br><span class="line">    <span class="keyword">return</span> method.invoke(<span class="keyword">null</span>, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-调用内部类"><a href="#3-4-调用内部类" class="headerlink" title="3.4 调用内部类"></a>3.4 调用内部类</h4><p>假设com.reflect.Outer类，有一个内部类inner和静态内部类StaticInner。 那么静态内部类的构造函数为Outer$StaticInner(); 而普通内部类的构造函数为Outer$Inner(Outer outer)，多了一个final的Outer类型属性，即Outer$Inner.this$0，用于存储外部类的属性值，也就是说非static内部类保持了外部类的引用。</p>
+<p>直接实例化内部类方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 静态内部类</span><br><span class="line">Outer.StaticInner sInner &#x3D; new Outer.StaticInner();</span><br><span class="line">&#x2F;&#x2F; 非静态内部类</span><br><span class="line">Outer.Inner inner &#x3D; new Outer().new Inner();</span><br></pre></td></tr></table></figure>
+
+<p>内部类的类名使用采用$符号，来连接外部类与内部类，格式为outer$Inner</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String className = <span class="string">"com.reflect.Outer$Inner"</span>;</span><br><span class="line">Class.forName(className);</span><br></pre></td></tr></table></figure>
+
+<p>除了格式了差异，关于内部类的属性和方法操作基本相似，下面以调用该静态类的静态方法为例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">invokeMethod</span><span class="params">(String methodName, Class[] argsType, Object... args)</span> </span>&#123;</span><br><span class="line">    Class clazz = Class.forName(“com.reflect.Outer$StaticInner<span class="string">");</span></span><br><span class="line"><span class="string">    Method method = clazz.getDeclaredMethod(methodName, argsType);</span></span><br><span class="line"><span class="string">    method.setAccessible(true);  </span></span><br><span class="line"><span class="string">    return method.invoke(null, args);</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="四、小节"><a href="#四、小节" class="headerlink" title="四、小节"></a>四、小节</h3><p>反射机制为解耦合提供了保障机制，也为在运行时动态修改属性和调用方法提供的可能性。在Android的源码中，我们会发现有很多被”@hide”标记的类，它的作用是使这个类或方法在生成SDK时不可见。那么应用程序便不可以直接调用。而反射机制可调用@hide标记的类或方法，如入无人之地，畅通无阻。不过从Android P开始就不允许调用@hide方法，会在虚拟机层面拦截直接抛出异常。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+          
+            <a href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag"># 基础</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"># 反射</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/05/grep%E5%92%8Cfind%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/" rel="next" title="grep和find命令用法">
+                <i class="fa fa-chevron-left"></i> grep和find命令用法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/05/Java/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/Java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8-ClassLoader/" rel="prev" title="Java类加载器-ClassLoader">
+                Java类加载器-ClassLoader <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、反射原理"><span class="nav-number">2.</span> <span class="nav-text">二、反射原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-Constructor"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Constructor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Field"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Field</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-Method"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-Class类的原理"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Class类的原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、反射实例"><span class="nav-number">3.</span> <span class="nav-text">三、反射实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-创建对象"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 创建对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-获取-修改属性"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 获取&#x2F;修改属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-调用方法"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 调用方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-调用内部类"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 调用内部类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、小节"><span class="nav-number">4.</span> <span class="nav-text">四、小节</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统总结篇," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="总结Android 系统架构Android大致可以分为四层架构：Linux内核层、系统运行库层、应用框架层和应用层。 本文作为Android系统架构的开篇，起到提纲挈领的作用，从系统整体架构角度概要讲解Android系统的核心技术点，带领大家初探Android系统全貌以及内部运作机制。虽然Android系统非常庞大且错综复杂，需要具备全面的技术栈，但整体架构设计清晰。Android底层内核空间以L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统总结篇">
+<meta property="og:url" content="http://yoursite.com/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="总结Android 系统架构Android大致可以分为四层架构：Linux内核层、系统运行库层、应用框架层和应用层。 本文作为Android系统架构的开篇，起到提纲挈领的作用，从系统整体架构角度概要讲解Android系统的核心技术点，带领大家初探Android系统全貌以及内部运作机制。虽然Android系统非常庞大且错综复杂，需要具备全面的技术栈，但整体架构设计清晰。Android底层内核空间以L">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-a8c2d9d3a1a3a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/12/22/16f2c322e9e0eea1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-68a5968ed562a20e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-f03913fd803c3125.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://gityuan.com/images/boot/init/zygote_init.jpg">
+<meta property="og:image" content="http://gityuan.com/images/boot/zygote/zygote_process.jpg">
+<meta property="og:image" content="http://gityuan.com/images/boot/zygote/zygote_start.jpg">
+<meta property="og:image" content="http://gityuan.com/images/android-process/start_app_process.jpg">
+<meta property="og:image" content="http://gityuan.com/images/android-process/process-create.jpg">
+<meta property="og:image" content="http://gityuan.com/images/boot/systemServer/system_server.jpg">
+<meta property="og:image" content="http://gityuan.com/images/boot/systemServer/system_server_boot_process.jpg">
+<meta property="article:published_time" content="2020-05-29T05:38:37.000Z">
+<meta property="article:modified_time" content="2020-06-02T05:19:15.770Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android系统总结篇">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4118241-a8c2d9d3a1a3a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/29/Android/Android系统分析/Android系统总结篇/"/>
+
+
+
+
+
+  <title>Android系统总结篇 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android系统总结篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-29T13:38:37+08:00">
+                2020-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">Android系统分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="Android-系统架构"><a href="#Android-系统架构" class="headerlink" title="Android 系统架构"></a>Android 系统架构</h2><p>Android大致可以分为四层架构：<strong>Linux内核层、系统运行库层、应用框架层和应用层</strong>。</p>
+<p>本文作为Android系统架构的开篇，起到提纲挈领的作用，从系统整体架构角度概要讲解Android系统的核心技术点，带领大家初探Android系统全貌以及内部运作机制。虽然Android系统非常庞大且错综复杂，需要具备全面的技术栈，但整体架构设计清晰。Android底层内核空间以Linux Kernel作为基石，上层用户空间由Native系统库、虚拟机运行环境、框架层组成，通过系统调用(Syscall)连通系统的内核空间与用户空间。对于用户空间主要采用C++和Java代码编写，通过JNI技术打通用户空间的Java层和Native层(C++/C)，从而连通整个系统。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-a8c2d9d3a1a3a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<ul>
+<li><p>Linux内核层</p>
+<p>Android系统是基于Linux内核的，这一层为Android设备的各种硬件提供了底层的驱动，如显示驱动、音频驱动、照相机驱动、蓝牙驱动、Wi-Fi驱动、电源管理等。</p>
+</li>
+<li><p>系统运行库层</p>
+<p>这一层通过一些C/C++库来为Android系统提供了主要的特性支持。如SQLite库提供了数据库的支持，OpenGl|ES库提供了3D绘图的支持，Webkit库提供了浏览器内核的支持等。</p>
+<p>同样这一层还有Android运行时库，它主要提供了一些核心库，能够允许开发者使用Java语言来编写Android应用。另外，Android运行库中还包含了Dalvik虚拟机（5.0系统之后改为ART运行环境），它使得每一个Android应用都能运行在独立的进程中，并且拥有一个自己的Dalvik虚拟机示例。相较于Java虚拟机，Dalvik是专门为移动设备定制的，它针对手机内存、CPU性能有限等情况做了优化处理。</p>
+</li>
+<li><p>应用框架层</p>
+<p>这一层主要提供了构建应用程序时可能用到的各种API,Andorid自带的一些核心应用就是使用这些API完成的，开发者也可以通过使用这些API来构建自己的应用程序。</p>
+</li>
+<li><p>应用层</p>
+<p>所有安装在手机上的应用程序都是属于这一层的，比如系统自带的联系人、短信等程序，或者是你从Google Play上下载的小游戏，当然还包括你自己开发的程序。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/12/22/16f2c322e9e0eea1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="脑图"></p>
+</li>
+</ul>
+<h2 id="系统启动架构"><a href="#系统启动架构" class="headerlink" title="系统启动架构"></a>系统启动架构</h2><p>Google提供的5层架构图很经典，但为了更进一步透视Android系统架构，本文更多的是以进程的视角，以分层的架构来诠释Android系统的全貌，阐述Android内部的环环相扣的内在联系。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-68a5968ed562a20e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-f03913fd803c3125.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h2 id="Init进程"><a href="#Init进程" class="headerlink" title="Init进程"></a>Init进程</h2><p>init进程是Linux系统中用户空间的第一个进程，进程号固定为1。Kernel启动后，在用户空间启动init进程，并调用init中的main()方法执行init进程。对于init进程的功能分为4部分：</p>
+<ul>
+<li><p>创建一块共享的内存空间，用于属性服务器;</p>
+</li>
+<li><p>解析各个rc文件，并启动相应属性服务进程;</p>
+</li>
+<li><p>初始化epoll，依次设置signal、property、keychord这3个fd可读时相对应的回调函数;</p>
+</li>
+<li><p>进入无限循环状态，执行如下流程：</p>
+<ul>
+<li>检查action_queue列表是否为空，若不为空则执行相应的action;</li>
+<li>检查是否需要重启的进程，若有则将其重新启动;</li>
+<li>进入epoll_wait等待状态，直到系统属性变化事件(property_set改变属性值)，或者收到子进程的信号SIGCHLD，再或者keychord 键盘输入事件，则会退出等待状态，执行相应的回调函数。</li>
+</ul>
+</li>
+</ul>
+<p>可见init进程在开机之后的核心工作就是响应property变化事件和回收僵尸进程。当某个进程调用property_set来改变一个系统属性值时，系统会通过socket向init进程发送一个property变化的事件通知，那么property fd会变成可读，init进程采用epoll机制监听该fd则会 触发回调handle_property_set_fd()方法。回收僵尸进程，在Linux内核中，如父进程不等待子进程的结束直接退出，会导致子进程在结束后变成僵尸进程，占用系统资源。为此，init进程专门安装了SIGCHLD信号接收器，当某些子进程退出时发现其父进程已经退出，则会向init进程发送SIGCHLD信号，init进程调用回调方法handle_signal()来回收僵尸子进程。</p>
+<h3 id="启动zygone服务"><a href="#启动zygone服务" class="headerlink" title="启动zygone服务"></a>启动zygone服务</h3><ul>
+<li>创建一个名叫”zygote”的service结构体；</li>
+<li>创建一个用于socket通信的socketinfo结构体；</li>
+<li>创建一个包含4个onrestart的action结构体。</li>
+</ul>
+<p><img src="http://gityuan.com/images/boot/init/zygote_init.jpg" alt="zygote_init"></p>
+<h2 id="Zygote进程"><a href="#Zygote进程" class="headerlink" title="Zygote进程"></a>Zygote进程</h2><p>Zygote启动过程的函数调用类大致流程如下：</p>
+<p><img src="http://gityuan.com/images/boot/zygote/zygote_process.jpg" alt="zygote_process"></p>
+<p><img src="http://gityuan.com/images/boot/zygote/zygote_start.jpg" alt="zygote_start"></p>
+<ol>
+<li>解析init.zygote.rc中的参数，创建AppRuntime并调用AppRuntime.start()方法；</li>
+<li>调用AndroidRuntime的startVM()方法创建虚拟机，再调用startReg()注册JNI函数；</li>
+<li>通过JNI方式调用ZygoteInit.main()，第一次进入Java世界；</li>
+<li>registerZygoteSocket()建立socket通道，zygote作为通信的服务端，用于响应客户端请求；</li>
+<li>preload()预加载通用类、drawable和color资源、openGL以及共享库以及WebView，用于提高app启动效率；</li>
+<li>zygote完毕大部分工作，接下来再通过startSystemServer()，fork得力帮手system_server进程，也是上层framework的运行载体。</li>
+<li>zygote功成身退，调用runSelectLoop()，随时待命，当接收到请求创建新进程请求时立即唤醒并执行相应工作。</li>
+</ol>
+<p><strong>Zygote做了哪些事：</strong></p>
+<ul>
+<li>创建vm虚拟机</li>
+<li>注册JNI函数</li>
+<li>建立socket通道，响应客户端请求</li>
+<li>预加载通用类、资源、openGL、共享库、WebView</li>
+<li>创建system_server进程</li>
+<li>调用runSelectLoop()，当接收到请求创建新进程请求时立即唤醒并执行相应工作，没有请求则休眠。</li>
+</ul>
+<h3 id="Zygote创建进程"><a href="#Zygote创建进程" class="headerlink" title="Zygote创建进程"></a>Zygote创建进程</h3><p>进程创建过程的简要图：</p>
+<p><img src="http://gityuan.com/images/android-process/start_app_process.jpg" alt="start_app_process"></p>
+<p>Process.start()方法是阻塞操作，等待直到进程创建完成并返回相应的新进程pid，才完成该方法。</p>
+<p>当App第一次启动时或者启动远程Service，即AndroidManifest.xml文件中定义了process:remote属性时，都需要创建进程。比如当用户点击桌面的某个App图标，桌面本身是一个app（即Launcher App），那么Launcher所在进程便是这次创建新进程的发起进程，该通过binder发送消息给system_server进程，该进程承载着整个java framework的核心服务。system_server进程从Process.start开始，执行创建进程，流程图（以进程的视角）如下：</p>
+<p><img src="http://gityuan.com/images/android-process/process-create.jpg" alt="process-create"></p>
+<p>上图中，<code>system_server</code>进程通过socket IPC通道向<code>zygote</code>进程通信，<code>zygote</code>在fork出新进程后由于fork<strong>调用一次，返回两次</strong>，即在zygote进程中调用一次，在zygote进程和子进程中各返回一次，从而能进入子进程来执行代码。该调用流程图的过程：</p>
+<ol>
+<li><strong>system_server进程</strong>（<code>即流程1~3</code>）：通过Process.start()方法发起创建新进程请求，会先收集各种新进程uid、gid、nice-name等相关的参数，然后通过socket通道发送给zygote进程；</li>
+<li><strong>zygote进程：</strong>接收到system_server进程发送过来的参数后封装成Arguments对象，图中绿色框forkAndSpecialize()方法是进程创建过程中最为核心的一个环节其具体工作是依次执行下面的3个方法：<ul>
+<li>preFork()：先停止Zygote的4个Daemon子线程（java堆内存整理线程、对线下引用队列线程、析构线程以及监控线程）的运行以及初始化gc堆；</li>
+<li>nativeForkAndSpecialize()：调用linux的fork()出新进程，创建Java堆处理的线程池，重置gc性能数据，设置进程的信号处理函数，启动JDWP线程；</li>
+<li>postForkCommon()：在启动之前被暂停的4个Daemon子线程。</li>
+</ul>
+</li>
+<li><strong>新进程</strong>：进入handleChildProc()方法，设置进程名，打开binder驱动，启动新的binder线程；然后设置art虚拟机参数，再反射调用目标类的main()方法，即Activity.main()方法。</li>
+</ol>
+<h2 id="system-server进程启动"><a href="#system-server进程启动" class="headerlink" title="system_server进程启动"></a>system_server进程启动</h2><p>SystemServer由Zygote fork生成的，进程名为<code>system_server</code>，该进程承载着framework的核心服务。 <a href="http://gityuan.com/2016/02/13/android-zygote/" target="_blank" rel="noopener">Android系统启动-zygote篇</a>中讲到Zygote启动过程中会调用startSystemServer()，可知<code>startSystemServer()</code>函数是system_server启动流程的起点， 启动流程图如下：<img src="http://gityuan.com/images/boot/systemServer/system_server.jpg" alt="system_server_boot_process"></p>
+<p>上图前4步骤（即颜色为紫色的流程）运行在是<code>Zygote</code>进程，从第5步（即颜色为蓝色的流程）ZygoteInit.handleSystemServerProcess开始是运行在新创建的<code>system_server</code>，这是fork机制实现的（fork会返回2次）。下面从startSystemServer()开始讲解详细启动流程。</p>
+<p>在<code>SystemServer#main</code>方法中进入<code>Looper.loop()</code>状态,等待其他线程通过<code>handler</code>发送消息到主线再处理.</p>
+<p>system_server进程，从源码角度划分为引导服务、核心服务、其他服务3类。</p>
+<ul>
+<li>引导服务(7个)：ActivityManagerService、PowerManagerService、LightsService、DisplayManagerService、PackageManagerService、UserManagerService、SensorService；</li>
+<li>核心服务(3个)：BatteryService、UsageStatsService、WebViewUpdateService；</li>
+<li>其他服务(70个+)：AlarmManagerService、VibratorService等。</li>
+</ul>
+<p>合计总大约80个系统服务：</p>
+<table>
+<thead>
+<tr>
+<th><code>ActivityManagerService</code></th>
+<th><code>PackageManagerService</code></th>
+<th><code>WindowManagerService</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PowerManagerService</code></td>
+<td><code>BatteryService</code></td>
+<td><code>BatteryStatsService</code></td>
+</tr>
+<tr>
+<td><code>DreamManagerService</code></td>
+<td><code>DropBoxManagerService</code></td>
+<td><code>SamplingProfilerService</code></td>
+</tr>
+<tr>
+<td><code>UsageStatsService</code></td>
+<td><code>DiskStatsService</code></td>
+<td><code>DeviceStorageMonitorService</code></td>
+</tr>
+<tr>
+<td>SchedulingPolicyService</td>
+<td><code>AlarmManagerService</code></td>
+<td>DeviceIdleController</td>
+</tr>
+<tr>
+<td>ThermalObserver</td>
+<td>JobSchedulerService</td>
+<td><code>AccessibilityManagerService</code></td>
+</tr>
+<tr>
+<td>DisplayManagerService</td>
+<td>LightsService</td>
+<td><code>GraphicsStatsService</code></td>
+</tr>
+<tr>
+<td>StatusBarManagerService</td>
+<td>NotificationManagerService</td>
+<td>WallpaperManagerService</td>
+</tr>
+<tr>
+<td>UiModeManagerService</td>
+<td>AppWidgetService</td>
+<td>LauncherAppsService</td>
+</tr>
+<tr>
+<td>TextServicesManagerService</td>
+<td>ContentService</td>
+<td>LockSettingsService</td>
+</tr>
+<tr>
+<td>InputMethodManagerService</td>
+<td>InputManagerService</td>
+<td><code>MountService</code></td>
+</tr>
+<tr>
+<td>FingerprintService</td>
+<td>TvInputManagerService</td>
+<td>DockObserver</td>
+</tr>
+<tr>
+<td>NetworkManagementService</td>
+<td>NetworkScoreService</td>
+<td><code>NetworkStatsService</code></td>
+</tr>
+<tr>
+<td>NetworkPolicyManagerService</td>
+<td>ConnectivityService</td>
+<td>BluetoothService</td>
+</tr>
+<tr>
+<td>WifiP2pService</td>
+<td>WifiService</td>
+<td>WifiScanningService</td>
+</tr>
+<tr>
+<td>AudioService</td>
+<td>MediaRouterService</td>
+<td>VoiceInteractionManagerService</td>
+</tr>
+<tr>
+<td>MediaProjectionManagerService</td>
+<td>MediaSessionService</td>
+<td></td>
+</tr>
+<tr>
+<td>DevicePolicyManagerService</td>
+<td>PrintManagerService</td>
+<td><code>BackupManagerService</code></td>
+</tr>
+<tr>
+<td><code>UserManagerService</code></td>
+<td>AccountManagerService</td>
+<td><code>TrustManagerService</code></td>
+</tr>
+<tr>
+<td><code>SensorService</code></td>
+<td>LocationManagerService</td>
+<td>VibratorService</td>
+</tr>
+<tr>
+<td>CountryDetectorService</td>
+<td>GestureLauncherService</td>
+<td>PersistentDataBlockService</td>
+</tr>
+<tr>
+<td>EthernetService</td>
+<td>WebViewUpdateService</td>
+<td>ClipboardService</td>
+</tr>
+<tr>
+<td>TelephonyRegistry</td>
+<td>TelecomLoaderService</td>
+<td>NsdService</td>
+</tr>
+<tr>
+<td>UpdateLockService</td>
+<td>SerialService</td>
+<td>SearchManagerService</td>
+</tr>
+<tr>
+<td>CommonTimeManagementService</td>
+<td>AssetAtlasService</td>
+<td>ConsumerIrService</td>
+</tr>
+<tr>
+<td>MidiServiceCameraService</td>
+<td>TwilightService</td>
+<td>RestrictionsManagerService</td>
+</tr>
+<tr>
+<td>MmsServiceBroker</td>
+<td>RttService</td>
+<td>UsbService</td>
+</tr>
+</tbody></table>
+<p>Service类别众多，其中表中加粗项是指博主挑选的较重要或者较常见的Service。</p>
+<h3 id="服务启动阶段"><a href="#服务启动阶段" class="headerlink" title="服务启动阶段"></a>服务启动阶段</h3><p>SystemServiceManager的startBootPhase()贯穿system_server进程的整个启动过程：</p>
+<p><img src="http://gityuan.com/images/boot/systemServer/system_server_boot_process.jpg" alt="system_server服务启动流程"></p>
+<h3 id="注册（添加）服务"><a href="#注册（添加）服务" class="headerlink" title="注册（添加）服务"></a>注册（添加）服务</h3><p><strong>方式1. ServiceManager.addService():</strong></p>
+<ul>
+<li>功能：向ServiceManager注册该服务.</li>
+<li>特点：服务往往直接或间接继承于Binder服务；</li>
+<li>举例：input, window, package；</li>
+</ul>
+<p><strong>方式2. SystemServiceManager.startService:</strong></p>
+<ul>
+<li>功能：<ul>
+<li>创建服务对象；</li>
+<li>执行该服务的onStart()方法；该方法会执行上面的SM.addService()；</li>
+<li>根据启动到不同的阶段会回调onBootPhase()方法；</li>
+<li>另外，还有多用户模式下用户状态的改变也会有回调方法；例如onStartUser();</li>
+</ul>
+</li>
+<li>特点：服务往往自身或内部类继承于SystemService；</li>
+<li>举例：power, activity；</li>
+</ul>
+<p>两种方式真正注册服务的过程都会调用到ServiceManager.addService()方法. 对于方式2多了一个服务对象创建以及 根据不同启动阶段采用不同的动作的过程。可以理解为方式2比方式1的功能更丰富。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/" rel="tag"># Android系统总结篇</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer%20(2)/" rel="next" title="Android系统启动-SystemServer(2)">
+                <i class="fa fa-chevron-left"></i> Android系统启动-SystemServer(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/31/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/" rel="prev" title="Android系统启动-init">
+                Android系统启动-init <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">1.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-系统架构"><span class="nav-number">1.1.</span> <span class="nav-text">Android 系统架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统启动架构"><span class="nav-number">1.2.</span> <span class="nav-text">系统启动架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Init进程"><span class="nav-number">1.3.</span> <span class="nav-text">Init进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动zygone服务"><span class="nav-number">1.3.1.</span> <span class="nav-text">启动zygone服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zygote进程"><span class="nav-number">1.4.</span> <span class="nav-text">Zygote进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zygote创建进程"><span class="nav-number">1.4.1.</span> <span class="nav-text">Zygote创建进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-server进程启动"><span class="nav-number">1.5.</span> <span class="nav-text">system_server进程启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务启动阶段"><span class="nav-number">1.5.1.</span> <span class="nav-text">服务启动阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册（添加）服务"><span class="nav-number">1.5.2.</span> <span class="nav-text">注册（添加）服务</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

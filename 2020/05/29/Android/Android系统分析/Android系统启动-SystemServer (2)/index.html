@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统启动-SystemServer," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是SystemService我们在Android开发过程中经常会用到各种各样的系统管理服务，如进行窗口相关的操作会用到窗口管理服务WindowManager，进行电源相关的操作会用到电源管理服务PowerManager，还有很多其他的系统管理服务，如通知管理服务NotifacationManager、振动管理服务Vibrator、电池管理服务BatteryManager…… 这些Manager">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统启动-SystemServer(2)">
+<meta property="og:url" content="http://yoursite.com/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer%20(2)/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="什么是SystemService我们在Android开发过程中经常会用到各种各样的系统管理服务，如进行窗口相关的操作会用到窗口管理服务WindowManager，进行电源相关的操作会用到电源管理服务PowerManager，还有很多其他的系统管理服务，如通知管理服务NotifacationManager、振动管理服务Vibrator、电池管理服务BatteryManager…… 这些Manager">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdn.net/20171220111218423?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2V5dW5mZWlf/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20171220150919660?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2V5dW5mZWlf/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="article:published_time" content="2020-05-29T03:05:49.000Z">
+<meta property="article:modified_time" content="2020-05-31T18:07:06.000Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android系统启动-SystemServer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20171220111218423?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2V5dW5mZWlf/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/29/Android/Android系统分析/Android系统启动-SystemServer (2)/"/>
+
+
+
+
+
+  <title>Android系统启动-SystemServer(2) | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer%20(2)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android系统启动-SystemServer(2)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-29T11:05:49+08:00">
+                2020-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">Android系统分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer%20(2)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer%20(2)/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是SystemService"><a href="#什么是SystemService" class="headerlink" title="什么是SystemService"></a>什么是SystemService</h1><p>我们在Android开发过程中经常会用到各种各样的系统管理服务，如进行窗口相关的操作会用到窗口管理服务WindowManager，进行电源相关的操作会用到电源管理服务PowerManager，还有很多其他的系统管理服务，如通知管理服务NotifacationManager、振动管理服务Vibrator、电池管理服务BatteryManager…… 这些Manager提供了很多对系统层的控制接口。对于App开发者，只需要了解这些接口的使用方式就可以方便的进行系统控制，获得系统各个服务的信息，而不需要了解这些接口的具体实现方式。而对于Framework开发者，则需要了解这些Manager服务的常用实现模式，维护这些Manager的接口，扩展这些接口，或者实现新的Manager。</p>
+<p><img src="https://img-blog.csdn.net/20171220111218423?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2V5dW5mZWlf/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="img"></p>
+<h2 id="一个简单的SystemService"><a href="#一个简单的SystemService" class="headerlink" title="一个简单的SystemService"></a>一个简单的SystemService</h2><p>我们从一个简单的系统服务Vibrator服务来看一下一个系统服务是怎样建立的。<br>Vibrator服务提供的控制手机振动的接口，应用可以调用Vibrator的接口来让手机产生振动，达到提醒用户的目的。<br>从Android的官方文档中可以看到Vibrator只是一个抽象类，只有4个抽象接口：</p>
+<ul>
+<li>abstract void cancel() 取消振动</li>
+<li>abstract boolean hasVibrator() 是否有振动功能</li>
+<li>abstract void vibrate(long[] pattern, int repeat) 按节奏重复振动</li>
+<li>abstract void vibrate(long milliseconds) 持续振动</li>
+</ul>
+<p>应用中使用振动服务的方法也很简单，如让手机持续振动500毫秒：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Vibrator mVibrator &#x3D; (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);</span><br><span class="line">mVibrator.vibrate(500);</span><br></pre></td></tr></table></figure>
+
+<p><code>Vibrator</code>使用起来很简单，我们再来看一下实现起来是不是也简单。从文档中可以看到Vibrator只是定义在android.os 包里的一个抽象类，在源码里的位置即<code>frameworks/base/core/java/android/os/Vibrator.java</code>，那么应用中实际使用的是哪个实例呢？应用中使用的Vibrator实例是通过Context的一个方法<code>getSystemService(Context.VIBRATOR_SERVICE)</code>获得的，而Context的实现一般都在<code>ContextImpl</code>中，那我们就看一下ContextImpl是怎么实现getSystemService的：<br><code>frameworks/base/core/java/android/app/ContextImpl.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public Object getSystemService(String name) &#123;</span><br><span class="line">    return SystemServiceRegistry.getSystemService(this, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>frameworks/base/core/java/android/app/SystemServiceRegistry.java</code></p>
+<p>(<code>SystemServiceRegistry</code>是 Android 6.0之后才有的，Android 6.0 之前的代码没有该类，下面的代码是直接写在<code>ContextImpl</code>里的)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static Object getSystemService(ContextImpl ctx, String name) &#123;</span><br><span class="line">    ServiceFetcher&lt;?&gt; fetcher &#x3D; SYSTEM_SERVICE_FETCHERS.get(name);</span><br><span class="line">    return fetcher !&#x3D; null ? fetcher.getService(ctx) : null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>SYSTEM_SERVICE_MA</code>P是一个HashMap，通过我们服务的名字name字符串，从这个HashMap里取出一个ServiceFetcher，再return这个ServiceFetcher的getService()。ServiceFetcher是什么？它的getService()又是什么？既然他是从SYSTEM_SERVICE_MAP这个HashMap里get出来的，那就找一找这个HashMap都put了什么。<br>通过搜索SystemServiceRegistry可以找到如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">private static &lt;T&gt; void registerService(String serviceName, Class&lt;T&gt; serviceClass,</span><br><span class="line">        ServiceFetcher&lt;T&gt; serviceFetcher) &#123;</span><br><span class="line">    SYSTEM_SERVICE_NAMES.put(serviceClass, serviceName);</span><br><span class="line">    SYSTEM_SERVICE_FETCHERS.put(serviceName, serviceFetcher);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里往<code>SYSTEM_SERVICE_MAP</code>里<code>put</code>了一对<code>String</code>与<code>ServiceFetcher</code>组成的key/value对，<code>registerService()</code>又是从哪里调用的？继续搜索可以发现很多类似下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">    registerService(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class,</span><br><span class="line">            new CachedServiceFetcher&lt;AccessibilityManager&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public AccessibilityManager createService(ContextImpl ctx) &#123;</span><br><span class="line">            return AccessibilityManager.getInstance(ctx);</span><br><span class="line">        &#125;&#125;);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    registerService(Context.VIBRATOR_SERVICE, Vibrator.class,</span><br><span class="line">            new CachedServiceFetcher&lt;Vibrator&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Vibrator createService(ContextImpl ctx) &#123;</span><br><span class="line">            return new SystemVibrator(ctx);</span><br><span class="line">        &#125;&#125;);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>SystemServiceRegistry</code>的static代码块里通过<code>registerService</code>注册了很多的系统服务，其中就包括我们正在调查的<code>VIBRATOR_SERVICE</code>，通过结合上面的分析代码可以可以知道<code>getSystemService(Context.VIBRATOR_SERVICE)</code>得到的是一个<code>SystemVibrator</code>的实例，通过查看<code>SystemVibrator</code>的代码也可以发现<code>SystemVibrator</code>确实是继承自Vibrator：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class SystemVibrator extends Vibrator &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们再从<code>SystemVibrator</code>看一下系统的振动控制是怎么实现的。以<code>hasVibrator()</code>为例，这个是查询当前系统是否能够振动，在<code>SystemVibrator</code>中它的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public boolean hasVibrator() &#123;</span><br><span class="line">    ...</span><br><span class="line">    try &#123;</span><br><span class="line">        return mService.hasVibrator();</span><br><span class="line">    &#125; catch (RemoteException e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里直接调用了一个<code>mService.hasVibrator()</code>。<code>mService</code>是什么？哪来的？搜索一下可以发现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private final IVibratorService mService;</span><br><span class="line">public SystemVibrator() &#123;</span><br><span class="line">    ...</span><br><span class="line">    mService &#x3D; IVibratorService.Stub.asInterface(</span><br><span class="line">            ServiceManager.getService(&quot;vibrator&quot;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>mService</code> 是一个<code>IVibratorService</code>，我们先不去管<code>IVibratorService.Stub.asInterface</code>是怎么回事，先看一下<code>IVibratorService</code>是什么。搜索一下代码发现这并不是一个java文件，而是一个aidl文件：<code>frameworks/base/core/java/android/os/IVibratorService.aidl</code><br>AIDL (Android Interface Definition Language) 是Android中的接口定义文件，为系统提供了一种简单跨进程通信方法。<br>IVibratorService 中定义了几个接口，SystemVibrator中使用的也是这几个接口，包括我们刚才使用的hasVibrator()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">interface IVibratorService</span><br><span class="line">&#123;</span><br><span class="line">    boolean hasVibrator();</span><br><span class="line">    void vibrate(...);</span><br><span class="line">    void vibratePattern(...);</span><br><span class="line">    void cancelVibrate(IBinder token);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里又只是接口定义，接口实现在哪呢？通过在<code>frameworks/base</code>目录下进行grep搜索，或者在AndroidXRef搜索，可以发现IVibratorService接口的实现在<code>frameworks/base/services/java/com/android/server/VibratorService.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class VibratorService extends IVibratorService.Stub</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 VibratorService实现了IVibratorService定义的所有接口，并通过JNI调用到native层，进行更底层的实现。更底层的实现不是这篇文档讨论的内容，我们需要分析的是VibratorService怎么成为系统服务的。那么VibratorService是怎么注册为系统服务的呢？在SystemServer里面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">VibratorService vibrator &#x3D; null;</span><br><span class="line">...</span><br><span class="line">&#x2F;&#x2F;实例化VibratorService并添加到ServiceManager</span><br><span class="line">traceBeginAndSlog(&quot;StartVibratorService&quot;);</span><br><span class="line">vibrator &#x3D; new VibratorService(context);</span><br><span class="line">ServiceManager.addService(&quot;vibrator&quot;, vibrator);</span><br><span class="line">Trace.traceEnd(Trace.TRACE_TAG_SYSTEM_SERVER);</span><br><span class="line">...</span><br><span class="line">&#x2F;&#x2F;通知服务系统启动完成</span><br><span class="line">Trace.traceBegin(Trace.TRACE_TAG_SYSTEM_SERVER, &quot;MakeVibratorServiceReady&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">    vibrator.systemReady();</span><br><span class="line">&#125; catch (Throwable e) &#123;</span><br><span class="line">    reportWtf(&quot;making Vibrator Service ready&quot;, e);</span><br><span class="line">&#125;</span><br><span class="line">Trace.traceEnd(Trace.TRACE_TAG_SYSTEM_SERVER);</span><br></pre></td></tr></table></figure>
+
+<p>这样在<code>SystemVibrator</code>里就可以通过下面的代码连接到<code>VibratorService</code>，与底层的系统服务进行通信了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IVibratorService.Stub.asInterface(ServiceManager.getService(&quot;vibrator&quot;));</span><br></pre></td></tr></table></figure>
+
+<p><code>mService</code>相当于<code>IVibratorService</code>在应用层的一个代理，所有的实现还是在<code>SystemServer</code>的<code>VibratorService</code>里。</p>
+<p>看代码时可以发现<code>registerService</code>是在static代码块里静态调用的，所以<code>getSystemServcr</code>获得的各个Manager也都是单例的。</p>
+<h1 id="System-Service实现流程"><a href="#System-Service实现流程" class="headerlink" title="System Service实现流程"></a>System Service实现流程</h1><p><strong>从上面的分析，我们可以总结出Vibrator服务的整个实现流程：</strong></p>
+<ol>
+<li><p>定义一个抽象类<code>Vibrator</code>，定义了应用中可以访问的一些抽象方法(抽象)<br><code>frameworks/base/core/java/android/os/Vibrator.java</code></p>
+</li>
+<li><p>定义具体的类<code>SystemVibrator</code>继承<code>Vibrator</code>，实现抽象方法（客户端调用）</p>
+<p><code>frameworks/base/core/java/android/os/SystemVibrator.java</code></p>
+</li>
+<li><p>定义一个AIDL接口文件<code>IVibratorService</code>，定义系统服务接口（服务端接口）<br>frameworks/base/core/java/android/os/IVibratorService.aidl</p>
+</li>
+<li><p>定义服务VibratorService，实现IVibratorService定义的接口(服务端实现)<br><code>frameworks/base/services/java/com/android/server/VibratorService.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class VibratorService extends IVibratorService.Stub</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将<code>VibratorServicey</code>添加到系统服务<br><code>frameworks/base/services/java/com/android/server/SystemServer.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">VibratorService vibrator &#x3D; null;</span><br><span class="line">...</span><br><span class="line">&#x2F;&#x2F;实例化VibratorService并添加到ServiceManager</span><br><span class="line">Slog.i(TAG, &quot;Vibrator Service&quot;);</span><br><span class="line">vibrator &#x3D; new VibratorService(context);</span><br><span class="line">ServiceManager.addService(&quot;vibrator&quot;, vibrator);</span><br><span class="line">...</span><br><span class="line">&#x2F;&#x2F;通知服务系统启动完成</span><br><span class="line">try &#123;</span><br><span class="line">    vibrator.systemReady();</span><br><span class="line">&#125; catch (Throwable e) &#123;</span><br><span class="line">    reportWtf(&quot;making Vibrator Service ready&quot;, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>SystemVibrator</code>中通过<code>IVibratorService</code>的代理连接到<code>VibratorService</code>，这样<code>SystemVibrator</code>的接口实现里就可以调用<code>IVibratorService</code>的接口：</p>
+<p><code>frameworks/base/core/java/android/os/SystemVibrator.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private final IVibratorService mService;</span><br><span class="line">...</span><br><span class="line">public SystemVibrator() &#123;</span><br><span class="line">    ...</span><br><span class="line">    mService &#x3D; IVibratorService.Stub.asInterface(</span><br><span class="line">            ServiceManager.getService(&quot;vibrator&quot;));</span><br><span class="line">    ...</span><br><span class="line">    public boolean hasVibrator() &#123;</span><br><span class="line">        ...</span><br><span class="line">        try &#123;</span><br><span class="line">            return mService.hasVibrator();</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>Context</code>里定义一个代表<code>Vibrator</code>服务的字符串</p>
+<p><code>frameworks/base/core/java/android/content/Context.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static final String VIBRATOR_SERVICE &#x3D; &quot;vibrator&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在ContextImpl里添加SystemVibrator的实例化过程<br><code>frameworks/base/core/java/android/app/ContextImpl.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">registerService(VIBRATOR_SERVICE, new ServiceFetcher() &#123;</span><br><span class="line">public Object createService(ContextImpl ctx) &#123;</span><br><span class="line">    return new SystemVibrator(ctx);</span><br><span class="line">&#125;&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在应用中使用<code>Vibrator</code>的接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Vibrator mVibrator &#x3D; (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);</span><br><span class="line">mVibrator.vibrate(500);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为保证编译正常，还需要将AIDL文件添加到编译配置里<br><code>frameworks/base/Android.mk</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LOCAL_SRC_FILES +&#x3D; \</span><br><span class="line">...</span><br><span class="line">core&#x2F;java&#x2F;android&#x2F;os&#x2F;IVibratorService.aidl \</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h1 id="System-Service-新加接口"><a href="#System-Service-新加接口" class="headerlink" title="System Service 新加接口"></a>System Service 新加接口</h1><p>如果我们需要实现一个新的系统服务，就可以按照上面的步骤在系统中扩展出一个新的服务，并给应用层提供出使用接口。如果想在Vibrator里添加一个新的接口，需要下面3步：</p>
+<ol>
+<li>在<code>IVibratorService</code>添加接口；</li>
+<li>在<code>VibratorService</code>添加接口的实现；</li>
+<li>在<code>Vibrator</code>及<code>SystemVibrator</code>里扩展新的接口；</li>
+</ol>
+<p>这样应用中就可以使用<code>Vibrator</code>的新接口了。</p>
+<h1 id="应用层与-System-Service-通信"><a href="#应用层与-System-Service-通信" class="headerlink" title="应用层与 System Service 通信"></a>应用层与 System Service 通信</h1><p>上面的实现我们看到的只是从应用层通过服务代理，调用系统服务的接口，如果我们想反过来，将系统服务的状态通知给应用层，该怎么做呢？</p>
+<ul>
+<li>方法一：使用Broadcast</li>
+</ul>
+<p>我们知道使用Broadcast广播可以实现跨进程的消息传递，一些系统服务也使用了这种方法。如电池管理服务BatteryManagerService，收到底层上报的电池状态变化信息时，就将当前的电池状态封装在一个Intent里，action为android.intent.action.BATTERY_CHANGED。应用只要注册一个对应的BroadcastReceiver就可以收到BatterManagerService发送的电池状态信息。</p>
+<ul>
+<li>方法二：使用AIDL</li>
+</ul>
+<p>从上面我们可以知道，通过AIDL定义一套接口，由系统服务端实现这些接口，应用端使用一个相应的代理就可以访问系统服务的接口，那反过来让应用端实现AIDL接口，系统服务端使用代理调用应用端的接口可不可以呢？答案是YES。那么接下来的问题是怎么让系统服务得到这个代理。我们再来看一个LocationManager的例子。</p>
+<p><code>LocationManager</code>是系统的定位服务，应用通过<code>LocationManager</code>可以获得设备当前的地理位置信息。下面是<code>LocationManager</code>的使用代码片段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获得定位服务</span><br><span class="line">LocationManager locationManager &#x3D; </span><br><span class="line">        (LocationManager) getSystemService(Context.LOCATION_SERVICE);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;定义定位监听器</span><br><span class="line">LocationListener locationListener &#x3D; new LocationListener() &#123;</span><br><span class="line">    public void onLocationChanged(Location location) &#123;</span><br><span class="line">        &#x2F;&#x2F;监听到位置信息</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册监听器</span><br><span class="line">locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, </span><br><span class="line">        0, 0, locationListener);</span><br></pre></td></tr></table></figure>
+
+<p>从上面的代码可以看到，我们创建了一个位置监听器LocationListener，并将这个监听器在LocationManager里进行了注册。当系统定位到系统的位置后，就会回调监听器的onLocationChanged()，将位置信息通知给监听器。LocationListener就是一个系统服务调用应用层接口的例子，我们就研究一下LocationListener的实现方式。</p>
+<p>我们先从<code>LocationManager</code>怎么注册<code>LocationListener</code>开始研究：<br><code>frameworks/base/location/java/android/location/LocationManager.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private final ILocationManager mService;</span><br><span class="line">...</span><br><span class="line">private void requestLocationUpdates(LocationRequest request, </span><br><span class="line">        LocationListener listener, Looper looper, PendingIntent intent) &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#x2F;&#x2F; wrap the listener class</span><br><span class="line">    ListenerTransport transport &#x3D; wrapListener(listener, looper);</span><br><span class="line">    try &#123;</span><br><span class="line">        mService.requestLocationUpdates(request, transport, </span><br><span class="line">                intent, packageName);</span><br><span class="line">   &#125; catch (RemoteException e) &#123;</span><br><span class="line">       Log.e(TAG, &quot;RemoteException&quot;, e);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到LocationListener被重新封装成了一个ListenerTransport，然后传递给了ILocationManager ，从前面的分析可以猜测到这个ILocationManager应该就是LocationManagerService的一个代理。那么ListenerTransport又是什么呢？搜索LocationManager.java可以找到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private class ListenerTransport extends ILocationListener.Stub &#123;</span><br><span class="line">    ...</span><br><span class="line">    @Override</span><br><span class="line">    public void onLocationChanged(Location location) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原来是<code>ILocationListener.Stub</code>的一个继承实现，那么<code>ILocationListener</code>应该就是一个AIDL接口定义：</p>
+<p><code>frameworks/base/location/java/android/location/ILocationListener.aidl</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">oneway interface ILocationListener</span><br><span class="line">&#123;</span><br><span class="line">    void onLocationChanged(in Location location);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而在<code>LocationManagerService</code>里只要调用<code>ILocationListener</code>的方法就可以将消息传递给应用层的监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mListener.onLocationChanged(new Location(location));</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现-System-Service-的注意事项"><a href="#实现-System-Service-的注意事项" class="headerlink" title="实现 System Service 的注意事项"></a>实现 System Service 的注意事项</h1><ul>
+<li><strong>注意防止阻塞</strong></li>
+</ul>
+<p>应用层访问系统服务提供的接口时会有两种情况：</p>
+<ol>
+<li>一种是应用调用端需要等待服务实现端处理完成，返回处理结果，这样如果服务端发生阻塞，那么应用端也会发生阻塞，因此在实现服务端的实现时要注意不要发生阻塞。</li>
+<li>另一种是调用端不需要等待服务端返回结果，调用完成后直接返回<code>void</code>，这样服务端发生阻塞不会影响到应用端，这样的单向的接口在AIDL里定义时需要添加<code>oneway</code>关键字，如：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oneway void statusBarVisibilityChanged(int visibility);</span><br></pre></td></tr></table></figure>
+
+<p>对于需要在服务端调用，在应用端实现的接口，考虑到系统的稳定性以及安全性，一般都会设计成上面的第二种，即AIDL里所有的接口都是单向的，如上面的<code>ILocationListener</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oneway interface ILocationListener</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意多线程访问</strong></li>
+</ul>
+<p>每个系统服务在系统进程中只有一个实例，而且应用中系统服务的代理也是单例的，而且应用端的访问，在系统进程都是使用独立的线程进行响应，所以访问同一个系统服务的接口时必然会出现多个线程或者多个进程同时访问的情况。为保证系统服务的线程安全，需要对系统服务的进程进行多线程访问的保护，目前主要有两种实现线程安全的方法：</p>
+<ol>
+<li><p>一种是通过同步锁机制，锁住一个对象实例（一般是这个服务对象本身），这样这个服务同一时间只能响应一个访问请求，如<code>LocationManagerService</code>里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public boolean callStatusChangedLocked(...) &#123;</span><br><span class="line">    ...</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>另一种方法就是使用<code>Handler</code>机制，这种服务一般会创建一个单独的线程，当有应用端访问请求到来时会向服务线程的<code>Handler</code>里发送一个<code>Message</code>，利用单线程顺序执行的特性，保证所有的访问都按顺序进行处理，但这种方法只适合单向的访问，不适合需要返回的双向访问。</p>
+</li>
+</ol>
+<h1 id="ServiceManager原理"><a href="#ServiceManager原理" class="headerlink" title="ServiceManager原理"></a>ServiceManager原理</h1><p>从上面流程的分析我们可以看到，所有的系统服务最终都是由<code>ServiceManager</code>来管理的，那么<code>ServiceManager</code>是怎么管理这些系统服务的呢？还是先看上面的<code>VibratorService</code>的实现：</p>
+<p><img src="https://img-blog.csdn.net/20171220150919660?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ2V5dW5mZWlf/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="img"></p>
+<p>VibratorService通过addService()将自己注册到ServiceManager里，SystemVibrator通过getService()获得一个服务代理，并与服务进行通信交互，那么ServiceManager又是什么？它是怎么管理服务的注册与代理的呢？我们先从addService()与getService()开始，分析一下ServiceManager:</p>
+<p><code>frameworks/base/core/java/android/os/ServiceManager.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br></pre></td><td class="code"><pre><span class="line">public final class ServiceManager &#123;</span><br><span class="line">    public static void addService(String name, IBinder service) &#123;</span><br><span class="line">        ...</span><br><span class="line">        getIServiceManager().addService(name, service, false);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static IBinder getService(String name) &#123;</span><br><span class="line">        ...</span><br><span class="line">        return getIServiceManager().getService(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">&#96;addService()&#96;和&#96;getService()&#96;都是直接调用了&#96;getIServiceManager()&#96;的方法，&#96;getIServiceManager()&#96;返回的又是什么呢？</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">private static IServiceManager getIServiceManager() &#123;</span><br><span class="line">    if (sServiceManager !&#x3D; null) &#123;</span><br><span class="line">        return sServiceManager;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; Find the service manager</span><br><span class="line">    sServiceManager &#x3D; ServiceManagerNative.asInterface(BinderInternal.getContextObject());</span><br><span class="line">    return sServiceManager;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">这里是创建了一个&#96;IServiceManager&#96;类型的单实例，具体的实例又是通过&#96;ServiceManagerNative&#96;创建的:</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">ServiceManagerNative.asInterface(BinderInternal.getContextObject());</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">先来看&#96;BinderInternal.getContextObject()&#96;</span><br><span class="line">&#96;frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;com&#x2F;android&#x2F;internal&#x2F;os&#x2F;BinderInternal.java&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">public static final native IBinder getContextObject();</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">&#96;getContextObject()&#96;是在native层实现的</span><br><span class="line">&#96;frameworks&#x2F;base&#x2F;core&#x2F;jni&#x2F;android_util_Binder.cpp&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">static jobject android_os_BinderInternal_getContextObject(JNIEnv* env, </span><br><span class="line">        jobject clazz)</span><br><span class="line">&#123;</span><br><span class="line">    sp&lt;IBinder&gt; b &#x3D; ProcessState::self()-&gt;getContextObject(NULL);</span><br><span class="line">    return javaObjectForIBinder(env, b);</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">后面的实现过程逻辑比较复杂，这里就不详细分析了，只是说明一下大致流程，感兴趣的可以自己详细研究一下binder的实现机制。</span><br><span class="line"></span><br><span class="line">ProcessState从名字可以看出这应该是一个保存进程状态的类，最好应该用单实例的对象保存，所以ProcessState::self()得到的也就是ProcessState的一个单实例对象，它的getContextObject()会继续调用getStrongProxyForHandle(int32_t handle)返回一个IBinder</span><br><span class="line"></span><br><span class="line">&#96;frameworks&#x2F;native&#x2F;libs&#x2F;binder&#x2F;ProcessState.cpp&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">sp&lt;IBinder&gt; ProcessState::getContextObject(const sp&lt;IBinder&gt;&amp; caller)</span><br><span class="line">&#123;</span><br><span class="line">    return getStrongProxyForHandle(0);</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">在getStrongProxyForHandle()中会根据传入的参数handle创建一个BpBinder，这个BpBinder会保存在一个数组mHandleToObject中，下次再用同样的handle请求时不会再重新创建。由于我们传入的handle&#x3D;0，这里创建的BpBinder也就相当于第0号BpBinder。</span><br><span class="line">之后的javaObjectForIBinder()会将C++的BpBinder对象封装成Java的BinderProxy对象并返回。所以BinderInternal.getContextObject()得到的是一个BinderProxy对象，并关联了native层的第0号BpBinder。</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">ServiceManagerNative.asInterface(BinderInternal.getContextObject());</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">相当于</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">ServiceManagerNative.asInterface(new BinderProxy());</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">ServiceManagerNative.asInterface()又做了些什么呢？</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">&#96;frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;ServiceManagerNative.java&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">static public IServiceManager asInterface(IBinder obj)</span><br><span class="line">&#123;</span><br><span class="line">    ...    </span><br><span class="line">    return new ServiceManagerProxy(obj);</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">这里会将&#96;BinderProxy&#96;再封装成一个&#96;ServiceManagerProxy()&#96;，所以&#96;getIServiceManager()&#96;得到的其实是一个&#96;ServiceManagerProxy&#96;，但是底层指向的是一个&#96;BpBinder(0)&#96;。</span><br><span class="line"></span><br><span class="line">&#96;ServiceManagerProxy&#96;、&#96;BinderProxy&#96;以及&#96;BpBinder&#96;都是代理模式中的proxy端，真正的实现应该在对应的native端。我们接着看。</span><br><span class="line"></span><br><span class="line">&#96;addService()&#96;和&#96;getService()&#96;在代理端的实现应该是在&#96;ServiceManagerProxy()&#96;里：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">public IBinder getService(String name) throws RemoteException &#123;</span><br><span class="line">    Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">    Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">    data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">    data.writeString(name);</span><br><span class="line">    mRemote.transact(GET_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">    IBinder binder &#x3D; reply.readStrongBinder();</span><br><span class="line">    reply.recycle();</span><br><span class="line">    data.recycle();</span><br><span class="line">    return binder;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">public void addService(String name, IBinder service, boolean allowIsolated)</span><br><span class="line">        throws RemoteException &#123;</span><br><span class="line">    Parcel data &#x3D; Parcel.obtain();</span><br><span class="line">    Parcel reply &#x3D; Parcel.obtain();</span><br><span class="line">    data.writeInterfaceToken(IServiceManager.descriptor);</span><br><span class="line">    data.writeString(name);</span><br><span class="line">    data.writeStrongBinder(service);</span><br><span class="line">    data.writeInt(allowIsolated ? 1 : 0);</span><br><span class="line">    mRemote.transact(ADD_SERVICE_TRANSACTION, data, reply, 0);</span><br><span class="line">    reply.recycle();</span><br><span class="line">    data.recycle();</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">从上面两个方法的实现可以看到，首先是创建了两个可序列化的Parcel data、reply，传入的参数被放到了data里，data、reply又一起传给了mRemote.transact()，之后又从reply里读取结果。addService()的实现里还通过data.writeStrongBinder(service)写入了一个IBinder的实例。同时注意到getService()和addService()里面调用mRemote.transact()传递的第一个参数分别为GET_SERVICE_TRANSACTION 和 ADD_SERVICE_TRANSACTION ，我们可以在IServiceManager里看到这是两个int值，分别为1和3</span><br><span class="line"></span><br><span class="line">&#96;frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;os&#x2F;IServiceManager.java&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">int GET_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION;  &#x2F;&#x2F;值为1</span><br><span class="line">int CHECK_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+1;</span><br><span class="line">int ADD_SERVICE_TRANSACTION &#x3D; IBinder.FIRST_CALL_TRANSACTION+2;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">&#96;mRemote&#96;就是&#96;BinderProxy&#96;，真正的实现是C++里的&#96;BpBinder&#96;</span><br><span class="line">&#96;frameworks&#x2F;native&#x2F;libs&#x2F;binder&#x2F;BpBinder.cpp&#96;</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line">status_t BpBinder::transact(</span><br><span class="line">        uint32_t code, const Parcel&amp; data, Parcel* reply, uint32_t flags)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; Once a binder has died, it will never come back to life.</span><br><span class="line">    if (mAlive) &#123;</span><br><span class="line">        status_t status &#x3D; IPCThreadState::self()-&gt;transact(</span><br><span class="line">            mHandle, code, data, reply, flags);</span><br><span class="line">        if (status &#x3D;&#x3D; DEAD_OBJECT) mAlive &#x3D; 0;</span><br><span class="line">        return status;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return DEAD_OBJECT;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">IPCThreadState里的transact会将proxy端的请求通过binder机制写入到一块共享内存里，然后会有一个native端从共享内存里读出请求，并执行相应的操作。那么这个native端在哪里呢？是不是ServiceManagerNative呢？但是ServiceManagerNative只是一个抽象类，我们并没有找到继承自它的子类。实际上ServiceManagerNative只是架构方面的一个抽象定义，并没有真正的一个实现，真正实现ServiceManager 的native端功能的是在native层的service_manager.c中。</span><br><span class="line"></span><br><span class="line">service_manager是底层的一个独立进程，主要的实现代码就在&#96;service_manager.c&#96;中。</span><br><span class="line"></span><br><span class="line">&#96;frameworks&#x2F;native&#x2F;cmds&#x2F;servicemanager&#x2F;binder.h&#96;</span><br></pre></td></tr></table></figure>
+<p>enum {<br>    /* Must match definitions in IBinder.h and IServiceManager.h */<br>    PING_TRANSACTION  = B_PACK_CHARS(‘_’,’P’,’N’,’G’),<br>    SVC_MGR_GET_SERVICE = 1,<br>    SVC_MGR_CHECK_SERVICE,<br>    SVC_MGR_ADD_SERVICE,<br>    SVC_MGR_LIST_SERVICES,<br>};</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#96;frameworks&#x2F;native&#x2F;cmds&#x2F;servicemanager&#x2F;service_manager.c&#96;</span><br></pre></td></tr></table></figure>
+<p>#include “binder.h”<br>…<br>int svcmgr_handler(struct binder_state *bs,<br>                   struct binder_transaction_data *txn,<br>                   struct binder_io *msg,<br>                   struct binder_io *reply)<br>{<br>    …<br>    switch(txn-&gt;code) {<br>    case SVC_MGR_GET_SERVICE:<br>    case SVC_MGR_CHECK_SERVICE:<br>        s = bio_get_string16(msg, &amp;len);<br>        if (s == NULL) {<br>            return -1;<br>        }<br>        handle = do_find_service(s, len, txn-&gt;sender_euid, txn-&gt;sender_pid);<br>        if (!handle)<br>            break;<br>        bio_put_ref(reply, handle);<br>        return 0;</p>
+<pre><code>case SVC_MGR_ADD_SERVICE:
+    s = bio_get_string16(msg, &amp;len);
+    if (s == NULL) {
+        return -1;
+    }
+    handle = bio_get_ref(msg);
+    allow_isolated = bio_get_uint32(msg) ? 1 : 0;
+    if (do_add_service(bs, s, len, handle, txn-&gt;sender_euid,
+        allow_isolated, txn-&gt;sender_pid))
+        return -1;
+    break;
+    ...
+}</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">service_manager.c的svcmgr_handler函数就是监听代理端请求命令的txn-&gt;code就是mRemote.transact()里传过来的第一个参数。SVC_MGR_GET_SERVICE和SVC_MGR_ADD_SERVICE是在头文件binder.h里定义的，它们的值与IServiceManager.java里定义的一致，也是1和3。</span><br><span class="line">我们先看SVC_MGR_ADD_SERVICE的响应：</span><br><span class="line"></span><br><span class="line">首先通过s &#x3D; bio_get_string16(msg, &amp;len)获得了service的名称，</span><br><span class="line">然后通过handle &#x3D; bio_get_ref(msg)获得了一个handle，这个handle就是我们之前通过writeStrongBinder写入的IBinder，</span><br><span class="line">最后通过do_add_service()添加注册service&#96;do_add_service()&#96;的实现如下：</span><br></pre></td></tr></table></figure>
+<p>int do_add_service(struct binder_state <em>bs,<br>                   const uint16_t <em>s, size_t len,<br>                   uint32_t handle, uid_t uid, int allow_isolated,<br>                   pid_t spid)<br>{<br>    struct svcinfo *si;<br>    si = find_svc(s, len);<br>    if (si) {<br>        if (si-&gt;handle) {<br>            ALOGE(“add_service(‘%s’,%x) uid=%d - ALREADY REGISTERED, OVERRIDE\n”,<br>                 str8(s, len), handle, uid);<br>            svcinfo_death(bs, si);<br>        }<br>        si-&gt;handle = handle;<br>    } else {<br>        si = malloc(sizeof(</em>si) + (len + 1) * sizeof(uint16_t));<br>        si-&gt;handle = handle;<br>        si-&gt;len = len;<br>        memcpy(si-&gt;name, s, (len + 1) * sizeof(uint16_t));<br>        si-&gt;name[len] = ‘\0’;<br>        si-&gt;death.func = (void</em>) svcinfo_death;<br>        si-&gt;death.ptr = si;<br>        si-&gt;allow_isolated = allow_isolated;<br>        si-&gt;next = svclist;<br>        svclist = si;<br>    }<br>    …<br>}</p>
+<p>struct svcinfo *find_svc(const uint16_t *s16, size_t len)<br>{<br>    struct svcinfo *si;</p>
+<pre><code>for (si = svclist; si; si = si-&gt;next) {
+    if ((len == si-&gt;len) &amp;&amp;
+        !memcmp(s16, si-&gt;name, len * sizeof(uint16_t))) {
+        return si;
+    }
+}
+return NULL;</code></pre><p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 首先声明了一个struct svcinfo *si</span><br><span class="line">- 通过find_svc(s, len)查找一下同样名称的service之前是不是注册过，防止重复注册。find_svc()的实现里可以看到是通过遍历一个svclist链表来查重的，svclist链表就是用来保存所有注册过的service的</span><br><span class="line">- 如果确认没有重复注册service，就重新构造一个svcinfo添加到svclist链表的头部。</span><br><span class="line"></span><br><span class="line">我们再看SVC_MGR_GET_SERVICE的响应，主要是通过do_find_service()查找到对应的service，并通过bio_put_ref(reply, handle)将查找到的handle返回。do_find_service()的实现主要也是通过find_svc()去svclist链表中查找</span><br></pre></td></tr></table></figure>
+<p>uint32_t do_find_service(const uint16_t *s, size_t len, uid_t uid, pid_t spid)<br>{<br>    struct svcinfo *si = find_svc(s, len);<br>    …<br>    return si-&gt;handle;<br>}</p>
+<pre><code>
+通过上面的流程梳理我们最终了解到：
+
+-  每个System Service通过调用ServiceManager.addService()将自己的名字以及IBinder引用保存到servicemanager进程的一个链表里
+
+- 每个使用该System Service的进程通过调用ServiceManager.getService()从service_manager进程获得该System Service对应的IBinder，就可以与该System Service进行通信了。
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer/" rel="tag"># Android系统启动-SystemServer</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-SystemServer/" rel="next" title="Android系统启动-SystemServer">
+                <i class="fa fa-chevron-left"></i> Android系统启动-SystemServer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/" rel="prev" title="Android系统总结篇">
+                Android系统总结篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是SystemService"><span class="nav-number">1.</span> <span class="nav-text">什么是SystemService</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的SystemService"><span class="nav-number">1.1.</span> <span class="nav-text">一个简单的SystemService</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-Service实现流程"><span class="nav-number">2.</span> <span class="nav-text">System Service实现流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-Service-新加接口"><span class="nav-number">3.</span> <span class="nav-text">System Service 新加接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用层与-System-Service-通信"><span class="nav-number">4.</span> <span class="nav-text">应用层与 System Service 通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现-System-Service-的注意事项"><span class="nav-number">5.</span> <span class="nav-text">实现 System Service 的注意事项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServiceManager原理"><span class="nav-number">6.</span> <span class="nav-text">ServiceManager原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

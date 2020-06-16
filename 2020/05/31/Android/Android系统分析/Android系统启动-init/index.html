@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统启动-init," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1234system&#x2F;core&#x2F;init&#x2F;  - init.cpp  - init_parser.cpp  - signal_handler.cpp  概述init进程是Linux系统中用户空间的第一个进程，进程号固定为1。Kernel启动后，在用户空间启动init进程，并调用init中的main()方法执行init进程的职责。对于init进程的功能分为4部分：  解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统启动-init">
+<meta property="og:url" content="http://yoursite.com/2020/05/31/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="1234system&#x2F;core&#x2F;init&#x2F;  - init.cpp  - init_parser.cpp  - signal_handler.cpp  概述init进程是Linux系统中用户空间的第一个进程，进程号固定为1。Kernel启动后，在用户空间启动init进程，并调用init中的main()方法执行init进程的职责。对于init进程的功能分为4部分：  解">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://gityuan.com/images/boot/init/zygote_init.jpg">
+<meta property="og:image" content="http://gityuan.com/images/boot/init/init_oneshot.jpg">
+<meta property="article:published_time" content="2020-05-30T17:50:06.000Z">
+<meta property="article:modified_time" content="2020-05-30T18:39:55.998Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Android系统启动-init">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://gityuan.com/images/boot/init/zygote_init.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/31/Android/Android系统分析/Android系统启动-init/"/>
+
+
+
+
+
+  <title>Android系统启动-init | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/31/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android系统启动-init</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-31T01:50:06+08:00">
+                2020-05-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">Android系统分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/31/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/31/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system&#x2F;core&#x2F;init&#x2F;</span><br><span class="line">  - init.cpp</span><br><span class="line">  - init_parser.cpp</span><br><span class="line">  - signal_handler.cpp</span><br></pre></td></tr></table></figure>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>init进程是Linux系统中用户空间的第一个进程，进程号固定为1。Kernel启动后，在用户空间启动init进程，并调用init中的main()方法执行init进程的职责。对于init进程的功能分为4部分：</p>
+<ul>
+<li>解析并运行所有的init.rc相关文件</li>
+<li>根据rc文件，生成相应的设备驱动节点</li>
+<li>处理子进程的终止(signal方式)</li>
+<li>提供属性服务的功能</li>
+</ul>
+<p>接下来从main()方法说起。</p>
+<h2 id="main"><a href="#main" class="headerlink" title="main()"></a><code>main()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">static int epoll_fd &#x3D; -1;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv) &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#x2F;&#x2F;设置文件属性0777</span><br><span class="line">    umask(0);</span><br><span class="line">    &#x2F;&#x2F;初始化内核log，位于节点&#x2F;dev&#x2F;kmsg【见小节1.2】</span><br><span class="line">    klog_init();</span><br><span class="line">    &#x2F;&#x2F;设置输出的log级别</span><br><span class="line">    klog_set_level(KLOG_NOTICE_LEVEL);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;创建一块共享的内存空间，用于属性服务【见小节5.1】</span><br><span class="line">    property_init();</span><br><span class="line">    &#x2F;&#x2F;初始化epoll功能</span><br><span class="line">    epoll_fd &#x3D; epoll_create1(EPOLL_CLOEXEC);</span><br><span class="line">    &#x2F;&#x2F;初始化子进程退出的信号处理函数，并调用epoll_ctl设置signal fd可读的回调函数【见小节2.1】</span><br><span class="line">    signal_handler_init();  </span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;加载default.prop文件</span><br><span class="line">    property_load_boot_defaults();</span><br><span class="line">    &#x2F;&#x2F;启动属性服务器，此处会调用epoll_ctl设置property fd可读的回调函数【见小节5.2】</span><br><span class="line">    start_property_service();   </span><br><span class="line">    &#x2F;&#x2F;解析init.rc文件</span><br><span class="line">    init_parse_config_file(&quot;&#x2F;init.rc&quot;);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;执行rc文件中触发器为on early-init的语句</span><br><span class="line">    action_for_each_trigger(&quot;early-init&quot;, action_add_queue_tail);</span><br><span class="line">    &#x2F;&#x2F;等冷插拔设备初始化完成</span><br><span class="line">    queue_builtin_action(wait_for_coldboot_done_action, &quot;wait_for_coldboot_done&quot;);</span><br><span class="line">    queue_builtin_action(mix_hwrng_into_linux_rng_action, &quot;mix_hwrng_into_linux_rng&quot;);</span><br><span class="line">    &#x2F;&#x2F;设备组合键的初始化操作，此处会调用epoll_ctl设置keychord fd可读的回调函数</span><br><span class="line">    queue_builtin_action(keychord_init_action, &quot;keychord_init&quot;);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 屏幕上显示Android静态Logo 【见小节1.3】</span><br><span class="line">    queue_builtin_action(console_init_action, &quot;console_init&quot;);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;执行rc文件中触发器为on init的语句</span><br><span class="line">    action_for_each_trigger(&quot;init&quot;, action_add_queue_tail);</span><br><span class="line">    queue_builtin_action(mix_hwrng_into_linux_rng_action, &quot;mix_hwrng_into_linux_rng&quot;);</span><br><span class="line"></span><br><span class="line">    char bootmode[PROP_VALUE_MAX];</span><br><span class="line">    &#x2F;&#x2F;当处于充电模式，则charger加入执行队列；否则late-init加入队列。</span><br><span class="line">    if (property_get(&quot;ro.bootmode&quot;, bootmode) &gt; 0 &amp;&amp; strcmp(bootmode, &quot;charger&quot;) &#x3D;&#x3D; 0)</span><br><span class="line">    &#123;</span><br><span class="line">       action_for_each_trigger(&quot;charger&quot;, action_add_queue_tail);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">       action_for_each_trigger(&quot;late-init&quot;, action_add_queue_tail);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;触发器为属性是否设置</span><br><span class="line">    queue_builtin_action(queue_property_triggers_action, &quot;queue_property_triggers&quot;);</span><br><span class="line"></span><br><span class="line">    while (true) &#123;</span><br><span class="line">        if (!waiting_for_exec) &#123;</span><br><span class="line">            execute_one_command();</span><br><span class="line">             &#x2F;&#x2F;根据需要重启服务【见小节1.4】</span><br><span class="line">            restart_processes();</span><br><span class="line">        &#125;</span><br><span class="line">        int timeout &#x3D; -1;</span><br><span class="line">        if (process_needs_restart) &#123;</span><br><span class="line">            timeout &#x3D; (process_needs_restart - gettime()) * 1000;</span><br><span class="line">            if (timeout &lt; 0)</span><br><span class="line">                timeout &#x3D; 0;</span><br><span class="line">        &#125;</span><br><span class="line">        if (!action_queue_empty() || cur_action) &#123;</span><br><span class="line">            timeout &#x3D; 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        epoll_event ev;</span><br><span class="line">        &#x2F;&#x2F;循环等待事件发生</span><br><span class="line">        int nr &#x3D; TEMP_FAILURE_RETRY(epoll_wait(epoll_fd, &amp;ev, 1, timeout));</span><br><span class="line">        if (nr &#x3D;&#x3D; -1) &#123;</span><br><span class="line">            ERROR(&quot;epoll_wait failed: %s\n&quot;, strerror(errno));</span><br><span class="line">        &#125; else if (nr &#x3D;&#x3D; 1) &#123;</span><br><span class="line">            ((void (*)()) ev.data.ptr)();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line">init进程执行完成后进入循环等待epoll_wait的状态。</span><br></pre></td></tr></table></figure>
+
+<h2 id="log系统"><a href="#log系统" class="headerlink" title="log系统"></a>log系统</h2><p>此时android的log系统还没有启动，采用kernel的log系统，打开的设备节点/dev/kmsg， 那么可通过<code>cat /dev/kmsg</code>来获取内核log。</p>
+<p>接下来，设置log的输出级别为KLOG_NOTICE_LEVEL(5)，当log级别小于5时则会输出到kernel log， 默认值为3.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define KLOG_ERROR_LEVEL 3</span><br><span class="line">#define KLOG_WARNING_LEVEL 4</span><br><span class="line">#define KLOG_NOTICE_LEVEL 5</span><br><span class="line">#define KLOG_INFO_LEVEL 6</span><br><span class="line">#define KLOG_DEBUG_LEVEL 7</span><br><span class="line">#define KLOG_DEFAULT_LEVEL 3 &#x2F;&#x2F;默认为3</span><br></pre></td></tr></table></figure>
+
+<h2 id="console-init-action"><a href="#console-init-action" class="headerlink" title="console_init_action"></a>console_init_action</h2><p>[-&gt; init.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">static int console_init_action(int nargs, char **args) &#123;</span><br><span class="line">    char console[PROP_VALUE_MAX];</span><br><span class="line">    if (property_get(&quot;ro.boot.console&quot;, console) &gt; 0) &#123;</span><br><span class="line">        snprintf(console_name, sizeof(console_name), &quot;&#x2F;dev&#x2F;%s&quot;, console);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int fd &#x3D; open(console_name, O_RDWR | O_CLOEXEC);</span><br><span class="line">    if (fd &gt;&#x3D; 0)</span><br><span class="line">        have_console &#x3D; 1;</span><br><span class="line">    close(fd);</span><br><span class="line"></span><br><span class="line">    fd &#x3D; open(&quot;&#x2F;dev&#x2F;tty0&quot;, O_WRONLY | O_CLOEXEC);</span><br><span class="line">    if (fd &gt;&#x3D; 0) &#123;</span><br><span class="line">        const char *msg;</span><br><span class="line">            msg &#x3D; &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;  &#x2F;&#x2F; console is 40 cols x 30 lines</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot;\n&quot;</span><br><span class="line">        &quot; A N D R O I D &quot;;</span><br><span class="line">        write(fd, msg, strlen(msg));</span><br><span class="line">        close(fd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这便是开机显示的底部带ANDROID字样的画面。</p>
+<h2 id="restart-processes"><a href="#restart-processes" class="headerlink" title="restart_processes"></a>restart_processes</h2><p>[-&gt; init.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static void restart_processes() &#123;</span><br><span class="line">    process_needs_restart &#x3D; 0;</span><br><span class="line">    service_for_each_flags(SVC_RESTARTING,</span><br><span class="line">                           restart_service_if_needed);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>检查service_list中的所有服务，对于带有SVC_RESTARTING标志的服务，则都会调用其相应的restart_service_if_needed。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">static void restart_service_if_needed(struct service *svc) &#123;</span><br><span class="line">    time_t next_start_time &#x3D; svc-&gt;time_started + 5;</span><br><span class="line"></span><br><span class="line">    if (next_start_time &lt;&#x3D; gettime()) &#123;</span><br><span class="line">        svc-&gt;flags &amp;&#x3D; (~SVC_RESTARTING);</span><br><span class="line">        service_start(svc, NULL);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if ((next_start_time &lt; process_needs_restart) ||</span><br><span class="line">        (process_needs_restart &#x3D;&#x3D; 0)) &#123;</span><br><span class="line">        process_needs_restart &#x3D; next_start_time;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后再调用service_start来启动服务。</p>
+<p>接下来，解读init的main方法中的4大块核心知识点：信号处理、rc文件语法、启动服务以及属性服务。</p>
+<h1 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h1><p>在小节[1.1]的init.cpp的main()方法中通过signal_handler_init()来初始化信号处理过程。</p>
+<p>主要工作：</p>
+<ul>
+<li>初始化signal句柄；</li>
+<li>循环处理子进程；</li>
+<li>注册epoll句柄；</li>
+<li>处理子进程的终止；</li>
+</ul>
+<h2 id="signal-handler-init"><a href="#signal-handler-init" class="headerlink" title="signal_handler_init"></a>signal_handler_init</h2><p>[-&gt; signal_handler.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void signal_handler_init() &#123;</span><br><span class="line">    int s[2];</span><br><span class="line">    &#x2F;&#x2F; 创建socket pair</span><br><span class="line">    if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0, s) &#x3D;&#x3D; -1) &#123;</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    signal_write_fd &#x3D; s[0];</span><br><span class="line">    signal_read_fd &#x3D; s[1];</span><br><span class="line">    &#x2F;&#x2F;当捕获信号SIGCHLD，则写入signal_write_fd</span><br><span class="line">    struct sigaction act;</span><br><span class="line">    memset(&amp;act, 0, sizeof(act));</span><br><span class="line">    act.sa_handler &#x3D; SIGCHLD_handler;</span><br><span class="line">    &#x2F;&#x2F;SA_NOCLDSTOP使init进程只有在其子进程终止时才会受到SIGCHLD信号</span><br><span class="line">    act.sa_flags &#x3D; SA_NOCLDSTOP;</span><br><span class="line">    sigaction(SIGCHLD, &amp;act, 0);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;进入waitpid来处理子进程是否退出的情况【见小节2.2】</span><br><span class="line">    reap_any_outstanding_children();</span><br><span class="line">    &#x2F;&#x2F;调用epoll_ctl方法来注册epoll的回调函数【见小节2.3】</span><br><span class="line">    register_epoll_handler(signal_read_fd, handle_signal);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个进程在处理其他进程发送的signal信号时都需要先注册，当进程的运行状态改变或终止时会产生某种signal信号，init进程是所有用户空间进程的父进程，当其子进程终止时产生SIGCHLD信号，init进程调用信号安装函数sigaction()，传递参数给sigaction结构体，便完成信号处理的过程。</p>
+<p>这里有两个重要的函数：SIGCHLD_handler和handle_signal，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;写入数据</span><br><span class="line">static void SIGCHLD_handler(int) &#123;</span><br><span class="line">    &#x2F;&#x2F;向signal_write_fd写入1，直到成功为止</span><br><span class="line">    if (TEMP_FAILURE_RETRY(write(signal_write_fd, &quot;1&quot;, 1)) &#x3D;&#x3D; -1) &#123;</span><br><span class="line">        ERROR(&quot;write(signal_write_fd) failed: %s\n&quot;, strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;读取数据</span><br><span class="line">static void handle_signal() &#123;</span><br><span class="line">    char buf[32];</span><br><span class="line">    &#x2F;&#x2F;读取signal_read_fd中的数据，并放入buf</span><br><span class="line">    read(signal_read_fd, buf, sizeof(buf));</span><br><span class="line">    reap_any_outstanding_children(); 【见小节2.2】</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="reap-any-outstanding-children"><a href="#reap-any-outstanding-children" class="headerlink" title="reap_any_outstanding_children"></a>reap_any_outstanding_children</h2><p>[-&gt; signal_handler.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">static void reap_any_outstanding_children() &#123;</span><br><span class="line">    while (wait_for_one_process()) &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static bool wait_for_one_process() &#123;</span><br><span class="line">    int status;</span><br><span class="line">    &#x2F;&#x2F;等待任意子进程，如果子进程没有退出则返回0，否则则返回该子进程pid。</span><br><span class="line">    pid_t pid &#x3D; TEMP_FAILURE_RETRY(waitpid(-1, &amp;status, WNOHANG));</span><br><span class="line">    if (pid &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125; else if (pid &#x3D;&#x3D; -1) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;根据pid查找到相应的service</span><br><span class="line">    service* svc &#x3D; service_find_by_pid(pid);</span><br><span class="line">    std::string name;</span><br><span class="line"></span><br><span class="line">    if (!svc) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;当flags为RESTART，且不是ONESHOT时，先kill进程组内所有的子进程或子线程</span><br><span class="line">    if (!(svc-&gt;flags &amp; SVC_ONESHOT) || (svc-&gt;flags &amp; SVC_RESTART)) &#123;</span><br><span class="line">        kill(-pid, SIGKILL);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;移除当前服务svc中的所有创建过的socket</span><br><span class="line">    for (socketinfo* si &#x3D; svc-&gt;sockets; si; si &#x3D; si-&gt;next) &#123;</span><br><span class="line">        char tmp[128];</span><br><span class="line">        snprintf(tmp, sizeof(tmp), ANDROID_SOCKET_DIR&quot;&#x2F;%s&quot;, si-&gt;name);</span><br><span class="line">        unlink(tmp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;当flags为EXEC时，释放相应的服务</span><br><span class="line">    if (svc-&gt;flags &amp; SVC_EXEC) &#123;</span><br><span class="line">        waiting_for_exec &#x3D; false;</span><br><span class="line">        list_remove(&amp;svc-&gt;slist);</span><br><span class="line">        free(svc-&gt;name);</span><br><span class="line">        free(svc);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    svc-&gt;pid &#x3D; 0;</span><br><span class="line">    svc-&gt;flags &amp;&#x3D; (~SVC_RUNNING);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;对于ONESHOT服务，使其进入disabled状态</span><br><span class="line">    if ((svc-&gt;flags &amp; SVC_ONESHOT) &amp;&amp; !(svc-&gt;flags &amp; SVC_RESTART)) &#123;</span><br><span class="line">        svc-&gt;flags |&#x3D; SVC_DISABLED;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;禁用和重置的服务，都不再自动重启</span><br><span class="line">    if (svc-&gt;flags &amp; (SVC_DISABLED | SVC_RESET))  &#123;</span><br><span class="line">        svc-&gt;NotifyStateChange(&quot;stopped&quot;); &#x2F;&#x2F;设置相应的service状态为stopped</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;服务在4分钟内重启次数超过4次，则重启手机进入recovery模式</span><br><span class="line">    time_t now &#x3D; gettime();</span><br><span class="line">    if ((svc-&gt;flags &amp; SVC_CRITICAL) &amp;&amp; !(svc-&gt;flags &amp; SVC_RESTART)) &#123;</span><br><span class="line">        if (svc-&gt;time_crashed + CRITICAL_CRASH_WINDOW &gt;&#x3D; now) &#123;</span><br><span class="line">            if (++svc-&gt;nr_crashed &gt; CRITICAL_CRASH_THRESHOLD) &#123;</span><br><span class="line">                android_reboot(ANDROID_RB_RESTART2, 0, &quot;recovery&quot;);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            svc-&gt;time_crashed &#x3D; now;</span><br><span class="line">            svc-&gt;nr_crashed &#x3D; 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    svc-&gt;flags &amp;&#x3D; (~SVC_RESTART);</span><br><span class="line">    svc-&gt;flags |&#x3D; SVC_RESTARTING;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;执行当前service中所有onrestart命令</span><br><span class="line">    struct listnode* node;</span><br><span class="line">    list_for_each(node, &amp;svc-&gt;onrestart.commands) &#123;</span><br><span class="line">        command* cmd &#x3D; node_to_item(node, struct command, clist);</span><br><span class="line">        cmd-&gt;func(cmd-&gt;nargs, cmd-&gt;args);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;设置相应的service状态为restarting</span><br><span class="line">    svc-&gt;NotifyStateChange(&quot;restarting&quot;);</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外：通过<code>getprop | grep init.svc</code> 可查看所有的service运行状态。状态总共分为：running, stopped, restarting</p>
+<h2 id="register-epoll-handler"><a href="#register-epoll-handler" class="headerlink" title="register_epoll_handler"></a>register_epoll_handler</h2><p>[-&gt; signal_handler.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void register_epoll_handler(int fd, void (*fn)()) &#123;</span><br><span class="line">    epoll_event ev;</span><br><span class="line">    ev.events &#x3D; EPOLLIN;</span><br><span class="line">    ev.data.ptr &#x3D; reinterpret_cast&lt;void*&gt;(fn);</span><br><span class="line">    &#x2F;&#x2F;将fd的可读事件加入到epoll_fd的监听队列中</span><br><span class="line">    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &amp;ev) &#x3D;&#x3D; -1) &#123;</span><br><span class="line">        ERROR(&quot;epoll_ctl failed: %s\n&quot;, strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当fd可读，则会触发调用(*fn)函数。</p>
+<h1 id="rc文件语法"><a href="#rc文件语法" class="headerlink" title="rc文件语法"></a>rc文件语法</h1><p>rc文件语法是以行尾单位，以空格间隔的语法，以#开始代表注释行。rc文件主要包含Action、Service、Command、Options，其中对于Action和Service的名称都是唯一的，对于重复的命名视为无效。</p>
+<h2 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h2><p>Action： 通过触发器trigger，即以on开头的语句来决定执行相应的service的时机，具体有如下时机：</p>
+<ul>
+<li>on early-init; 在初始化早期阶段触发；</li>
+<li>on init; 在初始化阶段触发；</li>
+<li>on late-init; 在初始化晚期阶段触发；</li>
+<li>on boot/charger： 当系统启动/充电时触发，还包含其他情况，此处不一一列举；</li>
+<li>on property:<key>=<value>: 当属性值满足条件时触发；</li>
+</ul>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>服务Service，以 service开头，由init进程启动，一般运行在init的一个子进程，所以启动service前需要判断对应的可执行文件是否存在。init生成的子进程，定义在rc文件，其中每一个service在启动时会通过fork方式生成子进程。</p>
+<p>例如： <code>service servicemanager /system/bin/servicemanager</code>代表的是服务名为servicemanager，服务执行的路径为/system/bin/servicemanager。</p>
+<h2 id="Command"><a href="#Command" class="headerlink" title="Command"></a>Command</h2><p>下面列举常用的命令</p>
+<ul>
+<li>class_start <service_class_name>： 启动属于同一个class的所有服务；</li>
+<li>start <service_name>： 启动指定的服务，若已启动则跳过；</li>
+<li>stop <service_name>： 停止正在运行的服务</li>
+<li>setprop <name> <value>：设置属性值</li>
+<li>mkdir <path>：创建指定目录</li>
+<li>symlink <target> <sym_link>： 创建连接到<target>的<sym_link>符号链接；</li>
+<li>write <path> <string>： 向文件path中写入字符串；</li>
+<li>exec： fork并执行，会阻塞init进程直到程序完毕；</li>
+<li>exprot <name> <name>：设定环境变量；</li>
+<li>loglevel <level>：设置log级别</li>
+</ul>
+<h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>Options是Service的可选项，与service配合使用</p>
+<ul>
+<li>disabled: 不随class自动启动，只有根据service名才启动；</li>
+<li>oneshot: service退出后不再重启；</li>
+<li>user/group： 设置执行服务的用户/用户组，默认都是root；</li>
+<li>class：设置所属的类名，当所属类启动/退出时，服务也启动/停止，默认为default；</li>
+<li>onrestart:当服务重启时执行相应命令；</li>
+<li>socket: 创建名为<code>/dev/socket/&lt;name&gt;</code>的socket</li>
+<li>critical: 在规定时间内该service不断重启，则系统会重启并进入恢复模式</li>
+</ul>
+<p><strong>default:</strong> 意味着disabled=false，oneshot=false，critical=false。</p>
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><h2 id="启动顺序"><a href="#启动顺序" class="headerlink" title="启动顺序"></a>启动顺序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">on early-init</span><br><span class="line">on init</span><br><span class="line">on late-init</span><br><span class="line">    trigger post-fs      </span><br><span class="line">    trigger load_system_props_action</span><br><span class="line">    trigger post-fs-data  </span><br><span class="line">    trigger load_persist_props_action</span><br><span class="line">    trigger firmware_mounts_complete</span><br><span class="line">    trigger boot   </span><br><span class="line"></span><br><span class="line">on post-fs      &#x2F;&#x2F;挂载文件系统</span><br><span class="line">    start logd</span><br><span class="line">    mount rootfs rootfs &#x2F; ro remount</span><br><span class="line">    mount rootfs rootfs &#x2F; shared rec</span><br><span class="line">    mount none &#x2F;mnt&#x2F;runtime&#x2F;default &#x2F;storage slave bind rec</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">on post-fs-data  &#x2F;&#x2F;挂载data</span><br><span class="line">    start logd</span><br><span class="line">    start vold   &#x2F;&#x2F;启动vold</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">on boot      &#x2F;&#x2F;启动核心服务</span><br><span class="line">    ...</span><br><span class="line">    class_start core &#x2F;&#x2F;启动core class</span><br></pre></td></tr></table></figure>
+
+<p>触发器的执行顺序为on early-init -&gt; init -&gt; late-init，从上面的代码可知，在late-init触发器中会触发文件系统挂载以及on boot。再on boot过程会触发启动core class。至于main class的启动是由vold.decrypt的以下4个值的设置所决定的， 该过程位于system/vold/cryptfs.c文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">on nonencrypted</span><br><span class="line">    class_start main</span><br><span class="line">    class_start late_start</span><br><span class="line"></span><br><span class="line">on property:vold.decrypt&#x3D;trigger_restart_min_framework</span><br><span class="line">    class_start main</span><br><span class="line"></span><br><span class="line">on property:vold.decrypt&#x3D;trigger_restart_framework</span><br><span class="line">    class_start main</span><br><span class="line">    class_start late_start</span><br><span class="line"></span><br><span class="line">on property:vold.decrypt&#x3D;trigger_reset_main</span><br><span class="line">    class_reset main</span><br><span class="line"></span><br><span class="line">on property:vold.decrypt&#x3D;trigger_shutdown_framework</span><br><span class="line">    class_reset late_start</span><br><span class="line">    class_reset main</span><br></pre></td></tr></table></figure>
+
+<h2 id="服务启动-Zygote"><a href="#服务启动-Zygote" class="headerlink" title="服务启动(Zygote)"></a>服务启动(Zygote)</h2><p>在init.zygote.rc文件中，zygote服务定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service zygote &#x2F;system&#x2F;bin&#x2F;app_process -Xzygote &#x2F;system&#x2F;bin --zygote --start-system-server</span><br><span class="line">    class main</span><br><span class="line">    socket zygote stream 660 root system</span><br><span class="line">    onrestart write &#x2F;sys&#x2F;android_power&#x2F;request_state wake</span><br><span class="line">    onrestart write &#x2F;sys&#x2F;power&#x2F;state on</span><br><span class="line">    onrestart restart media</span><br><span class="line">    onrestart restart netd</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>init_parser.cpp</code>完成整个service解析工作，此处就不详细展开讲解析过程，该过程主要工作是：</p>
+<ul>
+<li>创建一个名叫”zygote”的service结构体；</li>
+<li>创建一个用于socket通信的socketinfo结构体；</li>
+<li>创建一个包含4个onrestart的action结构体。</li>
+</ul>
+<p>Zygote服务会随着main class的启动而启动，退出后会由init重启zygote，即使多次重启也不会进入recovery模式。zygote所对应的可执行文件是/system/bin/app_process，通过调用<code>pid =fork()</code>创建子进程，通过<code>execve(svc-&gt;args[0], (char**)svc-&gt;args, (char**) ENV)</code>，进入App_main.cpp的main()函数。故zygote是通过fork和execv共同创建的。</p>
+<p>流程如下：</p>
+<p><img src="http://gityuan.com/images/boot/init/zygote_init.jpg" alt="zygote_init"></p>
+<p>而关于Zygote重启在前面的信号处理过程中讲过，是处理SIGCHLD信号，init进程重启zygote进程，更多关于Zygote内容见<a href="http://gityuan.com/2016/02/13/android-zygote/" target="_blank" rel="noopener">Zygote篇</a>。</p>
+<h2 id="服务重启"><a href="#服务重启" class="headerlink" title="服务重启"></a>服务重启</h2><p><img src="http://gityuan.com/images/boot/init/init_oneshot.jpg" alt="init_oneshot"></p>
+<p>当init子进程退出时，会产生SIGCHLD信号，并发送给init进程，通过socket套接字传递数据，调用到wait_for_one_process()方法，根据是否是oneshot，来决定是重启子进程，还是放弃启动。</p>
+<p>所有的Service里面只有servicemanager ，zygote ，surfaceflinger这3个服务有<code>onrestart</code>关键字来触发其他service启动过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;zygote可触发media、netd重启</span><br><span class="line">service zygote &#x2F;system&#x2F;bin&#x2F;app_process -Xzygote &#x2F;system&#x2F;bin --zygote --start-system-server</span><br><span class="line">    class main</span><br><span class="line">    socket zygote stream 660 root system</span><br><span class="line">    onrestart write &#x2F;sys&#x2F;android_power&#x2F;request_state wake</span><br><span class="line">    onrestart write &#x2F;sys&#x2F;power&#x2F;state on</span><br><span class="line">    onrestart restart media</span><br><span class="line">    onrestart restart netd</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;servicemanager可触发healthd、zygote、media、surfaceflinger、drm重启</span><br><span class="line">service servicemanager &#x2F;system&#x2F;bin&#x2F;servicemanager</span><br><span class="line">    class core</span><br><span class="line">    user system</span><br><span class="line">    group system</span><br><span class="line">    critical</span><br><span class="line">    onrestart restart healthd</span><br><span class="line">    onrestart restart zygote</span><br><span class="line">    onrestart restart media</span><br><span class="line">    onrestart restart surfaceflinger</span><br><span class="line">    onrestart restart drm</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;surfaceflinger可触发zygote重启</span><br><span class="line">service surfaceflinger &#x2F;system&#x2F;bin&#x2F;surfaceflinger</span><br><span class="line">    class core</span><br><span class="line">    user system</span><br><span class="line">    group graphics drmrpc</span><br><span class="line">    onrestart restart zygote</span><br></pre></td></tr></table></figure>
+
+<p>由上可知：</p>
+<ul>
+<li>zygote：触发media、netd以及子进程(包括system_server进程)重启；</li>
+<li>system_server: 触发zygote重启;</li>
+<li>surfaceflinger：触发zygote重启;</li>
+<li>servicemanager: 触发zygote、healthd、media、surfaceflinger、drm重启</li>
+</ul>
+<p>所以，surfaceflinger,servicemanager,zygote自身以及system_server进程被杀都会触发Zygote重启。</p>
+<h1 id="属性服务"><a href="#属性服务" class="headerlink" title="属性服务"></a>属性服务</h1><p>当某个进程A，通过property_set()修改属性值后，init进程会检查访问权限，当权限满足要求后，则更改相应的属性值，属性值一旦改变则会触发相应的触发器（即rc文件中的on开头的语句)，在Android Shared Memmory（共享内存区域）中有一个_system_property_area_区域，里面记录着所有的属性值。对于进程A通过property_get（）方法，获取的也是该共享内存区域的属性值。</p>
+<h2 id="property-init"><a href="#property-init" class="headerlink" title="property_init"></a>property_init</h2><p>[-&gt; property_service.cpp]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void property_init() &#123;</span><br><span class="line">    &#x2F;&#x2F;用于保证只初始化_system_property_area_区域一次</span><br><span class="line">    if (property_area_initialized) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    property_area_initialized &#x3D; true;</span><br><span class="line">    &#x2F;&#x2F;创建共享内存</span><br><span class="line">    if (__system_property_area_init()) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    pa_workspace.size &#x3D; 0;</span><br><span class="line">    pa_workspace.fd &#x3D; open(PROP_FILENAME, O_RDONLY | O_NOFOLLOW | O_CLOEXEC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法核心功能在执行__system_property_area_init()方法，创建用于跨进程的共享内存。主要工作如下：</p>
+<ul>
+<li>执行open()，打开名为”/dev/<strong>properties</strong>“的共享内存文件，并设置大小为128KB；</li>
+<li>执行mmap()，将该内存映射到init进程；</li>
+<li>将该内存的首地址保存在全局变量<strong>system_property_area</strong>，后续的增加或者修改属性都基于该变量来计算位置。</li>
+</ul>
+<p><strong>关于加载的prop文件</strong></p>
+<p>通过<code>load_all_load_all_propsprops()</code>方法，加载以下：</p>
+<ol>
+<li>/system/build.prop；</li>
+<li>/vendor/build.prop；</li>
+<li>/factory/factory.prop；</li>
+<li>/data/local.prop；</li>
+<li>/data/property路径下的persist属性</li>
+</ol>
+<h2 id="start-property-service"><a href="#start-property-service" class="headerlink" title="start_property_service"></a>start_property_service</h2><p>[-&gt; property_service.cpp]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">start_property_service</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    property_set(<span class="string">"ro.property_service.version"</span>, <span class="string">"2"</span>);</span><br><span class="line"></span><br><span class="line">    property_set_fd = CreateSocket(PROP_SERVICE_NAME, SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK,</span><br><span class="line">                                   <span class="keyword">false</span>, <span class="number">0666</span>, <span class="number">0</span>, <span class="number">0</span>, nullptr, sehandle);</span><br><span class="line">    listen(property_set_fd, <span class="number">8</span>);</span><br><span class="line">    <span class="comment">//设置property文件描述符可读的回调函数【见小节2.3】</span></span><br><span class="line">    register_epoll_handler(property_set_fd, handle_property_set_fd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建并监听名叫“property_service”的socket，再利用epoll_ctl设置property文件描述符触发可读时的回调函数为handle_property_set_fd，接下来看看该函数的实现。</p>
+<h2 id="handle-property-set-fd"><a href="#handle-property-set-fd" class="headerlink" title="handle_property_set_fd"></a>handle_property_set_fd</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">handle_property_set_fd</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> constexpr uint32_t kDefaultSocketTimeout = <span class="number">2000</span>; <span class="comment">/* ms */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> s = accept4(property_set_fd, nullptr, nullptr, SOCK_CLOEXEC);</span><br><span class="line"></span><br><span class="line">    struct ucred cr;</span><br><span class="line">    socklen_t cr_size = sizeof(cr);</span><br><span class="line">    getsockopt(s, SOL_SOCKET, SO_PEERCRED, &amp;cr, &amp;cr_size) &lt; <span class="number">0</span>)；</span><br><span class="line"></span><br><span class="line">    <span class="function">SocketConnection <span class="title">socket</span><span class="params">(s, cr)</span></span>;</span><br><span class="line">    uint32_t timeout_ms = kDefaultSocketTimeout; <span class="comment">//设置2秒超时</span></span><br><span class="line"></span><br><span class="line">    uint32_t cmd = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (!socket.RecvUint32(&amp;cmd, &amp;timeout_ms)) &#123;</span><br><span class="line">        socket.SendUint32(PROP_ERROR_READ_CMD);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (cmd) &#123;</span><br><span class="line">    <span class="keyword">case</span> PROP_MSG_SETPROP: &#123;</span><br><span class="line">        <span class="keyword">char</span> prop_name[PROP_NAME_MAX];</span><br><span class="line">        <span class="keyword">char</span> prop_value[PROP_VALUE_MAX];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!socket.RecvChars(prop_name, PROP_NAME_MAX, &amp;timeout_ms) ||</span><br><span class="line">            !socket.RecvChars(prop_value, PROP_VALUE_MAX, &amp;timeout_ms)) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        prop_name[PROP_NAME_MAX-<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        prop_value[PROP_VALUE_MAX-<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//设置property【见小节5.4】</span></span><br><span class="line">        handle_property_set(socket, prop_value, prop_value, <span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> PROP_MSG_SETPROP2: &#123;</span><br><span class="line">        std::string name;</span><br><span class="line">        std::string value;</span><br><span class="line">        <span class="keyword">if</span> (!socket.RecvString(&amp;name, &amp;timeout_ms) ||</span><br><span class="line">            !socket.RecvString(&amp;value, &amp;timeout_ms)) &#123;</span><br><span class="line">          socket.SendUint32(PROP_ERROR_READ_DATA);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//设置property【见小节5.4】</span></span><br><span class="line">        handle_property_set(socket, name, value, <span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        socket.SendUint32(PROP_ERROR_INVALID_CMD);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里针对socket接收事件设置2秒超时，也就是说property的设置过程有可能耗时。</p>
+<h2 id="handle-property-set"><a href="#handle-property-set" class="headerlink" title="handle_property_set"></a>handle_property_set</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">handle_property_set</span><span class="params">(SocketConnection&amp; socket,</span></span></span><br><span class="line"><span class="function"><span class="params">                                <span class="keyword">const</span> std::string&amp; name,</span></span></span><br><span class="line"><span class="function"><span class="params">                                <span class="keyword">const</span> std::string&amp; value,</span></span></span><br><span class="line"><span class="function"><span class="params">                                bool legacy_protocol)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* cmd_name = legacy_protocol ? <span class="string">"PROP_MSG_SETPROP"</span> : <span class="string">"PROP_MSG_SETPROP2"</span>;</span><br><span class="line">  <span class="keyword">if</span> (!is_legal_property_name(name)) &#123; <span class="comment">//检查属性名是否合规</span></span><br><span class="line">    socket.SendUint32(PROP_ERROR_INVALID_NAME);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  struct ucred cr = socket.cred();</span><br><span class="line">  <span class="keyword">char</span>* source_ctx = nullptr;</span><br><span class="line">  getpeercon(socket.socket(), &amp;source_ctx);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (android::base::StartsWith(name, <span class="string">"ctl."</span>)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (check_control_mac_perms(value.c_str(), source_ctx, &amp;cr)) &#123;</span><br><span class="line">      <span class="comment">//处理以ctl.开头的属性</span></span><br><span class="line">      handle_control_message(name.c_str() + <span class="number">4</span>, value.c_str());</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (check_perms(name, source_ctx, &amp;cr)) &#123;</span><br><span class="line">      <span class="comment">//设置属性名和属性值</span></span><br><span class="line">      uint32_t result = property_set(name, value);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  freecon(source_ctx);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里会检测属性名是否合规，具体检查规范如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">bool <span class="title">is_legal_property_name</span><span class="params">(<span class="keyword">const</span> std::string&amp; name)</span> </span>&#123;</span><br><span class="line">    size_t namelen = name.size();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (namelen &lt; <span class="number">1</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (name[<span class="number">0</span>] == <span class="string">'.'</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (name[namelen - <span class="number">1</span>] == <span class="string">'.'</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Only allow alphanumeric, plus '.', '-', '@', ':', or '_' */</span></span><br><span class="line">    <span class="comment">/* Don't allow ".." to appear in a property name */</span></span><br><span class="line">    <span class="keyword">for</span> (size_t i = <span class="number">0</span>; i &lt; namelen; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (name[i] == <span class="string">'.'</span>) &#123;</span><br><span class="line">            <span class="comment">// i=0 is guaranteed to never have a dot. See above.</span></span><br><span class="line">            <span class="keyword">if</span> (name[i-<span class="number">1</span>] == <span class="string">'.'</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (name[i] == <span class="string">'_'</span> || name[i] == <span class="string">'-'</span> || name[i] == <span class="string">'@'</span> || name[i] == <span class="string">':'</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span> (name[i] &gt;= <span class="string">'a'</span> &amp;&amp; name[i] &lt;= <span class="string">'z'</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span> (name[i] &gt;= <span class="string">'A'</span> &amp;&amp; name[i] &lt;= <span class="string">'Z'</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span> (name[i] &gt;= <span class="string">'0'</span> &amp;&amp; name[i] &lt;= <span class="string">'9'</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">uint32_t <span class="title">property_set</span><span class="params">(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> PropertySetImpl(name, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> uint32_t <span class="title">PropertySetImpl</span><span class="params">(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; value)</span> </span>&#123;</span><br><span class="line">    size_t valuelen = value.size();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!is_legal_property_name(name)) &#123;</span><br><span class="line">        <span class="keyword">return</span> PROP_ERROR_INVALID_NAME;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (valuelen &gt;= PROP_VALUE_MAX) &#123; <span class="comment">//属性名不可过长</span></span><br><span class="line">        <span class="keyword">return</span> PROP_ERROR_INVALID_VALUE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    prop_info* pi = (prop_info*) __system_property_find(name.c_str());</span><br><span class="line">    <span class="keyword">if</span> (pi != nullptr) &#123;</span><br><span class="line">        <span class="comment">// 以ro.开头的属性不可更改</span></span><br><span class="line">        <span class="keyword">if</span> (android::base::StartsWith(name, <span class="string">"ro."</span>)</span><br><span class="line">            &amp;&amp; strcmp(name.c_str(),<span class="string">"ro.build.software.version"</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> PROP_ERROR_READ_ONLY_PROPERTY;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新属性</span></span><br><span class="line">        __system_property_update(pi, value.c_str(), valuelen);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//添加属性</span></span><br><span class="line">        <span class="keyword">int</span> rc = __system_property_add(name.c_str(), name.size(), value.c_str(), valuelen);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//以persist.开头的属性需要持久化</span></span><br><span class="line">    <span class="keyword">if</span> (persistent_properties_loaded &amp;&amp; android::base::StartsWith(name, <span class="string">"persist."</span>)) &#123;</span><br><span class="line">        write_persistent_property(name.c_str(), value.c_str());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//属性值改变的通知过程</span></span><br><span class="line">    property_changed(name, value);</span><br><span class="line">    <span class="keyword">return</span> PROP_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不同属性执行逻辑有所不同，主要区分如下：</p>
+<ul>
+<li><p>属性名以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctl.</span><br></pre></td></tr></table></figure>
+
+<p>开头，则表示是控制消息，控制消息用来执行一些命令。例如：</p>
+<ul>
+<li>setprop ctl.start bootanim 查看开机动画；</li>
+<li>setprop ctl.stop bootanim 关闭开机动画；</li>
+<li>setprop ctl.start pre-recovey 进入recovery模式；</li>
+</ul>
+</li>
+<li><p>属性名以<code>ro.</code>开头，则表示是只读的，不能设置，所以直接返回；</p>
+</li>
+<li><p>属性名以<code>persist.</code>开头，则需要把这些值写到对应文件；需要注意的是，persist用于持久化保存某些属性值，当同时也带来了额外的IO操作。</p>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>init进程(pid=1)是Linux系统中用户空间的第一个进程，主要工作如下：</p>
+<ul>
+<li>创建一块共享的内存空间，用于属性服务器;</li>
+<li>解析各个rc文件，并启动相应属性服务进程;</li>
+<li>初始化epoll，依次设置signal、property、keychord这3个fd可读时相对应的回调函数;</li>
+<li>进入无限循环状态，执行如下流程：<ul>
+<li>检查action_queue列表是否为空，若不为空则执行相应的action;</li>
+<li>检查是否需要重启的进程，若有则将其重新启动;</li>
+<li>进入epoll_wait等待状态，直到系统属性变化事件(property_set改变属性值)，或者收到子进程的信号SIGCHLD，再或者keychord 键盘输入事件，则会退出等待状态，执行相应的回调函数。</li>
+</ul>
+</li>
+</ul>
+<p>可见init进程在开机之后的核心工作就是响应property变化事件和回收僵尸进程。当某个进程调用property_set来改变一个系统属性值时，系统会通过socket向init进程发送一个property变化的事件通知，那么property fd会变成可读，init进程采用epoll机制监听该fd则会 触发回调handle_property_set_fd()方法。回收僵尸进程，在Linux内核中，如父进程不等待子进程的结束直接退出，会导致子进程在结束后变成僵尸进程，占用系统资源。为此，init进程专门安装了SIGCHLD信号接收器，当某些子进程退出时发现其父进程已经退出，则会向init进程发送SIGCHLD信号，init进程调用回调方法handle_signal()来回收僵尸子进程。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8-init/" rel="tag"># Android系统启动-init</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/29/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E7%AF%87/" rel="next" title="Android系统总结篇">
+                <i class="fa fa-chevron-left"></i> Android系统总结篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/02/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Android%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1/Android%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1-ActivityManagerService/" rel="prev" title="Android系统服务-ActivityManagerService">
+                Android系统服务-ActivityManagerService <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#main"><span class="nav-number">1.1.</span> <span class="nav-text">main()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log系统"><span class="nav-number">1.2.</span> <span class="nav-text">log系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#console-init-action"><span class="nav-number">1.3.</span> <span class="nav-text">console_init_action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restart-processes"><span class="nav-number">1.4.</span> <span class="nav-text">restart_processes</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号处理"><span class="nav-number">2.</span> <span class="nav-text">信号处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#signal-handler-init"><span class="nav-number">2.1.</span> <span class="nav-text">signal_handler_init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reap-any-outstanding-children"><span class="nav-number">2.2.</span> <span class="nav-text">reap_any_outstanding_children</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#register-epoll-handler"><span class="nav-number">2.3.</span> <span class="nav-text">register_epoll_handler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rc文件语法"><span class="nav-number">3.</span> <span class="nav-text">rc文件语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Action"><span class="nav-number">3.1.</span> <span class="nav-text">Action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">3.2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-number">3.3.</span> <span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Options"><span class="nav-number">3.4.</span> <span class="nav-text">Options</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动服务"><span class="nav-number">4.</span> <span class="nav-text">启动服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动顺序"><span class="nav-number">4.1.</span> <span class="nav-text">启动顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务启动-Zygote"><span class="nav-number">4.2.</span> <span class="nav-text">服务启动(Zygote)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务重启"><span class="nav-number">4.3.</span> <span class="nav-text">服务重启</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性服务"><span class="nav-number">5.</span> <span class="nav-text">属性服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#property-init"><span class="nav-number">5.1.</span> <span class="nav-text">property_init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#start-property-service"><span class="nav-number">5.2.</span> <span class="nav-text">start_property_service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#handle-property-set-fd"><span class="nav-number">5.3.</span> <span class="nav-text">handle_property_set_fd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#handle-property-set"><span class="nav-number">5.4.</span> <span class="nav-text">handle_property_set</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
