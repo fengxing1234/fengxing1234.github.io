@@ -1041,6 +1041,484 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/%E7%BB%99ITerm%E4%BB%A3%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/04/%E7%BB%99ITerm%E4%BB%A3%E7%90%86/" itemprop="url">跨平台演进及架构开篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-04T18:17:47+08:00">
+                2020-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/04/%E7%BB%99ITerm%E4%BB%A3%E7%90%86/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/04/%E7%BB%99ITerm%E4%BB%A3%E7%90%86/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用-shadowsocks-加速-Mac-自带终端或iTerm-2"><a href="#使用-shadowsocks-加速-Mac-自带终端或iTerm-2" class="headerlink" title="使用 shadowsocks 加速 Mac 自带终端或iTerm 2"></a>使用 shadowsocks 加速 Mac 自带终端或iTerm 2</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>对于经常需要依赖国外资源的开发者，终端的下载速度让人抓狂，诸如常见的 wget、curl、git、brew 等命令行工具超慢，甚至无法获取资源，这就需要搭建一个科学上网利器，例如目前流行的<code>shadowsocks</code>，我们配置好 shadowsocks 服务器端后，安装对应系统的客户端便可，然而当你构建的时候还是会很慢，这时你发现系统自带的终端或 iTerm 2 是不走 Socks5 。</p>
+<p>因终端下<code>Socks5</code>代理的支持并不太友好，遂改用<code>http</code>代理，达到曲径通幽的目的。</p>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>在 Linux系统下相对简单，安装 proxychains-NG 等软件就可以解决了，但在Mac下有点麻烦。OS X 10.11之前的系统，都还比较顺利，但是OS X 10.11之后较新的系统默认设置下不会安装成功。苹果在新系统中加入了SIP安全机制，他会阻止第三方程序向系统目录内（/System，/bin，/sbin，/usr(除了/usr/local)）进行写操作，sudo也不行。办法是先把SIP关了，等装好软件配置好后再打开SIP。或者改用其他软件。</p>
+<p>关闭SIP也麻烦，遂用<code>privoxy</code>这个经典软件，它刚好就是安装在/usr/local内，不需要关闭SIP也可以正常使用。</p>
+<h2 id="privoxy安装和使用说明-↓"><a href="#privoxy安装和使用说明-↓" class="headerlink" title="privoxy安装和使用说明 ↓"></a>privoxy安装和使用说明 ↓</h2><h3 id="确保安装了-Homebrew"><a href="#确保安装了-Homebrew" class="headerlink" title="确保安装了 Homebrew"></a>确保安装了 Homebrew</h3><p>Mac OS 下不可或缺的套件管理器： <a href="https://brew.sh/index_zh-cn.html" target="_blank" rel="noopener">Homebrew</a></p>
+<h3 id="privoxy-安装"><a href="#privoxy-安装" class="headerlink" title="privoxy 安装"></a>privoxy 安装</h3><p>使用下面命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install privoxy</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="privoxy-配置"><a href="#privoxy-配置" class="headerlink" title="privoxy 配置"></a>privoxy 配置</h3><p>因为是 Homebrew 方式安装的 privoxy，所以跟官方网站的使用方式不一样，请以此文为准。</p>
+<p>打开配置文件 /usr/local/etc/privoxy/config</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;usr&#x2F;local&#x2F;etc&#x2F;privoxy&#x2F;config</span><br></pre></td></tr></table></figure>
+
+<p>在 config 配置文件的最底部，手动加入以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">listen-address 0.0.0.0:8118</span><br><span class="line">forward-socks5 &#x2F; localhost:1080 .</span><br></pre></td></tr></table></figure>
+
+<p>** 或者用<code>echo</code>命令直接写入，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;etc&#x2F;privoxy&#x2F;</span><br><span class="line">echo &#39;listen-address 0.0.0.0:8118\nforward-socks5 &#x2F; localhost:1080 .&#39; &gt;&gt; config</span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>0.0.0.0</code> 可以让其他设备访问到，若不需要，请修改成用 <code>127.0.0.1</code>；<code>8118</code>是HTTP代理的默认端口；localhost:1080 是 SOCKS5（shadowsocks） 默认的地址，可根据需要自行修改，且注意不要忘了最后有一个空格和点号。</p>
+<h3 id="启动-privoxy"><a href="#启动-privoxy" class="headerlink" title="启动 privoxy"></a>启动 privoxy</h3><p>因没有安装在系统目录内，所以启动的时候需要打全路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo &#x2F;usr&#x2F;local&#x2F;sbin&#x2F;privoxy &#x2F;usr&#x2F;local&#x2F;etc&#x2F;privoxy&#x2F;config</span><br></pre></td></tr></table></figure>
+
+<p>查看是否启动成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -na | grep 8118</span><br></pre></td></tr></table></figure>
+
+<p>看到有类似如下信息就表示启动成功了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp4	0	0  *.8118		*.*		LISTEN</span><br></pre></td></tr></table></figure>
+
+<p>注意：如果没有，可查阅日志信息，分析哪里出了问题。打开配置文件找到 logdir 配置项，查看log文件。</p>
+<h3 id="终端里-privoxy-的使用"><a href="#终端里-privoxy-的使用" class="headerlink" title="终端里 privoxy 的使用"></a>终端里 privoxy 的使用</h3><p>在命令行终端中输入如下命令后，该终端即可走代理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export http_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br><span class="line">export https_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br></pre></td></tr></table></figure>
+
+<p>注意：是当前终端标签页走代理，其他终端标签页或新窗口则不是！</p>
+<p>取消命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unset http_proxy</span><br><span class="line">unset https_proxy</span><br></pre></td></tr></table></figure>
+
+<p>如果关闭终端标签页或窗口，功能就会失效。</p>
+<p>如果需要代理一直生效，则可以把上述两行代码添加到 ~/.bash_profile 文件最后。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~&#x2F;.bash_profile</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">export http_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br><span class="line">export https_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br><span class="line">-----------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>使以上配置立即生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source  ~&#x2F;.bash_profile</span><br></pre></td></tr></table></figure>
+
+<p>还可以在 ~/.bash_profile 里加入开关函数，使用起来更方便</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function proxy_off()&#123;</span><br><span class="line">    unset http_proxy</span><br><span class="line">    unset https_proxy</span><br><span class="line">    echo -e &quot;已关闭代理&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function proxy_on() &#123;</span><br><span class="line">    export no_proxy&#x3D;&quot;localhost,127.0.0.1,localaddress,.localdomain.com&quot;</span><br><span class="line">    export http_proxy&#x3D;&quot;http:&#x2F;&#x2F;127.0.0.1:8118&quot;</span><br><span class="line">    export https_proxy&#x3D;$http_proxy</span><br><span class="line">    echo -e &quot;已开启代理&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试当前终端标签/窗口是否走代理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ curl ip.gs</span><br><span class="line">当前 IP：8.8.8.8 来自：美国加利福尼亚州洛杉矶 choopa.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用-Charles-fiddler-抓包软件"><a href="#利用-Charles-fiddler-抓包软件" class="headerlink" title="利用 Charles/fiddler 抓包软件"></a>利用 Charles/fiddler 抓包软件</h2><p>利用 Charles/fiddler 抓包软件，也可以将Sock5转换成一个http代理哦，这里就不介绍了。</p>
+<h2 id="新版客户端-ShadowsocksX-NG"><a href="#新版客户端-ShadowsocksX-NG" class="headerlink" title="新版客户端 ShadowsocksX-NG"></a>新版客户端 ShadowsocksX-NG</h2><p>嫌以上麻烦，可以直接使用新版客户端 ShadowsocksX-NG，它自身集成了以上功能，但这个软件体积好大！！</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/flutter/Flutter%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/04/flutter/Flutter%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/" itemprop="url">跨平台演进及架构开篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-04T18:17:47+08:00">
+                2020-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/04/flutter/Flutter%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/04/flutter/Flutter%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Flutter开发规范"><a href="#Flutter开发规范" class="headerlink" title="Flutter开发规范"></a>Flutter开发规范</h1><h2 id="一、命名规范"><a href="#一、命名规范" class="headerlink" title="一、命名规范"></a>一、命名规范</h2><h3 id="1-1-要-使用-UpperCamelCase-风格命名类型。"><a href="#1-1-要-使用-UpperCamelCase-风格命名类型。" class="headerlink" title="1.1 要 使用 UpperCamelCase 风格命名类型。"></a>1.1 <strong>要</strong> 使用 <code>UpperCamelCase</code> 风格命名类型。</h3><ul>
+<li>Classes（类名）</li>
+<li>enums（枚举类型）</li>
+<li>typedefs（类型定义）</li>
+<li>type parameters（类型参数）</li>
+</ul>
+<p>应该把每个单词的首字母都大写（包含第一个单词），不使用分隔符。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SliderMenu</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpRequest</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> Predicate&lt;T&gt; = <span class="built_in">bool</span> <span class="built_in">Function</span>(T value);</span><br></pre></td></tr></table></figure>
+
+<p>这里包括使用元数据注解的类。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> Foo([arg]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Foo</span>(anArg)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Foo</span>()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果注解类的构造函数是无参函数，则可以使用一个 <code>lowerCamelCase</code> 风格的常量来初始化这个注解。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = Foo();</span><br><span class="line"></span><br><span class="line"><span class="meta">@foo</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-要-使用-UpperCamelCase-风格类型作为扩展名"><a href="#1-2-要-使用-UpperCamelCase-风格类型作为扩展名" class="headerlink" title="1.2 要 使用 UpperCamelCase 风格类型作为扩展名"></a>1.2 <strong>要</strong> 使用 <code>UpperCamelCase</code> 风格类型作为扩展名</h3><p>与类型命名一样，扩展名也应大写每个单词的首字母（包括第一个单词），并且不使用分隔符。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extension</span> MyFancyList&lt;T&gt; <span class="keyword">on</span> <span class="built_in">List</span>&lt;T&gt; &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extension</span> SmartIterable&lt;T&gt; <span class="keyword">on</span> <span class="built_in">Iterable</span>&lt;T&gt; &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>版本提示:</strong></p>
+<blockquote>
+<p>Extensions 是 Dart 语言 2.7 版本的新增功能。详情请参考 <a href="https://github.com/dart-lang/language/blob/master/accepted/2.6/static-extension-members/feature-specification.md#dart-static-extension-methods-design" target="_blank" rel="noopener">extensions 设计文档。</a></p>
+</blockquote>
+<h3 id="1-3-要-在库，包，文件夹，源文件中使用-lowercase-with-underscores-方式命名。"><a href="#1-3-要-在库，包，文件夹，源文件中使用-lowercase-with-underscores-方式命名。" class="headerlink" title="1.3 要 在库，包，文件夹，源文件中使用 lowercase_with_underscores 方式命名。"></a>1.3 <strong>要</strong> 在<code>库</code>，<code>包</code>，<code>文件夹</code>，<code>源文件</code>中使用 <code>lowercase_with_underscores</code> 方式命名。</h3><p>一些文件系统不区分大小写，所以很多项目要求文件名必须是小写字母。使用分隔符这种形式可以保证命名的可读性。使用下划线作为分隔符可确保名称仍然是有效的Dart标识符，如果语言后续支持符号导入，这将会起到非常大的帮助。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//建议使用</span></span><br><span class="line"><span class="keyword">library</span> peg_parser.source_scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">'file_system.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'slider_menu.dart'</span>;</span><br><span class="line"><span class="comment">//不建议</span></span><br><span class="line"><span class="keyword">library</span> pegparser.SourceScanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">'file-system.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'SliderMenu.dart'</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-要-用-lowercase-with-underscores-风格命名库和源文件名。"><a href="#1-4-要-用-lowercase-with-underscores-风格命名库和源文件名。" class="headerlink" title="1.4 要 用 lowercase_with_underscores 风格命名库和源文件名。"></a>1.4 <strong>要</strong> 用 <code>lowercase_with_underscores</code> 风格命名库和源文件名。</h3><p><strong>建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#39;dart:math&#39; as math;</span><br><span class="line">import &#39;package:angular_components&#x2F;angular_components&#39;</span><br><span class="line">    as angular_components;</span><br><span class="line">import &#39;package:js&#x2F;js.dart&#39; as js;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#39;dart:math&#39; as Math;</span><br><span class="line">import &#39;package:angular_components&#x2F;angular_components&#39;</span><br><span class="line">    as angularComponents;</span><br><span class="line">import &#39;package:js&#x2F;js.dart&#39; as JS;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-5-要-使用-lowerCamelCase-风格来命名其他的标识符。"><a href="#1-5-要-使用-lowerCamelCase-风格来命名其他的标识符。" class="headerlink" title="1.5 要 使用 lowerCamelCase 风格来命名其他的标识符。"></a>1.5 <strong>要</strong> 使用 <code>lowerCamelCase</code> 风格来命名其他的标识符。</h3><ul>
+<li>类成员</li>
+<li>顶级定义</li>
+<li>变量</li>
+<li>参数</li>
+<li>命名参数等</li>
+</ul>
+<p><em>除了</em>第一个单词，每个单词首字母都应大写，并且不使用分隔符。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> item;</span><br><span class="line"></span><br><span class="line">HttpRequest httpRequest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> align(<span class="built_in">bool</span> clearItems) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-6-推荐使用-lowerCamelCase-来命名常量。"><a href="#1-6-推荐使用-lowerCamelCase-来命名常量。" class="headerlink" title="1.6 推荐使用 lowerCamelCase 来命名常量。"></a>1.6 <strong>推荐</strong>使用 <code>lowerCamelCase</code> 来命名常量。</h3><p>在新的代码中，使用 <code>lowerCamelCase</code> 来命名常量，包括枚举的值。</p>
+<p><strong>建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const pi &#x3D; 3.14;</span><br><span class="line">const defaultTimeout &#x3D; 1000;</span><br><span class="line">final urlScheme &#x3D; RegExp(&#39;^([a-z]+):&#39;);</span><br><span class="line"></span><br><span class="line">class Dice &#123;</span><br><span class="line">  static final numberGenerator &#x3D; Random();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const PI &#x3D; 3.14;</span><br><span class="line">const DefaultTimeout &#x3D; 1000;</span><br><span class="line">final URL_SCHEME &#x3D; RegExp(&#39;^([a-z]+):&#39;);</span><br><span class="line"></span><br><span class="line">class Dice &#123;</span><br><span class="line">  static final NUMBER_GENERATOR &#x3D; Random();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> 我们一开始使用 Java <code>SCREAMING_CAPS</code> 风格来命名常量。我们之所以不再使用，是因为：</p>
+<ul>
+<li><code>SCREAMING_CAPS</code> 很多情况下看起来比较糟糕，尤其类似于 CSS 颜色这类的枚举值。</li>
+<li>常量常常被修改为 final 类型的非常量变量，这种情况你还需要修改变量的名字为小写字母形式。</li>
+<li>在枚举类型中自动定义的 <code>values</code> 属性为常量并且是小写字母形式的。</li>
+</ul>
+<h3 id="1-7-把超过两个字母的首字母大写缩略词和缩写词当做一般单词来对待。"><a href="#1-7-把超过两个字母的首字母大写缩略词和缩写词当做一般单词来对待。" class="headerlink" title="1.7 把超过两个字母的首字母大写缩略词和缩写词当做一般单词来对待。"></a>1.7 把超过两个字母的首字母大写缩略词和缩写词当做一般单词来对待。</h3><p>首字母大写缩略词比较难阅读，特别是多个缩略词连载一起的时候会引起歧义。例如，一个以 <code>HTTPSFTP</code> 开头的名字，没有办法判断它是指 HTTPS FTP 还是 HTTP SFTP。</p>
+<p>为了避免上面的情况，缩略词和缩写词要像普通单词一样首字母大写，两个字母的单词除外。（像 ID 和 Mr. 这样的双字母<em>缩写词</em>仍然像一般单词一样首字母大写。）</p>
+<p><strong>建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HttpConnectionInfo</span><br><span class="line">uiHandler</span><br><span class="line">IOStream</span><br><span class="line">HttpRequest</span><br><span class="line">Id</span><br><span class="line">DB</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HTTPConnection</span><br><span class="line">UiHandler</span><br><span class="line">IoStream</span><br><span class="line">HTTPRequest</span><br><span class="line">ID</span><br><span class="line">Db</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、顺序-不强制要求，但不能太乱"><a href="#二、顺序-不强制要求，但不能太乱" class="headerlink" title="二、顺序(不强制要求，但不能太乱)"></a>二、顺序(不强制要求，但不能太乱)</h2><p>为了使文件前面部分保持整洁，我们规定了关键字出现顺序的规则。每个“部分”应该使用空行分割。</p>
+<h3 id="2-1-要-把-“dart-”-导入语句放到其他导入语句之前。"><a href="#2-1-要-把-“dart-”-导入语句放到其他导入语句之前。" class="headerlink" title="2.1 要 把 “dart:” 导入语句放到其他导入语句之前。"></a>2.1 <strong>要</strong> 把 “dart:” 导入语句放到其他导入语句之前。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#39;dart:async&#39;;</span><br><span class="line">import &#39;dart:html&#39;;</span><br><span class="line"></span><br><span class="line">import &#39;package:bar&#x2F;bar.dart&#39;;</span><br><span class="line">import &#39;package:foo&#x2F;foo.dart&#39;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-要-把-“package-”-导入语句放到项目相关导入语句之前。"><a href="#2-2-要-把-“package-”-导入语句放到项目相关导入语句之前。" class="headerlink" title="2.2 要 把 “package:” 导入语句放到项目相关导入语句之前。"></a>2.2 <strong>要</strong> 把 “package:” 导入语句放到项目相关导入语句之前。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#39;package:bar&#x2F;bar.dart&#39;;</span><br><span class="line">import &#39;package:foo&#x2F;foo.dart&#39;;</span><br><span class="line"></span><br><span class="line">import &#39;util.dart&#39;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-要-把导出（export）语句作为一个单独的部分放到所有导入语句之后。"><a href="#2-3-要-把导出（export）语句作为一个单独的部分放到所有导入语句之后。" class="headerlink" title="2.3 要 把导出（export）语句作为一个单独的部分放到所有导入语句之后。"></a>2.3 <strong>要</strong> 把导出（export）语句作为一个单独的部分放到所有导入语句之后。</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'src/error.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'src/foo_bar.dart'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="string">'src/error.dart'</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &#39;src&#x2F;error.dart&#39;;</span><br><span class="line">export &#39;src&#x2F;error.dart&#39;;</span><br><span class="line">import &#39;src&#x2F;foo_bar.dart&#39;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-要-按照字母顺序来排序每个部分中的语句。"><a href="#2-4-要-按照字母顺序来排序每个部分中的语句。" class="headerlink" title="2.4 要 按照字母顺序来排序每个部分中的语句。"></a>2.4 <strong>要</strong> 按照字母顺序来排序每个部分中的语句。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#39;package:bar&#x2F;bar.dart&#39;;</span><br><span class="line">import &#39;package:foo&#x2F;foo.dart&#39;;</span><br><span class="line"></span><br><span class="line">import &#39;foo.dart&#39;;</span><br><span class="line">import &#39;foo&#x2F;foo.dart&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#39;package:foo&#x2F;foo.dart&#39;;</span><br><span class="line">import &#39;package:bar&#x2F;bar.dart&#39;;</span><br><span class="line"></span><br><span class="line">import &#39;foo&#x2F;foo.dart&#39;;</span><br><span class="line">import &#39;foo.dart&#39;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、格式化"><a href="#三、格式化" class="headerlink" title="三、格式化"></a>三、格式化</h2><p>和其他大部分语言一样， Dart 忽略空格。但是，<em>人</em>不会。具有一致的空格风格有助于帮助我们能够用编译器相同的方式理解代码。</p>
+<h3 id="3-1-要-使用-dartfmt-格式化你的代码。"><a href="#3-1-要-使用-dartfmt-格式化你的代码。" class="headerlink" title="3.1 要 使用 dartfmt 格式化你的代码。"></a><strong>3.1 要</strong> 使用 <code>dartfmt</code> 格式化你的代码。</h3><p>格式化是一项繁琐的工作，尤其在重构过程中特别耗时。庆幸的是，你不必担心。我们提供了一个名为 <a href="https://github.com/dart-lang/dart_style" target="_blank" rel="noopener">dartfmt</a> 的优秀的自动代码格式化程序，它可以为你完成格式化工作。我们有一些关于它适用的规则的 <a href="https://github.com/dart-lang/dart_style/wiki/Formatting-Rules" target="_blank" rel="noopener">文档</a> ， Dart 中任何官方的空格处理规则由 <em>dartfmt 生成</em>。</p>
+<p>其余格式指南用于 dartfmt 无法修复的一些规则。</p>
+<h3 id="3-2-考虑-修改你的代码让格式更友好。"><a href="#3-2-考虑-修改你的代码让格式更友好。" class="headerlink" title="3.2 考虑 修改你的代码让格式更友好。"></a>3.2 考虑 修改你的代码让格式更友好。</h3><p>无论你扔给格式化程序什么样代码，它都会尽力去处理，但是格式化程序不会创造奇迹。如果代码里有特别长的标识符，深层嵌套的表达式，混合的不同类型运算符等。格式化输出的代码可能任然很难阅读。</p>
+<p>当有这样的情况发生时，那么就需要重新组织或简化你的代码。考虑缩短局部变量名或者将表达式抽取为一个新的局部变量。换句话说，你应该做一些手动格式化并增加代码的可读性的修改。在工作中应该把 dartfmt 看做一个合作伙伴，在代码的编写和迭代过程中互相协作输出优质的代码。</p>
+<h3 id="3-3-避免-单行超过-80-个字符。"><a href="#3-3-避免-单行超过-80-个字符。" class="headerlink" title="3.3 避免 单行超过 80 个字符。"></a>3.3 避免 单行超过 80 个字符。</h3><p>可读性研究表明，长行的文字不易阅读，长行文字移动到下一行的开头时，眼睛需要移动更长的距离。这也是为什么报纸和杂志会使用多列样式的文字排版。</p>
+<p>如果你真的发现你需要的文字长度超过了 80 个字符，根据我们的经验，你的代码很可能过于冗长，而且有方式可以让它更紧凑。最常见的的一种情况就是使用 <code>VeryLongCamelCaseClassNames</code> （非常长的类名字和变量名字）。当遇到这种情况时，请自问一下：“那个类型名称中的每个单词都会告诉我一些关键的内容或阻止名称冲突吗？”，如果不是，考虑删除它。</p>
+<p>注意，dartfmt 能自动处理 99% 的情况，但是剩下的 1% 需要你自己处理。 dartfmt 不会把很长的字符串字面量分割为 80 个字符的列，所以这种情况你<strong>需要</strong>自己手工确保每行不超过 80 个字符。</p>
+<p><strong>例外：</strong> 当情况出现在注释或字符串是（通常在导入和导出语句中），即使文字超出行限制，也可能会保留在一行中。这样可以更轻松地搜索给定路径的源文件。</p>
+<h3 id="3-4-要-对所有流控制结构使用花括号。"><a href="#3-4-要-对所有流控制结构使用花括号。" class="headerlink" title="3.4 要 对所有流控制结构使用花括号。"></a>3.4 <strong>要</strong> 对所有流控制结构使用花括号。</h3><p>这样可以避免 <a href="https://en.wikipedia.org/wiki/Dangling_else" target="_blank" rel="noopener">dangling else</a>（else悬挂）的问题。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (isWeekDay) &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'Bike to work!'</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'Go dancing or read a book!'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个例外：一个没有 <code>else</code> 的 <code>if</code> 语句，并且这个 <code>if</code> 语句以及它的执行体适合在一行中实现。在这种情况下，如果您愿意，可以不用括号：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (arg == <span class="keyword">null</span>) <span class="keyword">return</span> defaultValue;</span><br></pre></td></tr></table></figure>
+
+<p>但是，如果执行体包含下一行，请使用大括号：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (overflowChars != other.overflowChars) &#123;</span><br><span class="line">  <span class="keyword">return</span> overflowChars &lt; other.overflowChars;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (overflowChars != other.overflowChars)</span><br><span class="line">  <span class="keyword">return</span> overflowChars &lt; other.overflowChars;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、注释规范"><a href="#四、注释规范" class="headerlink" title="四、注释规范"></a>四、注释规范</h2><h3 id="4-1-要-像句子一样来格式化注释"><a href="#4-1-要-像句子一样来格式化注释" class="headerlink" title="4.1 要 像句子一样来格式化注释"></a>4.1 <strong>要</strong> 像句子一样来格式化注释</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Not if there is nothing before it.</span><br><span class="line">if (_chunks.isEmpty) return false;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-不要-使用块注释作用作解释说明。"><a href="#4-2-不要-使用块注释作用作解释说明。" class="headerlink" title="4.2 不要 使用块注释作用作解释说明。"></a>4.2 <strong>不要</strong> 使用块注释作用作解释说明。</h3><p><strong>建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">greet(name) &#123;</span><br><span class="line">  &#x2F;&#x2F; Assume we have a valid name.</span><br><span class="line">  print(&#39;Hi, $name!&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不建议</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">greet(name) &#123;</span><br><span class="line">  &#x2F;* Assume we have a valid name. *&#x2F;</span><br><span class="line">  print(&#39;Hi, $name!&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、文档注释"><a href="#五、文档注释" class="headerlink" title="五、文档注释"></a>五、文档注释</h2><p>文档注释特别有用，应为通过 <a href="https://github.com/dart-lang/dartdoc" target="_blank" rel="noopener">dartdoc</a> 解析这些注释可以生成 <a href="https://api.dart.dev/stable" target="_blank" rel="noopener">漂亮的文档网页</a>。文档注释包括所有出现在声明之前并使用 <code>///</code> 语法的注释，这些注释使用使用 dartdoc 检索。</p>
+<h3 id="5-1-要-使用-文档注释来注释成员和类型。"><a href="#5-1-要-使用-文档注释来注释成员和类型。" class="headerlink" title="5.1 要 使用 /// 文档注释来注释成员和类型。"></a>5.1 要 使用 <code>///</code> 文档注释来注释成员和类型。</h3><p>使用文档注释可以让 <a href="https://github.com/dart-lang/dartdoc" target="_blank" rel="noopener">dartdoc</a> 来为你生成代码 API 文档。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; The number of characters in this chunk when unsplit.</span><br><span class="line">int get length &#x3D;&gt; ...</span><br></pre></td></tr></table></figure>
+
+<p>由于历史原因，dartdoc 支持两种格式的文档注释：<code>///</code> (“C# 格式”) 和 <code>/** ... */</code> (“JavaDoc 格式”)。我们推荐使用 <code>///</code> 是因为其更加简洁。 <code>/**</code> 和 <code>*/</code> 在多行注释中间添加了开头和结尾的两行多余内容。 <code>///</code> 在一些情况下也更加易于阅读，例如，当文档注释中包含有使用 <code>*</code> 标记的列表内容的时候。</p>
+<p>如果你现在还在使用 JavaDoc 风格格式，请考虑使用新的格式。</p>
+<h3 id="5-2-推荐-为公开发布的-API-编写文档注释。"><a href="#5-2-推荐-为公开发布的-API-编写文档注释。" class="headerlink" title="5.2 推荐 为公开发布的 API 编写文档注释。"></a><strong>5.2 推荐</strong> 为公开发布的 API 编写文档注释。</h3><h3 id="5-3-推荐-为私有API-编写文档注释。"><a href="#5-3-推荐-为私有API-编写文档注释。" class="headerlink" title="5.3 推荐 为私有API 编写文档注释。"></a>5.3 推荐 为私有API 编写文档注释。</h3><p>文档注释不仅仅适用于外部用户使用你库的公开 API. 它也同样有助于理解那些私有成员，这些私有成员会被库的其他部分调用。</p>
+<h3 id="5-4-要在文档注释开头有一个单句总结。"><a href="#5-4-要在文档注释开头有一个单句总结。" class="headerlink" title="5.4 要在文档注释开头有一个单句总结。"></a>5.4 要在文档注释开头有一个单句总结。</h3><p>注释文档要以一个以用户为中心，简要的描述作为开始。通常句子片段就足够了。为读者提供足够的上下文来定位自己，并决定是否应该继续阅读，或寻找其他解决问题的方法。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">Deletes the file at [path] from the file system.</span></span></span><br><span class="line"><span class="keyword">void</span> delete(<span class="built_in">String</span> path) &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-要-让文档注释的第一句从段落中分开。"><a href="#5-5-要-让文档注释的第一句从段落中分开。" class="headerlink" title="5.5 要 让文档注释的第一句从段落中分开。"></a>5.5 <strong>要</strong> 让文档注释的第一句从段落中分开。</h3><p>在第一句之后添加一个空行，将其拆分为自己的段落。如果不止一个解释句子有用，请将其余部分放在后面的段落中。</p>
+<p>这有助于您编写一个紧凑的第一句话来总结文档。此外，像Dartdoc这样的工具使用第一段作为类和类成员列表等地方的简短摘要。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">Deletes the file at [path].</span></span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// <span class="markdown">Throws an [IOError] if the file could not be found. Throws a</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">[PermissionError] if the file is present but could not be deleted.</span></span></span><br><span class="line"><span class="keyword">void</span> delete(<span class="built_in">String</span> path) &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、项目通用工具"><a href="#五、项目通用工具" class="headerlink" title="五、项目通用工具"></a>五、项目通用工具</h2><h3 id="统一标题栏"><a href="#统一标题栏" class="headerlink" title="统一标题栏"></a>统一标题栏</h3><p>/widgets/mcp_title_bar.dart</p>
+<h3 id="按钮样式"><a href="#按钮样式" class="headerlink" title="按钮样式"></a>按钮样式</h3><p>/res/styles.dart/BtnStyles.class</p>
+<h3 id="文字样式"><a href="#文字样式" class="headerlink" title="文字样式"></a>文字样式</h3><p>/res/styles.dart/TextStyles.class</p>
+<h3 id="自定义TabBar-指示器"><a href="#自定义TabBar-指示器" class="headerlink" title="自定义TabBar 指示器"></a>自定义TabBar 指示器</h3><p>因TabBar默认无法满足UI需要，所以自定义指示器<br>/widgets/tab_bottom_shape_indicator.dart.dart</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/flutter/%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%BC%94%E8%BF%9B%E5%8F%8A%E6%9E%B6%E6%9E%84%E5%BC%80%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2960,471 +3438,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/03/git/git%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/03/git/git%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" itemprop="url">git常见问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-03T11:22:41+08:00">
-                2020-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/03/git/git%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/03/git/git%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="git常见问题记录"><a href="#git常见问题记录" class="headerlink" title="git常见问题记录"></a>git常见问题记录</h1><h2 id="Empty-reply-from-server"><a href="#Empty-reply-from-server" class="headerlink" title="Empty reply from server"></a>Empty reply from server</h2><p>问题：fatal: unable to access ‘<a href="http://xxx.git/&#39;" target="_blank" rel="noopener">http://xxx.git/&#39;</a>: Empty reply from server</p>
-<p>原因：因为设置了代理，所以找不到地址</p>
-<p>解决：取消全局代理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br></pre></td></tr></table></figure>
-
-<h2 id="error-src-refspec-xxx-matches-more-than-one"><a href="#error-src-refspec-xxx-matches-more-than-one" class="headerlink" title="error: src refspec xxx matches more than one."></a>error: src refspec xxx matches more than one.</h2><p>问题：error: src refspec v330 matches more than one.</p>
-<p>原因：出现这个错误之前，是在远程服务器上创建了一个tag v330，同时本地分支也是 v330，</p>
-<p>解决：删除tag，或者另起一名</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -d v330</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/02/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Activity/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/02/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Activity/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/" itemprop="url">源码分析-Activity生命周期流程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-02T20:41:53+08:00">
-                2020-06-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
-                    <span itemprop="name">Android系统分析</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Activity/" itemprop="url" rel="index">
-                    <span itemprop="name">Activity</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/02/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Activity/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/02/Android/Android%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90/Activity/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-Activity%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Activity 经典生命周期图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-9ceca5ca67e6e73f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-cc817b0ebc885e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>不要在<code>onCreate，onStart，onResume，onPause</code>几个方法进行耗时操作，否则会造成页面切换卡顿。</p>
-<h2 id="Activity的四种状态"><a href="#Activity的四种状态" class="headerlink" title="Activity的四种状态"></a>Activity的四种状态</h2><p>Activity的生命周期中存在四种基本的状态：</p>
-<ul>
-<li>活动状态(Active/Runing)</li>
-<li>暂停状态(Paused)</li>
-<li>停止状态(Stopped)</li>
-<li>销毁状态(Killed)。</li>
-</ul>
-<h3 id="活动状态"><a href="#活动状态" class="headerlink" title="活动状态"></a>活动状态</h3><p>一个新的Activity入栈后，当处于Activity栈顶时，此事它处于可见并且能与用户进行交互。</p>
-<ul>
-<li>期间触发的生命周期：<code>onCreate()-&gt; onStart()-&gt; onResume()</code></li>
-</ul>
-<h3 id="暂停状态"><a href="#暂停状态" class="headerlink" title="暂停状态"></a>暂停状态</h3><p>当Activity失去焦点，一个新的非全屏Activity或者透明的Activity被放置栈顶，此时处于暂停状态。一个处于暂定状态的Activity只有在系统极度匮乏的时候才会被回收掉。</p>
-<p>在Activity之上显示dialog对话框或者<code>PopupWindow</code>该Activity并不会变成暂停状态。<br>当下拉通知栏时，Activity会走什么生命周期?以及弹出Dialog时会走什么生命周期?关于这两知识点，今天特意写了一下，发现啥都没走，也就说任何生命周期都不会走，也简单查了一下原因，下拉通知栏因为是系统窗口，所以不影响activity的生命周期，Dialog或者Toast源码中也能看windowmanager.addView()，也就说都是和系统管理者有关系，不会影响到本应用。</p>
-<ul>
-<li>运行状态到暂停状态触发的生命周期：<code>onResume() --&gt; onPause()</code>。</li>
-<li>从暂停状态恢复到运行状态触发的生命周期：<code>onPause() -&gt; onResume()</code>。</li>
-</ul>
-<h3 id="停止状态"><a href="#停止状态" class="headerlink" title="停止状态"></a>停止状态</h3><p>一个Activity完全被另一个Activity完全覆盖或者，用户不可见或者退到后台，叫做停止状态。它仍保存着所有状态和成员信息，不能和用户交互，当系统内存需要的时候Stopped状态的Activity会被强制回收掉。</p>
-<ul>
-<li>从暂停状态到停止状态经过的生命周期：<code>onPause()--&gt;onStop()</code></li>
-<li>从停止状态到运行状态经过的生命周期：<code>onStop() --&gt; onRestart() --&gt; onStart() --&gt; onResume()</code>。不会走onCreate()方法。</li>
-</ul>
-<h3 id="销毁状态"><a href="#销毁状态" class="headerlink" title="销毁状态"></a>销毁状态</h3><p>如果一个Activity再Paused或者Stopped状态，系统可以将Activity从内存中删除，删除的方式有两种：一种是要求Activity结束，一种直接结束掉它的进程。当有需要的时候就得重新创建Activity了。</p>
-<p>触发的生命周期：onDestroy()，直接结束进程的话是不会走onDestroy()的。</p>
-<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p>在开启Activity流程分析时说过，开启Activity会经过<code>ActivityStackSupervisor#realStartActivityLocked()</code>方法，然后经过一些列流程最终调用<code>onCreate</code>方法，其实其它生命周期也是类似的。</p>
-<h2 id="ActivityStackSupervisor"><a href="#ActivityStackSupervisor" class="headerlink" title="ActivityStackSupervisor"></a><code>ActivityStackSupervisor</code></h2><h3 id="realStartActivityLocked"><a href="#realStartActivityLocked" class="headerlink" title="realStartActivityLocked()"></a><code>realStartActivityLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">final boolean realStartActivityLocked(ActivityRecord r, ProcessRecord app,</span><br><span class="line">            boolean andResume, boolean checkConfig) throws RemoteException &#123;</span><br><span class="line">            ...</span><br><span class="line">            &#x2F;&#x2F; Create activity launch transaction.</span><br><span class="line">                final ClientTransaction clientTransaction &#x3D; ClientTransaction.obtain(app.thread,</span><br><span class="line">                        r.appToken);</span><br><span class="line">                 &#x2F;&#x2F; 添加 LaunchActivityItem</span><br><span class="line">                clientTransaction.addCallback(LaunchActivityItem.obtain(new Intent(r.intent),</span><br><span class="line">                        System.identityHashCode(r), r.info,</span><br><span class="line">                        &#x2F;&#x2F; TODO: Have this take the merged configuration instead of separate global</span><br><span class="line">                        &#x2F;&#x2F; and override configs.</span><br><span class="line">                        mergedConfiguration.getGlobalConfiguration(),</span><br><span class="line">                        mergedConfiguration.getOverrideConfiguration(), r.compat,</span><br><span class="line">                        r.launchedFromPackage, task.voiceInteractor, app.repProcState, r.icicle,</span><br><span class="line">                        r.persistentState, results, newIntents, mService.isNextTransitionForward(),</span><br><span class="line">                        profilerInfo));</span><br><span class="line"></span><br><span class="line">                &#x2F;&#x2F; Set desired final state.</span><br><span class="line">                final ActivityLifecycleItem lifecycleItem;</span><br><span class="line">                if (andResume) &#123;</span><br><span class="line">                    lifecycleItem &#x3D; ResumeActivityItem.obtain(mService.isNextTransitionForward());</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    lifecycleItem &#x3D; PauseActivityItem.obtain();</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F; 2. 设置生命周期状态 这里是开启resume的关键，类型：ResumeActivityItem</span><br><span class="line">                clientTransaction.setLifecycleStateRequest(lifecycleItem);</span><br><span class="line"></span><br><span class="line">                &#x2F;&#x2F; Schedule transaction.</span><br><span class="line">                &#x2F;&#x2F;执行生命周期</span><br><span class="line">                mService.getLifecycleManager().scheduleTransaction(clientTransaction);</span><br><span class="line">                ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>首先还是看<code>mService.getLifecycleManager()</code></p>
-<h2 id="AMS中"><a href="#AMS中" class="headerlink" title="AMS中"></a>AMS中</h2><h3 id="getLifecycleManager"><a href="#getLifecycleManager" class="headerlink" title="getLifecycleManager()"></a><code>getLifecycleManager()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ClientLifecycleManager getLifecycleManager() &#123;</span><br><span class="line">        return mLifecycleManager;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>返回ClientLifecycleManager对象，然后调用<code>scheduleTransaction()</code></p>
-<h2 id="ClientLifecycleManager"><a href="#ClientLifecycleManager" class="headerlink" title="ClientLifecycleManager"></a><code>ClientLifecycleManager</code></h2><h3 id="scheduleTransaction"><a href="#scheduleTransaction" class="headerlink" title="scheduleTransaction()"></a><code>scheduleTransaction()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void scheduleTransaction(ClientTransaction transaction) throws RemoteException &#123;</span><br><span class="line">        final IApplicationThread client &#x3D; transaction.getClient();</span><br><span class="line">        transaction.schedule();</span><br><span class="line">        if (!(client instanceof Binder)) &#123;</span><br><span class="line">            &#x2F;&#x2F; If client is not an instance of Binder - it&#39;s a remote call and at this point it is</span><br><span class="line">            &#x2F;&#x2F; safe to recycle the object. All objects used for local calls will be recycled after</span><br><span class="line">            &#x2F;&#x2F; the transaction is executed on client in ActivityThread.</span><br><span class="line">            transaction.recycle();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ClientTransaction"><a href="#ClientTransaction" class="headerlink" title="ClientTransaction"></a><code>ClientTransaction</code></h2><h3 id="schedule"><a href="#schedule" class="headerlink" title="schedule()"></a><code>schedule()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void schedule() throws RemoteException &#123;</span><br><span class="line">        mClient.scheduleTransaction(this);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用<code>mClient</code>中<code>scheduleTransaction</code>方法，<code>mClient</code>是<code>IApplicationThread</code>,是<code>ActivityThread</code>内部类.</p>
-<h2 id="ActivityThread-IApplicationThread"><a href="#ActivityThread-IApplicationThread" class="headerlink" title="ActivityThread#IApplicationThread"></a><code>ActivityThread#IApplicationThread</code></h2><p><code>IApplicationThread</code> 是极其重要的一个 Binder 接口，它维护了应用进程和 AMS 的之间的通讯。这个 <code>mClient</code> 就是应用进程在 AMS 进程中的代理对象，AMS 通过 <code>mClient</code> 来指挥应用进程。</p>
-<h3 id="scheduleTransaction-1"><a href="#scheduleTransaction-1" class="headerlink" title="scheduleTransaction()"></a><code>scheduleTransaction()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">        public void scheduleTransaction(ClientTransaction transaction) throws RemoteException &#123;</span><br><span class="line">            ActivityThread.this.scheduleTransaction(transaction);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用<code>ActivityThread</code>中<code>scheduleTransaction</code>方法</p>
-<h2 id="ActivityThread"><a href="#ActivityThread" class="headerlink" title="ActivityThread"></a><code>ActivityThread</code></h2><h3 id="scheduleTransaction-2"><a href="#scheduleTransaction-2" class="headerlink" title="scheduleTransaction()"></a><code>scheduleTransaction()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void scheduleTransaction(ClientTransaction transaction) &#123;</span><br><span class="line">        transaction.preExecute(this);</span><br><span class="line">        sendMessage(ActivityThread.H.EXECUTE_TRANSACTION, transaction);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>线程间通讯，我们找到EXECUTE_TRANSACTION对应的实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">case EXECUTE_TRANSACTION:</span><br><span class="line">                    final ClientTransaction transaction &#x3D; (ClientTransaction) msg.obj;</span><br><span class="line">                    mTransactionExecutor.execute(transaction);</span><br><span class="line">                    if (isSystem()) &#123;</span><br><span class="line">                        &#x2F;&#x2F; Client transactions inside system process are recycled on the client side</span><br><span class="line">                        &#x2F;&#x2F; instead of ClientLifecycleManager to avoid being cleared before this</span><br><span class="line">                        &#x2F;&#x2F; message is handled.</span><br><span class="line">                        transaction.recycle();</span><br><span class="line">                    &#125;</span><br><span class="line">                    &#x2F;&#x2F; TODO(lifecycler): Recycle locally scheduled transactions.</span><br></pre></td></tr></table></figure>
-
-<h2 id="TransactionExecutor"><a href="#TransactionExecutor" class="headerlink" title="TransactionExecutor"></a><code>TransactionExecutor</code></h2><h3 id="execute"><a href="#execute" class="headerlink" title="execute()"></a><code>execute()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void execute(ClientTransaction transaction) &#123;</span><br><span class="line">        final IBinder token &#x3D; transaction.getActivityToken();</span><br><span class="line">        log(&quot;Start resolving transaction for client: &quot; + mTransactionHandler + &quot;, token: &quot; + token);</span><br><span class="line">				&#x2F;&#x2F;在这里执行onCreate()</span><br><span class="line">        executeCallbacks(transaction);</span><br><span class="line">				&#x2F;&#x2F;在这里执行onResume onStart()</span><br><span class="line">        executeLifecycleState(transaction);</span><br><span class="line">        mPendingActions.clear();</span><br><span class="line">        log(&quot;End resolving transaction&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>其实在之前的文章已经讲过onCreate是如何执行的了，这里就当预习了,<code>executeCallbacks</code>就不说了,最后执行<code>onCreate</code>,其实流程是差不多的</p>
-<h3 id="executeLifecycleState"><a href="#executeLifecycleState" class="headerlink" title="executeLifecycleState()"></a><code>executeLifecycleState()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void executeLifecycleState(ClientTransaction transaction) &#123;</span><br><span class="line">        final ActivityLifecycleItem lifecycleItem &#x3D; transaction.getLifecycleStateRequest();</span><br><span class="line">        ...</span><br><span class="line">        &#x2F;&#x2F;执行的是onStart</span><br><span class="line">        cycleToPath(r, lifecycleItem.getTargetState(), true &#x2F;* excludeLastState *&#x2F;);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; Execute the final transition with proper parameters.</span><br><span class="line">        &#x2F;&#x2F;onResume</span><br><span class="line">        lifecycleItem.execute(mTransactionHandler, token, mPendingActions);</span><br><span class="line">        lifecycleItem.postExecute(mTransactionHandler, token, mPendingActions);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>transaction.getLifecycleStateRequest()</code>是在前头传入的<code>ResumeActivityItem</code>，我们直接看<code>execute</code>方法，<code>cycleToPath</code>稍后在说</p>
-<h2 id="ResumeActivityItem"><a href="#ResumeActivityItem" class="headerlink" title="ResumeActivityItem"></a><code>ResumeActivityItem</code></h2><h3 id="execute-1"><a href="#execute-1" class="headerlink" title="execute()"></a><code>execute()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public void execute(ClientTransactionHandler client, IBinder token,</span><br><span class="line">            PendingTransactionActions pendingActions) &#123;</span><br><span class="line">        Trace.traceBegin(TRACE_TAG_ACTIVITY_MANAGER, &quot;activityResume&quot;);</span><br><span class="line">        client.handleResumeActivity(token, true &#x2F;* finalStateRequest *&#x2F;, mIsForward,</span><br><span class="line">                &quot;RESUME_ACTIVITY&quot;);</span><br><span class="line">        Trace.traceEnd(TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>ClientTransactionHandler</code>是一个抽象类，具体实现是<code>ActivityThread</code></p>
-<h2 id="ActivityThread-1"><a href="#ActivityThread-1" class="headerlink" title="ActivityThread"></a><code>ActivityThread</code></h2><p><code>handleResumeActivity</code>类似于这种方法还有很多，例如：<code>handlePauseActivity</code>,<code>handleStopActivity</code>等等。对应的Activity的生命周期.</p>
-<h3 id="handleResumeActivity"><a href="#handleResumeActivity" class="headerlink" title="handleResumeActivity()"></a><code>handleResumeActivity()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public void handleResumeActivity(IBinder token, boolean finalStateRequest, boolean isForward,</span><br><span class="line">            String reason) &#123;</span><br><span class="line">        ...</span><br><span class="line">        final ActivityClientRecord r &#x3D; performResumeActivity(token, finalStateRequest, reason);</span><br><span class="line">        ...</span><br><span class="line">       Looper.myQueue().addIdleHandler(new Idler());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="performResumeActivity"><a href="#performResumeActivity" class="headerlink" title="performResumeActivity()"></a><code>performResumeActivity()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public ActivityClientRecord performResumeActivity(IBinder token, boolean finalStateRequest,</span><br><span class="line">            String reason) &#123;</span><br><span class="line">        final ActivityClientRecord r &#x3D; mActivities.get(token);</span><br><span class="line">        </span><br><span class="line">        ...</span><br><span class="line">        r.activity.performResume(r.startsNotResumed, reason);</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后调用的Activity中的<code>performResume</code></p>
-<h2 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a><code>Activity</code></h2><h3 id="performResume"><a href="#performResume" class="headerlink" title="performResume()"></a><code>performResume()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">final void performResume(boolean followedByPause, String reason) &#123;</span><br><span class="line">				&#x2F;&#x2F;执行onRestart生命周期</span><br><span class="line">        performRestart(true &#x2F;* start *&#x2F;, reason);</span><br><span class="line">        mFragments.execPendingActions();</span><br><span class="line">				&#x2F;&#x2F;执行onResume</span><br><span class="line">        mInstrumentation.callActivityOnResume(this);        </span><br><span class="line">        ...</span><br><span class="line">        mFragments.dispatchResume();</span><br><span class="line">        mFragments.execPendingActions();</span><br><span class="line"></span><br><span class="line">        onPostResume();</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="onRestart"><a href="#onRestart" class="headerlink" title="onRestart"></a><code>onRestart</code></h1><h3 id="performRestart"><a href="#performRestart" class="headerlink" title="performRestart()"></a><code>performRestart()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">final void performRestart(boolean start, String reason) &#123;</span><br><span class="line">			...</span><br><span class="line">			mInstrumentation.callActivityOnRestart(this);</span><br><span class="line">			...</span><br><span class="line">			if (start) &#123;</span><br><span class="line">			&#x2F;&#x2F;最后执行onStart</span><br><span class="line">                performStart(reason);</span><br><span class="line">            &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里会通过<code>Instrumentation</code>执行<code>onRestart</code></p>
-<p><code>performStart</code>执行<code>onStart</code>后面说</p>
-<h2 id="Instrumentation"><a href="#Instrumentation" class="headerlink" title="Instrumentation"></a><code>Instrumentation</code></h2><h3 id="callActivityOnRestart"><a href="#callActivityOnRestart" class="headerlink" title="callActivityOnRestart()"></a><code>callActivityOnRestart()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">activity.onRestart();</span><br></pre></td></tr></table></figure>
-
-<p>就这一行代码但是已经足够了</p>
-<h2 id="Activity-1"><a href="#Activity-1" class="headerlink" title="Activity"></a><code>Activity</code></h2><h3 id="onRestart-1"><a href="#onRestart-1" class="headerlink" title="onRestart"></a><code>onRestart</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected void onRestart() &#123;</span><br><span class="line">        mCalled &#x3D; true;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>到此onRestart便完成了。</p>
-<h1 id="onResume"><a href="#onResume" class="headerlink" title="onResume"></a><code>onResume</code></h1><p>回到<code>performResume()</code>方法执行<code>mInstrumentation.callActivityOnResume(this);</code></p>
-<p>道理是一样的使用<code>Instrumentation</code>执行<code>onResume</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public void callActivityOnResume(Activity activity) &#123;</span><br><span class="line">        activity.mResumed &#x3D; true;</span><br><span class="line">        activity.onResume();</span><br><span class="line">        </span><br><span class="line">        if (mActivityMonitors !&#x3D; null) &#123;</span><br><span class="line">            synchronized (mSync) &#123;</span><br><span class="line">                final int N &#x3D; mActivityMonitors.size();</span><br><span class="line">                for (int i&#x3D;0; i&lt;N; i++) &#123;</span><br><span class="line">                    final ActivityMonitor am &#x3D; mActivityMonitors.get(i);</span><br><span class="line">                    am.match(activity, activity, activity.getIntent());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">protected void onResume() &#123;</span><br><span class="line">        if (DEBUG_LIFECYCLE) Slog.v(TAG, &quot;onResume &quot; + this);</span><br><span class="line">        getApplication().dispatchActivityResumed(this);</span><br><span class="line">        mActivityTransitionState.onResume(this, isTopOfTask());</span><br><span class="line">        if (mAutoFillResetNeeded) &#123;</span><br><span class="line">            if (!mAutoFillIgnoreFirstResumePause) &#123;</span><br><span class="line">                View focus &#x3D; getCurrentFocus();</span><br><span class="line">                if (focus !&#x3D; null &amp;&amp; focus.canNotifyAutofillEnterExitEvent()) &#123;</span><br><span class="line">                    &#x2F;&#x2F; TODO: in Activity killed&#x2F;recreated case, i.e. SessionLifecycleTest#</span><br><span class="line">                    &#x2F;&#x2F; testDatasetVisibleWhileAutofilledAppIsLifecycled: the View&#39;s initial</span><br><span class="line">                    &#x2F;&#x2F; window visibility after recreation is INVISIBLE in onResume() and next frame</span><br><span class="line">                    &#x2F;&#x2F; ViewRootImpl.performTraversals() changes window visibility to VISIBLE.</span><br><span class="line">                    &#x2F;&#x2F; So we cannot call View.notifyEnterOrExited() which will do nothing</span><br><span class="line">                    &#x2F;&#x2F; when View.isVisibleToUser() is false.</span><br><span class="line">                    getAutofillManager().notifyViewEntered(focus);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        mCalled &#x3D; true;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后我们在看看如何执行onStart方法的,我们在前面分析时说到<code>cycleToPath</code>最终执行onStart，来看看如何实现</p>
-<h2 id="TransactionExecutor-1"><a href="#TransactionExecutor-1" class="headerlink" title="TransactionExecutor"></a><code>TransactionExecutor</code></h2><h3 id="cycleToPath"><a href="#cycleToPath" class="headerlink" title="cycleToPath()"></a><code>cycleToPath()</code></h3><p>这个方法是根据state计算生命周期的路径，简单说就是，当前处于 <code>onCreate()</code> 状态，<code>setLifecycleState()</code> 设置的 <strong>final state</strong> 是 <strong>onResume()</strong> ，就需要执行 onCreate 到 onResume 之间的状态，即 <code>onStart()</code> 。下面简单看下源码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private void cycleToPath(ActivityClientRecord r, int finish,</span><br><span class="line">            boolean excludeLastState) &#123;</span><br><span class="line">        final int start &#x3D; r.getLifecycleState();</span><br><span class="line">        log(&quot;Cycle from: &quot; + start + &quot; to: &quot; + finish + &quot; excludeLastState:&quot; + excludeLastState);</span><br><span class="line">        final IntArray path &#x3D; mHelper.getLifecyclePath(start, finish, excludeLastState);</span><br><span class="line">        performLifecycleSequence(r, path);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="performLifecycleSequence"><a href="#performLifecycleSequence" class="headerlink" title="performLifecycleSequence()"></a><code>performLifecycleSequence()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">private void performLifecycleSequence(ActivityClientRecord r, IntArray path) &#123;</span><br><span class="line">       final int size &#x3D; path.size();</span><br><span class="line">       for (int i &#x3D; 0, state; i &lt; size; i++) &#123;</span><br><span class="line">           state &#x3D; path.get(i);</span><br><span class="line">           log(&quot;Transitioning to state: &quot; + state);</span><br><span class="line">           switch (state) &#123;</span><br><span class="line">               case ON_CREATE:</span><br><span class="line">                   mTransactionHandler.handleLaunchActivity(r, mPendingActions,</span><br><span class="line">                           null &#x2F;* customIntent *&#x2F;);</span><br><span class="line">                   break;</span><br><span class="line">               case ON_START:</span><br><span class="line">                   mTransactionHandler.handleStartActivity(r, mPendingActions);</span><br><span class="line">                   break;</span><br><span class="line">               case ON_RESUME:</span><br><span class="line">                   mTransactionHandler.handleResumeActivity(r.token, false &#x2F;* finalStateRequest *&#x2F;,</span><br><span class="line">                           r.isForward, &quot;LIFECYCLER_RESUME_ACTIVITY&quot;);</span><br><span class="line">                   break;</span><br><span class="line">               case ON_PAUSE:</span><br><span class="line">                   mTransactionHandler.handlePauseActivity(r.token, false &#x2F;* finished *&#x2F;,</span><br><span class="line">                           false &#x2F;* userLeaving *&#x2F;, 0 &#x2F;* configChanges *&#x2F;, mPendingActions,</span><br><span class="line">                           &quot;LIFECYCLER_PAUSE_ACTIVITY&quot;);</span><br><span class="line">                   break;</span><br><span class="line">               case ON_STOP:</span><br><span class="line">                   mTransactionHandler.handleStopActivity(r.token, false &#x2F;* show *&#x2F;,</span><br><span class="line">                           0 &#x2F;* configChanges *&#x2F;, mPendingActions, false &#x2F;* finalStateRequest *&#x2F;,</span><br><span class="line">                           &quot;LIFECYCLER_STOP_ACTIVITY&quot;);</span><br><span class="line">                   break;</span><br><span class="line">               case ON_DESTROY:</span><br><span class="line">                   mTransactionHandler.handleDestroyActivity(r.token, false &#x2F;* finishing *&#x2F;,</span><br><span class="line">                           0 &#x2F;* configChanges *&#x2F;, false &#x2F;* getNonConfigInstance *&#x2F;,</span><br><span class="line">                           &quot;performLifecycleSequence. cycling to:&quot; + path.get(size - 1));</span><br><span class="line">                   break;</span><br><span class="line">               case ON_RESTART:</span><br><span class="line">                   mTransactionHandler.performRestartActivity(r.token, false &#x2F;* start *&#x2F;);</span><br><span class="line">                   break;</span><br><span class="line">               default:</span><br><span class="line">                   throw new IllegalArgumentException(&quot;Unexpected lifecycle state: &quot; + state);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>getLifecyclePath()</code> 方法就是根据 <code>start</code> 和 <code>finish</code> 计算出中间的生命周期路径。这里计算出来就是 <code>ON_START</code> 。</p>
-<p>找到 <code>ON_START</code> 分支，调用了 <code>ActivityThread.handleStartActivity()</code> 方法，又是一样的套路了，这里就不再赘述了。</p>
-<p>依次类推，<code>ActivityThread</code> 中应该有如下方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">handleLaunchActivity()</span><br><span class="line">handleStartActivity()</span><br><span class="line">handleResumeActivity()</span><br><span class="line">handlePauseActivity()</span><br><span class="line">handleStopActivity()</span><br><span class="line">handleDestroyActivity()</span><br></pre></td></tr></table></figure>
-
-<h1 id="onPause延续startActivity流程"><a href="#onPause延续startActivity流程" class="headerlink" title="onPause延续startActivity流程"></a>onPause延续startActivity流程</h1><p>在<code>startActivity</code>启动流程中会调用<code>ActivityStarter#startActivity()</code>然后调用<code>startActivityUnchecked</code></p>
-<h2 id="ActivityStarter"><a href="#ActivityStarter" class="headerlink" title="ActivityStarter"></a><code>ActivityStarter</code></h2><h3 id="startActivityUnchecked"><a href="#startActivityUnchecked" class="headerlink" title="startActivityUnchecked()"></a><code>startActivityUnchecked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">private int startActivityUnchecked(final ActivityRecord r, ActivityRecord sourceRecord,</span><br><span class="line">            IVoiceInteractionSession voiceSession, IVoiceInteractor voiceInteractor,</span><br><span class="line">            int startFlags, boolean doResume, ActivityOptions options, TaskRecord inTask,</span><br><span class="line">            ActivityRecord[] outActivity) &#123;</span><br><span class="line"></span><br><span class="line">        setInitialState(r, options, inTask, doResume, startFlags, sourceRecord, voiceSession,</span><br><span class="line">                voiceInteractor);</span><br><span class="line">				&#x2F;&#x2F; 处理activity的启动模式.绑定activity的启动模式</span><br><span class="line">        computeLaunchingTaskFlags();</span><br><span class="line">        computeSourceStack();</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;给相应activity的intent设置flag</span><br><span class="line">        mIntent.setFlags(mLaunchFlags);</span><br><span class="line"></span><br><span class="line">        .......</span><br><span class="line">            &#x2F;&#x2F;根据activity的启动模式设置相应的栈</span><br><span class="line">            if (mStartActivity.getTask() &#x3D;&#x3D; null &amp;&amp; !clearTopAndResetStandardLaunchMode) &#123;</span><br><span class="line">                mStartActivity.setTask(reusedActivity.getTask());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (reusedActivity.getTask().intent &#x3D;&#x3D; null) &#123;</span><br><span class="line">                &#x2F;&#x2F; This task was started because of movement of the activity based on affinity...</span><br><span class="line">                &#x2F;&#x2F; Now that we are actually launching it, we can assign the base intent.</span><br><span class="line">                &#x2F;&#x2F;设置ActivityRecord,之后会传入到app_service进行activity的周期控制</span><br><span class="line">                reusedActivity.getTask().setIntent(mStartActivity);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">       </span><br><span class="line">            &#x2F;&#x2F;当activity设置为FLAG_ACTIVITY_CLEAR_TOP是的逻辑,即判断栈顶是否有目标activty,没有就重新创建,并且加入栈顶</span><br><span class="line">            if ((mLaunchFlags &amp; FLAG_ACTIVITY_CLEAR_TOP) !&#x3D; 0</span><br><span class="line">                    || isDocumentLaunchesIntoExisting(mLaunchFlags)</span><br><span class="line">                    || isLaunchModeOneOf(LAUNCH_SINGLE_INSTANCE, LAUNCH_SINGLE_TASK)) &#123;</span><br><span class="line">                final TaskRecord task &#x3D; reusedActivity.getTask();</span><br><span class="line"></span><br><span class="line">               </span><br><span class="line">                final ActivityRecord top &#x3D; task.performClearTaskForReuseLocked(mStartActivity,</span><br><span class="line">                        mLaunchFlags);</span><br><span class="line"></span><br><span class="line">                &#x2F;&#x2F; The above code can remove &#123;@code reusedActivity&#125; from the task, leading to the</span><br><span class="line">             </span><br><span class="line">              ......</span><br><span class="line">            &#x2F;&#x2F;设置目标栈与现有的activity匹配.根据需要清除栈</span><br><span class="line">            reusedActivity &#x3D; setTargetStackAndMoveToFrontIfNeeded(reusedActivity);</span><br><span class="line"></span><br><span class="line">            .......</span><br><span class="line">        &#x2F;&#x2F;根据activity的启动模式来判断是直接插入已存在栈顶还是重新开始插入;</span><br><span class="line">        mTargetStack.startActivityLocked(mStartActivity, topFocused, newTask, mKeepCurTransition,</span><br><span class="line">                mOptions);</span><br><span class="line">        if (mDoResume) &#123;   &#x2F;&#x2F; mDoResume &#x3D; true</span><br><span class="line">            final ActivityRecord topTaskActivity &#x3D;</span><br><span class="line">                    mStartActivity.getTask().topRunningActivityLocked();</span><br><span class="line">            if (!mTargetStack.isFocusable()</span><br><span class="line">                    || (topTaskActivity !&#x3D; null &amp;&amp; topTaskActivity.mTaskOverlay</span><br><span class="line">                    &amp;&amp; mStartActivity !&#x3D; topTaskActivity)) &#123;</span><br><span class="line">                </span><br><span class="line">                mTargetStack.ensureActivitiesVisibleLocked(null, 0, !PRESERVE_WINDOWS);</span><br><span class="line">              </span><br><span class="line">                mService.mWindowManager.executeAppTransition();</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">             </span><br><span class="line">                if (mTargetStack.isFocusable() &amp;&amp; !mSupervisor.isFocusedStack(mTargetStack)) &#123;</span><br><span class="line">                    mTargetStack.moveToFront(&quot;startActivityUnchecked&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                &#x2F;&#x2F;注释8</span><br><span class="line">                mSupervisor.resumeFocusedStackTopActivityLocked(mTargetStack, mStartActivity,</span><br><span class="line">                        mOptions);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else if (mStartActivity !&#x3D; null) &#123;</span><br><span class="line">            mSupervisor.mRecentTasks.add(mStartActivity.getTask());</span><br><span class="line">        &#125;</span><br><span class="line">        .......</span><br><span class="line"></span><br><span class="line">        return START_SUCCESS;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ActivityStackSupervisor-1"><a href="#ActivityStackSupervisor-1" class="headerlink" title="ActivityStackSupervisor"></a><code>ActivityStackSupervisor</code></h2><h3 id="resumeFocusedStackTopActivityLocked"><a href="#resumeFocusedStackTopActivityLocked" class="headerlink" title="resumeFocusedStackTopActivityLocked()"></a><code>resumeFocusedStackTopActivityLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">boolean resumeFocusedStackTopActivityLocked(</span><br><span class="line">            ActivityStack targetStack, ActivityRecord target, ActivityOptions targetOptions) &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">        if (targetStack !&#x3D; null &amp;&amp; isFocusedStack(targetStack)) &#123;</span><br><span class="line">            return targetStack.resumeTopActivityUncheckedLocked(target, targetOptions);</span><br><span class="line">        &#125;</span><br><span class="line">				...</span><br><span class="line"></span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>判断targetStack不为空 且isFocusedStack(targetStack) == true targetStack 就是activity的任务栈 用于管理即将启动的activity的任务栈,进而调用:<code>targetStack.resumeTopActivityUncheckedLocked(target, targetOptions);</code></p>
-<h2 id="ActivityStack"><a href="#ActivityStack" class="headerlink" title="ActivityStack"></a><code>ActivityStack</code></h2><h3 id="targetStack-resumeTopActivityUncheckedLocked"><a href="#targetStack-resumeTopActivityUncheckedLocked" class="headerlink" title="targetStack.resumeTopActivityUncheckedLocked()"></a><code>targetStack.resumeTopActivityUncheckedLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">boolean resumeTopActivityUncheckedLocked(ActivityRecord prev, ActivityOptions options) &#123;</span><br><span class="line">       	...</span><br><span class="line">           result &#x3D; resumeTopActivityInnerLocked(prev, options);</span><br><span class="line">				...</span><br><span class="line">       return result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="resumeTopActivityInnerLocked"><a href="#resumeTopActivityInnerLocked" class="headerlink" title="resumeTopActivityInnerLocked()"></a><code>resumeTopActivityInnerLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">private boolean resumeTopActivityInnerLocked(ActivityRecord prev, ActivityOptions options) &#123;</span><br><span class="line">        &#x2F;&#x2F; 处理下一个 activity?</span><br><span class="line">        final ActivityRecord next &#x3D; topRunningActivityLocked(true &#x2F;* focusableOnly *&#x2F;);</span><br><span class="line"></span><br><span class="line">       ......</span><br><span class="line">        boolean pausing &#x3D; mStackSupervisor.pauseBackStacks(userLeaving, next, false);</span><br><span class="line">        &#x2F;&#x2F; 注释1</span><br><span class="line">        if (mResumedActivity !&#x3D; null) &#123;</span><br><span class="line">            if (DEBUG_STATES) Slog.d(TAG_STATES,</span><br><span class="line">                    &quot;resumeTopActivityLocked: Pausing &quot; + mResumedActivity);</span><br><span class="line">            pausing |&#x3D; startPausingLocked(userLeaving, false, next, false);</span><br><span class="line">        &#125;</span><br><span class="line">        if (pausing &amp;&amp; !resumeWhilePausing) &#123;</span><br><span class="line">            if (DEBUG_SWITCH || DEBUG_STATES) Slog.v(TAG_STATES,</span><br><span class="line">                    &quot;resumeTopActivityLocked: Skip resume: need to start pausing&quot;);</span><br><span class="line">            </span><br><span class="line">            if (next.app !&#x3D; null &amp;&amp; next.app.thread !&#x3D; null) &#123;</span><br><span class="line">                mService.updateLruProcessLocked(next.app, true, null);</span><br><span class="line">            &#125;</span><br><span class="line">            if (DEBUG_STACK) mStackSupervisor.validateTopActivitiesLocked();</span><br><span class="line">            if (lastResumed !&#x3D; null) &#123;</span><br><span class="line">                lastResumed.setWillCloseOrEnterPip(true);</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125; else if (mResumedActivity &#x3D;&#x3D; next &amp;&amp; next.isState(RESUMED)</span><br><span class="line">                &amp;&amp; mStackSupervisor.allResumedActivitiesComplete()) &#123;</span><br><span class="line">            executeAppTransition(options);</span><br><span class="line">            if (DEBUG_STATES) Slog.d(TAG_STATES,</span><br><span class="line">                    &quot;resumeTopActivityLocked: Top activity resumed (dontWaitForPause) &quot; + next);</span><br><span class="line">            if (DEBUG_STACK) mStackSupervisor.validateTopActivitiesLocked();</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">                    .......</span><br><span class="line">                    &#x2F;&#x2F;注释2</span><br><span class="line">                    mStackSupervisor.startSpecificActivityLocked(next, true, false);</span><br><span class="line">                    if (DEBUG_STACK) mStackSupervisor.validateTopActivitiesLocked();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       ......</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注释1:从这里的源码可以看到当启动新的activity的时候,上一个activity走完onPause,之后才可以走新activity:onCreate —&gt;onStart—&gt;onResume…</li>
-<li>注释2:回调过程重新交给ActivityStackSupervisor的startSpecificActivityLocked;继续走startActivity的流程，也可以说是onCreate()流程。</li>
-</ul>
-<h1 id="开始onPause"><a href="#开始onPause" class="headerlink" title="开始onPause"></a>开始onPause</h1><h3 id="startPausingLocked"><a href="#startPausingLocked" class="headerlink" title="startPausingLocked()"></a><code>startPausingLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">final boolean startPausingLocked(boolean userLeaving, boolean uiSleeping,</span><br><span class="line">            ActivityRecord resuming, boolean pauseImmediately) &#123;</span><br><span class="line">        if (mPausingActivity !&#x3D; null) &#123;</span><br><span class="line">        ...</span><br><span class="line">        mStackSupervisor.resumeFocusedStackTopActivityLocked();</span><br><span class="line">        ...</span><br><span class="line">        if (prev.app !&#x3D; null &amp;&amp; prev.app.thread !&#x3D; null) &#123;</span><br><span class="line">            if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, &quot;Enqueueing pending pause: &quot; + prev);</span><br><span class="line">            try &#123;</span><br><span class="line">                EventLogTags.writeAmPauseActivity(prev.userId, System.identityHashCode(prev),</span><br><span class="line">                        prev.shortComponentName, &quot;userLeaving&#x3D;&quot; + userLeaving);</span><br><span class="line">                mService.updateUsageStats(prev, false);</span><br><span class="line">								&#x2F;&#x2F;还是原来的配方，还是原来的味道</span><br><span class="line">                mService.getLifecycleManager().scheduleTransaction(prev.app.thread, prev.appToken,</span><br><span class="line">                        PauseActivityItem.obtain(prev.finishing, userLeaving,</span><br><span class="line">                                prev.configChangeFlags, pauseImmediately));</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                &#x2F;&#x2F; Ignore exception, if process died other code will cleanup.</span><br><span class="line">                Slog.w(TAG, &quot;Exception thrown during pause&quot;, e);</span><br><span class="line">                mPausingActivity &#x3D; null;</span><br><span class="line">                mLastPausedActivity &#x3D; null;</span><br><span class="line">                mLastNoHistoryActivity &#x3D; null;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            mPausingActivity &#x3D; null;</span><br><span class="line">            mLastPausedActivity &#x3D; null;</span><br><span class="line">            mLastNoHistoryActivity &#x3D; null;</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>mService.getLifecycleManager().scheduleTransaction(prev.app.thread, prev.appToken,
-                        PauseActivityItem.obtain(prev.finishing, userLeaving,
-                                prev.configChangeFlags, pauseImmediately));</code></p>
-<p>多么的相似直接<code>scheduleTransaction</code>,就是复制上面的流程,最终执行：</p>
-<h2 id="ActivityThread-2"><a href="#ActivityThread-2" class="headerlink" title="ActivityThread"></a><code>ActivityThread</code></h2><h3 id="handleStopActivity"><a href="#handleStopActivity" class="headerlink" title="handleStopActivity()"></a><code>handleStopActivity()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Override</span><br><span class="line">    public void handlePauseActivity(IBinder token, boolean finished, boolean userLeaving,</span><br><span class="line">            int configChanges, PendingTransactionActions pendingActions, String reason) &#123;</span><br><span class="line">        ActivityClientRecord r &#x3D; mActivities.get(token);</span><br><span class="line">        if (r !&#x3D; null) &#123;</span><br><span class="line">            if (userLeaving) &#123;</span><br><span class="line">                performUserLeavingActivity(r);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            r.activity.mConfigChangeFlags |&#x3D; configChanges;</span><br><span class="line">            performPauseActivity(r, finished, reason, pendingActions);</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; Make sure any pending writes are now committed.</span><br><span class="line">            if (r.isPreHoneycomb()) &#123;</span><br><span class="line">                QueuedWork.waitToFinish();</span><br><span class="line">            &#125;</span><br><span class="line">            mSomeActivitiesChanged &#x3D; true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="onStop"><a href="#onStop" class="headerlink" title="onStop"></a><code>onStop</code></h1><p>onStop执行是在<code>onResume</code>执行方法中，具体在<code>ActivityThread</code>的<code>handleResumeActivity</code></p>
-<h2 id="ActivityThread-3"><a href="#ActivityThread-3" class="headerlink" title="ActivityThread"></a><code>ActivityThread</code></h2><h3 id="handleResumeActivity-1"><a href="#handleResumeActivity-1" class="headerlink" title="handleResumeActivity()"></a><code>handleResumeActivity()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public void handleResumeActivity(IBinder token, boolean finalStateRequest, boolean isForward,</span><br><span class="line">            String reason) &#123;</span><br><span class="line">        ...</span><br><span class="line">        final ActivityClientRecord r &#x3D; performResumeActivity(token, finalStateRequest, reason);</span><br><span class="line">        ...</span><br><span class="line">       Looper.myQueue().addIdleHandler(new Idler());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下来看一下Idler都做了什么。当MessageQueue空闲的时候就会回调Idler.queueIdle方法，经过层层调用跳转到ActivityStack.stopActivityLocked方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Idler</span> <span class="keyword">implements</span> <span class="title">MessageQueue</span>.<span class="title">IdleHandler</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">queueIdle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">           		...</span><br><span class="line">              am.activityIdle(a.token, a.createdConfig, stopProfiling);</span><br><span class="line">              ...</span><br><span class="line">                        </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>am最终执行的是AMS中同名方法</p>
-<h2 id="AMS"><a href="#AMS" class="headerlink" title="AMS"></a><code>AMS</code></h2><h3 id="activityIdle"><a href="#activityIdle" class="headerlink" title="activityIdle()"></a><code>activityIdle()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public final void activityIdle(IBinder token, Configuration config, boolean stopProfiling) &#123;</span><br><span class="line">        final long origId &#x3D; Binder.clearCallingIdentity();</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            ActivityStack stack &#x3D; ActivityRecord.getStackLocked(token);</span><br><span class="line">            if (stack !&#x3D; null) &#123;</span><br><span class="line">                ActivityRecord r &#x3D;</span><br><span class="line">                        mStackSupervisor.activityIdleInternalLocked(token, false &#x2F;* fromTimeout *&#x2F;,</span><br><span class="line">                                false &#x2F;* processPausingActivities *&#x2F;, config);</span><br><span class="line">                if (stopProfiling) &#123;</span><br><span class="line">                    if ((mProfileProc &#x3D;&#x3D; r.app) &amp;&amp; mProfilerInfo !&#x3D; null) &#123;</span><br><span class="line">                        clearProfilerLocked();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Binder.restoreCallingIdentity(origId);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ActivityStackSupervisor-2"><a href="#ActivityStackSupervisor-2" class="headerlink" title="ActivityStackSupervisor"></a><code>ActivityStackSupervisor</code></h2><h3 id="activityIdleInternalLocked"><a href="#activityIdleInternalLocked" class="headerlink" title="activityIdleInternalLocked()"></a><code>activityIdleInternalLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">final ActivityRecord activityIdleInternalLocked(final IBinder token, boolean fromTimeout,</span><br><span class="line">            boolean processPausingActivities, Configuration config) &#123;</span><br><span class="line">            ...</span><br><span class="line">            for (int i &#x3D; 0; i &lt; NS; i++) &#123;</span><br><span class="line">            r &#x3D; stops.get(i);</span><br><span class="line">            final ActivityStack stack &#x3D; r.getStack();</span><br><span class="line">            if (stack !&#x3D; null) &#123;</span><br><span class="line">                if (r.finishing) &#123;</span><br><span class="line">                    stack.finishCurrentActivityLocked(r, ActivityStack.FINISH_IMMEDIATELY, false,</span><br><span class="line">                            &quot;activityIdleInternalLocked&quot;);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    stack.stopActivityLocked(r);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ActivityStack-1"><a href="#ActivityStack-1" class="headerlink" title="ActivityStack"></a><code>ActivityStack</code></h2><h3 id="stopActivityLocked"><a href="#stopActivityLocked" class="headerlink" title="stopActivityLocked()"></a><code>stopActivityLocked()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">final void stopActivityLocked(ActivityRecord r) &#123;</span><br><span class="line">				mService.getLifecycleManager().scheduleTransaction(r.app.thread, r.appToken,</span><br><span class="line">                        StopActivityItem.obtain(r.visible, r.configChangeFlags));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样的逻辑,最终执行</p>
-<h2 id="ActivityThread-4"><a href="#ActivityThread-4" class="headerlink" title="ActivityThread"></a><code>ActivityThread</code></h2><h3 id="handleStopActivity-1"><a href="#handleStopActivity-1" class="headerlink" title="handleStopActivity()"></a><code>handleStopActivity()</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">   public void handleStopActivity(IBinder token, boolean show, int configChanges,</span><br><span class="line">           PendingTransactionActions pendingActions, boolean finalStateRequest, String reason) &#123;</span><br><span class="line">       final ActivityClientRecord r &#x3D; mActivities.get(token);</span><br><span class="line">       r.activity.mConfigChangeFlags |&#x3D; configChanges;</span><br><span class="line"></span><br><span class="line">       final StopInfo stopInfo &#x3D; new StopInfo();</span><br><span class="line">       performStopActivityInner(r, stopInfo, show, true &#x2F;* saveState *&#x2F;, finalStateRequest,</span><br><span class="line">               reason);</span><br><span class="line"></span><br><span class="line">       if (localLOGV) Slog.v(</span><br><span class="line">           TAG, &quot;Finishing stop of &quot; + r + &quot;: show&#x3D;&quot; + show</span><br><span class="line">           + &quot; win&#x3D;&quot; + r.window);</span><br><span class="line"></span><br><span class="line">       updateVisibility(r, show);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; Make sure any pending writes are now committed.</span><br><span class="line">       if (!r.isPreHoneycomb()) &#123;</span><br><span class="line">           QueuedWork.waitToFinish();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       stopInfo.setActivity(r);</span><br><span class="line">       stopInfo.setState(r.state);</span><br><span class="line">       stopInfo.setPersistentState(r.persistentState);</span><br><span class="line">       pendingActions.setStopInfo(stopInfo);</span><br><span class="line">       mSomeActivitiesChanged &#x3D; true;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3475,7 +3488,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

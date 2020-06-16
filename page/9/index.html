@@ -262,6 +262,436 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">观察者（Observer）模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T19:07:13+08:00">
+                2020-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">行为型设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在现实世界中，许多对象并不是独立存在的，其中一个对象的行为发生改变可能会导致一个或者多个其他对象的行为也发生改变。例如，某种商品的物价上涨时会导致部分商家高兴，而消费者伤心；还有，当我们开车到交叉路口时，遇到红灯会停，遇到绿灯会行。这样的例子还有很多，例如，股票价格与股民、微信公众号与微信用户、气象局的天气预报与听众、小偷与警察等。</p>
+<p><strong>定义：</strong></p>
+<p>观察者（Observer）模式的定义：指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式。</p>
+<p><strong>类型：</strong>行为类模式</p>
+<p><strong>类图：</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-d5b6f068df5001d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>模式的结构：</strong></p>
+<ul>
+<li><strong>被观察者：它提供了一个用于保存观察者对象的聚集类和增加、删除观察者对象的方法，以及通知所有观察者的抽象方法。</strong>从类图中可以看到，类中有一个用来存放观察者对象的Vector容器（之所以使用Vector而不使用List，是因为多线程操作时，Vector在是安全的，而List则是不安全的），这个Vector容器是被观察者类的核心，另外还有三个方法：attach方法是向这个容器中添加观察者对象；detach方法是从容器中移除观察者对象；notify方法是依次调用观察者对象的对应方法。这个角色可以是接口，也可以是抽象类或者具体的类，因为很多情况下会与其他的模式混用，所以使用抽象类的情况比较多。</li>
+<li><strong>观察者：</strong>观察者角色一般是一个接口，它只有一个update方法，在被观察者状态发生变化时，这个方法就会被触发调用。</li>
+<li><strong>具体的被观察者：</strong>使用这个角色是为了便于扩展，可以在此角色中定义具体的业务逻辑。</li>
+<li><strong>具体的观察者：</strong>观察者接口的具体实现，在这个角色中，将定义被观察者对象状态发生变化时所要处理的逻辑。</li>
+</ul>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li><p>目标与观察者之间建立了一套触发机制。</p>
+</li>
+<li><p>降低了目标与观察者之间的耦合关系，两者之间是抽象耦合关系。</p>
+</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>目标与观察者之间的依赖关系并没有完全解除，而且有可能出现循环引用。</li>
+<li>当观察者对象很多时，通知的发布会花费很多时间，影响程序的效率。</li>
+</ul>
+<p><strong>Android中使用</strong></p>
+<p>ListView 是 Android 中很常用的控件，我们在使用 ListView 添加数据后会调用 Adapter 的 notifyDataSetChanged()方法。</p>
+<p>监听器、点击事件、滚动事件<br>rxjava、eventbus、广播</p>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>对象间存在一对多关系，一个对象的状态发生改变会影响其他对象。</li>
+<li>当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>抽象被观察者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 抽象被观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractSubject &#123;</span><br><span class="line">    protected List&lt;IObserver&gt; list &#x3D; new ArrayList();</span><br><span class="line"></span><br><span class="line">    public void attach(IObserver observer) &#123;</span><br><span class="line">        list.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void detach(IObserver observer) &#123;</span><br><span class="line">        list.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void notifyObserver() &#123;</span><br><span class="line">        if (list.size() &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            System.out.println(&quot;没有更多的观察者了&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        for (IObserver observer : list) &#123;</span><br><span class="line">            observer.update();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract void doSomething();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体被观察者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 具体被观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteSubject extends AbstractSubject &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomething() &#123;</span><br><span class="line">        System.out.println(&quot;处理一些事情 处理完毕 需要告诉 观察者更新数据&quot;);</span><br><span class="line">        notifyObserver();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>抽象观察者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface IObserver &#123;</span><br><span class="line">    void update();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体观察者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class ObserverA implements IObserver &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void update() &#123;</span><br><span class="line">        System.out.println(&quot;A 收到了更新请求&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 具体的观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ObserverB implements IObserver &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void update() &#123;</span><br><span class="line">        System.out.println(&quot;B 收到了更新请求&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void observerMode() &#123;</span><br><span class="line">        ConcreteSubject subject &#x3D; new ConcreteSubject();</span><br><span class="line">        ObserverA observerA &#x3D; new ObserverA();</span><br><span class="line">        ObserverB observerB &#x3D; new ObserverB();</span><br><span class="line">        subject.attach(observerA);</span><br><span class="line">        subject.attach(observerB);</span><br><span class="line">        subject.doSomething();</span><br><span class="line">        System.out.println(&quot;-------------&quot;);</span><br><span class="line">        subject.detach(observerA);</span><br><span class="line">        subject.detach(observerB);</span><br><span class="line">        subject.doSomething();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">处理一些事情 处理完毕 需要告诉 观察者更新数据</span><br><span class="line">A 收到了更新请求</span><br><span class="line">B 收到了更新请求</span><br><span class="line">-------------</span><br><span class="line">处理一些事情 处理完毕 需要告诉 观察者更新数据</span><br><span class="line">没有更多的观察者了</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">中介者（Mediator）模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T16:52:09+08:00">
+                2020-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">行为型设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在现实生活中，常常会出现好多对象之间存在复杂的交互关系，这种交互关系常常是“网状结构”，它要求每个对象都必须知道它需要交互的对象。例如，每个人必须记住他（她）所有朋友的电话；而且，朋友中如果有人的电话修改了，他（她）必须告诉其他所有的朋友修改，这叫作“牵一发而动全身”，非常复杂。</p>
+<p><strong>定义：</strong>中介者（Mediator）模式：定义一个中介对象来封装一系列对象之间的交互，使原有对象之间的耦合松散，且可以独立地改变它们之间的交互。中介者模式又叫调停模式，它是迪米特法则的典型应用。</p>
+<p><strong>类型：</strong>行为设计模式</p>
+<p><strong>类图：</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-332a4b17960cd27b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q1161I532V0.gif" alt="中介者模式的结构图"></p>
+<p><strong>模式的结构：</strong></p>
+<ul>
+<li>抽象中介者：定义好同事类对象到中介者对象的接口，用于各个同事类之间的通信。一般包括一个或几个抽象的事件方法，并由子类去实现。</li>
+<li>中介者实现类：从抽象中介者继承而来，实现抽象中介者中定义的事件方法。从一个同事类接收消息，然后通过消息影响其他同时类。</li>
+<li>抽象同事类（Colleague）角色：定义同事类的接口，保存中介者对象，提供同事对象交互的抽象方法，实现所有相互影响的同事类的公共功能。</li>
+<li>同事类：如果一个对象会影响其他的对象，同时也会被其他对象影响，那么这两个对象称为同事类。在类图中，同事类只有一个，这其实是现实的省略，在实际应用中，同事类一般由多个组成，他们之间相互影响，相互依赖。同事类越多，关系越复杂。并且，同事类也可以表现为继承了同一个抽象类的一组实现组成。在中介者模式中，同事类之间必须通过中介者才能进行消息传递。</li>
+</ul>
+<p><strong>解决的问题：</strong></p>
+<p>一般来说，同事类之间的关系是比较复杂的，多个同事类之间互相关联时，他们之间的关系会呈现为复杂的网状结构，这是一种过度耦合的架构，即不利于类的复用，也不稳定。例如在下图中，有六个同事类对象，假如对象1发生变化，那么将会有4个对象受到影响。如果对象2发生变化，那么将会有5个对象受到影响。也就是说，同事类之间直接关联的设计是不好的。<br><img src="https://upload-images.jianshu.io/upload_images/4118241-1899a94b9afe9deb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-34a9a234acb32f7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>​    如果引入中介者模式，那么同事类之间的关系将变为星型结构，从图中可以看到，任何一个类的变动，只会影响的类本身，以及中介者，这样就减小了系统的耦合。一个好的设计，必定不会把所有的对象关系处理逻辑封装在本类中，而是使用一个专门的类来管理那些不属于自己的行为。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-bb8db9fd250f5d4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>适当地使用中介者模式可以避免同事类之间的过度耦合，使得各同事类之间可以相对独立地使用。</li>
+<li>使用中介者模式可以将对象间一对多的关联转变为一对一的关联，使对象间的关系易于理解和维护。</li>
+<li>使用中介者模式可以将对象的行为和协作进行抽象，能够比较灵活的处理对象间的相互作用。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>当同事类太多时，中介者的职责将很大，它会变得复杂而庞大，以至于系统难以维护。</li>
+</ul>
+<p><strong>Android中</strong></p>
+<p>具体的例子是KeyGuardViewMediator，这个类是负责锁屏控制的一个类。 在我们的开屏和锁屏的时候要注意会需要很多的控制，包括音效和状态栏，通知等，这些都对应AudioManager等具体的系统服务。所以需要一个统一的中介类来协调和控制各个管理服务的状态。</p>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>当对象之间存在复杂的网状结构关系而导致依赖关系混乱且难以复用时。</li>
+<li>当想创建一个运行于多个类之间的对象，又不想生成新的子类时。</li>
+</ul>
+<p>在 MVC 框架中，控制器（C）就是模型（M）和视图（V）的中介者。</p>
+<p>在面向对象编程中，一个类必然会与其他的类发生依赖关系，完全独立的类是没有意义的。一个类同时依赖多个类的情况也相当普遍，既然存在这样的情况，说明，一对多的依赖关系有它的合理性，适当的使用中介者模式可以使原本凌乱的对象关系清晰，但是如果滥用，则可能会带来反的效果。一般来说，只有对于那种同事类之间是网状结构的关系，才会考虑使用中介者模式。可以将网状结构变为星状结构，使同事类之间的关系变的清晰一些。</p>
+<p>   中介者模式是一种比较常用的模式，也是一种比较容易被滥用的模式。对于大多数的情况，同事类之间的关系不会复杂到混乱不堪的网状结构，因此，大多数情况下，将对象间的依赖关系封装的同事类内部就可以的，没有必要非引入中介者模式。滥用中介者模式，只会让事情变的更复杂。</p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><strong>抽象中介者：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象中介者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractMediator &#123;</span><br><span class="line">    public abstract void register(AbstractColleague colleague);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;转发</span><br><span class="line">    public abstract void relay(AbstractColleague colleague);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>具体中介者：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 具体中介者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteMediator extends AbstractMediator &#123;</span><br><span class="line"></span><br><span class="line">    private List&lt;AbstractColleague&gt; colleagues &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void register(AbstractColleague colleague) &#123;</span><br><span class="line">        System.out.println(&quot;具体中介者 register&quot;);</span><br><span class="line">        if (!colleagues.contains(colleague)) &#123;</span><br><span class="line">            colleagues.add(colleague);</span><br><span class="line">            colleague.setMediator(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;转发</span><br><span class="line">    @Override</span><br><span class="line">    public void relay(AbstractColleague colleague) &#123;</span><br><span class="line">        System.out.println(&quot;具体中介者 转发&quot;);</span><br><span class="line">        for (AbstractColleague ob : colleagues) &#123;</span><br><span class="line">            if (!ob.equals(colleague)) &#123;</span><br><span class="line">                ob.receive();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>抽象同事类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象同时类</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractColleague &#123;</span><br><span class="line">    protected AbstractMediator mediator;</span><br><span class="line"></span><br><span class="line">    protected void setMediator(AbstractMediator mediator) &#123;</span><br><span class="line">        System.out.println(&quot;抽象同时类 setMediator&quot;);</span><br><span class="line">        this.mediator &#x3D; mediator;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract void receive();</span><br><span class="line"></span><br><span class="line">    public abstract void send();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>具体同事类：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteColleagueA extends AbstractColleague &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void receive() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类A receive&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void send() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类A send&quot;);</span><br><span class="line">        mediator.relay(this); &#x2F;&#x2F;请中介者转发</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 具体同时类B</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteColleagueB extends AbstractColleague &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void receive() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类B receive&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void send() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类B send&quot;);</span><br><span class="line">        mediator.relay(this); &#x2F;&#x2F;请中介者转发</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端使用</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static void mediatorMode() &#123;</span><br><span class="line">        &#x2F;&#x2F;创建具体中介者</span><br><span class="line">        AbstractMediator concreteMediator &#x3D; new ConcreteMediator();</span><br><span class="line">        &#x2F;&#x2F;创建具体同事类A</span><br><span class="line">        ConcreteColleagueA colleagueA &#x3D; new ConcreteColleagueA();</span><br><span class="line">        &#x2F;&#x2F;创建具体同事类A</span><br><span class="line">        ConcreteColleagueB colleagueB &#x3D; new ConcreteColleagueB();</span><br><span class="line">        concreteMediator.register(colleagueA);</span><br><span class="line">        concreteMediator.register(colleagueB);</span><br><span class="line">        System.out.println(&quot;--------------------&quot;);</span><br><span class="line">        colleagueA.send();</span><br><span class="line">        System.out.println(&quot;--------------------&quot;);</span><br><span class="line">        colleagueB.send();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">具体中介者 register</span><br><span class="line">抽象同时类 setMediator</span><br><span class="line">具体中介者 register</span><br><span class="line">抽象同时类 setMediator</span><br><span class="line">--------------------</span><br><span class="line">具体同时类A send</span><br><span class="line">具体中介者 转发</span><br><span class="line">具体同时类B receive</span><br><span class="line">--------------------</span><br><span class="line">具体同时类B send</span><br><span class="line">具体中介者 转发</span><br><span class="line">具体同时类A receive</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%EF%BC%88Template%20Method%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2009,517 +2439,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/10/UML/UML%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/10/UML/UML%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/" itemprop="url">UML中类的关系</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-10T21:15:22+08:00">
-                2020-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UML/" itemprop="url" rel="index">
-                    <span itemprop="name">UML</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/10/UML/UML%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/10/UML/UML%E4%B8%AD%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>类图知识点：</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-3f8577784f7dfdc6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<ul>
-<li><p>类图分为三部分，依次是类名、属性、方法</p>
-</li>
-<li><p>以&lt;&lt;开头和以&gt;&gt;结尾的为注释信息</p>
-</li>
-<li><p>修饰符+代表public，-代表private，#代表protected，什么都没有代表包可见。</p>
-</li>
-<li><p>带下划线的属性或方法代表是静态的。</p>
-</li>
-</ul>
-<p>在java以及其他的面向对象设计模式中，类与类之间主要有6种关系，他们分别是：</p>
-<ul>
-<li>依赖</li>
-<li>关联</li>
-<li>聚合</li>
-<li>组合</li>
-<li>继承</li>
-<li>实现</li>
-</ul>
-<p>他们的耦合度依次增强</p>
-<h1 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖<img src="https://upload-images.jianshu.io/upload_images/4118241-b8cac23467b8431c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><p><img src="https://upload-images.jianshu.io/upload_images/4118241-46ead55a043b1c3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>依赖关系的定义为：对于两个相对独立的对象，当一个对象负责构造另一个对象的实例，或者依赖另一个对象的服务时，这两个对象之间主要体现为依赖关系。定义比较晦涩难懂，但在java中的表现还是比较直观的：<strong>类A当中使用了类B，其中类B是作为类A的方法参数、方法中的局部变量、或者静态方法调用</strong>。类上面的图例中：People类依赖于Book类和Food类，Book类和Food类是作为类中方法的参数形式出现在People类中的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class People&#123;</span><br><span class="line">    &#x2F;&#x2F;Book作为read方法的形参</span><br><span class="line">     public void read(Book book)&#123;</span><br><span class="line">        System.out.println(“读的书是”+book.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="关联"><a href="#关联" class="headerlink" title="关联))"></a>关联<img src="https://upload-images.jianshu.io/upload_images/4118241-0df900778ab7f3af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">)<img src="/Users/fengxing/blogs/source/image/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%B1%BB%E7%9A%84%E5%85%B3%E7%B3%BB/%E5%85%B3%E8%81%94.png" alt="image.png">)<img src="https://upload-images.jianshu.io/upload_images/4118241-3304f5652e0e10ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><ul>
-<li>关联关系中作为成员变量的类一般会在类中赋值</li>
-</ul>
-<p><strong>双向的关联可以有两个箭头或者没有箭头，单向的关联有一个箭头。</strong></p>
-<p> 对于两个相对独立的对象，当一个对象的实例与另一个对象的一些特定实例存在固定的对应关系时，这两个对象之间为关联关系。关联关系分为单向关联和双向关联。在java中，单向关联表现为：类A当中使用了类B，其中类B是作为类A的成员变量。双向关联表现为：类A当中使用了类B作为成员变量；同时类B中也使用了类A作为成员变量。</p>
-<p><strong>单项关联</strong></p>
-<p><img src="https://img-blog.csdn.net/20160507192549756" alt="这里写图片描述"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class Person&#123;</span><br><span class="line">    private Car car &#x3D; new Car();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>双向关联</strong></p>
-<p><img src="https://img-blog.csdn.net/20160507192628366" alt="这里写图片描述"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class Husband&#123;</span><br><span class="line">    private Wife wife&#x3D;new Wife();</span><br><span class="line"></span><br><span class="line">    public void say()&#123;</span><br><span class="line">        System.out.println(&quot;my wife name:&quot;+wife.getName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Wife&#123;</span><br><span class="line">    private Husband husband&#x3D;new Husband();</span><br><span class="line"></span><br><span class="line">    public void say()&#123;</span><br><span class="line">        System.out.println(&quot;my husband name:&quot;+husband.getName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合<img src="https://upload-images.jianshu.io/upload_images/4118241-2e286214e4402d08.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><ul>
-<li>从<code>set</code>方法中传递过来的叫聚合</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-16c2707d4666de18.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>聚合关系是关联关系的一种，耦合度强于关联，他们的代码表现是相同的，仅仅是在语义上有所区别：关联关系的对象间是相互独立的，而聚合关系的对象之间存在着包容关系，他们之间是“整体-个体”的相互关系。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class People&#123;</span><br><span class="line">    Car car;</span><br><span class="line">    House house; </span><br><span class="line">    &#x2F;&#x2F;聚合关系中作为成员变量的类一般使用set方法赋值</span><br><span class="line">     public void setCar(Car car)&#123;</span><br><span class="line">        This.car &#x3D; car;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setHouse(House house)&#123;</span><br><span class="line">        This.house &#x3D; house;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public void driver()&#123;</span><br><span class="line">        System.out.println(“车的型号：”+car.getType());</span><br><span class="line">    &#125;</span><br><span class="line">    public void sleep()&#123;</span><br><span class="line">        System.out.println(“我在房子里睡觉：”+house.getAddress());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合<img src="https://upload-images.jianshu.io/upload_images/4118241-16bf5e2669ef869d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><ul>
-<li>在构造方法中实例化其他类叫组合</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-a87c3182e0dd1052.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>相比于聚合，组合是一种耦合度更强的关联关系。存在组合关系的类表示“整体-部分”的关联关系，“整体”负责“部分”的生命周期，他们之间是共生共死的；并且“部分”单独存在时没有任何意义。在下图的例子中，People与Soul、Body之间是组合关系，当人的生命周期开始时，必须同时有灵魂和肉体；当人的生命周期结束时，灵魂肉体随之消亡；无论是灵魂还是肉体，都不能单独存在，他们必须作为人的组成部分存在。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Public class People&#123;</span><br><span class="line">    Soul soul;</span><br><span class="line">    Body body; </span><br><span class="line">    &#x2F;&#x2F;组合关系中的成员变量一般会在构造方法中赋值</span><br><span class="line">     Public People(Soul soul, Body body)&#123; </span><br><span class="line">        This.soul &#x3D; soul;</span><br><span class="line">        This.body &#x3D; body;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    Public void study()&#123;</span><br><span class="line">        System.out.println(“学习要用灵魂”+soul.getName());</span><br><span class="line">    &#125;</span><br><span class="line">    Public void eat()&#123;</span><br><span class="line">        System.out.println(“吃饭用身体：”+body.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承<img src="https://upload-images.jianshu.io/upload_images/4118241-b67f94bc3650ad16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><p><img src="https://upload-images.jianshu.io/upload_images/4118241-b2e030a7da785f79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>​    继承表示类与类（或者接口与接口）之间的父子关系。在java中，用关键字extends表示继承关系。UML图例中，继承关系用实线+空心箭头表示，箭头指向父类。</p>
-<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现<img src="https://upload-images.jianshu.io/upload_images/4118241-6af21432d37bf5da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></h1><p><img src="https://upload-images.jianshu.io/upload_images/4118241-a80ee9fdf19a635d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>​     表示一个类实现一个或多个接口的方法。接口定义好操作的集合，由实现类去完成接口的具体操作。在java中使用implements表示。UML图例中，实现关系用虚线+空心箭头表示，箭头指向接口。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" itemprop="url">代理模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-10T20:12:32+08:00">
-                2020-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">结构型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>定义：</strong></p>
-<p>代理模式的定义：由于某些原因需要给某对象提供一个代理以控制对该对象的访问。这时，访问对象不适合或者不能直接引用目标对象，代理对象作为访问对象和目标对象之间的中介。</p>
-<p><strong>类型：</strong>结构型</p>
-<p><strong>类图：</strong></p>
-<p><img src="http://c.biancheng.net/uploads/allimg/181115/3-1Q115093011523.gif" alt="代理模式的结构图"></p>
-<p><strong>模式的结构：</strong></p>
-<ul>
-<li>抽象主题（Subject）类：通过接口或抽象类声明真实主题和代理对象实现的业务方法。</li>
-<li>真实主题（Real Subject）类：实现了抽象主题中的具体业务，是代理对象所代表的真实对象，是最终要引用的对象。</li>
-<li>代理（Proxy）类：提供了与真实主题相同的接口，其内部含有对真实主题的引用，它可以访问、控制或扩展真实主题的功能。</li>
-</ul>
-<p><strong>解决的问题：</strong></p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>代理模式在客户端与目标对象之间起到一个中介作用和保护目标对象的作用；</li>
-<li>代理对象可以扩展目标对象的功能；</li>
-<li>代理模式能将客户端与目标对象分离，在一定程度上降低了系统的耦合度；</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>在客户端和目标对象之间增加一个代理对象，会造成请求处理速度变慢；</li>
-<li>增加了系统的复杂度；</li>
-</ul>
-<p><strong>Android中</strong></p>
-<p>Binder中的代理模式</p>
-<p>Retrofit 中动态代理</p>
-<p><strong>适用场景：</strong></p>
-<ul>
-<li>远程代理，这种方式通常是为了隐藏目标对象存在于不同地址空间的事实，方便客户端访问。例如，用户申请某些网盘空间时，会在用户的文件系统中建立一个虚拟的硬盘，用户访问虚拟硬盘时实际访问的是网盘空间。</li>
-<li>虚拟代理，这种方式通常用于要创建的目标对象开销很大时。例如，下载一幅很大的图像需要很长时间，因某种计算比较复杂而短时间无法完成，这时可以先用小比例的虚拟代理替换真实的对象，消除用户对服务器慢的感觉。</li>
-<li>安全代理，这种方式通常用于控制不同种类客户对真实对象的访问权限。</li>
-<li>智能指引，主要用于调用目标对象时，代理附加一些额外的处理功能。例如，增加计算真实对象的引用次数的功能，这样当该对象没有被引用时，就可以自动释放它。</li>
-<li>延迟加载，指为了提高系统的性能，延迟对目标的加载。</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;抽象代理</span><br><span class="line">public interface ISubject &#123;</span><br><span class="line">    void request();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;真实代理</span><br><span class="line">public class RealSubject implements ISubject &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        System.out.println(&quot;访问真实主题方法...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;代理类</span><br><span class="line">public class Proxy implements ISubject&#123;</span><br><span class="line"></span><br><span class="line">    private ISubject subject;</span><br><span class="line"></span><br><span class="line">    public Proxy() &#123;</span><br><span class="line">        subject &#x3D; new RealSubject();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">		@Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        preRequest();</span><br><span class="line">        subject.request();</span><br><span class="line">        postRequest();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void preRequest() &#123;</span><br><span class="line">        System.out.println(&quot;访问真实主题之后的预处理。&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void postRequest() &#123;</span><br><span class="line">        System.out.println(&quot;访问真实主题之后的后续处理。&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端</span><br><span class="line"></span><br><span class="line">Proxy proxy &#x3D; new Proxy();</span><br><span class="line">        proxy.request();</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">访问真实主题之后的预处理。</span><br><span class="line">访问真实主题方法...</span><br><span class="line">访问真实主题之后的后续处理。</span><br></pre></td></tr></table></figure>
-
-<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicProxy implements InvocationHandler &#123;</span><br><span class="line">    &#x2F;&#x2F; 声明代理对象</span><br><span class="line">    &#x2F;&#x2F; 作用：绑定关系，即关联到哪个接口（与具体的实现类绑定）的哪些方法将被调用时，执行invoke（）</span><br><span class="line">    private Object ProxyObject;</span><br><span class="line"></span><br><span class="line">    public Object newProxyInstance(Object ProxyObject) &#123;</span><br><span class="line">        this.ProxyObject &#x3D; ProxyObject;</span><br><span class="line">        return Proxy.newProxyInstance(ProxyObject.getClass().getClassLoader(),</span><br><span class="line">                ProxyObject.getClass().getInterfaces(), this);</span><br><span class="line">        &#x2F;&#x2F; Proxy类 &#x3D; 动态代理类的主类</span><br><span class="line">        &#x2F;&#x2F; Proxy.newProxyInstance（）作用：根据指定的类装载器、一组接口 &amp; 调用处理器 生成动态代理类实例，并最终返回</span><br><span class="line">        &#x2F;&#x2F; 参数说明：</span><br><span class="line">        &#x2F;&#x2F; 参数1：指定产生代理对象的类加载器，需要将其指定为和目标对象同一个类加载器</span><br><span class="line">        &#x2F;&#x2F; 参数2：指定目标对象的实现接口</span><br><span class="line">        &#x2F;&#x2F; 即要给目标对象提供一组什么接口。若提供了一组接口给它，那么该代理对象就默认实现了该接口，这样就能调用这组接口中的方法</span><br><span class="line">        &#x2F;&#x2F; 参数3：指定InvocationHandler对象。即动态代理对象在调用方法时，会关联到哪个InvocationHandler对象</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">        &#x2F;&#x2F; 参数说明：</span><br><span class="line">        &#x2F;&#x2F; 参数1：动态代理对象（即哪个动态代理对象调用了method（）</span><br><span class="line">        &#x2F;&#x2F; 参数2：目标对象被调用的方法</span><br><span class="line">        &#x2F;&#x2F; 参数3：指定被调用方法的参数</span><br><span class="line">        System.out.println(&quot;代购出门了&quot;);</span><br><span class="line">        Object result &#x3D; null;</span><br><span class="line">        &#x2F;&#x2F; 通过Java反射机制调用目标对象方法</span><br><span class="line">        result &#x3D; method.invoke(ProxyObject, args);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface ISubject &#123;</span><br><span class="line">    &#x2F;&#x2F; 定义目标对象的接口方法</span><br><span class="line">    &#x2F;&#x2F; 代购物品</span><br><span class="line">    public void buy();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Buyer1 implements ISubject &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void buy() &#123;</span><br><span class="line">        System.out.println(&quot;小成要买Mac&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Buyer2 implements ISubject &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void buy() &#123;</span><br><span class="line">        System.out.println(&quot;小何要买iPhone&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端调用</span><br><span class="line">private static void dynamic() &#123;</span><br><span class="line">        &#x2F;&#x2F; 1. 创建调用处理器类对象</span><br><span class="line">        DynamicProxy DynamicProxy &#x3D; new DynamicProxy();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 2. 创建目标对象对象</span><br><span class="line">        Buyer1 mBuyer1 &#x3D; new Buyer1();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 3. 创建动态代理类 &amp; 对象：通过调用处理器类对象newProxyInstance（）</span><br><span class="line">        &#x2F;&#x2F; 传入上述目标对象对象</span><br><span class="line">        ISubject Buyer1_DynamicProxy &#x3D; (ISubject) DynamicProxy.newProxyInstance(mBuyer1);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 4. 通过调用动态代理对象方法从而调用目标对象方法</span><br><span class="line">        &#x2F;&#x2F; 实际上是调用了invoke（），再通过invoke（）里的反射机制调用目标对象的方法</span><br><span class="line">        Buyer1_DynamicProxy.buy();</span><br><span class="line">        &#x2F;&#x2F; 以上代购为小成代购Mac</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 以下是代购为小何代购iPhone</span><br><span class="line">        Buyer2 mBuyer2 &#x3D; new Buyer2();</span><br><span class="line">        ISubject Buyer2_DynamicProxy &#x3D; (ISubject) DynamicProxy.newProxyInstance(mBuyer2);</span><br><span class="line">        Buyer2_DynamicProxy.buy();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">代购出门了</span><br><span class="line">小成要买Mac</span><br><span class="line">代购出门了</span><br><span class="line">小何要买iPhone</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="Java代理模式"><a href="#Java代理模式" class="headerlink" title="Java代理模式"></a>Java代理模式</h1><h2 id="代理模式基本概念及分类"><a href="#代理模式基本概念及分类" class="headerlink" title="代理模式基本概念及分类"></a>代理模式基本概念及分类</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><img src="https://img-blog.csdnimg.cn/20190601204007375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>为其他对象提供一种代理以控制对这个对象的访问。代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理对象起到中介的作用，可去掉功能服务或增加额外的服务。负责为委托类预处理消息，过滤消息并将请求分派给委托类处理，以及进行消息被委托类执行后的后续操作。</p>
-<p>例如火车票代售处是火车站的代理，相对于火车站，可以提供额外的服务，如电话预约，提供额外服务的同时，会收取一定金额的手续费。也可以将原有的功能去掉，如代售处不能提供退票服务。</p>
-<h3 id="代理模式模型"><a href="#代理模式模型" class="headerlink" title="代理模式模型"></a>代理模式模型</h3><p>代理模式一般设计到角色有4 种：</p>
-<ul>
-<li><strong>抽象角色</strong>：对应代理接口（&lt;&lt; interface &gt;&gt;Subject），用来定义代理类和委托类的公共对外方法/接口；</li>
-<li><strong>真实角色</strong>：对应委托类（接口实现类RealSubject），真正实现业务逻辑的类，是代理角色所代表的真实对象，是最终要引用的对象；</li>
-<li><strong>代理角色</strong>：对应代理类（Proxy），用来代理和封装真实角色。代理角色内部含有对真实对象的引用，从而可以操作真实对象。同时，代理对象可以在执行真是对象操作时，添加或去除其他操作，相当于对真实对象进行封装；</li>
-<li><strong>客户角色</strong>：对应客户端，使用代理类和主题接口完成一些工作。</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20190601204859723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>在代理模式中真实角色对于客户端角色来说的透明的，也就是客户端不知道也无需知道真实角色的存在。 为了保持行为的一致性，代理角色和真实角色通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。</p>
-<p>通过代理角色这中间一层，能有效控制对真实角色（委托类对象）的直接访问，也可以很好地隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。</p>
-<h3 id="代理模式特点"><a href="#代理模式特点" class="headerlink" title="代理模式特点"></a>代理模式特点</h3><h4 id="代理模式优点"><a href="#代理模式优点" class="headerlink" title="代理模式优点"></a>代理模式优点</h4><ul>
-<li>隐藏委托类的实现，调用者只需要和代理类进行交互即可。</li>
-<li>解耦，在不改变委托类代码情况下做一些额外处理，比如添加初始判断及其他公共操作</li>
-</ul>
-<h2 id="代理模式实现方式"><a href="#代理模式实现方式" class="headerlink" title="代理模式实现方式"></a>代理模式实现方式</h2><p>根据代理类的<strong>生成时间</strong>不同可以将代理分为静态代理和动态代理。</p>
-<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>所谓静态代理也就是在程序运行前就已经存在代理类的.class文件，代理类和委托类的关系在运行前就确定了。</p>
-<p>接口</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>被代理对象Car</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="继承方式"><a href="#继承方式" class="headerlink" title="继承方式"></a>继承方式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Car2 extends Car &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		super.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="聚合方式"><a href="#聚合方式" class="headerlink" title="聚合方式"></a>聚合方式</h4><p>聚合：在代理中引用被代理对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Car3 implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public Car3(Car car) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.car &#x3D; car;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Car car;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		car.move();</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="继承方式与聚合方式对比"><a href="#继承方式与聚合方式对比" class="headerlink" title="继承方式与聚合方式对比"></a>继承方式与聚合方式对比</h4><p>聚合方式比继承方式更适合代理模式：适合功能的叠加（可灵活传递，组合）。</p>
-<p>记录日志代理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class CarLogProxy implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	public CarLogProxy(Moveable m) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.m &#x3D; m;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	private Moveable m;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		System.out.println(&quot;日志开始....&quot;);</span><br><span class="line">		m.move();</span><br><span class="line">		System.out.println(&quot;日志结束....&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>记录时间代理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	Car car &#x3D; new Car();</span><br><span class="line">	CarLogProxy clp &#x3D; new CarLogProxy(car);</span><br><span class="line">	CarTimeProxy ctp &#x3D; new CarTimeProxy(clp);</span><br><span class="line">	ctp.move();&#x2F;&#x2F;先记录日志后记录时间</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果要按照上述的方法使用代理模式，那么真实角色(委托类)必须是事先已经存在的，并将其作为代理对象的内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀；此外，如果事先并不知道真实角色（委托类），该如何使用代理呢？这个问题可以通过Java的动态代理类来解决。</p>
-<h3 id="动态代理-1"><a href="#动态代理-1" class="headerlink" title="动态代理"></a>动态代理</h3><p>通过动态代理可实现对不同类、不同方法的代理。动态代理的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件（.class）。代理类和委托类的关系在程序运行时确定。</p>
-<h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><p><strong>实现模式</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20190601211348201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5OTY2MjAz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>Java动态代理类位于java.lang.reflect包下，一般主要涉及到以下两个类：</p>
-<p><strong>Interface InvocationHandler</strong></p>
-<p>InvocationHandler是负责连接代理类和委托类的中间类必须实现的接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，每次生成动态代理对象都邀制定一个对应的调用处理器对象，通常在该方法中实现对委托类的代理访问。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public object invoke(Object obj,Method method,Object[] args)</span><br></pre></td></tr></table></figure>
-
-<p>在实际使用时，obj指代理类的实例，method指被代理的方法，args是该方法的参数数组。这个抽象方法在代理类中动态实现。</p>
-<p>该方法也是InvocationHandler接口所定义的唯一的一个方法，该方法负责集中处理动态代理类上的所有方法的调用。调用处理器根据这三个参数进行预处理或分派到委托类实例上执行。</p>
-<p><strong>Proxy class动态代理类</strong></p>
-<p>Proxy是 Java 动态代理机制的主类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static Object newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h)</span><br></pre></td></tr></table></figure>
-
-<p>返回代理类的一个实例，返回后的代理类可以当做被代理类使用（可使用被代理类在接口中声明过的方法）</p>
-<p>该方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</p>
-<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p><strong>步骤1：创建一个实现接口InvocationHandler的调用处理器，它必须实现invoke方法</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class TimeHandler implements InvocationHandler &#123;</span><br><span class="line">&#x2F;&#x2F;动态代理类对应的调用处理程序类（时间处理器）</span><br><span class="line">	public TimeHandler(Object target) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.target &#x3D; target;</span><br><span class="line">	&#125;</span><br><span class="line">&#x2F;&#x2F;代理类持有一个委托类的对象引用</span><br><span class="line">	private Object target;</span><br><span class="line">	</span><br><span class="line">	&#x2F;*</span><br><span class="line">	 * 参数：</span><br><span class="line">	 * proxy  被代理对象</span><br><span class="line">	 * method  被代理对象的方法</span><br><span class="line">	 * args 方法的参数</span><br><span class="line">	 * </span><br><span class="line">	 * 返回值：</span><br><span class="line">	 * Object  方法的返回值</span><br><span class="line">	 * *&#x2F;</span><br><span class="line">	@Override</span><br><span class="line">	public Object invoke(Object proxy, Method method, Object[] args)</span><br><span class="line">			throws Throwable &#123;</span><br><span class="line">		long starttime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车开始行驶....&quot;);</span><br><span class="line">		method.invoke(target);&#x2F;&#x2F;调用被代理对象的方法（Car的move方法）</span><br><span class="line">		long endtime &#x3D; System.currentTimeMillis();</span><br><span class="line">		System.out.println(&quot;汽车结束行驶....  汽车行驶时间：&quot; </span><br><span class="line">				+ (endtime - starttime) + &quot;毫秒！&quot;);</span><br><span class="line">		return null;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>TimeHandler实现了InvocationHandler的invoke方法，当代理对象的方法被调用时，invoke方法会被回调。其中proxy表示实现了公共代理方法的动态代理对象。</p>
-<p><strong>步骤2：创建被代理的类以及接口</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Moveable &#123;</span><br><span class="line">	void move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>代理类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Car implements Moveable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void move() &#123;</span><br><span class="line">		&#x2F;&#x2F;实现开车</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(new Random().nextInt(1000));</span><br><span class="line">			System.out.println(&quot;汽车行驶中....&quot;);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>步骤3：调用Proxy的静态方法newProxyInstance，提供ClassLoader和代理接口类型数组动态创建一个代理类，并通过代理调用方法</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;客户端，使用代理类和主题接口完成功能</span><br><span class="line">public class Test &#123;</span><br><span class="line">	&#x2F;**</span><br><span class="line">	 * JDK动态代理测试类</span><br><span class="line">	 *&#x2F;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Car car &#x3D; new Car();</span><br><span class="line">		InvocationHandler h &#x3D; new TimeHandler(car);</span><br><span class="line">		Class&lt;?&gt; cls &#x3D; car.getClass();</span><br><span class="line">		&#x2F;**</span><br><span class="line">		 * loader  类加载器</span><br><span class="line">		 * interfaces  实现接口</span><br><span class="line">		 * h InvocationHandler</span><br><span class="line">		 *&#x2F;</span><br><span class="line">		Moveable m &#x3D; (Moveable)Proxy.newProxyInstance(cls.getClassLoader(),</span><br><span class="line">												cls.getInterfaces(), h);&#x2F;&#x2F;获得动态代理对象，动态代理对象与代理对象实现同一接口</span><br><span class="line">		m.move();&#x2F;&#x2F;调用动态代理的move方法</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码通过InvocationHandler handler=new TimeHandler(target);将委托对象作为构造方法的参数传递给了TimeHandler来作为代理方法调用的对象。当我们调用代理对象的move()方法时，该调用将会被转发到TimeHandler对象的invoke上从而达到动态代理的效果。</p>
-<p>所谓动态代理是这样一种class：它是运行时生成的class，该class需要实现一组interface，使用动态代理类时，必须实现InvocationHandler接口</p>
-<h3 id="静态代理与动态代理对比"><a href="#静态代理与动态代理对比" class="headerlink" title="静态代理与动态代理对比"></a>静态代理与动态代理对比</h3><h4 id="静态代理-1"><a href="#静态代理-1" class="headerlink" title="静态代理"></a>静态代理</h4><ul>
-<li>优点：<br>业务类只需要关注业务逻辑本身，保证了业务类的重用性。这是代理的共有优点。</li>
-<li>缺点：<ul>
-<li>代理对象的一个接口只服务于一种类型的对象，如果要代理的方法很多，势必要为每一种方法都进行代理，静态代理在程序规模稍大时就无法胜任了。</li>
-<li>如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度。</li>
-<li>采用静态代理模式，那么真实角色（委托类）必须事先已经存在的，并将其作为代理对象代理对象内部属性。但是实际使用时，一个真实角色必须对应一个代理角色，如果大量使用会导致类的急剧膨胀。</li>
-</ul>
-</li>
-</ul>
-<h4 id="动态代理-2"><a href="#动态代理-2" class="headerlink" title="动态代理"></a>动态代理</h4><ul>
-<li>优点<ul>
-<li>动态代理类的字节码在程序运行时由Java反射机制动态生成，无需程序员手工编写它的源代码。</li>
-<li>动态代理类不仅简化了编程工作，而且提高了软件系统的可扩展性，因为Java 反射机制可以生成任意类型的动态代理类。</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>JDK的动态代理机制只能代理实现了接口的类，而不能实现接口的类就不能实现JDK的动态代理，cglib是针对类来实现代理的，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，但因为采用的是继承，所以不能对final修饰的类进行代理。</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2570,7 +2489,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -262,6 +262,438 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" itemprop="url">行为类模式总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-14T14:35:09+08:00">
+                2020-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E7%B1%BB%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>行为型模式主要是描述类或者对象是怎样交互和怎样分配职责</strong></p>
+<p>行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。</p>
+<p><strong>行为型模式分为类行为模式和对象行为模式</strong></p>
+<ul>
+<li>类行为模式：采用继承机制来在类间分派行为</li>
+<li>对象行为模式：采用组合或聚合在对象间分配行为</li>
+</ul>
+<p>由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。</p>
+<p>行为类型设计模式有11种：</p>
+<ul>
+<li><p>模版方法：(AsyncTask)<strong>定义一套流程模板，根据需要实现模板中的操作。</strong></p>
+<ul>
+<li>定义一个操作中的算法骨架，将算法的一些步骤延迟到子类中，使得子类在可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</li>
+</ul>
+</li>
+<li><p>中介者：（房屋中介、Android锁屏KeyGuardViewMediator）<strong>将网状结构转变为星型结构，所有行为都通过中介</strong></p>
+<ul>
+<li>定义一个中介对象来简化原有对象之间的交互关系，降低系统中对象间的耦合度，使原有对象之间不必相互了解。<ul>
+<li>将网状结构转化成星型结构，可以避免同事类之间的过度耦合</li>
+<li>同事对象只知道中介者而不知道其他同事对象，同事类之间必须通过中介者才能进行消息传递</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>观察者：（ListView中notifyDataSetChanged）<strong>状态发生改变时通知观察者，一对多的关系。</strong></p>
+<ul>
+<li>指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式。</li>
+</ul>
+</li>
+<li><p>访问者：<strong>稳定数据结构中，定义新的操作行为</strong></p>
+<ul>
+<li>将作用于某种数据结构中的各元素的操作分离出来封装成独立的类，使其在不改变数据结构的前提下可以添加作用于这些元素的新的操作，为数据结构中的每个元素提供多种访问方式。它将对数据的操作与数据结构进行分离，是行为类模式中最复杂的一种模式。</li>
+</ul>
+</li>
+<li><p>命令模式：（PackageManagerService）<strong>将请求封装成命令，并记录下来，能够撤销与重做</strong></p>
+<ul>
+<li>将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行储存、传递、调用、增加与管理。</li>
+</ul>
+</li>
+<li><p>责任链模式：(OkHttp拦截器、View事件分发机制)<strong>将事件沿着链去处理。</strong></p>
+<ul>
+<li>为了避免请求发送者与多个请求处理者耦合在一起，将所有请求的处理者通过前一对象记住其下一个对象的引用而连成一条链；当有请求发生时，可将请求沿着这条链传递，直到有对象处理它为止。</li>
+</ul>
+</li>
+<li><p>策略模式（插值器）<strong>封装不同的算法，算法之间能互相替换。</strong></p>
+</li>
+<li><p>迭代器模式（Map、List等有用到迭代器模式，Cursor）<strong>提供一种方法访问一个容器对象中各个元素。</strong></p>
+<ul>
+<li>至少提供hasNext()和next()方法</li>
+</ul>
+</li>
+<li><p>解释器模式（正则）<strong>定义语法，并对其进行解释</strong></p>
+<ul>
+<li>给定一种语言，定义他的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中句子<ul>
+<li>正则表达式Pattern</li>
+<li>解释加减乘除、或与非</li>
+<li>时间格式化Format、Html格式化、Integer.parseInt解析、SQL解析</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>备忘录模式（Activity的onSaveInstanceState）<strong>保存对象的状态，在需要时进行恢复</strong></p>
+<ul>
+<li>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后当需要时能将该对象恢复到原先保存的状态。该模式又叫快照模式。</li>
+</ul>
+</li>
+<li><p>状态模式：（）<strong>根据不同的状态做出不同的行为。</strong></p>
+<ul>
+<li>对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。<ul>
+<li>把所研究的对象的行为包装在不同的状态对象里</li>
+<li>登录状态、未登录状态下用户的行为</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">状态（State）模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-14T12:55:55+08:00">
+                2020-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">行为型设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%8A%B6%E6%80%81%EF%BC%88State%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在软件开发过程中，应用程序中的有些对象可能会根据不同的情况做出不同的行为，我们把这种对象称为有状态的对象，而把影响对象行为的一个或多个动态变化的属性称为状态。当有状态的对象与外部事件产生互动时，其内部状态会发生改变，从而使得其行为也随之发生改变。如人的情绪有高兴的时候和伤心的时候，不同的情绪有不同的行为，当然外界也会影响其情绪变化。</p>
+<p>对这种有状态的对象编程，传统的解决方案是：将这些所有可能发生的情况全都考虑到，然后使用 if-else 语句来做状态判断，再进行不同情况的处理。但当对象的状态很多时，程序会变得很复杂。而且增加新的状态要添加新的 if-else 语句，这违背了“开闭原则”，不利于程序的扩展。</p>
+<p>以上问题如果采用“状态模式”就能很好地得到解决。状态模式的解决思想是：当控制一个对象状态转换的条件表达式过于复杂时，把相关“判断逻辑”提取出来，放到一系列的状态类当中，这样可以把原来复杂的逻辑判断简单化。</p>
+<p><strong>定义：</strong></p>
+<p>状态（State）模式的定义：对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。</p>
+<p><strong>类型：</strong>行为型设计模式</p>
+<p><strong>类图：</strong></p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q11615412U55.gif" alt="状态模式的结构图"></p>
+<p><strong>模式的结构：</strong></p>
+<p><strong>解决的问题：</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>状态模式将与特定状态相关的行为局部化到一个状态中，并且将不同状态的行为分割开来，满足“单一职责原则”。</li>
+<li>减少对象间的相互依赖。将不同的状态引入独立的对象中会使得状态转换变得更加明确，且减少对象间的相互依赖。</li>
+<li>有利于程序的扩展。通过定义新的子类很容易地增加新的状态和转换。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>状态模式的使用必然会增加系统的类与对象的个数。</li>
+<li>状态模式的结构与实现都较为复杂，如果使用不当会导致程序结构和代码的混乱。</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractState &#123;</span><br><span class="line">    public abstract void handle(StateContext context);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ConcreteStateA extends AbstractState &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void handle(StateContext context) &#123;</span><br><span class="line">        System.out.println(&quot;当前状态是 A.&quot;);</span><br><span class="line">        context.setState(new ConcreteStateB());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ConcreteStateB extends AbstractState &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void handle(StateContext context) &#123;</span><br><span class="line">        System.out.println(&quot;当前状态是 B.&quot;);</span><br><span class="line">        context.setState(new ConcreteStateA());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class StateContext &#123;</span><br><span class="line"></span><br><span class="line">    private AbstractState state;</span><br><span class="line"></span><br><span class="line">    public StateContext() &#123;</span><br><span class="line">        this.state &#x3D; new ConcreteStateA();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public AbstractState getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setState(AbstractState state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void handle() &#123;</span><br><span class="line">        state.handle(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端段调用</span><br><span class="line">StateContext context &#x3D; new StateContext();    &#x2F;&#x2F;创建环境</span><br><span class="line">        context.handle();    &#x2F;&#x2F;处理请求</span><br><span class="line">        context.handle();</span><br><span class="line">        context.handle();</span><br><span class="line">        context.handle();</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">当前状态是 A.</span><br><span class="line">当前状态是 B.</span><br><span class="line">当前状态是 A.</span><br><span class="line">当前状态是 B.</span><br></pre></td></tr></table></figure>
+
+<h3 id="【例1】用“状态模式”设计一个学生成绩的状态转换程序。"><a href="#【例1】用“状态模式”设计一个学生成绩的状态转换程序。" class="headerlink" title="【例1】用“状态模式”设计一个学生成绩的状态转换程序。"></a>【例1】用“状态模式”设计一个学生成绩的状态转换程序。</h3><p>分析：本实例包含了“不及格”“中等”和“优秀” 3 种状态，当学生的分数小于 60 分时为“不及格”状态，当分数大于等于 60 分且小于 90 分时为“中等”状态，当分数大于等于 90 分时为“优秀”状态，我们用状态模式来实现这个程序。</p>
+<p>首先，定义一个抽象状态类（AbstractState），其中包含了环境属性、状态名属性和当前分数属性，以及加减分方法 addScore(intx) 和检查当前状态的抽象方法 checkState()；然后，定义“不及格”状态类 LowState、“中等”状态类 MiddleState 和“优秀”状态类 HighState，它们是具体状态类，实现 checkState() 方法，负责检査自己的状态，并根据情况转换；最后，定义环境类（ScoreContext），其中包含了当前状态对象和加减分的方法 add(int score)，客户类通过该方法来改变成绩状态。图 2 所示是其结构图。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q11615425V39.gif" alt="学生成绩的状态转换程序的结构图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;环境类</span><br><span class="line">public class ScoreContext &#123;</span><br><span class="line">    private AbstractState state;</span><br><span class="line"></span><br><span class="line">    public ScoreContext() &#123;</span><br><span class="line">        state &#x3D; new LowState(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public AbstractState getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setState(AbstractState state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void add(int score) &#123;</span><br><span class="line">        state.addScore(score);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 抽象状态类</span><br><span class="line">public abstract class AbstractState &#123;</span><br><span class="line">    protected ScoreContext context;</span><br><span class="line">    protected String stateName;</span><br><span class="line">    protected int score;</span><br><span class="line"></span><br><span class="line">    public abstract void checkState();</span><br><span class="line"></span><br><span class="line">    public void addScore(int x) &#123;</span><br><span class="line">        score +&#x3D; x;</span><br><span class="line">        System.out.print(&quot;加上：&quot; + x + &quot;分，\t当前分数：&quot; + score);</span><br><span class="line">        checkState();</span><br><span class="line">        System.out.println(&quot;分，\t当前状态：&quot; + context.getState().stateName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;具体状态类</span><br><span class="line">public class HighState extends AbstractState &#123;</span><br><span class="line">    public HighState(AbstractState state) &#123;</span><br><span class="line">        context &#x3D; state.context;</span><br><span class="line">        stateName &#x3D; &quot;优秀&quot;;</span><br><span class="line">        score &#x3D; state.score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void checkState() &#123;</span><br><span class="line">        if (score &lt; 60) &#123;</span><br><span class="line">            context.setState(new LowState(this));</span><br><span class="line">        &#125; else if (score &lt; 90) &#123;</span><br><span class="line">            context.setState(new MiddleState(this));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class MiddleState extends AbstractState &#123;</span><br><span class="line"></span><br><span class="line">    public MiddleState(AbstractState state) &#123;</span><br><span class="line">        context &#x3D; state.context;</span><br><span class="line">        stateName &#x3D; &quot;中等&quot;;</span><br><span class="line">        score &#x3D; state.score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void checkState() &#123;</span><br><span class="line">        if (score &lt; 60) &#123;</span><br><span class="line">            context.setState(new LowState(this));</span><br><span class="line">        &#125; else if (score &gt;&#x3D; 90) &#123;</span><br><span class="line">            context.setState(new HighState(this));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class LowState extends AbstractState &#123;</span><br><span class="line"></span><br><span class="line">    public LowState(ScoreContext c) &#123;</span><br><span class="line">        super.context &#x3D; c;</span><br><span class="line">        stateName &#x3D; &quot;不及格&quot;;</span><br><span class="line">        score &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public LowState(AbstractState state) &#123;</span><br><span class="line">        context &#x3D; state.context;</span><br><span class="line">        stateName &#x3D; &quot;不及格&quot;;</span><br><span class="line">        score &#x3D; state.score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void checkState() &#123;</span><br><span class="line">        if (score &gt;&#x3D; 90) &#123;</span><br><span class="line">            context.setState(new HighState(this));</span><br><span class="line">        &#125; else if (score &gt;&#x3D; 60) &#123;</span><br><span class="line">            context.setState(new MiddleState(this));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;客户端调用</span><br><span class="line">ScoreContext account &#x3D; new ScoreContext();</span><br><span class="line">        System.out.println(&quot;学生成绩状态测试：&quot;);</span><br><span class="line">        account.add(30);</span><br><span class="line">        account.add(40);</span><br><span class="line">        account.add(25);</span><br><span class="line">        account.add(-15);</span><br><span class="line">        account.add(-25);</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">学生成绩状态测试：</span><br><span class="line">加上：30分，	当前分数：30分，	当前状态：不及格</span><br><span class="line">加上：40分，	当前分数：70分，	当前状态：中等</span><br><span class="line">加上：25分，	当前分数：95分，	当前状态：优秀</span><br><span class="line">加上：-15分，	当前分数：80分，	当前状态：中等</span><br><span class="line">加上：-25分，	当前分数：55分，	当前状态：不及格</span><br></pre></td></tr></table></figure>
+
+<h3 id="【例2】用“状态模式”设计一个多线程的状态转换程序。"><a href="#【例2】用“状态模式”设计一个多线程的状态转换程序。" class="headerlink" title="【例2】用“状态模式”设计一个多线程的状态转换程序。"></a>【例2】用“状态模式”设计一个多线程的状态转换程序。</h3><p>分析：多线程存在 5 种状态，分别为新建状态、就绪状态、运行状态、阻塞状态和死亡状态，各个状态当遇到相关方法调用或事件触发时会转换到其他状态，其状态转换规律如图 3 所示。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q116154332451.gif" alt="线程状态转换图"></p>
+<p>现在先定义一个抽象状态类（TheadState），然后为图 3 所示的每个状态设计一个具体状态类，它们是新建状态（New）、就绪状态（Runnable ）、运行状态（Running）、阻塞状态（Blocked）和死亡状态（Dead），每个状态中有触发它们转变状态的方法，环境类（ThreadContext）中先生成一个初始状态（New），并提供相关触发方法，图 4 所示是线程状态转换程序的结构图。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q116154432352.gif" alt="线程状态转换程序的结构图"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;抽象状态类</span><br><span class="line">public abstract class ThreadState &#123;</span><br><span class="line">    protected String stateName;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;具体状态类</span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class NewState extends ThreadState &#123;</span><br><span class="line"></span><br><span class="line">    public static final String NEW_STATE &#x3D; &quot;新建状态&quot;;</span><br><span class="line"></span><br><span class="line">    public NewState() &#123;</span><br><span class="line">        stateName &#x3D; NEW_STATE;</span><br><span class="line">        System.out.println(&quot;当前线程处于：&quot; + stateName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void start(ThreadContext context) &#123;</span><br><span class="line">        if (NEW_STATE.equals(stateName)) &#123;</span><br><span class="line">            System.out.print(&quot;调用start()方法--&gt;&quot;);</span><br><span class="line">            context.setState(new RunnableState());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;当前线程不是新建状态，不能调用start()方法.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class RunnableState extends ThreadState &#123;</span><br><span class="line">    public static final String RUNNABLE_STATE &#x3D; &quot;就绪状态&quot;;</span><br><span class="line"></span><br><span class="line">    public RunnableState() &#123;</span><br><span class="line">        stateName &#x3D; RUNNABLE_STATE;</span><br><span class="line">        System.out.println(&quot;当前线程处于：&quot; + stateName);</span><br><span class="line">    &#125;</span><br><span class="line">    public void getCPU(ThreadContext context)&#123;</span><br><span class="line">        if(RUNNABLE_STATE.equals(stateName))&#123;</span><br><span class="line">            System.out.print(&quot;getCPU()方法--&gt;&quot;);</span><br><span class="line">            context.setState(new RunningState());</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;当前线程不是新建状态，不能调用start()方法.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class RunningState extends ThreadState &#123;</span><br><span class="line">    public static final String RUNNING_STATE &#x3D; &quot;运行状态&quot;;</span><br><span class="line"></span><br><span class="line">    public RunningState() &#123;</span><br><span class="line">        stateName &#x3D; RUNNING_STATE;</span><br><span class="line">        System.out.println(&quot;当前线程处于：&quot; + stateName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void suspend(ThreadContext hj) &#123;</span><br><span class="line">        System.out.print(&quot;调用suspend()方法--&gt;&quot;);</span><br><span class="line">        if (RUNNING_STATE.equals(stateName)) &#123;</span><br><span class="line">            hj.setState(new BlockState());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;当前线程不是运行状态，不能调用suspend()方法.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void stop(ThreadContext hj) &#123;</span><br><span class="line">        System.out.print(&quot;调用stop()方法--&gt;&quot;);</span><br><span class="line">        if (RUNNING_STATE.equals(stateName)) &#123;</span><br><span class="line">            hj.setState(new DeadState());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;当前线程不是运行状态，不能调用stop()方法.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class BlockState extends ThreadState &#123;</span><br><span class="line">    public BlockState() &#123;</span><br><span class="line">        stateName &#x3D; &quot;阻塞状态&quot;;</span><br><span class="line">        System.out.println(&quot;当前线程处于：阻塞状态.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void resume(ThreadContext hj) &#123;</span><br><span class="line">        System.out.print(&quot;调用resume()方法--&gt;&quot;);</span><br><span class="line">        if (stateName.equals(&quot;阻塞状态&quot;)) &#123;</span><br><span class="line">            hj.setState(new RunnableState());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;当前线程不是阻塞状态，不能调用resume()方法.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class DeadState extends ThreadState &#123;</span><br><span class="line">    public DeadState() &#123;</span><br><span class="line">        stateName &#x3D; &quot;死亡状态&quot;;</span><br><span class="line">        System.out.println(&quot;当前线程处于：死亡状态.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;环境类</span><br><span class="line">package com.zhyen.base.design_mode.state_mode.thread_state_demo;</span><br><span class="line"></span><br><span class="line">public class ThreadContext &#123;</span><br><span class="line">    private ThreadState state;</span><br><span class="line"></span><br><span class="line">    public ThreadContext() &#123;</span><br><span class="line">        this.state &#x3D; new NewState();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ThreadState getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setState(ThreadState state) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void start() &#123;</span><br><span class="line">        ((NewState) state).start(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void getCPU() &#123;</span><br><span class="line">        ((RunnableState) state).getCPU(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void suspend() &#123;</span><br><span class="line">        ((RunningState) state).suspend(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void stop() &#123;</span><br><span class="line">        ((RunningState) state).stop(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void resume() &#123;</span><br><span class="line">        ((BlockState) state).resume(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;客户端调用</span><br><span class="line">ThreadContext context&#x3D;new ThreadContext();</span><br><span class="line">        context.start();</span><br><span class="line">        context.getCPU();</span><br><span class="line">        context.suspend();</span><br><span class="line">        context.resume();</span><br><span class="line">        context.getCPU();</span><br><span class="line">        context.stop();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">当前线程处于：新建状态</span><br><span class="line">调用start()方法--&gt;当前线程处于：就绪状态</span><br><span class="line">getCPU()方法--&gt;当前线程处于：运行状态</span><br><span class="line">调用suspend()方法--&gt;当前线程处于：阻塞状态.</span><br><span class="line">调用resume()方法--&gt;当前线程处于：就绪状态</span><br><span class="line">getCPU()方法--&gt;当前线程处于：运行状态</span><br><span class="line">调用stop()方法--&gt;当前线程处于：死亡状态.</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%A4%87%E5%BF%98%E5%BD%95%EF%BC%88Memento%EF%BC%89%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2071,436 +2503,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">观察者（Observer）模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T19:07:13+08:00">
-                2020-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">行为型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%88Observer%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在现实世界中，许多对象并不是独立存在的，其中一个对象的行为发生改变可能会导致一个或者多个其他对象的行为也发生改变。例如，某种商品的物价上涨时会导致部分商家高兴，而消费者伤心；还有，当我们开车到交叉路口时，遇到红灯会停，遇到绿灯会行。这样的例子还有很多，例如，股票价格与股民、微信公众号与微信用户、气象局的天气预报与听众、小偷与警察等。</p>
-<p><strong>定义：</strong></p>
-<p>观察者（Observer）模式的定义：指多个对象间存在一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。这种模式有时又称作发布-订阅模式、模型-视图模式。</p>
-<p><strong>类型：</strong>行为类模式</p>
-<p><strong>类图：</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-d5b6f068df5001d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><strong>模式的结构：</strong></p>
-<ul>
-<li><strong>被观察者：它提供了一个用于保存观察者对象的聚集类和增加、删除观察者对象的方法，以及通知所有观察者的抽象方法。</strong>从类图中可以看到，类中有一个用来存放观察者对象的Vector容器（之所以使用Vector而不使用List，是因为多线程操作时，Vector在是安全的，而List则是不安全的），这个Vector容器是被观察者类的核心，另外还有三个方法：attach方法是向这个容器中添加观察者对象；detach方法是从容器中移除观察者对象；notify方法是依次调用观察者对象的对应方法。这个角色可以是接口，也可以是抽象类或者具体的类，因为很多情况下会与其他的模式混用，所以使用抽象类的情况比较多。</li>
-<li><strong>观察者：</strong>观察者角色一般是一个接口，它只有一个update方法，在被观察者状态发生变化时，这个方法就会被触发调用。</li>
-<li><strong>具体的被观察者：</strong>使用这个角色是为了便于扩展，可以在此角色中定义具体的业务逻辑。</li>
-<li><strong>具体的观察者：</strong>观察者接口的具体实现，在这个角色中，将定义被观察者对象状态发生变化时所要处理的逻辑。</li>
-</ul>
-<p><strong>解决的问题：</strong></p>
-<p><strong>优点：</strong></p>
-<ul>
-<li><p>目标与观察者之间建立了一套触发机制。</p>
-</li>
-<li><p>降低了目标与观察者之间的耦合关系，两者之间是抽象耦合关系。</p>
-</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>目标与观察者之间的依赖关系并没有完全解除，而且有可能出现循环引用。</li>
-<li>当观察者对象很多时，通知的发布会花费很多时间，影响程序的效率。</li>
-</ul>
-<p><strong>Android中使用</strong></p>
-<p>ListView 是 Android 中很常用的控件，我们在使用 ListView 添加数据后会调用 Adapter 的 notifyDataSetChanged()方法。</p>
-<p>监听器、点击事件、滚动事件<br>rxjava、eventbus、广播</p>
-<p><strong>适用场景：</strong></p>
-<ul>
-<li>对象间存在一对多关系，一个对象的状态发生改变会影响其他对象。</li>
-<li>当对一个对象的改变需要同时改变其它对象, 而不知道具体有多少对象有待改变。</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>抽象被观察者</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 抽象被观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractSubject &#123;</span><br><span class="line">    protected List&lt;IObserver&gt; list &#x3D; new ArrayList();</span><br><span class="line"></span><br><span class="line">    public void attach(IObserver observer) &#123;</span><br><span class="line">        list.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void detach(IObserver observer) &#123;</span><br><span class="line">        list.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void notifyObserver() &#123;</span><br><span class="line">        if (list.size() &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            System.out.println(&quot;没有更多的观察者了&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        for (IObserver observer : list) &#123;</span><br><span class="line">            observer.update();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract void doSomething();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体被观察者</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 具体被观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteSubject extends AbstractSubject &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomething() &#123;</span><br><span class="line">        System.out.println(&quot;处理一些事情 处理完毕 需要告诉 观察者更新数据&quot;);</span><br><span class="line">        notifyObserver();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>抽象观察者</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface IObserver &#123;</span><br><span class="line">    void update();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体观察者</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class ObserverA implements IObserver &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void update() &#123;</span><br><span class="line">        System.out.println(&quot;A 收到了更新请求&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 具体的观察者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ObserverB implements IObserver &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void update() &#123;</span><br><span class="line">        System.out.println(&quot;B 收到了更新请求&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>客户端调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void observerMode() &#123;</span><br><span class="line">        ConcreteSubject subject &#x3D; new ConcreteSubject();</span><br><span class="line">        ObserverA observerA &#x3D; new ObserverA();</span><br><span class="line">        ObserverB observerB &#x3D; new ObserverB();</span><br><span class="line">        subject.attach(observerA);</span><br><span class="line">        subject.attach(observerB);</span><br><span class="line">        subject.doSomething();</span><br><span class="line">        System.out.println(&quot;-------------&quot;);</span><br><span class="line">        subject.detach(observerA);</span><br><span class="line">        subject.detach(observerB);</span><br><span class="line">        subject.doSomething();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">处理一些事情 处理完毕 需要告诉 观察者更新数据</span><br><span class="line">A 收到了更新请求</span><br><span class="line">B 收到了更新请求</span><br><span class="line">-------------</span><br><span class="line">处理一些事情 处理完毕 需要告诉 观察者更新数据</span><br><span class="line">没有更多的观察者了</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="冯星">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冯星的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="url">中介者（Mediator）模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-12T16:52:09+08:00">
-                2020-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">行为型设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%B8%AD%E4%BB%8B%E8%80%85%EF%BC%88Mediator%EF%BC%89%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在现实生活中，常常会出现好多对象之间存在复杂的交互关系，这种交互关系常常是“网状结构”，它要求每个对象都必须知道它需要交互的对象。例如，每个人必须记住他（她）所有朋友的电话；而且，朋友中如果有人的电话修改了，他（她）必须告诉其他所有的朋友修改，这叫作“牵一发而动全身”，非常复杂。</p>
-<p><strong>定义：</strong>中介者（Mediator）模式：定义一个中介对象来封装一系列对象之间的交互，使原有对象之间的耦合松散，且可以独立地改变它们之间的交互。中介者模式又叫调停模式，它是迪米特法则的典型应用。</p>
-<p><strong>类型：</strong>行为设计模式</p>
-<p><strong>类图：</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-332a4b17960cd27b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><img src="http://c.biancheng.net/uploads/allimg/181116/3-1Q1161I532V0.gif" alt="中介者模式的结构图"></p>
-<p><strong>模式的结构：</strong></p>
-<ul>
-<li>抽象中介者：定义好同事类对象到中介者对象的接口，用于各个同事类之间的通信。一般包括一个或几个抽象的事件方法，并由子类去实现。</li>
-<li>中介者实现类：从抽象中介者继承而来，实现抽象中介者中定义的事件方法。从一个同事类接收消息，然后通过消息影响其他同时类。</li>
-<li>抽象同事类（Colleague）角色：定义同事类的接口，保存中介者对象，提供同事对象交互的抽象方法，实现所有相互影响的同事类的公共功能。</li>
-<li>同事类：如果一个对象会影响其他的对象，同时也会被其他对象影响，那么这两个对象称为同事类。在类图中，同事类只有一个，这其实是现实的省略，在实际应用中，同事类一般由多个组成，他们之间相互影响，相互依赖。同事类越多，关系越复杂。并且，同事类也可以表现为继承了同一个抽象类的一组实现组成。在中介者模式中，同事类之间必须通过中介者才能进行消息传递。</li>
-</ul>
-<p><strong>解决的问题：</strong></p>
-<p>一般来说，同事类之间的关系是比较复杂的，多个同事类之间互相关联时，他们之间的关系会呈现为复杂的网状结构，这是一种过度耦合的架构，即不利于类的复用，也不稳定。例如在下图中，有六个同事类对象，假如对象1发生变化，那么将会有4个对象受到影响。如果对象2发生变化，那么将会有5个对象受到影响。也就是说，同事类之间直接关联的设计是不好的。<br><img src="https://upload-images.jianshu.io/upload_images/4118241-1899a94b9afe9deb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-34a9a234acb32f7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>​    如果引入中介者模式，那么同事类之间的关系将变为星型结构，从图中可以看到，任何一个类的变动，只会影响的类本身，以及中介者，这样就减小了系统的耦合。一个好的设计，必定不会把所有的对象关系处理逻辑封装在本类中，而是使用一个专门的类来管理那些不属于自己的行为。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4118241-bb8db9fd250f5d4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>适当地使用中介者模式可以避免同事类之间的过度耦合，使得各同事类之间可以相对独立地使用。</li>
-<li>使用中介者模式可以将对象间一对多的关联转变为一对一的关联，使对象间的关系易于理解和维护。</li>
-<li>使用中介者模式可以将对象的行为和协作进行抽象，能够比较灵活的处理对象间的相互作用。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>当同事类太多时，中介者的职责将很大，它会变得复杂而庞大，以至于系统难以维护。</li>
-</ul>
-<p><strong>Android中</strong></p>
-<p>具体的例子是KeyGuardViewMediator，这个类是负责锁屏控制的一个类。 在我们的开屏和锁屏的时候要注意会需要很多的控制，包括音效和状态栏，通知等，这些都对应AudioManager等具体的系统服务。所以需要一个统一的中介类来协调和控制各个管理服务的状态。</p>
-<p><strong>适用场景：</strong></p>
-<ul>
-<li>当对象之间存在复杂的网状结构关系而导致依赖关系混乱且难以复用时。</li>
-<li>当想创建一个运行于多个类之间的对象，又不想生成新的子类时。</li>
-</ul>
-<p>在 MVC 框架中，控制器（C）就是模型（M）和视图（V）的中介者。</p>
-<p>在面向对象编程中，一个类必然会与其他的类发生依赖关系，完全独立的类是没有意义的。一个类同时依赖多个类的情况也相当普遍，既然存在这样的情况，说明，一对多的依赖关系有它的合理性，适当的使用中介者模式可以使原本凌乱的对象关系清晰，但是如果滥用，则可能会带来反的效果。一般来说，只有对于那种同事类之间是网状结构的关系，才会考虑使用中介者模式。可以将网状结构变为星状结构，使同事类之间的关系变的清晰一些。</p>
-<p>   中介者模式是一种比较常用的模式，也是一种比较容易被滥用的模式。对于大多数的情况，同事类之间的关系不会复杂到混乱不堪的网状结构，因此，大多数情况下，将对象间的依赖关系封装的同事类内部就可以的，没有必要非引入中介者模式。滥用中介者模式，只会让事情变的更复杂。</p>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p><strong>抽象中介者：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象中介者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractMediator &#123;</span><br><span class="line">    public abstract void register(AbstractColleague colleague);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;转发</span><br><span class="line">    public abstract void relay(AbstractColleague colleague);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体中介者：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 具体中介者</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteMediator extends AbstractMediator &#123;</span><br><span class="line"></span><br><span class="line">    private List&lt;AbstractColleague&gt; colleagues &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void register(AbstractColleague colleague) &#123;</span><br><span class="line">        System.out.println(&quot;具体中介者 register&quot;);</span><br><span class="line">        if (!colleagues.contains(colleague)) &#123;</span><br><span class="line">            colleagues.add(colleague);</span><br><span class="line">            colleague.setMediator(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;转发</span><br><span class="line">    @Override</span><br><span class="line">    public void relay(AbstractColleague colleague) &#123;</span><br><span class="line">        System.out.println(&quot;具体中介者 转发&quot;);</span><br><span class="line">        for (AbstractColleague ob : colleagues) &#123;</span><br><span class="line">            if (!ob.equals(colleague)) &#123;</span><br><span class="line">                ob.receive();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>抽象同事类</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 抽象同时类</span><br><span class="line"> *&#x2F;</span><br><span class="line">public abstract class AbstractColleague &#123;</span><br><span class="line">    protected AbstractMediator mediator;</span><br><span class="line"></span><br><span class="line">    protected void setMediator(AbstractMediator mediator) &#123;</span><br><span class="line">        System.out.println(&quot;抽象同时类 setMediator&quot;);</span><br><span class="line">        this.mediator &#x3D; mediator;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract void receive();</span><br><span class="line"></span><br><span class="line">    public abstract void send();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>具体同事类：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteColleagueA extends AbstractColleague &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void receive() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类A receive&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void send() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类A send&quot;);</span><br><span class="line">        mediator.relay(this); &#x2F;&#x2F;请中介者转发</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 具体同时类B</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class ConcreteColleagueB extends AbstractColleague &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void receive() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类B receive&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void send() &#123;</span><br><span class="line">        System.out.println(&quot;具体同时类B send&quot;);</span><br><span class="line">        mediator.relay(this); &#x2F;&#x2F;请中介者转发</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>客户端使用</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static void mediatorMode() &#123;</span><br><span class="line">        &#x2F;&#x2F;创建具体中介者</span><br><span class="line">        AbstractMediator concreteMediator &#x3D; new ConcreteMediator();</span><br><span class="line">        &#x2F;&#x2F;创建具体同事类A</span><br><span class="line">        ConcreteColleagueA colleagueA &#x3D; new ConcreteColleagueA();</span><br><span class="line">        &#x2F;&#x2F;创建具体同事类A</span><br><span class="line">        ConcreteColleagueB colleagueB &#x3D; new ConcreteColleagueB();</span><br><span class="line">        concreteMediator.register(colleagueA);</span><br><span class="line">        concreteMediator.register(colleagueB);</span><br><span class="line">        System.out.println(&quot;--------------------&quot;);</span><br><span class="line">        colleagueA.send();</span><br><span class="line">        System.out.println(&quot;--------------------&quot;);</span><br><span class="line">        colleagueB.send();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">具体中介者 register</span><br><span class="line">抽象同时类 setMediator</span><br><span class="line">具体中介者 register</span><br><span class="line">抽象同时类 setMediator</span><br><span class="line">--------------------</span><br><span class="line">具体同时类A send</span><br><span class="line">具体中介者 转发</span><br><span class="line">具体同时类B receive</span><br><span class="line">--------------------</span><br><span class="line">具体同时类B send</span><br><span class="line">具体中介者 转发</span><br><span class="line">具体同时类A receive</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2551,7 +2553,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
