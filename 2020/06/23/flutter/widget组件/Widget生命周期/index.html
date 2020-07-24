@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,Widget生命周期," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="生命周期Flutter生命周期相对于android的Activity，ta存在于framework.dart的State类，  实测写个有状态类并混入WidgetsBindingObserver配合监听特殊状态及其一个按钮，调用setState， 给生命周期的方法新增打印： 12345678910111213141516171819202122232425262728293031323334353">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Widget生命周期">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="生命周期Flutter生命周期相对于android的Activity，ta存在于framework.dart的State类，  实测写个有状态类并混入WidgetsBindingObserver配合监听特殊状态及其一个按钮，调用setState， 给生命周期的方法新增打印： 12345678910111213141516171819202122232425262728293031323334353">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://book.flutterj.com/img/StateFul.png">
+<meta property="og:image" content="http://book.flutterj.com/chart/life_cycle.png">
+<meta property="og:image" content="http://book.flutterj.com/chart/AppLifecycleState.png">
+<meta property="article:published_time" content="2020-06-22T16:10:52.000Z">
+<meta property="article:modified_time" content="2020-07-20T14:06:03.561Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="Widget生命周期">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://book.flutterj.com/img/StateFul.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/23/flutter/widget组件/Widget生命周期/"/>
+
+
+
+
+
+  <title>Widget生命周期 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Widget生命周期</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-23T00:10:52+08:00">
+                2020-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><p>Flutter生命周期相对于android的Activity，ta存在于<code>framework.dart</code>的State类， <img src="http://book.flutterj.com/img/StateFul.png" alt="img"></p>
+<h1 id="实测"><a href="#实测" class="headerlink" title="实测"></a>实测</h1><p>写个有状态类并混入WidgetsBindingObserver配合监听特殊状态及其一个按钮，调用setState， 给生命周期的方法新增打印：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() =&gt; runApp(<span class="keyword">new</span> MyApp());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MaterialApp(</span><br><span class="line">      title: <span class="string">'生命周期'</span>,</span><br><span class="line">      home: <span class="keyword">new</span> LiftCycle(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LiftCycle</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _LiftCycleState createState() =&gt; _LiftCycleState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_LiftCycleState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">LiftCycle</span>&gt; <span class="title">with</span> <span class="title">WidgetsBindingObserver</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> initState() &#123;</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">    WidgetsBinding.instance.addObserver(<span class="keyword">this</span>);</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'初始化 initState'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> didUpdateWidget(LiftCycle oldWidget) &#123;</span><br><span class="line">    <span class="keyword">super</span>.didUpdateWidget(oldWidget);</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'组件更新 didUpdateWidget'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> reassemble() &#123;</span><br><span class="line">    <span class="keyword">super</span>.reassemble();</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'重新安装 reassemble'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> deactivate() &#123;</span><br><span class="line">    <span class="keyword">super</span>.deactivate();</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'停用  deactivate'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> dispose() &#123;</span><br><span class="line">    <span class="keyword">super</span>.dispose();</span><br><span class="line">    WidgetsBinding.instance.removeObserver(<span class="keyword">this</span>);</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'销毁 dispose'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> didChangeAppLifecycleState(AppLifecycleState state) &#123;</span><br><span class="line">    <span class="keyword">super</span>.didChangeAppLifecycleState(state);</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'特殊状态 state：<span class="subst">$state</span>'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> setState(fn) &#123;</span><br><span class="line">    <span class="keyword">super</span>.setState(fn);</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'状态刷新 setState'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Scaffold(</span><br><span class="line">      appBar: <span class="keyword">new</span> AppBar(title: <span class="keyword">new</span> Text(<span class="string">'生命周期'</span>)),</span><br><span class="line">      body: <span class="keyword">new</span> Center(</span><br><span class="line">        child: <span class="keyword">new</span> FlatButton(</span><br><span class="line">          onPressed: () =&gt; setState(() =&gt; count++),</span><br><span class="line">          child: <span class="keyword">new</span> Text(<span class="string">'<span class="subst">$count</span>'</span>),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> didChangeDependencies() &#123;</span><br><span class="line">    <span class="keyword">super</span>.didChangeDependencies();</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'依赖改变 didChangeDependencies'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们现在来看看打印流程，正常打开App什么都不操作，就打印了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">I&#x2F;flutter (15867): 初始化 initState</span><br><span class="line">I&#x2F;flutter (15867): 依赖改变 didChangeDependencies</span><br><span class="line">I&#x2F;flutter (15867): 重新安装 reassemble</span><br><span class="line">I&#x2F;flutter (15867): 组件更新 didUpdateWidget</span><br></pre></td></tr></table></figure>
+
+<p>热重载打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I&#x2F;flutter (16141): 重新安装 reassemble</span><br><span class="line">I&#x2F;flutter (16141): 组件更新 didUpdateWidget</span><br><span class="line">Reloaded 0 of 468 libraries in 186ms.</span><br></pre></td></tr></table></figure>
+
+<p>点击按钮打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I&#x2F;flutter (16141): 状态刷新 setState</span><br><span class="line">&#x2F;&#x2F; count也+1了，说明重新调用过build。</span><br></pre></td></tr></table></figure>
+
+<h1 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h1><p><img src="http://book.flutterj.com/chart/life_cycle.png" alt="img"></p>
+<p>图解主要部分：</p>
+<ul>
+<li>1.构建<code>（build）</code>；</li>
+<li>2.如果用户调用了<code>setState</code>时则状态刷新，重新build；</li>
+<li>3.如果销毁先停用然后<code>dispose</code>销毁再结束；</li>
+</ul>
+<h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><p>构造函数不属于生命周期，必然是要第一个调用的，也就是调用前State的widget属性为空。</p>
+<h4 id="initState-初始化"><a href="#initState-初始化" class="headerlink" title="initState 初始化"></a>initState 初始化</h4><p>当此对象插入树中时调用，框架会调用一次此方法并不会再次重复执行， 如果<code>[State]</code>的<code>[build]</code>方法依赖于本身可以更改状态的对象，例如<code>[ChangeNotifier]</code>或<code>[Stream]</code>， 或者某些其他可以订阅的对象接收通知，可以在此方法订阅，但记得去dispose取消订阅；</p>
+<h4 id="didChangeDependencies-依赖改变"><a href="#didChangeDependencies-依赖改变" class="headerlink" title="didChangeDependencies 依赖改变"></a>didChangeDependencies 依赖改变</h4><p>顾名思义，依赖项更改时调用，但也会在initState之后调用， 在这个方法调用<code>[BuildContext.inheritFromWidgetOfExactType]</code>是安全的。</p>
+<h4 id="build-构建"><a href="#build-构建" class="headerlink" title="build 构建"></a>build 构建</h4><p>会在以下场景调用：</p>
+<ul>
+<li><code>initState()</code>之后；</li>
+<li><code>didUpdateWidget()</code>之后；</li>
+<li><code>setState()</code>之后。</li>
+<li><code>didChangeDependencies()</code>之后。</li>
+<li>State对象从树中一个位置移除后会调用<code>deactivate</code>，然后又重新插入到树的其它位置之后。</li>
+</ul>
+<h4 id="reassemble-重新安装"><a href="#reassemble-重新安装" class="headerlink" title="reassemble 重新安装"></a>reassemble 重新安装</h4><p>专门为了开发调试而提供的，在热重载(hot reload)时会被调用，此回调在Release模式下永远不会被调用。</p>
+<h4 id="didUpdateWidget-组件更新"><a href="#didUpdateWidget-组件更新" class="headerlink" title="didUpdateWidget 组件更新"></a>didUpdateWidget 组件更新</h4><p>当组件的状态改变的时候就会调用<code>didUpdateWidget()</code>,比如调用了<code>setState()</code>， 在widget重新构建时，Flutter framework会调用<code>Widget.canUpdate</code>来检测Widget树中同一位置的新旧节点， 然后决定是否需要更新，如果<code>Widget.canUpdate</code>返回true则会调用此回调。正如之前所述，<code>Widget.canUpdate</code>会在 新旧widget的key和runtimeType同时相等时会返回true，也就是说在新旧widget的key和runtimeType同时相等时<code>didUpdateWidget()</code>就会被调用。</p>
+<h4 id="deactivate-暂停"><a href="#deactivate-暂停" class="headerlink" title="deactivate 暂停"></a>deactivate 暂停</h4><p>State对象从树中被移除时（在dispose之前），会调用这个函数来将对象暂停。</p>
+<h4 id="dispose-销毁"><a href="#dispose-销毁" class="headerlink" title="dispose 销毁"></a>dispose 销毁</h4><p>当State对象被销毁时调用，通常在此回调中释放资源和移除监听。</p>
+<h1 id="【-特殊状态-】"><a href="#【-特殊状态-】" class="headerlink" title="【 特殊状态 】"></a>【 特殊状态 】</h1><p>我们自定义的State类混入了<code>WidgetsBindingObserver</code>，所以可以使用他的暂停和恢复，</p>
+<p>初始化：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line"> <span class="keyword">super</span>.initState();</span><br><span class="line"> WidgetsBinding.instance.addObserver(<span class="keyword">this</span>); <span class="comment">// 在这初始化了</span></span><br><span class="line"> <span class="built_in">print</span>(<span class="string">'初始化 initState'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>销毁：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> dispose() &#123;</span><br><span class="line">  <span class="keyword">super</span>.dispose();</span><br><span class="line">  WidgetsBinding.instance.removeObserver(<span class="keyword">this</span>); <span class="comment">// 在这销毁</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'销毁 dispose'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> didChangeAppLifecycleState(AppLifecycleState state) &#123;</span><br><span class="line">  <span class="keyword">super</span>.didChangeAppLifecycleState(state);</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">'特殊状态 state：<span class="subst">$state</span>'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个<code>didChangeAppLifecycleState</code>是<code>WidgetsBindingObserver</code>类的一个方法， 可以用来判断当前的状态是在前台还是后台。</p>
+<h5 id="这个方法接收一个AppLifecycleState类型的枚举："><a href="#这个方法接收一个AppLifecycleState类型的枚举：" class="headerlink" title="这个方法接收一个AppLifecycleState类型的枚举："></a>这个方法接收一个<code>AppLifecycleState</code>类型的枚举：</h5><table>
+<thead>
+<tr>
+<th>枚举值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>resumed</td>
+<td>程序可见，并响应用户输入。</td>
+</tr>
+<tr>
+<td>inactive</td>
+<td>处于非活动状态，未收到用户输入。</td>
+</tr>
+<tr>
+<td>paused</td>
+<td>程序当前不可见，不响应用户输入，并且在后台运行。</td>
+</tr>
+<tr>
+<td>suspending</td>
+<td>程序将暂时暂停。</td>
+</tr>
+</tbody></table>
+<h5 id="AppLifecycleState实测"><a href="#AppLifecycleState实测" class="headerlink" title="AppLifecycleState实测"></a>AppLifecycleState实测</h5><p>当App返回到桌面或者其他不可见状态，但并未结束：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I&#x2F;flutter ( 2428): 特殊状态 state：AppLifecycleState.inactive</span><br><span class="line">I&#x2F;flutter ( 2428): 特殊状态 state：AppLifecycleState.paused</span><br></pre></td></tr></table></figure>
+
+<p>当App回到可见状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I&#x2F;flutter ( 2428): 特殊状态 state：AppLifecycleState.inactive</span><br><span class="line">I&#x2F;flutter ( 2428): 特殊状态 state：AppLifecycleState.resumed</span><br></pre></td></tr></table></figure>
+
+<p>流程图：</p>
+<p><img src="http://book.flutterj.com/chart/AppLifecycleState.png" alt="img"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="tag"># Widget生命周期</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/21/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E8%B7%AF%E7%94%B1/" rel="next" title="Flutter路由">
+                <i class="fa fa-chevron-left"></i> Flutter路由
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/" rel="prev" title="MaterialApp组件">
+                MaterialApp组件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#生命周期"><span class="nav-number">1.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实测"><span class="nav-number">2.</span> <span class="nav-text">实测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程图"><span class="nav-number">3.</span> <span class="nav-text">流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#initState-初始化"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">initState 初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#didChangeDependencies-依赖改变"><span class="nav-number">3.0.0.3.</span> <span class="nav-text">didChangeDependencies 依赖改变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#build-构建"><span class="nav-number">3.0.0.4.</span> <span class="nav-text">build 构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reassemble-重新安装"><span class="nav-number">3.0.0.5.</span> <span class="nav-text">reassemble 重新安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#didUpdateWidget-组件更新"><span class="nav-number">3.0.0.6.</span> <span class="nav-text">didUpdateWidget 组件更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deactivate-暂停"><span class="nav-number">3.0.0.7.</span> <span class="nav-text">deactivate 暂停</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dispose-销毁"><span class="nav-number">3.0.0.8.</span> <span class="nav-text">dispose 销毁</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#【-特殊状态-】"><span class="nav-number">4.</span> <span class="nav-text">【 特殊状态 】</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#这个方法接收一个AppLifecycleState类型的枚举："><span class="nav-number">4.0.0.0.1.</span> <span class="nav-text">这个方法接收一个AppLifecycleState类型的枚举：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AppLifecycleState实测"><span class="nav-number">4.0.0.0.2.</span> <span class="nav-text">AppLifecycleState实测</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

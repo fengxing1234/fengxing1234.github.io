@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,Widget生命周期," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="字段 类型    navigatorKey（导航键） GlobalKey   home（主页） Widget   routes（路由） Map&lt;String, WidgetBuilder&gt;   initialRoute（初始路由） String   onGenerateRoute（生成路由） RouteFactory   onUnknownRoute（未知路由） RouteFac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MaterialApp组件">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="字段 类型    navigatorKey（导航键） GlobalKey   home（主页） Widget   routes（路由） Map&lt;String, WidgetBuilder&gt;   initialRoute（初始路由） String   onGenerateRoute（生成路由） RouteFactory   onUnknownRoute（未知路由） RouteFac">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-23T06:11:21.000Z">
+<meta property="article:modified_time" content="2020-06-23T07:29:29.020Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="Widget生命周期">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/23/flutter/widget组件/MaterialApp组件/"/>
+
+
+
+
+
+  <title>MaterialApp组件 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MaterialApp组件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-23T14:11:21+08:00">
+                2020-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>navigatorKey（导航键）</td>
+<td>GlobalKey</td>
+</tr>
+<tr>
+<td>home（主页）</td>
+<td>Widget</td>
+</tr>
+<tr>
+<td>routes（路由）</td>
+<td>Map&lt;String, WidgetBuilder&gt;</td>
+</tr>
+<tr>
+<td>initialRoute（初始路由）</td>
+<td>String</td>
+</tr>
+<tr>
+<td>onGenerateRoute（生成路由）</td>
+<td>RouteFactory</td>
+</tr>
+<tr>
+<td>onUnknownRoute（未知路由）</td>
+<td>RouteFactory</td>
+</tr>
+<tr>
+<td>navigatorObservers（导航观察器）</td>
+<td>List</td>
+</tr>
+<tr>
+<td>builder（建造者）</td>
+<td>TransitionBuilder</td>
+</tr>
+<tr>
+<td>title（标题）</td>
+<td>String</td>
+</tr>
+<tr>
+<td>onGenerateTitle（生成标题）</td>
+<td>GenerateAppTitle</td>
+</tr>
+<tr>
+<td>color（颜色）</td>
+<td>Color</td>
+</tr>
+<tr>
+<td>theme（主题）</td>
+<td>ThemeData</td>
+</tr>
+<tr>
+<td>locale(地点)</td>
+<td>Locale</td>
+</tr>
+<tr>
+<td>localizationsDelegates（本地化委托）</td>
+<td>Iterable<LocalizationsDelegate></td>
+</tr>
+<tr>
+<td>localeResolutionCallback（区域分辨回调）</td>
+<td>LocaleResolutionCallback</td>
+</tr>
+<tr>
+<td>supportedLocales（支持区域）</td>
+<td>Iterable</td>
+</tr>
+<tr>
+<td>debugShowMaterialGrid（调试显示材质网格）</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>showPerformanceOverlay（显示性能叠加）</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>checkerboardRasterCacheImages（棋盘格光栅缓存图像）</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>checkerboardOffscreenLayers（棋盘格层）</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>showSemanticsDebugger（显示语义调试器）</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>debugShowCheckedModeBanner（调试显示检查模式横幅）</td>
+<td>bool</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">const MaterialApp(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    this.navigatorKey,</span><br><span class="line">    this.home,</span><br><span class="line">    this.routes &#x3D; const &lt;String, WidgetBuilder&gt;&#123;&#125;,</span><br><span class="line">    this.initialRoute,</span><br><span class="line">    this.onGenerateRoute,</span><br><span class="line">    this.onGenerateInitialRoutes,</span><br><span class="line">    this.onUnknownRoute,</span><br><span class="line">    this.navigatorObservers &#x3D; const &lt;NavigatorObserver&gt;[],</span><br><span class="line">    this.builder,</span><br><span class="line">    this.title &#x3D; &#39;&#39;,</span><br><span class="line">    this.onGenerateTitle,</span><br><span class="line">    this.color,</span><br><span class="line">    this.theme,</span><br><span class="line">    this.darkTheme,</span><br><span class="line">    this.themeMode &#x3D; ThemeMode.system,</span><br><span class="line">    this.locale,</span><br><span class="line">    this.localizationsDelegates,</span><br><span class="line">    this.localeListResolutionCallback,</span><br><span class="line">    this.localeResolutionCallback,</span><br><span class="line">    this.supportedLocales &#x3D; const &lt;Locale&gt;[Locale(&#39;en&#39;, &#39;US&#39;)],</span><br><span class="line">    this.debugShowMaterialGrid &#x3D; false,</span><br><span class="line">    this.showPerformanceOverlay &#x3D; false,</span><br><span class="line">    this.checkerboardRasterCacheImages &#x3D; false,</span><br><span class="line">    this.checkerboardOffscreenLayers &#x3D; false,</span><br><span class="line">    this.showSemanticsDebugger &#x3D; false,</span><br><span class="line">    this.debugShowCheckedModeBanner &#x3D; true,</span><br><span class="line">    this.shortcuts,</span><br><span class="line">    this.actions,</span><br><span class="line">  &#125;) : assert(routes !&#x3D; null),</span><br><span class="line">       assert(navigatorObservers !&#x3D; null),</span><br><span class="line">       assert(title !&#x3D; null),</span><br><span class="line">       assert(debugShowMaterialGrid !&#x3D; null),</span><br><span class="line">       assert(showPerformanceOverlay !&#x3D; null),</span><br><span class="line">       assert(checkerboardRasterCacheImages !&#x3D; null),</span><br><span class="line">       assert(checkerboardOffscreenLayers !&#x3D; null),</span><br><span class="line">       assert(showSemanticsDebugger !&#x3D; null),</span><br><span class="line">       assert(debugShowCheckedModeBanner !&#x3D; null),</span><br><span class="line">       super(key: key);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-navigatorKey"><a href="#1-navigatorKey" class="headerlink" title="1. navigatorKey"></a>1. navigatorKey</h3><blockquote>
+<p>navigatorKey.currentState 相当于 Navigator.of(context)</p>
+</blockquote>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GlobalKey&lt;NavigatorState&gt; _navigatorKey&#x3D;new GlobalKey();</span><br><span class="line"></span><br><span class="line">new MaterialApp(</span><br><span class="line">    navigatorKey: _navigatorKey,</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-home"><a href="#2-home" class="headerlink" title="2. home"></a>2. home</h3><blockquote>
+<p>进入程序后显示的第一个页面,传入的是一个Widget，但实际上这个Widget需要包裹一个Scaffold以显示该程序使用Material Design风格</p>
+</blockquote>
+<h3 id="3-routes"><a href="#3-routes" class="headerlink" title="3. routes"></a>3. routes</h3><blockquote>
+<p>声明程序中有哪个通过Navigation.of(context).pushNamed跳转的路由 参数以键值对的形式传递 key:路由名字 value:对应的Widget</p>
+</blockquote>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      routes: &#123;</span><br><span class="line">       &#39;&#x2F;home&#39;:(BuildContext context) &#x3D;&gt; HomePage(),</span><br><span class="line">       &#39;&#x2F;home&#x2F;one&#39;:(BuildContext context) &#x3D;&gt; OnePage(),</span><br><span class="line">       &#x2F;&#x2F;....</span><br><span class="line">      &#125;,</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-initialRoute"><a href="#4-initialRoute" class="headerlink" title="4. initialRoute,"></a>4. initialRoute,</h3><blockquote>
+<p>初始路由，当用户进入程序时，自动打开对应的路由。 (home还是位于一级) 传入的是上面routes的key 跳转的是对应的Widget（如果该Widget有Scaffold.AppBar,并不做任何修改，左上角有返回键）</p>
+</blockquote>
+<h4 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      routes: &#123;</span><br><span class="line">       &#39;&#x2F;home&#39;:(BuildContext context) &#x3D;&gt; HomePage(),</span><br><span class="line">       &#39;&#x2F;home&#x2F;one&#39;:(BuildContext context) &#x3D;&gt; OnePage(),</span><br><span class="line">       &#x2F;&#x2F;....</span><br><span class="line">      &#125;,</span><br><span class="line">      initialRoute: &#39;&#x2F;home&#x2F;one&#39;,</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-onGenerateRoute"><a href="#5-onGenerateRoute" class="headerlink" title="5. onGenerateRoute,"></a>5. onGenerateRoute,</h3><p>当通过Navigation.of(context).pushNamed跳转路由时， 在routes查找不到时，会调用该方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      routes: &#123;</span><br><span class="line">       &#39;&#x2F;home&#39;:(BuildContext context) &#x3D;&gt; HomePage(),</span><br><span class="line">       &#39;&#x2F;home&#x2F;one&#39;:(BuildContext context) &#x3D;&gt; OnePage(),</span><br><span class="line">       &#x2F;&#x2F;....</span><br><span class="line">      &#125;,</span><br><span class="line">      onGenerateRoute: (setting)&#123;</span><br><span class="line">        &#x2F;&#x2F;setting.isInitialRoute; bool类型 是否初始路由</span><br><span class="line">        &#x2F;&#x2F;setting.name; 要跳转的路由名key</span><br><span class="line">        return new PageRouteBuilder(</span><br><span class="line">            pageBuilder: (BuildContext context, _, __) &#123;</span><br><span class="line">        &#x2F;&#x2F;这里为返回的Widget</span><br><span class="line">              return HomePage();</span><br><span class="line">            &#125;,</span><br><span class="line">            opaque: false,</span><br><span class="line">        &#x2F;&#x2F;跳转动画</span><br><span class="line">            transitionDuration: new Duration(milliseconds: 200),</span><br><span class="line">            transitionsBuilder:</span><br><span class="line">                (___, Animation&lt;double&gt; animation, ____, Widget child) &#123;</span><br><span class="line">              return new FadeTransition(</span><br><span class="line">                opacity: animation,</span><br><span class="line">                child: new ScaleTransition(</span><br><span class="line">                  scale: new Tween&lt;double&gt;(begin: 0.5, end: 1.0)</span><br><span class="line">                      .animate(animation),</span><br><span class="line">                  child: child,</span><br><span class="line">                ),</span><br><span class="line">              );</span><br><span class="line">            &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-onUnknownRoute"><a href="#6-onUnknownRoute" class="headerlink" title="6. onUnknownRoute"></a>6. onUnknownRoute</h3><blockquote>
+<p>效果跟onGenerateRoute一样 调用顺序为onGenerateRoute ==&gt; onUnknownRoute</p>
+</blockquote>
+<h3 id="7-navigatorObservers"><a href="#7-navigatorObservers" class="headerlink" title="7. navigatorObservers"></a>7. navigatorObservers</h3><blockquote>
+<p>路由观察器，当调用Navigator的相关方法时，会回调相关的操作</p>
+</blockquote>
+<h4 id="使用-3"><a href="#使用-3" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      navigatorObservers: [</span><br><span class="line">        MyObserver(),</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">&#x2F;&#x2F;继承NavigatorObserver</span><br><span class="line">class MyObserver extends NavigatorObserver&#123;</span><br><span class="line">  @override</span><br><span class="line">  void didPush(Route route, Route previousRoute) &#123;</span><br><span class="line">    &#x2F;&#x2F; 当调用Navigator.push时回调</span><br><span class="line">    super.didPush(route, previousRoute);</span><br><span class="line">    &#x2F;&#x2F;可通过route.settings获取路由相关内容</span><br><span class="line">    &#x2F;&#x2F;route.currentResult获取返回内容</span><br><span class="line">    &#x2F;&#x2F;....等等</span><br><span class="line">    print(route.settings.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-builder"><a href="#8-builder" class="headerlink" title="8.  builder"></a>8.  builder</h3><blockquote>
+<p>当构建一个Widget前调用 一般做字体大小，方向，主题颜色等配置</p>
+</blockquote>
+<h4 id="使用-4"><a href="#使用-4" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      builder: (BuildContext context, Widget child) &#123;</span><br><span class="line">        return MediaQuery(</span><br><span class="line">          data: MediaQuery.of(context).copyWith(</span><br><span class="line">            &#x2F;&#x2F;字体大小</span><br><span class="line">                textScaleFactor: 1.4,</span><br><span class="line">              ),</span><br><span class="line">          child: child,</span><br><span class="line">        );</span><br><span class="line">      &#125;,</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-title"><a href="#9-title" class="headerlink" title="9. title"></a>9. title</h3><blockquote>
+<p>该标题出现在 Android：任务管理器的程序快照之上 IOS: 程序切换管理器中</p>
+</blockquote>
+<h4 id="使用-5"><a href="#使用-5" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      title: &#39;Flutter应用&#39;,</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-onGenerateTitle"><a href="#10-onGenerateTitle" class="headerlink" title="10. onGenerateTitle"></a>10. onGenerateTitle</h3><blockquote>
+<p>跟上面的tiitle一样，但含有一个context参数 用于做本地化</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      onGenerateTitle: (context)&#123;</span><br><span class="line">        return &#39;Flutter应用&#39;;</span><br><span class="line">      &#125;,</span><br><span class="line">    );</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="11-color"><a href="#11-color" class="headerlink" title="11. color"></a>11. color</h3><blockquote>
+<p>该颜色为Android中程序切换中应用图标背景的颜色，当应用图标背景为透明时</p>
+</blockquote>
+<h4 id="使用-6"><a href="#使用-6" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-theme"><a href="#12-theme" class="headerlink" title="12. theme"></a>12. theme</h3><blockquote>
+<p>应用程序的主题，各种的定制颜色都可以设置，用于程序主题切换</p>
+</blockquote>
+<h3 id="使用-7"><a href="#使用-7" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      theme: new ThemeData(</span><br><span class="line">       &#x2F;&#x2F;主题色</span><br><span class="line">        primarySwatch: Colors.blue,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="13-locale"><a href="#13-locale" class="headerlink" title="13. locale"></a>13. locale</h3><blockquote>
+<p>当前区域，如果为null则使用系统区域 一般用于语言切换</p>
+</blockquote>
+<h3 id="使用-8"><a href="#使用-8" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;传入两个参数，语言代码，国家代码</span><br><span class="line">new MaterialApp(</span><br><span class="line">      Locale(&#39;yy&#39;,&#39;zh&#39;)，</span><br><span class="line">    );</span><br><span class="line">&#x2F;&#x2F;源码纠正，一些曾经用过的代码（注释后面的日期为不再使用的日期），源码会自动纠正</span><br><span class="line">&#x2F;&#x2F;来看一下源码</span><br><span class="line">&#x2F;&#x2F;languageCode 第一个参数</span><br><span class="line">switch (languageCode) &#123;</span><br><span class="line">      case &#39;in&#39;: return &#39;id&#39;; &#x2F;&#x2F; Indonesian; deprecated 1989-01-01</span><br><span class="line">      case &#39;iw&#39;: return &#39;he&#39;; &#x2F;&#x2F; Hebrew; deprecated 1989-01-01</span><br><span class="line">      case &#39;ji&#39;: return &#39;yi&#39;; &#x2F;&#x2F; Yiddish; deprecated 1989-01-01</span><br><span class="line">      case &#39;jw&#39;: return &#39;jv&#39;; &#x2F;&#x2F; Javanese; deprecated 2001-08-13</span><br><span class="line">      case &#39;mo&#39;: return &#39;ro&#39;; &#x2F;&#x2F; Moldavian, Moldovan; deprecated 2008-11-22</span><br><span class="line">      case &#39;aam&#39;: return &#39;aas&#39;; &#x2F;&#x2F; Aramanik; deprecated 2015-02-12</span><br><span class="line">      case &#39;adp&#39;: return &#39;dz&#39;; &#x2F;&#x2F; Adap; deprecated 2015-02-12</span><br><span class="line">      case &#39;aue&#39;: return &#39;ktz&#39;; &#x2F;&#x2F; &#x3D;&#x2F;Kx&#39;au&#x2F;&#x2F;&#39;ein; deprecated 2015-02-12</span><br><span class="line">      case &#39;ayx&#39;: return &#39;nun&#39;; &#x2F;&#x2F; Ayi (China); deprecated 2011-08-16</span><br><span class="line">      case &#39;bgm&#39;: return &#39;bcg&#39;; &#x2F;&#x2F; Baga Mboteni; deprecated 2016-05-30</span><br><span class="line">      case &#39;bjd&#39;: return &#39;drl&#39;; &#x2F;&#x2F; Bandjigali; deprecated 2012-08-12</span><br><span class="line">      case &#39;ccq&#39;: return &#39;rki&#39;; &#x2F;&#x2F; Chaungtha; deprecated 2012-08-12</span><br><span class="line">      case &#39;cjr&#39;: return &#39;mom&#39;; &#x2F;&#x2F; Chorotega; deprecated 2010-03-11</span><br><span class="line">      case &#39;cka&#39;: return &#39;cmr&#39;; &#x2F;&#x2F; Khumi Awa Chin; deprecated 2012-08-12</span><br><span class="line">      case &#39;cmk&#39;: return &#39;xch&#39;; &#x2F;&#x2F; Chimakum; deprecated 2010-03-11</span><br><span class="line">      case &#39;coy&#39;: return &#39;pij&#39;; &#x2F;&#x2F; Coyaima; deprecated 2016-05-30</span><br><span class="line">      case &#39;cqu&#39;: return &#39;quh&#39;; &#x2F;&#x2F; Chilean Quechua; deprecated 2016-05-30</span><br><span class="line">      case &#39;drh&#39;: return &#39;khk&#39;; &#x2F;&#x2F; Darkhat; deprecated 2010-03-11</span><br><span class="line">      case &#39;drw&#39;: return &#39;prs&#39;; &#x2F;&#x2F; Darwazi; deprecated 2010-03-11</span><br><span class="line">      case &#39;gav&#39;: return &#39;dev&#39;; &#x2F;&#x2F; Gabutamon; deprecated 2010-03-11</span><br><span class="line">      case &#39;gfx&#39;: return &#39;vaj&#39;; &#x2F;&#x2F; Mangetti Dune !Xung; deprecated 2015-02-12</span><br><span class="line">      case &#39;ggn&#39;: return &#39;gvr&#39;; &#x2F;&#x2F; Eastern Gurung; deprecated 2016-05-30</span><br><span class="line">      case &#39;gti&#39;: return &#39;nyc&#39;; &#x2F;&#x2F; Gbati-ri; deprecated 2015-02-12</span><br><span class="line">      case &#39;guv&#39;: return &#39;duz&#39;; &#x2F;&#x2F; Gey; deprecated 2016-05-30</span><br><span class="line">      case &#39;hrr&#39;: return &#39;jal&#39;; &#x2F;&#x2F; Horuru; deprecated 2012-08-12</span><br><span class="line">      case &#39;ibi&#39;: return &#39;opa&#39;; &#x2F;&#x2F; Ibilo; deprecated 2012-08-12</span><br><span class="line">      case &#39;ilw&#39;: return &#39;gal&#39;; &#x2F;&#x2F; Talur; deprecated 2013-09-10</span><br><span class="line">      case &#39;jeg&#39;: return &#39;oyb&#39;; &#x2F;&#x2F; Jeng; deprecated 2017-02-23</span><br><span class="line">      case &#39;kgc&#39;: return &#39;tdf&#39;; &#x2F;&#x2F; Kasseng; deprecated 2016-05-30</span><br><span class="line">      case &#39;kgh&#39;: return &#39;kml&#39;; &#x2F;&#x2F; Upper Tanudan Kalinga; deprecated 2012-08-12</span><br><span class="line">      case &#39;koj&#39;: return &#39;kwv&#39;; &#x2F;&#x2F; Sara Dunjo; deprecated 2015-02-12</span><br><span class="line">      case &#39;krm&#39;: return &#39;bmf&#39;; &#x2F;&#x2F; Krim; deprecated 2017-02-23</span><br><span class="line">      case &#39;ktr&#39;: return &#39;dtp&#39;; &#x2F;&#x2F; Kota Marudu Tinagas; deprecated 2016-05-30</span><br><span class="line">      case &#39;kvs&#39;: return &#39;gdj&#39;; &#x2F;&#x2F; Kunggara; deprecated 2016-05-30</span><br><span class="line">      case &#39;kwq&#39;: return &#39;yam&#39;; &#x2F;&#x2F; Kwak; deprecated 2015-02-12</span><br><span class="line">      case &#39;kxe&#39;: return &#39;tvd&#39;; &#x2F;&#x2F; Kakihum; deprecated 2015-02-12</span><br><span class="line">      case &#39;kzj&#39;: return &#39;dtp&#39;; &#x2F;&#x2F; Coastal Kadazan; deprecated 2016-05-30</span><br><span class="line">      case &#39;kzt&#39;: return &#39;dtp&#39;; &#x2F;&#x2F; Tambunan Dusun; deprecated 2016-05-30</span><br><span class="line">      case &#39;lii&#39;: return &#39;raq&#39;; &#x2F;&#x2F; Lingkhim; deprecated 2015-02-12</span><br><span class="line">      case &#39;lmm&#39;: return &#39;rmx&#39;; &#x2F;&#x2F; Lamam; deprecated 2014-02-28</span><br><span class="line">      case &#39;meg&#39;: return &#39;cir&#39;; &#x2F;&#x2F; Mea; deprecated 2013-09-10</span><br><span class="line">      case &#39;mst&#39;: return &#39;mry&#39;; &#x2F;&#x2F; Cataelano Mandaya; deprecated 2010-03-11</span><br><span class="line">      case &#39;mwj&#39;: return &#39;vaj&#39;; &#x2F;&#x2F; Maligo; deprecated 2015-02-12</span><br><span class="line">      case &#39;myt&#39;: return &#39;mry&#39;; &#x2F;&#x2F; Sangab Mandaya; deprecated 2010-03-11</span><br><span class="line">      case &#39;nad&#39;: return &#39;xny&#39;; &#x2F;&#x2F; Nijadali; deprecated 2016-05-30</span><br><span class="line">      case &#39;nnx&#39;: return &#39;ngv&#39;; &#x2F;&#x2F; Ngong; deprecated 2015-02-12</span><br><span class="line">      case &#39;nts&#39;: return &#39;pij&#39;; &#x2F;&#x2F; Natagaimas; deprecated 2016-05-30</span><br><span class="line">      case &#39;oun&#39;: return &#39;vaj&#39;; &#x2F;&#x2F; !O!ung; deprecated 2015-02-12</span><br><span class="line">      case &#39;pcr&#39;: return &#39;adx&#39;; &#x2F;&#x2F; Panang; deprecated 2013-09-10</span><br><span class="line">      case &#39;pmc&#39;: return &#39;huw&#39;; &#x2F;&#x2F; Palumata; deprecated 2016-05-30</span><br><span class="line">      case &#39;pmu&#39;: return &#39;phr&#39;; &#x2F;&#x2F; Mirpur Panjabi; deprecated 2015-02-12</span><br><span class="line">      case &#39;ppa&#39;: return &#39;bfy&#39;; &#x2F;&#x2F; Pao; deprecated 2016-05-30</span><br><span class="line">      case &#39;ppr&#39;: return &#39;lcq&#39;; &#x2F;&#x2F; Piru; deprecated 2013-09-10</span><br><span class="line">      case &#39;pry&#39;: return &#39;prt&#39;; &#x2F;&#x2F; Pray 3; deprecated 2016-05-30</span><br><span class="line">      case &#39;puz&#39;: return &#39;pub&#39;; &#x2F;&#x2F; Purum Naga; deprecated 2014-02-28</span><br><span class="line">      case &#39;sca&#39;: return &#39;hle&#39;; &#x2F;&#x2F; Sansu; deprecated 2012-08-12</span><br><span class="line">      case &#39;skk&#39;: return &#39;oyb&#39;; &#x2F;&#x2F; Sok; deprecated 2017-02-23</span><br><span class="line">      case &#39;tdu&#39;: return &#39;dtp&#39;; &#x2F;&#x2F; Tempasuk Dusun; deprecated 2016-05-30</span><br><span class="line">      case &#39;thc&#39;: return &#39;tpo&#39;; &#x2F;&#x2F; Tai Hang Tong; deprecated 2016-05-30</span><br><span class="line">      case &#39;thx&#39;: return &#39;oyb&#39;; &#x2F;&#x2F; The; deprecated 2015-02-12</span><br><span class="line">      case &#39;tie&#39;: return &#39;ras&#39;; &#x2F;&#x2F; Tingal; deprecated 2011-08-16</span><br><span class="line">      case &#39;tkk&#39;: return &#39;twm&#39;; &#x2F;&#x2F; Takpa; deprecated 2011-08-16</span><br><span class="line">      case &#39;tlw&#39;: return &#39;weo&#39;; &#x2F;&#x2F; South Wemale; deprecated 2012-08-12</span><br><span class="line">      case &#39;tmp&#39;: return &#39;tyj&#39;; &#x2F;&#x2F; Tai Mène; deprecated 2016-05-30</span><br><span class="line">      case &#39;tne&#39;: return &#39;kak&#39;; &#x2F;&#x2F; Tinoc Kallahan; deprecated 2016-05-30</span><br><span class="line">      case &#39;tnf&#39;: return &#39;prs&#39;; &#x2F;&#x2F; Tangshewi; deprecated 2010-03-11</span><br><span class="line">      case &#39;tsf&#39;: return &#39;taj&#39;; &#x2F;&#x2F; Southwestern Tamang; deprecated 2015-02-12</span><br><span class="line">      case &#39;uok&#39;: return &#39;ema&#39;; &#x2F;&#x2F; Uokha; deprecated 2015-02-12</span><br><span class="line">      case &#39;xba&#39;: return &#39;cax&#39;; &#x2F;&#x2F; Kamba (Brazil); deprecated 2016-05-30</span><br><span class="line">      case &#39;xia&#39;: return &#39;acn&#39;; &#x2F;&#x2F; Xiandao; deprecated 2013-09-10</span><br><span class="line">      case &#39;xkh&#39;: return &#39;waw&#39;; &#x2F;&#x2F; Karahawyana; deprecated 2016-05-30</span><br><span class="line">      case &#39;xsj&#39;: return &#39;suj&#39;; &#x2F;&#x2F; Subi; deprecated 2015-02-12</span><br><span class="line">      case &#39;ybd&#39;: return &#39;rki&#39;; &#x2F;&#x2F; Yangbye; deprecated 2012-08-12</span><br><span class="line">      case &#39;yma&#39;: return &#39;lrr&#39;; &#x2F;&#x2F; Yamphe; deprecated 2012-08-12</span><br><span class="line">      case &#39;ymt&#39;: return &#39;mtm&#39;; &#x2F;&#x2F; Mator-Taygi-Karagas; deprecated 2015-02-12</span><br><span class="line">      case &#39;yos&#39;: return &#39;zom&#39;; &#x2F;&#x2F; Yos; deprecated 2013-09-10</span><br><span class="line">      case &#39;yuu&#39;: return &#39;yug&#39;; &#x2F;&#x2F; Yugh; deprecated 2014-02-28</span><br><span class="line">      default: return languageCode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;_countryCode 第二个参数</span><br><span class="line">switch (_countryCode) &#123;</span><br><span class="line">      case &#39;BU&#39;: return &#39;MM&#39;; &#x2F;&#x2F; Burma; deprecated 1989-12-05</span><br><span class="line">      case &#39;DD&#39;: return &#39;DE&#39;; &#x2F;&#x2F; German Democratic Republic; deprecated 1990-10-30</span><br><span class="line">      case &#39;FX&#39;: return &#39;FR&#39;; &#x2F;&#x2F; Metropolitan France; deprecated 1997-07-14</span><br><span class="line">      case &#39;TP&#39;: return &#39;TL&#39;; &#x2F;&#x2F; East Timor; deprecated 2002-05-20</span><br><span class="line">      case &#39;YD&#39;: return &#39;YE&#39;; &#x2F;&#x2F; Democratic Yemen; deprecated 1990-08-14</span><br><span class="line">      case &#39;ZR&#39;: return &#39;CD&#39;; &#x2F;&#x2F; Zaire; deprecated 1997-07-14</span><br><span class="line">      default: return regionCode;</span><br><span class="line">    &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="14-localizationsDelegates"><a href="#14-localizationsDelegates" class="headerlink" title="14. localizationsDelegates"></a>14. localizationsDelegates</h3><blockquote>
+<p>本地化委托，用于更改Flutter Widget默认的提示语，按钮text等</p>
+</blockquote>
+<h4 id="使用-9"><a href="#使用-9" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      localizationsDelegates: [</span><br><span class="line">          MyLocalizationsDelegates(),</span><br><span class="line">      ],</span><br><span class="line">      locale: Locale(&#39;zh&#39;,&#39;cn&#39;),</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">class MyLocalizationsDelegates extends LocalizationsDelegate</span><br><span class="line">&lt;MaterialLocalizations&gt;&#123;</span><br><span class="line">  @override</span><br><span class="line">  bool isSupported(Locale locale) &#123;</span><br><span class="line">&#x2F;&#x2F;是否支持该locale，如果不支持会报异常</span><br><span class="line">    if(locale &#x3D;&#x3D; const Locale(&#39;zh&#39;,&#39;cn&#39;))&#123;</span><br><span class="line">      return true;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">  &#125;</span><br><span class="line">  @override&#x2F;&#x2F;是否需要重载</span><br><span class="line">  bool shouldReload(LocalizationsDelegate old)  &#x3D;&gt; false;</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  Future&lt;MaterialLocalizations&gt; load(Locale locale) &#123;</span><br><span class="line">&#x2F;&#x2F;加载本地化</span><br><span class="line">    return new SynchronousFuture(new MyLocalizations(locale));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;本地化实现，继承DefaultMaterialLocalizations</span><br><span class="line">class MyLocalizations extends DefaultMaterialLocalizations&#123;</span><br><span class="line">  final Locale locale;</span><br><span class="line">  MyLocalizations(this.locale, );</span><br><span class="line">  @override</span><br><span class="line">  String get okButtonLabel &#123;</span><br><span class="line">    if(locale &#x3D;&#x3D; const Locale(&#39;zh&#39;,&#39;cn&#39;))&#123;</span><br><span class="line">      return &#39;好的&#39;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      return super.okButtonLabel;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  @override</span><br><span class="line">  String get backButtonTooltip &#123;</span><br><span class="line">    if(locale &#x3D;&#x3D; const Locale(&#39;zh&#39;,&#39;cn&#39;))&#123;</span><br><span class="line">      return &#39;返回&#39;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      return super.okButtonLabel;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="15-localeResolutionCallback"><a href="#15-localeResolutionCallback" class="headerlink" title="15. localeResolutionCallback"></a>15. localeResolutionCallback</h3><blockquote>
+<p>当传入的是不支持的语种，可以根据这个回调，返回相近,并且支持的语种</p>
+</blockquote>
+<h4 id="使用-10"><a href="#使用-10" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      localeResolutionCallback: (local,support)&#123;</span><br><span class="line">        if(support.contains(support))&#123;</span><br><span class="line">          print(&#39;support&#39;);</span><br><span class="line">          return local;</span><br><span class="line">        &#125;</span><br><span class="line">        print(&#39;no_support&#39;);</span><br><span class="line">        return const Locale(&#39;us&#39;,&#39;uk&#39;);</span><br><span class="line">      &#125;,</span><br><span class="line">&#x2F;&#x2F;这个代码是随便填的，有可能出错</span><br><span class="line">      locale: Locale(&#39;ze&#39;,&#39;cn&#39;),</span><br><span class="line">    );</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="16-supportedLocales"><a href="#16-supportedLocales" class="headerlink" title="16. supportedLocales"></a>16. supportedLocales</h4><blockquote>
+<p>传入支持的语种数组</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">new MaterialApp(</span><br><span class="line">      supportedLocales: [</span><br><span class="line">        const Locale(&#39;uok&#39;),</span><br><span class="line">        const Locale(&#39;meg&#39;),</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="17-debugShowMaterialGrid"><a href="#17-debugShowMaterialGrid" class="headerlink" title="17. debugShowMaterialGrid"></a>17. debugShowMaterialGrid</h3><blockquote>
+<p>debug模式下是否显示材质网格，传入bool类型，使用就不写了</p>
+</blockquote>
+<h4 id="18-showPerformanceOverlay"><a href="#18-showPerformanceOverlay" class="headerlink" title="18. showPerformanceOverlay"></a>18. showPerformanceOverlay</h4><blockquote>
+<p>当为true时应用程序顶部覆盖一层GPU和UI曲线图，可即时查看当前流畅度情况</p>
+</blockquote>
+<h4 id="19-checkerboardRasterCacheImages"><a href="#19-checkerboardRasterCacheImages" class="headerlink" title="19. checkerboardRasterCacheImages"></a>19. checkerboardRasterCacheImages</h4><blockquote>
+<p>当为true时，打开光栅缓存图像的棋盘格</p>
+</blockquote>
+<h4 id="20-checkerboardOffscreenLayers"><a href="#20-checkerboardOffscreenLayers" class="headerlink" title="20. checkerboardOffscreenLayers"></a>20. checkerboardOffscreenLayers</h4><blockquote>
+<p>当为true时，打开呈现到屏幕位图的层的棋盘格</p>
+</blockquote>
+<h4 id="21-showSemanticsDebugger"><a href="#21-showSemanticsDebugger" class="headerlink" title="21. showSemanticsDebugger"></a>21. showSemanticsDebugger</h4><blockquote>
+<p>当为true时，打开Widget边框，类似Android开发者模式中显示布局边界</p>
+</blockquote>
+<h4 id="22-debugShowCheckedModeBanner"><a href="#22-debugShowCheckedModeBanner" class="headerlink" title="22. debugShowCheckedModeBanner"></a>22. debugShowCheckedModeBanner</h4><blockquote>
+<p>当为true时，在debug模式下显示右上角的debug字样的横幅，false即为不显示</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="tag"># Widget生命周期</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/Widget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="next" title="Widget生命周期">
+                <i class="fa fa-chevron-left"></i> Widget生命周期
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/ThemeData/" rel="prev" title="ThemeData">
+                ThemeData <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-navigatorKey"><span class="nav-number">1.</span> <span class="nav-text">1. navigatorKey</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">1.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-home"><span class="nav-number">2.</span> <span class="nav-text">2. home</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-routes"><span class="nav-number">3.</span> <span class="nav-text">3. routes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-1"><span class="nav-number">3.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-initialRoute"><span class="nav-number">4.</span> <span class="nav-text">4. initialRoute,</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-2"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-onGenerateRoute"><span class="nav-number">5.</span> <span class="nav-text">5. onGenerateRoute,</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-onUnknownRoute"><span class="nav-number">6.</span> <span class="nav-text">6. onUnknownRoute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-navigatorObservers"><span class="nav-number">7.</span> <span class="nav-text">7. navigatorObservers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-3"><span class="nav-number">7.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-builder"><span class="nav-number">8.</span> <span class="nav-text">8.  builder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-4"><span class="nav-number">8.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-title"><span class="nav-number">9.</span> <span class="nav-text">9. title</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-5"><span class="nav-number">9.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-onGenerateTitle"><span class="nav-number">10.</span> <span class="nav-text">10. onGenerateTitle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-color"><span class="nav-number">11.</span> <span class="nav-text">11. color</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-6"><span class="nav-number">11.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-theme"><span class="nav-number">12.</span> <span class="nav-text">12. theme</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-7"><span class="nav-number">13.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-locale"><span class="nav-number">14.</span> <span class="nav-text">13. locale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-8"><span class="nav-number">15.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-localizationsDelegates"><span class="nav-number">16.</span> <span class="nav-text">14. localizationsDelegates</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-9"><span class="nav-number">16.1.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-localeResolutionCallback"><span class="nav-number">17.</span> <span class="nav-text">15. localeResolutionCallback</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-10"><span class="nav-number">17.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-supportedLocales"><span class="nav-number">17.2.</span> <span class="nav-text">16. supportedLocales</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-debugShowMaterialGrid"><span class="nav-number">18.</span> <span class="nav-text">17. debugShowMaterialGrid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#18-showPerformanceOverlay"><span class="nav-number">18.1.</span> <span class="nav-text">18. showPerformanceOverlay</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#19-checkerboardRasterCacheImages"><span class="nav-number">18.2.</span> <span class="nav-text">19. checkerboardRasterCacheImages</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#20-checkerboardOffscreenLayers"><span class="nav-number">18.3.</span> <span class="nav-text">20. checkerboardOffscreenLayers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#21-showSemanticsDebugger"><span class="nav-number">18.4.</span> <span class="nav-text">21. showSemanticsDebugger</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-debugShowCheckedModeBanner"><span class="nav-number">18.5.</span> <span class="nav-text">22. debugShowCheckedModeBanner</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

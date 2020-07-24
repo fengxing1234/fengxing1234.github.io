@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Flutter之Timer原理解析在开发中，Timer总是一定无法绕过的。通过它，我们可以来实现任务的轮询、定时执行等。当然，由于一些原因，一些平台中不建议使用Timer。在Android中，基本上就是不建议使用它，而是通过Handler、ScheduledThreadPoolExecutor等来替代Timer。那如果在Flutter中尼？下面就来看Flutter中如何使用Timer及Timer的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter之Timer原理解析">
+<meta property="og:url" content="http://yoursite.com/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BTimer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="Flutter之Timer原理解析在开发中，Timer总是一定无法绕过的。通过它，我们可以来实现任务的轮询、定时执行等。当然，由于一些原因，一些平台中不建议使用Timer。在Android中，基本上就是不建议使用它，而是通过Handler、ScheduledThreadPoolExecutor等来替代Timer。那如果在Flutter中尼？下面就来看Flutter中如何使用Timer及Timer的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-29T09:17:22.000Z">
+<meta property="article:modified_time" content="2020-06-29T09:18:15.611Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Java，Android，Flutter">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/29/flutter/未曾理解/Flutter之Timer原理解析/"/>
+
+
+
+
+
+  <title>Flutter之Timer原理解析 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BTimer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flutter之Timer原理解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-29T17:17:22+08:00">
+                2020-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BTimer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BTimer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Flutter之Timer原理解析"><a href="#Flutter之Timer原理解析" class="headerlink" title="Flutter之Timer原理解析"></a>Flutter之Timer原理解析</h1><p>在开发中，<code>Timer</code>总是一定无法绕过的。通过它，我们可以来实现任务的轮询、定时执行等。当然，由于一些原因，一些平台中不建议使用<code>Timer</code>。在<code>Android</code>中，基本上就是不建议使用它，而是通过<code>Handler</code>、<code>ScheduledThreadPoolExecutor</code>等来替代<code>Timer</code>。那如果在<code>Flutter</code>中尼？下面就来看<code>Flutter</code>中如何使用<code>Timer</code>及<code>Timer</code>的实现原理。</p>
+<h3 id="1、Timer的使用"><a href="#1、Timer的使用" class="headerlink" title="1、Timer的使用"></a>1、Timer的使用</h3><p>在<code>Flutter</code>中，<code>Timer</code>是无处不在的，有直接使用其API，也有使用<code>Timer</code>的包装类，如<code>Future</code>。但在本文，会通过<code>Timer</code>及其API来深入了解实现原理。先来看<code>Timer</code>的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;任务的定时执行。延迟1秒后输出f1</span><br><span class="line">Timer(Duration(milliseconds: 1000), () &#123;</span><br><span class="line">  print(&quot;f1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">int count &#x3D; 0;</span><br><span class="line">&#x2F;&#x2F;任务的周期性执行</span><br><span class="line">Timer.periodic(Duration(milliseconds: 1000), (timer) &#123;</span><br><span class="line">  print(&quot;f2&quot;);</span><br><span class="line">  count++;</span><br><span class="line">  if (count &#x3D;&#x3D; 3) &#123;</span><br><span class="line">    &#x2F;&#x2F;当执行count&#x3D;3时，取消timer中的任务</span><br><span class="line">    timer.cancel();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#x2F;&#x2F;异步任务执行，输出f3</span><br><span class="line">Timer.run(() &#123;</span><br><span class="line">  print(&quot;f3&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>以上就是<code>Timer</code>的全部用法，主要是任务的定时执行、任务的周期性执行及任务的异步执行。由于任务周期性执行的实现原理与任务定时执行的实现原理基本相同，所有<code>Timer</code>就主要分为定时任务的执行及异步任务的执行两中情况。</p>
+<p>下面也就根据这两种情况来分析<code>Timer</code>的实现原理。</p>
+<h3 id="2、Timer原理解析"><a href="#2、Timer原理解析" class="headerlink" title="2、Timer原理解析"></a>2、Timer原理解析</h3><p>由于无论那种任务类型都需要创建一个<code>Timer</code>对象，所以就先来看<code>Timer</code>对象的创建。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">abstract class Timer &#123;</span><br><span class="line">  &#x2F;&#x2F;延迟一定时间后执行callback</span><br><span class="line">  factory Timer(Duration duration, void callback()) &#123;</span><br><span class="line">    if (Zone.current &#x3D;&#x3D; Zone.root) &#123;</span><br><span class="line">      &#x2F;&#x2F; No need to bind the callback. We know that the root&#39;s timer will</span><br><span class="line">      &#x2F;&#x2F; be invoked in the root zone.</span><br><span class="line">      return Zone.current.createTimer(duration, callback);</span><br><span class="line">    &#125;</span><br><span class="line">    return Zone.current</span><br><span class="line">        .createTimer(duration, Zone.current.bindCallbackGuarded(callback));</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;&#x2F;创建一个timer对象</span><br><span class="line">  external static Timer _createTimer(Duration duration, void callback());</span><br><span class="line">  &#x2F;&#x2F;创建一个可轮询timer对象</span><br><span class="line">  external static Timer _createPeriodicTimer(</span><br><span class="line">      Duration duration, void callback(Timer timer));</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在上面代码中，<code>Timer</code>构造函数中最会终调用<code>_createTimer</code>来创建一个<code>_Timer</code>对象。所以下面就来看<code>_createTimer</code>方法的具体实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@patch</span><br><span class="line">class Timer &#123;</span><br><span class="line">  @patch</span><br><span class="line">  static Timer _createTimer(Duration duration, void callback()) &#123;</span><br><span class="line">    &#x2F;&#x2F; TODO(iposva): Remove _TimerFactory and use VMLibraryHooks exclusively.</span><br><span class="line">    if (_TimerFactory._factory &#x3D;&#x3D; null) &#123;</span><br><span class="line">      _TimerFactory._factory &#x3D; VMLibraryHooks.timerFactory;</span><br><span class="line">    &#125;</span><br><span class="line">    if (_TimerFactory._factory &#x3D;&#x3D; null) &#123;</span><br><span class="line">      throw new UnsupportedError(&quot;Timer interface not supported.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    int milliseconds &#x3D; duration.inMilliseconds;</span><br><span class="line">    if (milliseconds &lt; 0) milliseconds &#x3D; 0;</span><br><span class="line">    return _TimerFactory._factory(milliseconds, (_) &#123;</span><br><span class="line">      callback();</span><br><span class="line">    &#125;, false);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>_createTimer</code>中，最终调用的是<code>_TimerFactory._factory</code>方法。由于在<code>Flutter</code>的第一个<code>isolate</code>初始化成功后，会调用<code>_setupHooks</code>方法将<code>_Timer._factory</code>赋给<code>_TimerFactory._factory</code>。所以<code>_createTimer</code>中最终调用了<code>_Timer._factory</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@pragma(&quot;vm:entry-point&quot;, &quot;call&quot;)</span><br><span class="line">_setupHooks() &#123;</span><br><span class="line">  VMLibraryHooks.timerFactory &#x3D; _Timer._factory;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>_Timer._factory</code>方法中，直接就是创建一个<code>_timer</code>对象，也就是在<code>Timer</code>的具体实现类是<code>_Timer</code>。下面就来看<code>_Timer</code>的具体实现代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br></pre></td><td class="code"><pre><span class="line">class _Timer implements Timer &#123;</span><br><span class="line">  &#x2F;&#x2F;消息类型：表示需要取消event handler中已存在某个timer</span><br><span class="line">  static const _NO_TIMER &#x3D; -1;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;根据发送的值来区分消息类型</span><br><span class="line">  &#x2F;&#x2F;消息类型：表示异步执行的timer</span><br><span class="line">  static const _ZERO_EVENT &#x3D; 1;</span><br><span class="line">  &#x2F;&#x2F;消息类型：表示已经超时的timer</span><br><span class="line">  static const _TIMEOUT_EVENT &#x3D; null;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;创建一个二叉堆，该堆按照唤醒时间进行排序。</span><br><span class="line">  static final _heap &#x3D; new _TimerHeap();</span><br><span class="line">  &#x2F;&#x2F;链表中的第一个Timer</span><br><span class="line">  static _Timer _firstZeroTimer;</span><br><span class="line">  &#x2F;&#x2F;链表中的最后一个Timer</span><br><span class="line">  static _Timer _lastZeroTimer;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;使用id来对具有相同到期时间的Timer进行排序。</span><br><span class="line">  &#x2F;&#x2F;ID_MASK入队后或计时器队列为空时，将回收ID。</span><br><span class="line">  static const _ID_MASK &#x3D; 0x1fffffff;</span><br><span class="line">  static int _idCount &#x3D; 0;</span><br><span class="line"></span><br><span class="line">  static RawReceivePort _receivePort;</span><br><span class="line">  static SendPort _sendPort;</span><br><span class="line">  static int _scheduledWakeupTime;</span><br><span class="line"></span><br><span class="line">  static bool _handlingCallbacks &#x3D; false;</span><br><span class="line"></span><br><span class="line">  Function _callback; &#x2F;&#x2F;timer触发的回调方法，如果timer已被取消，则为null</span><br><span class="line">  int _wakeupTime; &#x2F;&#x2F;唤醒时间</span><br><span class="line">  final int _milliSeconds; &#x2F;&#x2F;创建指定的持续时间</span><br><span class="line">  final bool _repeating; &#x2F;&#x2F;是否周期性</span><br><span class="line">  var _indexOrNext; &#x2F;&#x2F;如果Timer在_TimerHeap中，该值就是在该堆中的索引。如果是在链表中，则是当前Timer指向的下一个Timer</span><br><span class="line">  int _id; &#x2F;&#x2F;当前Timer所对应的id，如果到期时间相同，则根据此id来进行排序</span><br><span class="line"></span><br><span class="line">  int _tick &#x3D; 0; &#x2F;&#x2F; Backing for [tick],</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;获取下一个可用id</span><br><span class="line">  static int _nextId() &#123;</span><br><span class="line">    var result &#x3D; _idCount;</span><br><span class="line">    _idCount &#x3D; (_idCount + 1) &amp; _ID_MASK;</span><br><span class="line">    return result;</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;&#x2F;创建一个Timer对象</span><br><span class="line">  _Timer._internal(</span><br><span class="line">      this._callback, this._wakeupTime, this._milliSeconds, this._repeating)</span><br><span class="line">      : _id &#x3D; _nextId();</span><br><span class="line"></span><br><span class="line">  static Timer _createTimer(</span><br><span class="line">      void callback(Timer timer), int milliSeconds, bool repeating) &#123;</span><br><span class="line">    &#x2F;&#x2F;milliSeconds不能小于0，小于0也就意味着超时，需要立即执行。</span><br><span class="line">    if (milliSeconds &lt; 0) &#123;</span><br><span class="line">      milliSeconds &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;获取当前时间</span><br><span class="line">    int now &#x3D; VMLibraryHooks.timerMillisecondClock();</span><br><span class="line">    &#x2F;&#x2F;得到Timer的唤醒时间</span><br><span class="line">    int wakeupTime &#x3D; (milliSeconds &#x3D;&#x3D; 0) ? now : (now + 1 + milliSeconds);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;创建一个Timer对象</span><br><span class="line">    _Timer timer &#x3D;</span><br><span class="line">        new _Timer._internal(callback, wakeupTime, milliSeconds, repeating);</span><br><span class="line">    &#x2F;&#x2F;将新创建的Timer放到适当的结构中，并在必要时进行对应的通知。</span><br><span class="line">    &#x2F;&#x2F;如果Timer中是异步任务，则加入到链表中，否则加入到二叉堆中</span><br><span class="line">    timer._enqueue();</span><br><span class="line">    return timer;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;通过工厂模式来创建一个timer</span><br><span class="line">  factory _Timer(int milliSeconds, void callback(Timer timer)) &#123;</span><br><span class="line">    return _createTimer(callback, milliSeconds, false);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;通过工厂模式来创建一个周期性执行的timer</span><br><span class="line">  factory _Timer.periodic(int milliSeconds, void callback(Timer timer)) &#123;</span><br><span class="line">    return _createTimer(callback, milliSeconds, true);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;timer是否在二叉堆中</span><br><span class="line">  bool get _isInHeap &#x3D;&gt; _indexOrNext is int;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;首先根据唤醒时间来排序，如果唤醒时间相同则根据timer的_id来排序</span><br><span class="line">  int _compareTo(_Timer other) &#123;</span><br><span class="line">    int c &#x3D; _wakeupTime - other._wakeupTime;</span><br><span class="line">    if (c !&#x3D; 0) return c;</span><br><span class="line">    return _id - other._id;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;判断timer是否可使用，实际上就是判断回调方法是否为null</span><br><span class="line">  bool get isActive &#x3D;&gt; _callback !&#x3D; null;</span><br><span class="line"></span><br><span class="line">  int get tick &#x3D;&gt; _tick;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;取消已经设置的timer，如果Timer存在于二叉堆中，则将其从堆中删除。否则继续保留在链表中，因为它们需要消耗相应的待处理消息。</span><br><span class="line">  void cancel() &#123;</span><br><span class="line">    _callback &#x3D; null;</span><br><span class="line">    &#x2F;&#x2F;实际上只有存在于二叉堆中的Timer被删除。链表中的Timer需要消耗其相应的唤醒消息，以便将它们留在队列中。</span><br><span class="line">    if (!_isInHeap) return;</span><br><span class="line">    bool update &#x3D; _heap.isFirst(this);</span><br><span class="line">    _heap.remove(this);</span><br><span class="line">    if (update) &#123;</span><br><span class="line">      _notifyEventHandler();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;主要是重新计算下一次的唤醒时间。仅会在周期性执行的Timer中调用，</span><br><span class="line">  void _advanceWakeupTime() &#123;</span><br><span class="line">    &#x2F;&#x2F;重新计算下一次唤醒时间。 对于已经超时的Timer，当前时间就是下一个唤醒时间。</span><br><span class="line">    _id &#x3D; _nextId();</span><br><span class="line">    if (_milliSeconds &gt; 0) &#123;</span><br><span class="line">      _wakeupTime +&#x3D; _milliSeconds;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      _wakeupTime &#x3D; VMLibraryHooks.timerMillisecondClock();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;将Timer添加到二叉堆或者链表中，如果唤醒时间相同则按照先进先出的规则来取出</span><br><span class="line">  void _enqueue() &#123;</span><br><span class="line">    if (_milliSeconds &#x3D;&#x3D; 0) &#123;</span><br><span class="line">      if (_firstZeroTimer &#x3D;&#x3D; null) &#123;</span><br><span class="line">        _lastZeroTimer &#x3D; this;</span><br><span class="line">        _firstZeroTimer &#x3D; this;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        _lastZeroTimer._indexOrNext &#x3D; this;</span><br><span class="line">        _lastZeroTimer &#x3D; this;</span><br><span class="line">      &#125;</span><br><span class="line">      &#x2F;&#x2F; Every zero timer gets its own event.</span><br><span class="line">      _notifyZeroHandler();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      _heap.add(this);</span><br><span class="line">      if (_heap.isFirst(this)) &#123;</span><br><span class="line">        _notifyEventHandler();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;对于包含异步任务的timer，需要发送一个消息类型为_ZERO_EVENT的消息。之所以消息类型是_ZERO_EVENT，主要是为了区分EventHandler消息（_TIMEOUT_EVENT消息）。</span><br><span class="line">  static void _notifyZeroHandler() &#123;</span><br><span class="line">    if (_sendPort &#x3D;&#x3D; null) &#123;</span><br><span class="line">      _createTimerHandler();</span><br><span class="line">    &#125;</span><br><span class="line">    _sendPort.send(_ZERO_EVENT);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;从链表中获取即将执行的timer及二叉堆中到期时间小于_firstZeroTimer的timer</span><br><span class="line">  static List _queueFromZeroEvent() &#123;</span><br><span class="line">    var pendingTimers &#x3D; new List();</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;从二叉堆中查询到期时间小于_firstZeroTimer的timer，并加入到一个List中</span><br><span class="line">    var timer;</span><br><span class="line">    while (!_heap.isEmpty &amp;&amp; (_heap.first._compareTo(_firstZeroTimer) &lt; 0)) &#123;</span><br><span class="line">      timer &#x3D; _heap.removeFirst();</span><br><span class="line">      pendingTimers.add(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;获取链表中的第一个timer</span><br><span class="line">    timer &#x3D; _firstZeroTimer;</span><br><span class="line">    _firstZeroTimer &#x3D; timer._indexOrNext;</span><br><span class="line">    timer._indexOrNext &#x3D; null;</span><br><span class="line">    pendingTimers.add(timer);</span><br><span class="line">    return pendingTimers;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static void _notifyEventHandler() &#123;</span><br><span class="line">    if (_handlingCallbacks) &#123;</span><br><span class="line">      &#x2F;&#x2F;如果正在进行timer的回调处理，则不继续向下执行</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;如果不存在即将执行的timers，则关闭receive port</span><br><span class="line">    if ((_firstZeroTimer &#x3D;&#x3D; null) &amp;&amp; _heap.isEmpty) &#123;</span><br><span class="line">      &#x2F;&#x2F;没有待处理的计时器，则关闭receive port并通知event handler。</span><br><span class="line">      if (_sendPort !&#x3D; null) &#123;</span><br><span class="line">        _cancelWakeup();</span><br><span class="line">        _shutdownTimerHandler();</span><br><span class="line">      &#125;</span><br><span class="line">      return;</span><br><span class="line">    &#125; else if (_heap.isEmpty) &#123;</span><br><span class="line">      &#x2F;&#x2F;如果二叉堆中不存在timer，则取消唤醒。</span><br><span class="line">      _cancelWakeup();</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;仅在请求的唤醒时间与预定的唤醒时间不同时发送消息。</span><br><span class="line">    var wakeupTime &#x3D; _heap.first._wakeupTime;</span><br><span class="line">    if ((_scheduledWakeupTime &#x3D;&#x3D; null) ||</span><br><span class="line">        (wakeupTime !&#x3D; _scheduledWakeupTime)) &#123;</span><br><span class="line">      _scheduleWakeup(wakeupTime);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;获取已经超时的timer</span><br><span class="line">  static List _queueFromTimeoutEvent() &#123;</span><br><span class="line">    var pendingTimers &#x3D; new List();</span><br><span class="line">    if (_firstZeroTimer !&#x3D; null) &#123;</span><br><span class="line">      &#x2F;&#x2F;从二叉堆中获取唤醒时间小于链表中第一个timer唤醒时间的timer，并将该timer添加到pendingTimers中</span><br><span class="line">      var timer;</span><br><span class="line">      while (!_heap.isEmpty &amp;&amp; (_heap.first._compareTo(_firstZeroTimer) &lt; 0)) &#123;</span><br><span class="line">        timer &#x3D; _heap.removeFirst();</span><br><span class="line">        pendingTimers.add(timer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      &#x2F;&#x2F;从二叉堆中获取已经到期的timer并添加到pendingTimers中</span><br><span class="line">      var currentTime &#x3D; VMLibraryHooks.timerMillisecondClock();</span><br><span class="line">      var timer;</span><br><span class="line">      while (!_heap.isEmpty &amp;&amp; (_heap.first._wakeupTime &lt;&#x3D; currentTime)) &#123;</span><br><span class="line">        timer &#x3D; _heap.removeFirst();</span><br><span class="line">        pendingTimers.add(timer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return pendingTimers;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static void _runTimers(List pendingTimers) &#123;</span><br><span class="line">    &#x2F;&#x2F;如果目前没有待处理的timer，那么就有机会在新加入timer之前来重置_idCount</span><br><span class="line">    if (_heap.isEmpty &amp;&amp; (_firstZeroTimer &#x3D;&#x3D; null)) &#123;</span><br><span class="line">      _idCount &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;如果没有待处理的timer，则结束方法的执行</span><br><span class="line">    if (pendingTimers.length &#x3D;&#x3D; 0) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Trigger all of the pending timers. New timers added as part of the</span><br><span class="line">    &#x2F;&#x2F; callbacks will be enqueued now and notified in the next spin at the</span><br><span class="line">    &#x2F;&#x2F; earliest.</span><br><span class="line">    _handlingCallbacks &#x3D; true;</span><br><span class="line">    var i &#x3D; 0;</span><br><span class="line">    try &#123;</span><br><span class="line">      for (; i &lt; pendingTimers.length; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;获取下一个timer</span><br><span class="line">        var timer &#x3D; pendingTimers[i];</span><br><span class="line">        timer._indexOrNext &#x3D; null;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; One of the timers in the pending_timers list can cancel</span><br><span class="line">        &#x2F;&#x2F; one of the later timers which will set the callback to</span><br><span class="line">        &#x2F;&#x2F; null. Or the pending zero timer has been canceled earlier.</span><br><span class="line">        if (timer._callback !&#x3D; null) &#123;</span><br><span class="line">          var callback &#x3D; timer._callback;</span><br><span class="line">          if (!timer._repeating) &#123;</span><br><span class="line">            &#x2F;&#x2F;将timer标记为无效</span><br><span class="line">            timer._callback &#x3D; null;</span><br><span class="line">          &#125; else if (timer._milliSeconds &gt; 0) &#123;</span><br><span class="line">            var ms &#x3D; timer._milliSeconds;</span><br><span class="line">            int overdue &#x3D;</span><br><span class="line">                VMLibraryHooks.timerMillisecondClock() - timer._wakeupTime;</span><br><span class="line">            if (overdue &gt; ms) &#123;</span><br><span class="line">              int missedTicks &#x3D; overdue ~&#x2F; ms;</span><br><span class="line">              timer._wakeupTime +&#x3D; missedTicks * ms;</span><br><span class="line">              timer._tick +&#x3D; missedTicks;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          timer._tick +&#x3D; 1;</span><br><span class="line">          </span><br><span class="line">          &#x2F;&#x2F;执行timer中注册的回调方法</span><br><span class="line">          callback(timer);</span><br><span class="line">          &#x2F;&#x2F; Re-insert repeating timer if not canceled.</span><br><span class="line">          &#x2F;&#x2F;如果timer未取消，则重新插入链表或者二叉堆中</span><br><span class="line">          if (timer._repeating &amp;&amp; (timer._callback !&#x3D; null)) &#123;</span><br><span class="line">            &#x2F;&#x2F;更新唤醒时间</span><br><span class="line">            timer._advanceWakeupTime();</span><br><span class="line">            timer._enqueue();</span><br><span class="line">          &#125;</span><br><span class="line">          &#x2F;&#x2F;执行微任务，仅限于非RootIsolate。</span><br><span class="line">          var immediateCallback &#x3D; _removePendingImmediateCallback();</span><br><span class="line">          if (immediateCallback !&#x3D; null) &#123;</span><br><span class="line">            immediateCallback();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      _handlingCallbacks &#x3D; false;</span><br><span class="line">      &#x2F;&#x2F;重新向二叉堆或者链表中插入pendingTimers中还存在的timer</span><br><span class="line">      for (i++; i &lt; pendingTimers.length; i++) &#123;</span><br><span class="line">        var timer &#x3D; pendingTimers[i];</span><br><span class="line">        timer._enqueue();</span><br><span class="line">      &#125;</span><br><span class="line">      _notifyEventHandler();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static void _handleMessage(msg) &#123;</span><br><span class="line">    var pendingTimers;</span><br><span class="line">    if (msg &#x3D;&#x3D; _ZERO_EVENT) &#123;</span><br><span class="line">      &#x2F;&#x2F;获取包含异步任务的timer</span><br><span class="line">      pendingTimers &#x3D; _queueFromZeroEvent();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      _scheduledWakeupTime &#x3D; null; &#x2F;&#x2F; Consumed the last scheduled wakeup now.</span><br><span class="line">      &#x2F;&#x2F;获取已经超时的timer</span><br><span class="line">      pendingTimers &#x3D; _queueFromTimeoutEvent();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;执行Timer的回调方法</span><br><span class="line">    _runTimers(pendingTimers);</span><br><span class="line">    &#x2F;&#x2F;如果当前没有待执行的Timer，则通知event handler或者关闭port</span><br><span class="line">    _notifyEventHandler();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;告诉event handler，在特定时间，当前isolated中的timer需要被唤醒</span><br><span class="line">  static void _scheduleWakeup(int wakeupTime) &#123;</span><br><span class="line">    if (_sendPort &#x3D;&#x3D; null) &#123;</span><br><span class="line">      _createTimerHandler();</span><br><span class="line">    &#125;</span><br><span class="line">    VMLibraryHooks.eventHandlerSendData(null, _sendPort, wakeupTime);</span><br><span class="line">    _scheduledWakeupTime &#x3D; wakeupTime;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;取消event handler中等待唤醒的timer</span><br><span class="line">  static void _cancelWakeup() &#123;</span><br><span class="line">    if (_sendPort !&#x3D; null) &#123;</span><br><span class="line">      VMLibraryHooks.eventHandlerSendData(null, _sendPort, _NO_TIMER);</span><br><span class="line">      _scheduledWakeupTime &#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;创建一个receive port并注册一个message handler</span><br><span class="line">  static void _createTimerHandler() &#123;</span><br><span class="line">    assert(_sendPort &#x3D;&#x3D; null);</span><br><span class="line">    _receivePort &#x3D; new RawReceivePort(_handleMessage);</span><br><span class="line">    _sendPort &#x3D; _receivePort.sendPort;</span><br><span class="line">    _scheduledWakeupTime &#x3D; null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static void _shutdownTimerHandler() &#123;</span><br><span class="line">    _receivePort.close();</span><br><span class="line">    _receivePort &#x3D; null;</span><br><span class="line">    _sendPort &#x3D; null;</span><br><span class="line">    _scheduledWakeupTime &#x3D; null;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;创建_timer对象</span><br><span class="line">  static Timer _factory(</span><br><span class="line">      int milliSeconds, void callback(Timer timer), bool repeating) &#123;</span><br><span class="line">    if (repeating) &#123;</span><br><span class="line">      return new _Timer.periodic(milliSeconds, callback);</span><br><span class="line">    &#125;</span><br><span class="line">    return new _Timer(milliSeconds, callback);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>_Timer</code>中，根据任务类型的不同，将<code>timer</code>添加到不同的数据结构中。如果是异步任务，则会将<code>timer</code>添加到一个单链表中，根据FIFO的顺序来执行；如果是定时任务，则会将<code>timer</code>添加到<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中并根据唤醒时间来进行排序。</p>
+<p>下面就先来看异步任务执行的实现原理。</p>
+<h4 id="2-1、异步任务的执行"><a href="#2-1、异步任务的执行" class="headerlink" title="2.1、异步任务的执行"></a>2.1、异步任务的执行</h4><p>根据上面代码。可以发现，包含异步任务的<code>timer</code>是将<code>timer</code>添加到以<code>Timer</code>为节点的单链表中，再通过<code>SendPort</code>来发送一个类型为<code>_ZERO_EVENT</code>的消息。</p>
+<p>那么<code>SendPort</code>是如何发送消息的尼？这在<a href="https://juejin.im/post/5e149a7df265da5d3b32e167" target="_blank" rel="noopener">Isolate的创建流程</a>一文中做了详细的介绍。其发送消息就是通过<code>PostMessage</code>函数来将消息添加到<code>Isolate</code>对应的<code>MessageHandler</code>中，然后等待<code>MessageHandler</code>的处理。下面来看<code>PostMessage</code>函数的实现代码。</p>
+<p>[-&gt;third_party/dart/runtime/vm/message_handler.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">void MessageHandler::PostMessage(std::unique_ptr&lt;Message&gt; message,</span><br><span class="line">                                 bool before_events) &#123;</span><br><span class="line">  Message::Priority saved_priority;</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line">    MonitorLocker ml(&amp;monitor_);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    saved_priority &#x3D; message-&gt;priority();</span><br><span class="line">    if (message-&gt;IsOOB()) &#123;</span><br><span class="line">      &#x2F;&#x2F;加入到OOB类型消息的队列中</span><br><span class="line">      oob_queue_-&gt;Enqueue(std::move(message), before_events);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      &#x2F;&#x2F;加入到OOB类型消息的队列中</span><br><span class="line">      queue_-&gt;Enqueue(std::move(message), before_events);</span><br><span class="line">    &#125;</span><br><span class="line">    if (paused_for_messages_) &#123;</span><br><span class="line">      ml.Notify();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    &#x2F;&#x2F;通过task_running_来防止短时间内多次重复执行</span><br><span class="line">    if (pool_ !&#x3D; nullptr &amp;&amp; !task_running_) &#123;</span><br><span class="line">      task_running_ &#x3D; true;</span><br><span class="line">      &#x2F;&#x2F;交给线程池来异步执行（非RootIsolate）</span><br><span class="line">      const bool launched_successfully &#x3D; pool_-&gt;Run&lt;MessageHandlerTask&gt;(this);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;调用自定义的消息通知</span><br><span class="line">  MessageNotify(saved_priority);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>由于在<code>Flutter</code>的<code>RootIsolate</code>中，<code>pool_</code>为null。所以在非<code>RootIsolate</code>中，消息是通过线程池中的子线程来执行<code>RawReceivePort</code>对象创建时设置的回调方法——<code>_handleMessage</code>。</p>
+<p>再来看<code>MessageNotify</code>函数，它的实现是在其子类<code>IsolateMessageHandler</code>中。</p>
+<p>[-&gt;third_party/dart/runtime/vm/isolate.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void IsolateMessageHandler::MessageNotify(Message::Priority priority) &#123;</span><br><span class="line">  if (priority &gt;&#x3D; Message::kOOBPriority) &#123;</span><br><span class="line">    &#x2F;&#x2F;即使mutator线程繁忙，也要处理优先级为OOB的消息</span><br><span class="line">    I-&gt;ScheduleInterrupts(Thread::kMessageInterrupt);</span><br><span class="line">  &#125;</span><br><span class="line">  &#x2F;&#x2F;获取Isolate的message_notify_callback_的值</span><br><span class="line">  Dart_MessageNotifyCallback callback &#x3D; I-&gt;message_notify_callback();</span><br><span class="line">  if (callback !&#x3D; nullptr) &#123;</span><br><span class="line">    &#x2F;&#x2F; Allow the embedder to handle message notification.</span><br><span class="line">    (*callback)(Api::CastIsolate(I));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>一般情况下，<code>callback</code>为null，但<code>RootIsolate</code>却例外。是因为在<a href="https://juejin.im/post/5e535ca2f265da573e6723f3" target="_blank" rel="noopener">Flutter的Engine启动</a>过程中，也就是在<code>RootIsolate</code>的<code>MessageHandler</code>初始化时，会给<code>callback</code>赋值。</p>
+<p>[-&gt;third_party/tonic/dart_message_handler.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void DartMessageHandler::Initialize(TaskDispatcher dispatcher) &#123;</span><br><span class="line">  &#x2F;&#x2F;仅能调用一次</span><br><span class="line">  task_dispatcher_ &#x3D; dispatcher;</span><br><span class="line">  &#x2F;&#x2F;给RootIsolate的message_notify_callback_赋值</span><br><span class="line">  Dart_SetMessageNotifyCallback(MessageNotifyCallback);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>也就是当调用<code>callback</code>时，对应的是<code>MessageNotifyCallback</code>函数的执行。</p>
+<p>[-&gt;third_party/tonic/dart_message_handler.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void DartMessageHandler::OnMessage(DartState* dart_state) &#123;</span><br><span class="line">  auto task_dispatcher_ &#x3D; dart_state-&gt;message_handler().task_dispatcher_;</span><br><span class="line"></span><br><span class="line">  auto weak_dart_state &#x3D; dart_state-&gt;GetWeakPtr();</span><br><span class="line">  &#x2F;&#x2F;在Android中，任务交给UI线程中的loop来执行。</span><br><span class="line">  &#x2F;&#x2F;在iOS中，也是通过类似loop的消息处理器来执行</span><br><span class="line">  task_dispatcher_([weak_dart_state]() &#123;</span><br><span class="line">    if (auto dart_state &#x3D; weak_dart_state.lock()) &#123;</span><br><span class="line">      dart_state-&gt;message_handler().OnHandleMessage(dart_state.get());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void DartMessageHandler::MessageNotifyCallback(Dart_Isolate dest_isolate) &#123;</span><br><span class="line">  auto dart_state &#x3D; DartState::From(dest_isolate);</span><br><span class="line">  &#x2F;&#x2F;调用OnMessage函数</span><br><span class="line">  dart_state-&gt;message_handler().OnMessage(dart_state);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>通过上面代码，可以发现在<code>Android</code>平台的<code>RootIsolate</code>中，消息的处理是通过UI线程中的<code>loop</code>来处理。从<code>Android</code>角度来看，就是通过<code>handler</code>来发送一个消息。</p>
+<p>总而言之，<code>timer</code>中异步任务的处理主要分为以下两种情况。</p>
+<ol>
+<li>在非<code>RootIsolate</code>中，是通过线程池获取一个子线程来处理任务。</li>
+<li>在<code>RootIsolate</code>中，如果是<code>Android</code>平台，则通过UI线程中的<code>loop</code>来处理任务。如果是iOS平台，则通过UI线程中的类似<code>loop</code>的消息处理器来处理任务。</li>
+</ol>
+<h4 id="2-2、定时任务的执行"><a href="#2-2、定时任务的执行" class="headerlink" title="2.2、定时任务的执行"></a>2.2、定时任务的执行</h4><p>通过对_ZERO_EVENT消息的处理来执行了<code>timer</code>中的异步任务。那么再来看定时任务的执行，该任务则是通过<code>event handler</code>来处理的。</p>
+<p>在<a href="https://juejin.im/post/5e5478d651882549274a5340" target="_blank" rel="noopener">Flutter之Dart虚拟机启动</a>一文中说过，当Dart VM虚拟机启动时会创建一个名为<code>event handler</code>的子线程，并在该子线程中通过异步IO来实现任务的执行。根据平台不同，异步IO的实现方式不同。在<code>Android</code>中，是通过<code>Linux</code>的<code>epoll</code>来实现的；在<code>iOS</code>中，是通过<code>kqueue</code>来实现的。</p>
+<p>把<code>timer</code>对象添加到<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>之后，会根据唤醒时间来排序，如果当前<code>timer</code>对象的唤醒时间最短，则会通知<code>event handler</code>。这里的<code>VMLibraryHooks.eventHandlerSendData</code>是在<code>Isolate</code>初始化时赋值的，它对应着<code>_EventHandler._sendData</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@patch</span><br><span class="line">class _EventHandler &#123;</span><br><span class="line">  @patch</span><br><span class="line">  static void _sendData(Object sender, SendPort sendPort, int data)</span><br><span class="line">      native &quot;EventHandler_SendData&quot;;</span><br><span class="line"></span><br><span class="line">  static int _timerMillisecondClock()</span><br><span class="line">      native &quot;EventHandler_TimerMillisecondClock&quot;;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>[-&gt;third_party/dart/runtime/bin/eventhandler.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void FUNCTION_NAME(EventHandler_SendData)(Dart_NativeArguments args) &#123;</span><br><span class="line">  &#x2F;&#x2F; Get the id out of the send port. If the handle is not a send port</span><br><span class="line">  &#x2F;&#x2F; we will get an error and propagate that out.</span><br><span class="line">  Dart_Handle handle &#x3D; Dart_GetNativeArgument(args, 1);</span><br><span class="line">  Dart_Port dart_port;</span><br><span class="line">  &#x2F;&#x2F;拿到SendPort</span><br><span class="line">  handle &#x3D; Dart_SendPortGetId(handle, &amp;dart_port);</span><br><span class="line">  ...</span><br><span class="line">  </span><br><span class="line">  Dart_Handle sender &#x3D; Dart_GetNativeArgument(args, 0);</span><br><span class="line">  intptr_t id;</span><br><span class="line">  if (Dart_IsNull(sender)) &#123;</span><br><span class="line">    id &#x3D; kTimerId;</span><br><span class="line">  &#125; else &#123;...&#125;</span><br><span class="line">  &#x2F;&#x2F;拿到唤醒时间</span><br><span class="line">  int64_t data &#x3D; DartUtils::GetIntegerValue(Dart_GetNativeArgument(args, 2));</span><br><span class="line">  &#x2F;&#x2F;发送消息</span><br><span class="line">  event_handler-&gt;SendData(id, dart_port, data);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>event_handler</code>在不同系统有不同实现，所以这里以Android为例。</p>
+<p>[-&gt;third_party/dart/runtime/bin/eventhandler_android.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;发送数据</span><br><span class="line">void EventHandlerImplementation::SendData(intptr_t id,</span><br><span class="line">                                          Dart_Port dart_port,</span><br><span class="line">                                          int64_t data) &#123;</span><br><span class="line">  WakeupHandler(id, dart_port, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void EventHandlerImplementation::WakeupHandler(intptr_t id,</span><br><span class="line">                                               Dart_Port dart_port,</span><br><span class="line">                                               int64_t data) &#123;</span><br><span class="line">  InterruptMessage msg;</span><br><span class="line">  &#x2F;&#x2F;消息id</span><br><span class="line">  msg.id &#x3D; id;</span><br><span class="line">  &#x2F;&#x2F;传递的dart_port</span><br><span class="line">  msg.dart_port &#x3D; dart_port;</span><br><span class="line">  &#x2F;&#x2F;消息需要传递的数据，在当前传递的是任务的唤醒时间</span><br><span class="line">  msg.data &#x3D; data;</span><br><span class="line">  &#x2F;&#x2F; WriteToBlocking will write up to 512 bytes atomically, and since our msg</span><br><span class="line">  &#x2F;&#x2F; is smaller than 512, we don&#39;t need a thread lock.</span><br><span class="line">  &#x2F;&#x2F; See: http:&#x2F;&#x2F;linux.die.net&#x2F;man&#x2F;7&#x2F;pipe, section &#39;Pipe_buf&#39;.</span><br><span class="line">  ASSERT(kInterruptMessageSize &lt; PIPE_BUF);</span><br><span class="line">  &#x2F;&#x2F;消息写入</span><br><span class="line">  intptr_t result &#x3D;</span><br><span class="line">      FDUtils::WriteToBlocking(interrupt_fds_[1], &amp;msg, kInterruptMessageSize);</span><br><span class="line">  if (result !&#x3D; kInterruptMessageSize) &#123;</span><br><span class="line">    if (result &#x3D;&#x3D; -1) &#123;</span><br><span class="line">      perror(&quot;Interrupt message failure:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    FATAL1(&quot;Interrupt message failure. Wrote %&quot; Pd &quot; bytes.&quot;, result);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;处理拿到的事件</span><br><span class="line">void EventHandlerImplementation::HandleEvents(struct epoll_event* events,</span><br><span class="line">                                              int size) &#123;</span><br><span class="line">  bool interrupt_seen &#x3D; false;</span><br><span class="line">  for (int i &#x3D; 0; i &lt; size; i++) &#123;</span><br><span class="line">    if (events[i].data.ptr &#x3D;&#x3D; NULL) &#123;</span><br><span class="line">      interrupt_seen &#x3D; true;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      DescriptorInfo* di &#x3D;</span><br><span class="line">          reinterpret_cast&lt;DescriptorInfo*&gt;(events[i].data.ptr);</span><br><span class="line">      const intptr_t old_mask &#x3D; di-&gt;Mask();</span><br><span class="line">      const intptr_t event_mask &#x3D; GetPollEvents(events[i].events, di);</span><br><span class="line">      if ((event_mask &amp; (1 &lt;&lt; kErrorEvent)) !&#x3D; 0) &#123;</span><br><span class="line">        di-&gt;NotifyAllDartPorts(event_mask);</span><br><span class="line">        UpdateEpollInstance(old_mask, di);</span><br><span class="line">      &#125; else if (event_mask !&#x3D; 0) &#123;</span><br><span class="line">        Dart_Port port &#x3D; di-&gt;NextNotifyDartPort(event_mask);</span><br><span class="line">        UpdateEpollInstance(old_mask, di);</span><br><span class="line">        &#x2F;&#x2F;通过消息的dart_port来调用注册的回调方法</span><br><span class="line">        DartUtils::PostInt32(port, event_mask);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (interrupt_seen) &#123;</span><br><span class="line">    &#x2F;&#x2F; Handle after socket events, so we avoid closing a socket before we handle</span><br><span class="line">    &#x2F;&#x2F; the current events.</span><br><span class="line">    HandleInterruptFd();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>epoll</code>就能在指定的时间来处理事件，然后通过<code>dart_port</code>来找到对应的<code>MessageHandler</code>并处理。</p>
+<p>[-&gt;third_party/dart/runtime/bin/dartutils.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bool DartUtils::PostInt32(Dart_Port port_id, int32_t value) &#123;</span><br><span class="line">  &#x2F;&#x2F; Post a message with the integer value.</span><br><span class="line">  int32_t min &#x3D; 0xc0000000;  &#x2F;&#x2F; -1073741824</span><br><span class="line">  int32_t max &#x3D; 0x3fffffff;  &#x2F;&#x2F; 1073741823</span><br><span class="line">  ASSERT(min &lt;&#x3D; value &amp;&amp; value &lt; max);</span><br><span class="line">  Dart_CObject object;</span><br><span class="line">  object.type &#x3D; Dart_CObject_kInt32;</span><br><span class="line">  object.value.as_int32 &#x3D; value;</span><br><span class="line">  return Dart_PostCObject(port_id, &amp;object);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>[-&gt;third_party/dart/runtime/vm/native_api_impl.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">DART_EXPORT bool Dart_PostCObject(Dart_Port port_id, Dart_CObject* message) &#123;</span><br><span class="line">  return PostCObjectHelper(port_id, message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static bool PostCObjectHelper(Dart_Port port_id, Dart_CObject* message) &#123;</span><br><span class="line">  ApiMessageWriter writer;</span><br><span class="line">  std::unique_ptr&lt;Message&gt; msg &#x3D;</span><br><span class="line">      writer.WriteCMessage(message, port_id, Message::kNormalPriority);</span><br><span class="line"></span><br><span class="line">  if (msg &#x3D;&#x3D; nullptr) &#123;</span><br><span class="line">    return false;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Post the message at the given port.</span><br><span class="line">  return PortMap::PostMessage(std::move(msg));</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最终也就跟_ZERO_EVENT消息的处理流程一样，在当前<code>isolate</code>的<code>MessageHandler</code>中调用创建<code>RawReceivePort</code>对象时设置的回调方法——<code>_handleMessage</code>。</p>
+<h4 id="2-3、回调方法的执行"><a href="#2-3、回调方法的执行" class="headerlink" title="2.3、回调方法的执行"></a>2.3、回调方法的执行</h4><p>无论是异步任务，还是需要延时执行的任务，最终执行的回调方法都是<code>_handleMessage</code>。在该回调方法中，会根据消息类型来进行不同的区分，如果消息类型是<code>_ZERO_EVENT</code>，则会从<code>_queueFromZeroEvent</code>取出对应的<code>Timer</code>对象并执行其回调方法；否则就从<code>_queueFromTimeoutEvent</code>中取出对应<code>timer</code>对象并执行其回调方法。</p>
+<p>先来看<code>_queueFromZeroEvent</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  static List _queueFromZeroEvent() &#123;</span><br><span class="line">    var pendingTimers &#x3D; new List();</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;从二叉堆中查询到期时间小于_firstZeroTimer的timer，并加入到一个List中</span><br><span class="line">    var timer;</span><br><span class="line">    while (!_heap.isEmpty &amp;&amp; (_heap.first._compareTo(_firstZeroTimer) &lt; 0)) &#123;</span><br><span class="line">      timer &#x3D; _heap.removeFirst();</span><br><span class="line">      pendingTimers.add(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;获取链表中的第一个timer</span><br><span class="line">    timer &#x3D; _firstZeroTimer;</span><br><span class="line">    _firstZeroTimer &#x3D; timer._indexOrNext;</span><br><span class="line">    timer._indexOrNext &#x3D; null;</span><br><span class="line">    pendingTimers.add(timer);</span><br><span class="line">    return pendingTimers;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在该方法中，会将<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中唤醒时间比链表中的第一个<code>timer</code>对象唤醒时间还短的<code>timer</code>对象加入到集合<code>pendingTimers</code>中，然后再将链表中的第一个<code>timer</code>对象加入到集合<code>pendingTimers</code>中。</p>
+<p>再来看<code>_queueFromTimeoutEvent</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">  static List _queueFromTimeoutEvent() &#123;</span><br><span class="line">    var pendingTimers &#x3D; new List();</span><br><span class="line">    if (_firstZeroTimer !&#x3D; null) &#123;</span><br><span class="line">      &#x2F;&#x2F;从二叉堆中获取唤醒时间小于链表中第一个timer唤醒时间的timer，并将该timer添加到pendingTimers中</span><br><span class="line">      var timer;</span><br><span class="line">      while (!_heap.isEmpty &amp;&amp; (_heap.first._compareTo(_firstZeroTimer) &lt; 0)) &#123;</span><br><span class="line">        timer &#x3D; _heap.removeFirst();</span><br><span class="line">        pendingTimers.add(timer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      &#x2F;&#x2F;从二叉堆中获取已经到期的timer并添加到pendingTimers中</span><br><span class="line">      var currentTime &#x3D; VMLibraryHooks.timerMillisecondClock();</span><br><span class="line">      var timer;</span><br><span class="line">      while (!_heap.isEmpty &amp;&amp; (_heap.first._wakeupTime &lt;&#x3D; currentTime)) &#123;</span><br><span class="line">        timer &#x3D; _heap.removeFirst();</span><br><span class="line">        pendingTimers.add(timer);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return pendingTimers;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在该方法中，也会将<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中唤醒时间比链表中的第一个<code>timer</code>对象唤醒时间还短的<code>timer</code>对象加入到集合<code>pendingTimers</code>中。如果此时链表的第一个<code>timer</code>对象为空，则会将<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中<code>Timer</code>对象的唤醒时间与当前时间进行对比，如果唤醒时间小于当前当前时间，则将<code>timer</code>添加到集合<code>pendingTimers</code>中。</p>
+<p>经过<code>_queueFromZeroEvent</code>与<code>_queueFromTimeoutEvent</code>两个方法，就获取到了所有待执行的<code>timer</code>对象。然后调用<code>_runTimers</code>方法来执行所有待执行的<code>timer</code>对象。待<code>_runTimers</code>方法执行完毕后，还会调用<code>_notifyEventHandler</code>来通知<code>event handler</code>或者关闭<code>port</code>。</p>
+<p>再来看<code>_runTimers</code>方法的实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">  static void _runTimers(List pendingTimers) &#123;</span><br><span class="line">    &#x2F;&#x2F;如果目前没有待处理的timer，那么就有机会在新加入timer之前来重置_idCount</span><br><span class="line">    if (_heap.isEmpty &amp;&amp; (_firstZeroTimer &#x3D;&#x3D; null)) &#123;</span><br><span class="line">      _idCount &#x3D; 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;如果没有待处理的timer，则结束方法的执行</span><br><span class="line">    if (pendingTimers.length &#x3D;&#x3D; 0) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Trigger all of the pending timers. New timers added as part of the</span><br><span class="line">    &#x2F;&#x2F; callbacks will be enqueued now and notified in the next spin at the</span><br><span class="line">    &#x2F;&#x2F; earliest.</span><br><span class="line">    _handlingCallbacks &#x3D; true;</span><br><span class="line">    var i &#x3D; 0;</span><br><span class="line">    try &#123;</span><br><span class="line">      for (; i &lt; pendingTimers.length; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;获取下一个timer</span><br><span class="line">        var timer &#x3D; pendingTimers[i];</span><br><span class="line">        timer._indexOrNext &#x3D; null;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; One of the timers in the pending_timers list can cancel</span><br><span class="line">        &#x2F;&#x2F; one of the later timers which will set the callback to</span><br><span class="line">        &#x2F;&#x2F; null. Or the pending zero timer has been canceled earlier.</span><br><span class="line">        if (timer._callback !&#x3D; null) &#123;</span><br><span class="line">          var callback &#x3D; timer._callback;</span><br><span class="line">          if (!timer._repeating) &#123;</span><br><span class="line">            &#x2F;&#x2F;将timer标记为无效</span><br><span class="line">            timer._callback &#x3D; null;</span><br><span class="line">          &#125; else if (timer._milliSeconds &gt; 0) &#123;</span><br><span class="line">            var ms &#x3D; timer._milliSeconds;</span><br><span class="line">            int overdue &#x3D;</span><br><span class="line">                VMLibraryHooks.timerMillisecondClock() - timer._wakeupTime;</span><br><span class="line">            if (overdue &gt; ms) &#123;</span><br><span class="line">              int missedTicks &#x3D; overdue ~&#x2F; ms;</span><br><span class="line">              timer._wakeupTime +&#x3D; missedTicks * ms;</span><br><span class="line">              timer._tick +&#x3D; missedTicks;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          timer._tick +&#x3D; 1;</span><br><span class="line">          </span><br><span class="line">          &#x2F;&#x2F;执行timer中注册的回调方法</span><br><span class="line">          callback(timer);</span><br><span class="line">          &#x2F;&#x2F; Re-insert repeating timer if not canceled.</span><br><span class="line">          &#x2F;&#x2F;如果timer未取消，则重新插入链表或者二叉堆中</span><br><span class="line">          if (timer._repeating &amp;&amp; (timer._callback !&#x3D; null)) &#123;</span><br><span class="line">            &#x2F;&#x2F;更新唤醒时间</span><br><span class="line">            timer._advanceWakeupTime();</span><br><span class="line">            timer._enqueue();</span><br><span class="line">          &#125;</span><br><span class="line">          &#x2F;&#x2F;执行微任务，仅限于非RootIsolate。</span><br><span class="line">          var immediateCallback &#x3D; _removePendingImmediateCallback();</span><br><span class="line">          if (immediateCallback !&#x3D; null) &#123;</span><br><span class="line">            immediateCallback();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      _handlingCallbacks &#x3D; false;</span><br><span class="line">      &#x2F;&#x2F;重新向二叉堆或者链表中插入pendingTimers中还存在的timer</span><br><span class="line">      for (i++; i &lt; pendingTimers.length; i++) &#123;</span><br><span class="line">        var timer &#x3D; pendingTimers[i];</span><br><span class="line">        timer._enqueue();</span><br><span class="line">      &#125;</span><br><span class="line">      _notifyEventHandler();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在上面代码中，主要就是遍历<code>pendingTimers</code>中的<code>Timer</code>对象，获取<code>Timer</code>中的任务<code>callback</code>并执行，在上面示例中，就是输出f1、f2及f3。如果是周期性任务，则会在<code>callback</code>执行完毕后更新唤醒时间并重新添加到链表或<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中。如果在非<code>RootIsolate</code>中，还会执行微任务。如果最终<code>pendingTimers</code>中还存在未遍历的<code>Timer</code>，则将这些<code>Timer</code>添加到链表或<a href="https://zh.wikipedia.org/wiki/二叉堆" target="_blank" rel="noopener">二叉堆</a>中并通知<code>event handler</code>。</p>
+<h3 id="3、总结"><a href="#3、总结" class="headerlink" title="3、总结"></a>3、总结</h3><p>经过上面的分析，全面了解了<code>Timer</code>的使用及其实现原理。它的使用很简单，实现原理也分为以下几点。</p>
+<ol>
+<li>如果是异步任务，则通过<code>isolate</code>中的<code>MessageHandler</code>来处理。使用方式是调用<code>Timer</code>的<code>run</code>方法。</li>
+<li>如果是定时任务或周期性任务，则通过<code>event handler</code>来处理并通过<code>isolate</code>中的<code>MessageHandler</code>来执行任务。使用方式是通过工厂模式创建<code>Timer</code>或者调用<code>Timer</code>的<code>periodic</code>方法。</li>
+<li>如果在非<code>RootIsolate</code>中，<code>Timer</code>的任务执行完毕后都会执行微任务。</li>
+</ol>
+<p>由于<code>Future</code>的异步机制是通过<code>Timer</code>来实现的，所以了解了<code>Timer</code>的实现原理，也就知道了<code>Future</code>的异步部分的实现原理。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Fluter%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6%E4%B9%8B%E5%BE%AE%E4%BB%BB%E5%8A%A1/" rel="next" title="Fluter消息机制之微任务">
+                <i class="fa fa-chevron-left"></i> Fluter消息机制之微任务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BEngine%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" rel="prev" title="Flutter之Engine启动流程">
+                Flutter之Engine启动流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flutter之Timer原理解析"><span class="nav-number">1.</span> <span class="nav-text">Flutter之Timer原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、Timer的使用"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、Timer的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、Timer原理解析"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、Timer原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、异步任务的执行"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1、异步任务的执行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、定时任务的执行"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.2、定时任务的执行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、回调方法的执行"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">2.3、回调方法的执行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、总结"><span class="nav-number">1.0.3.</span> <span class="nav-text">3、总结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

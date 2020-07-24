@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Flutter," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[译]在 Flutter 中解析复杂的 JSON  原文地址：Parsing complex JSON in Flutter 原文作者：Poojã Bhaumik 译文出自：掘金翻译计划 本文永久链接：github.com&#x2F;xitu&#x2F;gold-m… 译者：DateBro 校对者：LeviDing   我必须承认，在 Flutter&#x2F;Dart 中使用 JSON 后，我一直想念 gson 的 Andr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter解析JSON">
+<meta property="og:url" content="http://yoursite.com/2020/07/20/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E8%A7%A3%E6%9E%90JSON/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="[译]在 Flutter 中解析复杂的 JSON  原文地址：Parsing complex JSON in Flutter 原文作者：Poojã Bhaumik 译文出自：掘金翻译计划 本文永久链接：github.com&#x2F;xitu&#x2F;gold-m… 译者：DateBro 校对者：LeviDing   我必须承认，在 Flutter&#x2F;Dart 中使用 JSON 后，我一直想念 gson 的 Andr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/7/28/164e173fe5e7e9a8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="article:published_time" content="2020-07-20T08:30:03.000Z">
+<meta property="article:modified_time" content="2020-07-21T15:33:44.747Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/7/28/164e173fe5e7e9a8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/20/flutter/实战开发/Flutter解析JSON/"/>
+
+
+
+
+
+  <title>Flutter解析JSON | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/20/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E8%A7%A3%E6%9E%90JSON/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flutter解析JSON</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T16:30:03+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">Flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/Flutter%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">Flutter实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/20/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E8%A7%A3%E6%9E%90JSON/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/20/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E8%A7%A3%E6%9E%90JSON/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="译-在-Flutter-中解析复杂的-JSON"><a href="#译-在-Flutter-中解析复杂的-JSON" class="headerlink" title="[译]在 Flutter 中解析复杂的 JSON"></a>[译]在 Flutter 中解析复杂的 JSON</h1><blockquote>
+<ul>
+<li>原文地址：<a href="https://medium.com/flutter-community/parsing-complex-json-in-flutter-747c46655f51" target="_blank" rel="noopener">Parsing complex JSON in Flutter</a></li>
+<li>原文作者：<a href="https://medium.com/@poojabhaumik?source=post_header_lockup" target="_blank" rel="noopener">Poojã Bhaumik</a></li>
+<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
+<li>本文永久链接：<a href="https://github.com/xitu/gold-miner/blob/master/TODO1/parsing-complex-json-in-flutter.md" target="_blank" rel="noopener">github.com/xitu/gold-m…</a></li>
+<li>译者：<a href="https://github.com/DateBro" target="_blank" rel="noopener">DateBro</a></li>
+<li>校对者：<a href="https://github.com/leviding" target="_blank" rel="noopener">LeviDing</a></li>
+</ul>
+</blockquote>
+<p>我必须承认，在 Flutter/Dart 中使用 JSON 后，我一直想念 <strong>gson</strong> 的 Android 世界。当我开始使用 Flutter 中的 API 时，JSON 解析真的让我很困扰。而且我敢确定，它也让很多初学者感到困惑。</p>
+<p>我们将在这篇博客中使用内置的 <code>dart:convert</code> 库。这是最基本的解析方法，只有在你刚开始使用 Flutter 或者你正在写一个小项目时才建议使用它。不过，了解一些 Flutter 中 JSON 解析的基础知识非常重要。如果你精通这个，或者你需要写更大的项目时，可以考虑像 <a href="https://pub.dartlang.org/packages/json_serializable" target="_blank" rel="noopener">json_serializable</a> 等代码生成器库。如果可能的话，我会在以后的文章中介绍它们。</p>
+<p>Fork 这个<a href="https://github.com/PoojaB26/ParsingJSON-Flutter" target="_blank" rel="noopener">示例项目</a>。它包含这篇博客中的所有代码，你可以对照着实践一下。</p>
+<h3 id="JSON-结构-1：简单的-map"><a href="#JSON-结构-1：简单的-map" class="headerlink" title="JSON 结构 #1：简单的 map"></a>JSON 结构 #1：简单的 map</h3><p>让我们从一个简单的 JSON 结构开始 —— <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/student.json" target="_blank" rel="noopener">student.json</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:&quot;487349&quot;,</span><br><span class="line">  &quot;name&quot;:&quot;Pooja Bhaumik&quot;,</span><br><span class="line">  &quot;score&quot; : 1000</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>规则 #1：</strong> <strong>确定结构。Json 字符串将具有 Map（键值对）或 List of Maps。</strong></p>
+<p><strong>规则 #2：用花括号开始？这是 map。用方括号开始？那是 List of maps。</strong></p>
+<p><code>student.json</code> 明显是 map（比如，<code>id</code> 是键，<code>487349</code> 是 <code>id</code> 的值）。</p>
+<p>让我们为这个 json 结构做一个 PODO（Plain Old Dart Object？）文件。你可以在示例项目的 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/student_model.dart" target="_blank" rel="noopener">student_model.dart</a> 文件中找到这段代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Student&#123;</span><br><span class="line">  String studentId;</span><br><span class="line">  String studentName;</span><br><span class="line">  int studentScores;</span><br><span class="line"></span><br><span class="line">  Student(&#123;</span><br><span class="line">    this.studentId,</span><br><span class="line">    this.studentName,</span><br><span class="line">    this.studentScores</span><br><span class="line"> &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>Perfect！ <strong>是这样吗？</strong> 因为 json 映射和这个 PODO 文件之间没有映射。甚至实体名称也不匹配。 <strong>我知道我知道。</strong> 我们还没有完成。我们必须将这些类成员映射到 json 对象。为此，我们需要创建一个 <code>factory</code> 方法。根据 Dart 文档，我们在实现一个构造函数时使用 <code>factory</code> 关键字时，这个构造函数不会总是创建其类的新实例，而这正是我们现在所需要的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">factory Student.fromJson(Map&lt;String, dynamic&gt; parsedJson)&#123;</span><br><span class="line">    return Student(</span><br><span class="line">      studentId: parsedJson[&#39;id&#39;],</span><br><span class="line">      studentName : parsedJson[&#39;name&#39;],</span><br><span class="line">      studentScores : parsedJson [&#39;score&#39;]</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们创建了一个叫做 <code>Student.fromJson</code> 的工厂方法，用来简单地反序列化你的 json。</p>
+<p><strong>我是一个小菜鸡，能告诉我反序列化究竟是什么吗？</strong></p>
+<p>当然。我们首先要向你介绍序列化和反序列化。<strong>序列化</strong> 简单来讲就是把数据（可能在对象中）写成字符串，<strong>反序列化</strong> 正好相反。它获取原始数据并重建对象模型。在本文中，我们主要讨论反序列化部分。在第一部分中，我们从 <code>student.json</code> 反序列化 json 字符串。</p>
+<p>所以我们的工厂方法也可以称为我们的转换器方法。</p>
+<p>还必须注意 <code>fromJson</code> 方法中的参数。它是一个 <code>Map&lt;String, dynamic&gt;</code> 这意味着它将 <code>String</code> <strong>键</strong>映射为 <code>dynamic</code> <strong>值</strong>。这正是我们需要识别它结构的原因。如果这个 json 结构是一个映射列表，那么这个参数会有所不同。</p>
+<p><strong>但为什么选择动态呢？</strong> 让我们先看一下另一个 json 结构来回答你的问题。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/7/28/164e173fe5e7e9a8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>name</code> 是一个 Map&lt;String，String&gt;，<code>majors</code> 是 String 和 List 的 Map，<code>subject</code> 是 String 和 List 的 Map。</p>
+<p>因为键总是一个 <code>string</code> 并且值可以是任何类型，所以我们将它保持为 <code>dynamic</code> 以保证安全。</p>
+<p>在 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/student_model.dart" target="_blank" rel="noopener">这里</a> 检查 <code>student_model.dart</code> 的完整代码。</p>
+<h3 id="访问对象"><a href="#访问对象" class="headerlink" title="访问对象"></a>访问对象</h3><p>让我们写 <code>student_services.dart</code>，它具有调用 <code>Student.fromJson</code> 的代码，能够从 <code>Student</code> 对象中获取值。</p>
+<h4 id="片段-1：imports"><a href="#片段-1：imports" class="headerlink" title="片段 #1：imports"></a>片段 #1：imports</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#39;dart:async&#39; show Future;</span><br><span class="line">import &#39;package:flutter&#x2F;services.dart&#39; show rootBundle;</span><br><span class="line">import &#39;dart:convert&#39;;</span><br><span class="line">import &#39;package:flutter_json&#x2F;student_model.dart&#39;;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最后导入的是你的模型文件名。</p>
+<h4 id="片段-2：加载-Json-Asset（可选）"><a href="#片段-2：加载-Json-Asset（可选）" class="headerlink" title="片段 #2：加载 Json Asset（可选）"></a><strong>片段 #2：加载 Json Asset（可选）</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;String&gt; _loadAStudentAsset() async &#123;</span><br><span class="line">  return await rootBundle.loadString(&#39;assets&#x2F;student.json&#39;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在这个特定项目中，我们的 json 文件放在 assets 文件夹下，所以我们必须这样加载 json。但如果你的 json 文件放在云端，你也可以进行网络调用。<strong>网络调用不在我们这篇文章的讨论范围内。</strong></p>
+<h4 id="片段-3：加载响应"><a href="#片段-3：加载响应" class="headerlink" title="片段 #3：加载响应"></a>片段 #3：加载响应</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Future loadStudent() async &#123;</span><br><span class="line">  String jsonString &#x3D; await _loadAStudentAsset();</span><br><span class="line">  final jsonResponse &#x3D; json.decode(jsonString);</span><br><span class="line">  Student student &#x3D; new Student.fromJson(jsonResponse);</span><br><span class="line">  print(student.studentScores);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>loadStudent()</code> 方法中， <strong>第一行</strong>：从 assets 中加载原始 json 字符串。 <strong>第二行</strong>：解码我们得到的 json 字符串。 <strong>第三行</strong>：现在我们通过调用 <code>Student.fromJson</code> 方法反序列化解码的 json 响应，这样我们现在可以使用 <code>Student</code> 对象来访问我们的实体。 <strong>第四行</strong>：就像我们在这里做的一样，我们在 <code>Student</code> 类里打印了 <code>studentScores</code>。</p>
+<p><strong>检查 Flutter 控制台以查看打印的所有值。（在 Android Studio 中，它在运行选项下）</strong></p>
+<p>瞧！你刚刚完成了第一次 JSON 解析（或没有）。 <strong>注意：请记住这里的 3 个片段，我们将把它用于下一组 json 解析（只更改文件名和方法名），我不会在这里重复代码。但你可以在示例项目中找到所有内容。</strong></p>
+<h3 id="JSON-结构-2：含有数组的简单结构"><a href="#JSON-结构-2：含有数组的简单结构" class="headerlink" title="JSON 结构 #2：含有数组的简单结构"></a>JSON 结构 #2：含有数组的简单结构</h3><p>现在我们要征服一个和上面那个类似的 json 结构，但不是单一值的，它可能有一个值数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;city&quot;: &quot;Mumbai&quot;,</span><br><span class="line">  &quot;streets&quot;: [</span><br><span class="line">    &quot;address1&quot;,</span><br><span class="line">    &quot;address2&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>所以在这个 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/address.json" target="_blank" rel="noopener">address.json</a> 中，我们有一个包含简单 <code>String</code> 值的 <code>city</code> 实体，但 <code>streets</code> 是一个 <code>String</code> 数组。 就我所知，Dart 并没有数组这种数据类型，但它有 List，所以这里 <code>streets</code> 是一个 <code>List&lt;String&gt;</code>。</p>
+<p>现在我们要检查一下 <strong>规则 #1 和 规则 #2</strong>。这绝对是一个 map，因为这是以花括号开头的。<code>streets</code> 仍然是一个 <code>List</code>，但我们稍后才会考虑这个。</p>
+<p>所以 <code>address_model.dart</code> 一开始看起来像是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Address &#123;</span><br><span class="line">  final String city;</span><br><span class="line">  final List&lt;String&gt; streets;</span><br><span class="line"></span><br><span class="line">  Address(&#123;</span><br><span class="line">    this.city,</span><br><span class="line">    this.streets</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>现在它是一个 map，我们的 <code>Address.fromJson</code> 方法 仍然有一个 <code>Map&lt;String, dynamic&gt;</code> 参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">factory Address.fromJson(Map&lt;String, dynamic&gt; parsedJson) &#123;</span><br><span class="line"></span><br><span class="line">  return new Address(</span><br><span class="line">      city: parsedJson[&#39;city&#39;],</span><br><span class="line">      streets: parsedJson[&#39;streets&#39;],</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>现在通过添加上面提到的三个代码片段来构造 <code>address_services.dart</code>。<strong>必须记住要放入正确的文件名和方法名。示例项目已经为您构建了 <code>_address_services.dart_</code>。</strong></p>
+<p>如果你现在运行它，你会发现一个小错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type &#39;List&lt;dynamic&gt;&#39; is not a subtype of type &#39;List&lt;String&gt;&#39;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>我告诉你，这些错误几乎在我 Dart 开发的每一步中都会出现。你也会遇到它们。那么让我解释一下这是什么意思。我们正在请求 <code>List&lt;String&gt;</code> 但我们得到一个 <code>List&lt;dynamic&gt;</code> ，因为我们的应用程序还无法识别它的类型。</p>
+<p>所以我们必须把这个显式地转换成 <code>List&lt;String&gt;</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var streetsFromJson &#x3D; parsedJson[&#39;streets&#39;];</span><br><span class="line">List&lt;String&gt; streetsList &#x3D; new List&lt;String&gt;.from(streetsFromJson);</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们首先把变量映射到 <code>streetsFromJson</code> <code>streets</code> 实体。<code>streetsFromJson</code> 仍然是一个 <code>List&lt;dynamic&gt;</code>。现在我们显式地创造了一个 <code>List&lt;String&gt; streetsList</code>，它包含了 <strong>来自</strong> <code>streetsFromJson</code>的所有元素。</p>
+<p>在 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/address_model.dart" target="_blank" rel="noopener">这里</a> 检查更新的方法。<strong>注意现在的返回语句。</strong> 现在你可以用 <code>_address_services.dart_</code> 来运行它，<strong>它会完美运行。</strong></p>
+<h3 id="Json-结构-3：简单的嵌套结构"><a href="#Json-结构-3：简单的嵌套结构" class="headerlink" title="Json 结构 #3：简单的嵌套结构"></a>Json 结构 #3：简单的嵌套结构</h3><p>现在如果我们有一个像来自 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/shape.json" target="_blank" rel="noopener">shape.json</a> 的嵌套结构的话会怎样呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;shape_name&quot;:&quot;rectangle&quot;,</span><br><span class="line">  &quot;property&quot;:&#123;</span><br><span class="line">    &quot;width&quot;:5.0,</span><br><span class="line">    &quot;breadth&quot;:10.0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里，<code>property</code> 包含一个对象而不是基本的数据类型。 <strong>那么 POOD 看起来会是怎样呢？</strong></p>
+<p>好啦，让我们先休息一会。 在 <code>shape_model.dart</code> 中，让我们先为 <code>Property</code> 建一个类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Property&#123;</span><br><span class="line">  double width;</span><br><span class="line">  double breadth;</span><br><span class="line"></span><br><span class="line">  Property(&#123;</span><br><span class="line">    this.width,</span><br><span class="line">    this.breadth</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>现在让我们为 <code>Shape</code> 创建一个类。<strong>我将这两个类保存在同一个 Dart 文件中。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Shape&#123;</span><br><span class="line">  String shapeName;</span><br><span class="line">  Property property;</span><br><span class="line"></span><br><span class="line">  Shape(&#123;</span><br><span class="line">    this.shapeName,</span><br><span class="line">    this.property</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>注意第二个数据成员 <code>property</code> 就是我们前面 <code>Property</code> 类的对象。</p>
+<p><strong>规则 #3：对于嵌套结构，首先创建类和构造函数，然后从底层添加工厂方法。</strong></p>
+<p><strong>在底层上，我的意思是，首先我们征服 <code>_Property_</code> 类，然后我们在 <code>_Shape_</code> 类上再上一级。当然，这只是我的个人见解，不是 Flutter 规则。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">factory Property.fromJson(Map&lt;String, dynamic&gt; json)&#123;</span><br><span class="line">  return Property(</span><br><span class="line">    width: json[&#39;width&#39;],</span><br><span class="line">    breadth: json[&#39;breadth&#39;]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>这是一个简单的 map。</strong></p>
+<p>但是对于在 <code>Shape</code> 类中的工厂方法，我们只能这样做。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">factory Shape.fromJson(Map&lt;String, dynamic&gt; parsedJson)&#123;</span><br><span class="line">  return Shape(</span><br><span class="line">    shapeName: parsedJson[&#39;shape_name&#39;],</span><br><span class="line">    property : parsedJson[&#39;property&#39;]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>property : parsedJson[&#39;property&#39;]</code> 首先，它会抛出一个类型不匹配错误 ——</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type &#39;_InternalLinkedHashMap&lt;String, dynamic&gt;&#39; is not a subtype of type &#39;Property&#39;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>其次，<strong>嘿，我们刚刚为 Property 做了这个优雅的类，我没有看到它在任何地方使用。</strong></p>
+<p>没错，我们必须在这里映射我们的 Property 类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">factory Shape.fromJson(Map&lt;String, dynamic&gt; parsedJson)&#123;</span><br><span class="line">  return Shape(</span><br><span class="line">    shapeName: parsedJson[&#39;shape_name&#39;],</span><br><span class="line">    property: Property.fromJson(parsedJson[&#39;property&#39;])</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>所以基本上，我们从 <code>Property</code> 类调用 <code>Property.fromJson</code> 方法，无论得到什么，我们都将它映射到 <code>property</code> 实体。简单！在 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/shape_model.dart" target="_blank" rel="noopener">这里</a> 检查你的代码。</p>
+<p>用你的 <code>shape_services.dart</code> 运行它，你会对运行结果感到满意的。</p>
+<h3 id="JSON-结构-4：含有-Lists-的嵌套结构"><a href="#JSON-结构-4：含有-Lists-的嵌套结构" class="headerlink" title="JSON 结构 #4：含有 Lists 的嵌套结构"></a>JSON 结构 #4：含有 Lists 的嵌套结构</h3><p><strong>让我们检查我们的</strong> <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/product.json" target="_blank" rel="noopener"><em>product.json</em></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;id&quot;:1,</span><br><span class="line">  &quot;name&quot;:&quot;ProductName&quot;,</span><br><span class="line">  &quot;images&quot;:[</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;:11,</span><br><span class="line">      &quot;imageName&quot;:&quot;xCh-rhy&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;:31,</span><br><span class="line">      &quot;imageName&quot;:&quot;fjs-eun&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>好的，现在我们越来越深入了。<strong>哇哦，我在里面看到了一个对象列表。</strong></p>
+<p>是的，所以这个结构有一个对象列表，但它本身仍然是一个 map。（参考<strong>规则 #1</strong> 和 <strong>规则 #2</strong>）。现在参考 <strong>规则 #3</strong>，让我们构造我们的 <code>product_model.dart</code>。</p>
+<p>现在我们来创建 <code>Product</code> 和 <code>Image</code> 这两个类。 <strong>注意：<code>_Product_</code> 会有一个数据成员，它是 <code>_Image_</code> 的 List</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Product &#123;</span><br><span class="line">  final int id;</span><br><span class="line">  final String name;</span><br><span class="line">  final List&lt;Image&gt; images;</span><br><span class="line"></span><br><span class="line">  Product(&#123;this.id, this.name, this.images&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Image &#123;</span><br><span class="line">  final int imageId;</span><br><span class="line">  final String imageName;</span><br><span class="line"></span><br><span class="line">  Image(&#123;this.imageId, this.imageName&#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>Image</code> 的工厂方法会非常简单和基础。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">factory Image.fromJson(Map&lt;String, dynamic&gt; parsedJson)&#123;</span><br><span class="line"> return Image(</span><br><span class="line">   imageId:parsedJson[&#39;id&#39;],</span><br><span class="line">   imageName:parsedJson[&#39;imageName&#39;]</span><br><span class="line"> );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里是 <code>Product</code> 的工厂方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">factory Product.fromJson(Map&lt;String, dynamic&gt; parsedJson)&#123;</span><br><span class="line"></span><br><span class="line">  return Product(</span><br><span class="line">    id: parsedJson[&#39;id&#39;],</span><br><span class="line">    name: parsedJson[&#39;name&#39;],</span><br><span class="line">    images: parsedJson[&#39;images&#39;]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里明显会抛出一个 runtime error</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type &#39;List&lt;dynamic&gt;&#39; is not a subtype of type &#39;List&lt;Image&gt;&#39;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>如果我们这样做，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">images: Image.fromJson(parsedJson[&#39;images&#39;])</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这也是绝对错误的，它会立即引发错误，因为你无法将 <code>Image</code> 对象分配给 <code>List&lt;Image&gt;</code>。</p>
+<p>所以我们必须创建一个 <code>List&lt;Image&gt;</code> 然后将它分配给 <code>images</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var list &#x3D; parsedJson[&#39;images&#39;] as List;</span><br><span class="line">print(list.runtimeType); &#x2F;&#x2F;returns List&lt;dynamic&gt;</span><br><span class="line">List&lt;Image&gt; imagesList &#x3D; list.map((i) &#x3D;&gt; Image.fromJson(i)).toList();</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>list</code> 在这里是一个 List。现在我们通过调用 <code>Image.fromJson</code> 遍历整个列表，并把 <code>list</code> 中的每个对象映射到 <code>Image</code> 中，然后我们将每个 map 对象放入一个带有 <code>toList()</code> 的新列表中，并将它存储在 <code>List&lt;Image&gt; imagesList</code>。可以在<a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/product_model.dart" target="_blank" rel="noopener">这里</a> 查看完整代码。</p>
+<h3 id="JSON-结构-5：map-列表"><a href="#JSON-结构-5：map-列表" class="headerlink" title="JSON 结构 #5：map 列表"></a>JSON 结构 #5：map 列表</h3><p>现在让我们来看一下 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/photo.json" target="_blank" rel="noopener">photo.json</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;albumId&quot;: 1,</span><br><span class="line">    &quot;id&quot;: 1,</span><br><span class="line">    &quot;title&quot;: &quot;accusamus beatae ad facilis cum similique qui sunt&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;600&#x2F;92c952&quot;,</span><br><span class="line">    &quot;thumbnailUrl&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;150&#x2F;92c952&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;albumId&quot;: 1,</span><br><span class="line">    &quot;id&quot;: 2,</span><br><span class="line">    &quot;title&quot;: &quot;reprehenderit est deserunt velit ipsam&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;600&#x2F;771796&quot;,</span><br><span class="line">    &quot;thumbnailUrl&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;150&#x2F;771796&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;albumId&quot;: 1,</span><br><span class="line">    &quot;id&quot;: 3,</span><br><span class="line">    &quot;title&quot;: &quot;officia porro iure quia iusto qui ipsa ut modi&quot;,</span><br><span class="line">    &quot;url&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;600&#x2F;24f355&quot;,</span><br><span class="line">    &quot;thumbnailUrl&quot;: &quot;http:&#x2F;&#x2F;placehold.it&#x2F;150&#x2F;24f355&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>哦，<strong>规则 #1 和 规则 #2</strong> 可以看出这不是一个 map，因为这个 json 字符串以方括号开头。<strong>所以这是一个对象列表？</strong> 是的，这里的对象是 <code>Photo</code>（或者你想称之为的任何东西）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Photo&#123;</span><br><span class="line">  final String id;</span><br><span class="line">  final String title;</span><br><span class="line">  final String url;</span><br><span class="line"></span><br><span class="line">  Photo(&#123;</span><br><span class="line">    this.id,</span><br><span class="line">    this.url,</span><br><span class="line">    this.title</span><br><span class="line">&#125;) ;</span><br><span class="line"></span><br><span class="line">  factory Photo.fromJson(Map&lt;String, dynamic&gt; json)&#123;</span><br><span class="line">    return new Photo(</span><br><span class="line">      id: json[&#39;id&#39;].toString(),</span><br><span class="line">      title: json[&#39;title&#39;],</span><br><span class="line">      url: json[&#39;json&#39;],</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>但它是一个 <code>_Photo_</code> 列表，所以这意味着你必须创建一个包含 <code>_List&lt;Photo&gt;_</code> 的类？</strong></p>
+<p>是的，我建议这样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class PhotosList &#123;</span><br><span class="line">  final List&lt;Photo&gt; photos;</span><br><span class="line"></span><br><span class="line">  PhotosList(&#123;</span><br><span class="line">    this.photos,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>同时请注意，这个 json 字符串是一个映射列表。因此，在我们的工厂方法中，不会有一个 <code>Map&lt;String, dynamic&gt;</code> 参数，因为它是一个 List。这就是为什么首先要确定结构。所以我们的新参数是 <code>List&lt;dynamic&gt;</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">factory PhotosList.fromJson(List&lt;dynamic&gt; parsedJson) &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;Photo&gt; photos &#x3D; new List&lt;Photo&gt;();</span><br><span class="line"></span><br><span class="line">    return new PhotosList(</span><br><span class="line">       photos: photos,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这样会抛出一个错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Invalid value: Valid value range is empty: 0</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>嘿，因为我们永远不能使用 <code>Photo.fromJson</code> 方法。 如果我们在列表初始化之后添加这行代码会怎样？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">photos &#x3D; parsedJson.map((i)&#x3D;&gt;Photo.fromJson(i)).toList();</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>与前面相同的概念，我们不必把它映射到 json 字符串中的任何键，因为它是 List 而不是 map。代码在 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/photo_model.dart" target="_blank" rel="noopener">这里</a>.</p>
+<h3 id="JSON-结构-6：复杂的嵌套结构"><a href="#JSON-结构-6：复杂的嵌套结构" class="headerlink" title="JSON 结构 #6：复杂的嵌套结构"></a>JSON 结构 #6：复杂的嵌套结构</h3><p>这是 <a href="https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/assets/page.json" target="_blank" rel="noopener">page.json</a>.</p>
+<p>我会要求你解决这个问题。它已包含在示例项目中。你只需要为此构建模型和服务文件。但是在给你提示之前我不会总结（如果你需要任何提示的话）。</p>
+<p><strong>规则 #1</strong> and <strong>规则 #2</strong> 一样使用。首先确定结构。这是一个 map。所以 1-5 的所有 json 结构都有用。</p>
+<p><strong>规则 #3</strong> 要求你先创建类和构造函数，然后从底层添加工厂方法。不过还有一个提示，还要记得从深层/底层添加类。例如，对于这个 json 结构，首先为 <code>Image</code> 创建类，然后为 <code>Data</code> 和 <code>Author</code> 创建类，然后创建主类 <code>Page</code>。并以相同的顺序添加工厂方法。</p>
+<p>对于 <code>Image</code> 和 <code>Data</code> 类，参考 <strong>Json 结构 #4</strong>。 对于 <code>Author</code> 类，参考 <strong>Json 结构 #3</strong></p>
+<p><strong>给初学者的建议：在试验任何新 asset 时，请记得在 pubspec.yaml 文件中声明它。</strong></p>
+<p>这就是这篇 Fluttery 文章的内容。这篇文章可能不是最好的 JSON 解析文章（因为我还在学习很多东西），但我希望它能帮助你入门。</p>
+<hr>
+<blockquote>
+<p>我弄错了什么吗？在评论中提一下。我洗耳恭听。</p>
+</blockquote>
+<blockquote>
+<p>如果你学到了一两件点知识，请尽可能多地拍手 👏 以表示你的支持！这会鼓励我写更多的文章。</p>
+</blockquote>
+<blockquote>
+<p>Hello World，我是 Pooja Bhaumik。一个有创意的开发人员和理性的设计师。你可以在 <a href="https://www.linkedin.com/in/poojab26/" target="_blank" rel="noopener">Linkedin</a> 或 <a href="https://github.com/PoojaB26" target="_blank" rel="noopener">GitHub</a> 或 <a href="https://twitter.com/pblead26" target="_blank" rel="noopener">Twitter</a> 上关注我？如果这对你来说太 social 了，如果你想和我谈论对科技的想法，请发邮件到 <a href="mailto:pbhaumik26@gmail.com">pbhaumik26@gmail.com</a>。</p>
+</blockquote>
+<blockquote>
+<p>祝你度过美好的一天！</p>
+</blockquote>
+<blockquote>
+<p>如果发现译文存在错误或其他需要改进的地方，欢迎到 <a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a> 对译文进行修改并 PR，也可获得相应奖励积分。文章开头的 <strong>本文永久链接</strong> 即为本文在 GitHub 上的 MarkDown 链接。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flutter/" rel="tag"># Flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Chip%E6%A0%87%E7%AD%BE/" rel="next" title="Chip标签">
+                <i class="fa fa-chevron-left"></i> Chip标签
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/20/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/%E5%A4%8D%E6%9D%82%E4%B8%9A%E5%8A%A1%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81Flutter%E7%9A%84%E9%AB%98%E6%80%A7%E8%83%BD%E9%AB%98%E6%B5%81%E7%95%85%E5%BA%A6/" rel="prev" title="复杂业务如何保证Flutter的高性能高流畅度">
+                复杂业务如何保证Flutter的高性能高流畅度 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#译-在-Flutter-中解析复杂的-JSON"><span class="nav-number">1.</span> <span class="nav-text">[译]在 Flutter 中解析复杂的 JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-结构-1：简单的-map"><span class="nav-number">1.0.1.</span> <span class="nav-text">JSON 结构 #1：简单的 map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问对象"><span class="nav-number">1.0.2.</span> <span class="nav-text">访问对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#片段-1：imports"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">片段 #1：imports</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#片段-2：加载-Json-Asset（可选）"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">片段 #2：加载 Json Asset（可选）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#片段-3：加载响应"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">片段 #3：加载响应</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-结构-2：含有数组的简单结构"><span class="nav-number">1.0.3.</span> <span class="nav-text">JSON 结构 #2：含有数组的简单结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Json-结构-3：简单的嵌套结构"><span class="nav-number">1.0.4.</span> <span class="nav-text">Json 结构 #3：简单的嵌套结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-结构-4：含有-Lists-的嵌套结构"><span class="nav-number">1.0.5.</span> <span class="nav-text">JSON 结构 #4：含有 Lists 的嵌套结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-结构-5：map-列表"><span class="nav-number">1.0.6.</span> <span class="nav-text">JSON 结构 #5：map 列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-结构-6：复杂的嵌套结构"><span class="nav-number">1.0.7.</span> <span class="nav-text">JSON 结构 #6：复杂的嵌套结构</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="flutter," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="WidgetFlutter widgets是采取React思想使用响应式框架构建的。核心思想就是使用widgets构建出UI(界面)。Widgets根据其当前配置和状态描述了它们的视图。当某个widget的状态发生更改时，widget会重新构建所描述的视图，framework会根据前面所描述的视图(状态没改变时)进行区分，以确定底层呈现树从一个状态转换到下一个状态所需的最小更改步骤。 widget">
+<meta name="description" content="1234567891011121314151617&#x2F;&#x2F;脚手架Scaffold(&amp;#123;    Key key,    this.appBar,&#x2F;&#x2F;设置应用栏，显示在脚手架顶部    this.body,&#x2F;&#x2F;设置脚手架内容区域控件    this.floatingActionButton,&#x2F;&#x2F;设置显示在上层区域的按钮">
 <meta property="og:type" content="article">
-<meta property="og:title" content="widget体系">
-<meta property="og:url" content="http://yoursite.com/2020/06/14/flutter/widget%E4%BD%93%E7%B3%BB/index.html">
+<meta property="og:title" content="Scaffold">
+<meta property="og:url" content="http://yoursite.com/2020/07/01/flutter/widget%E7%BB%84%E4%BB%B6/Scaffold/index.html">
 <meta property="og:site_name" content="冯星的博客">
-<meta property="og:description" content="WidgetFlutter widgets是采取React思想使用响应式框架构建的。核心思想就是使用widgets构建出UI(界面)。Widgets根据其当前配置和状态描述了它们的视图。当某个widget的状态发生更改时，widget会重新构建所描述的视图，framework会根据前面所描述的视图(状态没改变时)进行区分，以确定底层呈现树从一个状态转换到下一个状态所需的最小更改步骤。 widget">
+<meta property="og:description" content="1234567891011121314151617&#x2F;&#x2F;脚手架Scaffold(&amp;#123;    Key key,    this.appBar,&#x2F;&#x2F;设置应用栏，显示在脚手架顶部    this.body,&#x2F;&#x2F;设置脚手架内容区域控件    this.floatingActionButton,&#x2F;&#x2F;设置显示在上层区域的按钮">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-06-14T12:38:51.000Z">
-<meta property="article:modified_time" content="2020-06-15T01:56:46.915Z">
+<meta property="article:published_time" content="2020-07-01T07:51:09.000Z">
+<meta property="article:modified_time" content="2020-07-01T07:52:03.850Z">
 <meta property="article:author" content="冯星">
-<meta property="article:tag" content="Java，Android，Flutter">
+<meta property="article:tag" content="flutter">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/06/14/flutter/widget体系/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/07/01/flutter/widget组件/Scaffold/"/>
 
 
 
 
 
-  <title>widget体系 | 冯星的博客</title>
+  <title>Scaffold | 冯星的博客</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/flutter/widget%E4%BD%93%E7%B3%BB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/flutter/widget%E7%BB%84%E4%BB%B6/Scaffold/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="冯星">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">widget体系</h1>
+          <h1 class="post-title" itemprop="name headline">Scaffold</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-14T20:38:51+08:00">
-                2020-06-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T15:51:09+08:00">
+                2020-07-01
               </time>
             
 
@@ -303,6 +303,39 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -311,8 +344,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/06/14/flutter/widget%E4%BD%93%E7%B3%BB/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/14/flutter/widget%E4%BD%93%E7%B3%BB/" itemprop="commentCount"></span>
+                <a href="/2020/07/01/flutter/widget%E7%BB%84%E4%BB%B6/Scaffold/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/flutter/widget%E7%BB%84%E4%BB%B6/Scaffold/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -340,9 +373,8 @@
       
 
       
-        <h3 id="Widget"><a href="#Widget" class="headerlink" title="Widget"></a>Widget</h3><p><code>Flutter widgets</code>是采取React思想使用响应式框架构建的。核心思想就是使用<code>widgets</code>构建出UI(界面)。<code>Widgets</code>根据其当前配置和状态描述了它们的视图。当某个<code>widget</code>的状态发生更改时，<code>widget</code>会重新构建所描述的视图，framework会根据前面所描述的视图(状态没改变时)进行区分，以确定底层呈现树从一个状态转换到下一个状态所需的最小更改步骤。</p>
-<p><code>widget</code>为<code>element</code>(下面再描述)提供配置信息，这里可以知道<code>widget</code>和<code>element</code>存在某种联系。<code>Widgets</code>在Flutter framework是中心类层次结构，<code>widget</code>是不可变的对象并且是界面的一部分，<code>widget</code>会被渲染在<code>elements</code>上，并(elelments)管理底层渲染树(render tree)，这里可以得到一个信息：<code>widget</code>在渲染的时候会最终转换成<code>element</code></p>
-<p><code>Wigets</code>本身是没有可变的状态(其所有的字段必须是final)。如果你想吧可变状态和一个<code>widget</code>关联起来，可以使用<code>StatefulWidget</code>，<code>StatefulWidget</code>通过使用<code>StatefulWidget.createState</code>方法创建<code>State</code>对象，并且扩充到<code>element</code>和合并到树中。那么这段可以得出的信息是：<code>widget</code>并不会直接渲染和管理状态，管理状态是交给<code>State</code>对象负责。</p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;脚手架</span><br><span class="line">Scaffold(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    this.appBar,&#x2F;&#x2F;设置应用栏，显示在脚手架顶部</span><br><span class="line">    this.body,&#x2F;&#x2F;设置脚手架内容区域控件</span><br><span class="line">    this.floatingActionButton,&#x2F;&#x2F;设置显示在上层区域的按钮，默认位置位于右下角</span><br><span class="line">    this.floatingActionButtonLocation,&#x2F;&#x2F;设置floatingActionButton的位置</span><br><span class="line">    this.floatingActionButtonAnimator,&#x2F;&#x2F;floatingActionButtonAnimator 动画 动画，但是设置了没有效果？</span><br><span class="line">    this.persistentFooterButtons,&#x2F;&#x2F;一组显示在脚手架底部的按钮(在bottomNavigationBar底部导航栏的上面)</span><br><span class="line">    this.drawer,&#x2F;&#x2F;设置左边侧边栏</span><br><span class="line">    this.endDrawer,&#x2F;&#x2F;设置右边侧边栏</span><br><span class="line">    this.bottomNavigationBar,&#x2F;&#x2F;设置脚手架 底部导航栏</span><br><span class="line">    this.bottomSheet,&#x2F;&#x2F;底部抽屉栏</span><br><span class="line">    this.backgroundColor,&#x2F;&#x2F;设置脚手架内容区域的颜色</span><br><span class="line">    this.resizeToAvoidBottomPadding &#x3D; true,&#x2F;&#x2F; ? 控制界面内容 body 是否重新布局来避免底部被覆盖，比如当键盘显示的时候，重新布局避免被键盘盖住内容。</span><br><span class="line">    this.primary &#x3D; true,&#x2F;&#x2F;脚手架是否显示在最低部</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -358,6 +390,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+        </div>
+      
 
       
       
@@ -367,8 +405,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/12/flutter/dart/drat%E6%96%B0%E9%A2%96%E8%AF%AD%E6%B3%95%E7%B3%96/" rel="next" title="drat新颖语法糖">
-                <i class="fa fa-chevron-left"></i> drat新颖语法糖
+              <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BEngine%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" rel="next" title="Flutter之Engine启动流程">
+                <i class="fa fa-chevron-left"></i> Flutter之Engine启动流程
               </a>
             
           </div>
@@ -376,6 +414,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/02/flutter/widget%E7%BB%84%E4%BB%B6/BoxShadow%E5%AE%9E%E7%8E%B0%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1/" rel="prev" title="BoxShadow实现模糊阴影">
+                BoxShadow实现模糊阴影 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -432,17 +474,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -457,7 +490,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-count">134</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -468,7 +501,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -479,7 +512,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -502,22 +535,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Widget"><span class="nav-number">1.</span> <span class="nav-text">Widget</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

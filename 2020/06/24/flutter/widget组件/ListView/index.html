@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ListView常用构造ListView我们可以直接使用ListView 它的实现也是直接返回最简单的列表结构，粗糙没有修饰。 ListView 默认构建1234567891011121314151617181920 &#x2F;&#x2F;&#x2F;默认构建  Widget listViewDefault(List&lt;BaseBean&gt; list) &amp;#123;    List&amp;lt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ListView">
+<meta property="og:url" content="http://yoursite.com/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/ListView/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="ListView常用构造ListView我们可以直接使用ListView 它的实现也是直接返回最简单的列表结构，粗糙没有修饰。 ListView 默认构建1234567891011121314151617181920 &#x2F;&#x2F;&#x2F;默认构建  Widget listViewDefault(List&lt;BaseBean&gt; list) &amp;#123;    List&amp;lt">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-24T05:13:57.000Z">
+<meta property="article:modified_time" content="2020-06-25T12:14:05.456Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/24/flutter/widget组件/ListView/"/>
+
+
+
+
+
+  <title>ListView | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/ListView/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ListView</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-24T13:13:57+08:00">
+                2020-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/ListView/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/ListView/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ListView常用构造"><a href="#ListView常用构造" class="headerlink" title="ListView常用构造"></a>ListView常用构造</h2><h3 id="ListView"><a href="#ListView" class="headerlink" title="ListView"></a>ListView</h3><p>我们可以直接使用<strong>ListView</strong> 它的实现也是直接返回最简单的列表结构，粗糙没有修饰。</p>
+<h4 id="ListView-默认构建"><a href="#ListView-默认构建" class="headerlink" title="ListView 默认构建"></a>ListView 默认构建</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> &#x2F;&#x2F;&#x2F;默认构建</span><br><span class="line">  Widget listViewDefault(List&lt;BaseBean&gt; list) &#123;</span><br><span class="line">    List&lt;Widget&gt; _list &#x3D; new List();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; list.length; i++) &#123;</span><br><span class="line">      _list.add(new Center(</span><br><span class="line">        child: new Text(list[i].age.toString()),</span><br><span class="line">      ));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 添加分割线</span><br><span class="line">    var divideList &#x3D;</span><br><span class="line">        ListTile.divideTiles(context: context, tiles: _list).toList();</span><br><span class="line">    return new Scrollbar(</span><br><span class="line">      child: new ListView(</span><br><span class="line">        &#x2F;&#x2F; 添加ListView控件</span><br><span class="line">        children: _list, &#x2F;&#x2F; 无分割线</span><br><span class="line">&#x2F;&#x2F;        children: divideList, &#x2F;&#x2F; 添加分割线&#x2F;</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ListView-ListTile"><a href="#ListView-ListTile" class="headerlink" title="ListView ListTile"></a>ListView ListTile</h3><p><strong>ListTile</strong> 是<strong>Flutter</strong> 给我们准备好的<strong>widget</strong> 提供非常常见的构造和定义方式，包括文字，<strong>icon</strong>，点击事件，一般是能够满足基本需求，但是就不能自己定义了</p>
+<h4 id="ListTile-属性"><a href="#ListTile-属性" class="headerlink" title="ListTile 属性"></a>ListTile 属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">this.leading,              &#x2F;&#x2F; item 前置图标</span><br><span class="line">this.title,                &#x2F;&#x2F; item 标题</span><br><span class="line">this.subtitle,             &#x2F;&#x2F; item 副标题</span><br><span class="line">this.trailing,             &#x2F;&#x2F; item 后置图标</span><br><span class="line">this.isThreeLine &#x3D; false,  &#x2F;&#x2F; item 是否三行显示</span><br><span class="line">this.dense,                &#x2F;&#x2F; item 直观感受是整体大小</span><br><span class="line">this.contentPadding,       &#x2F;&#x2F; item 内容内边距</span><br><span class="line">this.enabled &#x3D; true,</span><br><span class="line">this.onTap,                &#x2F;&#x2F; item onTap 点击事件</span><br><span class="line">this.onLongPress,          &#x2F;&#x2F; item onLongPress 长按事件</span><br><span class="line">this.selected &#x3D; false,     &#x2F;&#x2F; item 是否选中状态</span><br></pre></td></tr></table></figure>
+
+<h5 id="ListTile-使用"><a href="#ListTile-使用" class="headerlink" title="ListTile 使用"></a>ListTile 使用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; ListTile代码</span><br><span class="line">Widget listViewListTile(List&lt;BaseBean&gt; list) &#123;</span><br><span class="line">  List&lt;Widget&gt; _list &#x3D; new List();</span><br><span class="line">  for (int i &#x3D; 0; i &lt; list.length; i++) &#123;</span><br><span class="line">    _list.add(new Center(</span><br><span class="line">      child: ListTile(</span><br><span class="line">        leading: new Icon(Icons.list),</span><br><span class="line">        title: new Text(list[i].name),</span><br><span class="line">        trailing: new Icon(Icons.keyboard_arrow_right),</span><br><span class="line">      ),</span><br><span class="line">    ));</span><br><span class="line">  &#125;</span><br><span class="line">  return new ListView(</span><br><span class="line">    children: _list,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ListView-builder"><a href="#ListView-builder" class="headerlink" title="ListView builder"></a>ListView builder</h3><p><strong>builder</strong> 顾名思义 构造 可以非常方便的构建我们自己定义的<strong>child</strong>布局，所以在<strong>Flutter</strong>中非常的常用。</p>
+<h4 id="builder属性详细介绍"><a href="#builder属性详细介绍" class="headerlink" title="builder属性详细介绍"></a>builder属性详细介绍</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   &#x2F;&#x2F;设置滑动方向 Axis.horizontal 水平  默认 Axis.vertical 垂直</span><br><span class="line">        scrollDirection: Axis.vertical,</span><br><span class="line">        &#x2F;&#x2F;内间距</span><br><span class="line">        padding: EdgeInsets.all(10.0),</span><br><span class="line">        &#x2F;&#x2F;是否倒序显示 默认正序 false  倒序true</span><br><span class="line">        reverse: false,</span><br><span class="line">        &#x2F;&#x2F;false，如果内容不足，则用户无法滚动 而如果[primary]为true，它们总是可以尝试滚动。</span><br><span class="line">        primary: true,</span><br><span class="line">        &#x2F;&#x2F;确定每一个item的高度 会让item加载更加高效</span><br><span class="line">        itemExtent: 50.0,</span><br><span class="line">        &#x2F;&#x2F;内容适配</span><br><span class="line">        shrinkWrap: true,</span><br><span class="line">        &#x2F;&#x2F;item 数量</span><br><span class="line">        itemCount: list.length,</span><br><span class="line">        &#x2F;&#x2F;滑动类型设置</span><br><span class="line">        physics: new ClampingScrollPhysics(),</span><br><span class="line">         &#x2F;&#x2F;cacheExtent  设置预加载的区域 </span><br><span class="line">         cacheExtent: 30.0, </span><br><span class="line">        &#x2F;&#x2F;滑动监听</span><br><span class="line">&#x2F;&#x2F;        controller ,</span><br></pre></td></tr></table></figure>
+
+<h4 id="分析几个比较难理解的属性"><a href="#分析几个比较难理解的属性" class="headerlink" title="分析几个比较难理解的属性"></a>分析几个比较难理解的属性</h4><p><strong>shrinkWrap</strong>特别推荐<br><strong>child</strong> 高度会适配 <strong>item</strong>填充的内容的高度,我们非常的不希望<strong>child</strong>的高度固定，因为这样的话，如果里面的内容超出就会造成布局的溢出。<br><strong>shrinkWrap</strong>多用于嵌套<strong>listView</strong>中 内容大小不确定 比如 垂直布局中 先后放入文字 <strong>listView</strong> （需要<strong>Expend</strong>包裹否则无法显示无穷大高度 但是需要确定<strong>listview</strong>高度 <strong>shrinkWrap</strong>使用内容适配不会有这样的影响）</p>
+<p><strong>primary</strong><br><strong>If the [primary] argument is true, the [controller] must be null.</strong><br>在构造中默认是false 它的意思就是为主的意思，<strong>primary</strong>为true时，我们的<strong>controller</strong> 滑动监听就不能使用了</p>
+<p><strong>physics</strong><br>这个属性几个滑动的选择<br><strong>AlwaysScrollableScrollPhysics</strong>() 总是可以滑动<br><strong>NeverScrollableScrollPhysics</strong>禁止滚动<br><strong>BouncingScrollPhysics</strong> 内容超过一屏 上拉有回弹效果<br><strong>ClampingScrollPhysics</strong> 包裹内容 不会有回弹</p>
+<p><strong>cacheExtent</strong><br>这个属性的意思就是预加载的区域<br>设置预加载的区域 <strong>cacheExtent</strong> 强制设置为了 0.0，从而关闭了“预加载”</p>
+<p><strong>controller</strong><br>滑动监听，我们多用于上拉加载更多，通过监听滑动的距离来执行操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> &#x2F;&#x2F;&#x2F;listView builder 构建</span><br><span class="line">  Widget listViewLayoutBuilder(List&lt;BaseBean&gt; list) &#123;</span><br><span class="line">    return ListView.builder(</span><br><span class="line">        scrollDirection: Axis.vertical,   </span><br><span class="line">        padding: EdgeInsets.all(10.0),</span><br><span class="line">        reverse: false,</span><br><span class="line">        primary: true,</span><br><span class="line">        itemExtent: 50.0,</span><br><span class="line">        shrinkWrap: true,</span><br><span class="line">        itemCount: list.length,     </span><br><span class="line">        cacheExtent: 30.0, </span><br><span class="line">        physics: new ClampingScrollPhysics(),</span><br><span class="line">&#x2F;&#x2F;        controller ,</span><br><span class="line">        itemBuilder: (context, i) &#x3D;&gt; new Container(</span><br><span class="line">              child: new Row(</span><br><span class="line">                mainAxisAlignment: MainAxisAlignment.spaceEvenly,</span><br><span class="line">                children: &lt;Widget&gt;[</span><br><span class="line">                  new Text(</span><br><span class="line">                    &quot;$&#123;list[i].name&#125;&quot;,</span><br><span class="line">                    style: new TextStyle(fontSize: 18.0, color: Colors.red),</span><br><span class="line">                  ),</span><br><span class="line">                  new Text(</span><br><span class="line">                    &quot;$&#123;list[i].age&#125;&quot;,</span><br><span class="line">                    style: new TextStyle(fontSize: 18.0, color: Colors.green),</span><br><span class="line">                  ),</span><br><span class="line">                  new Text(</span><br><span class="line">                    &quot;$&#123;list[i].content&#125;&quot;,</span><br><span class="line">                    style: new TextStyle(fontSize: 18.0, color: Colors.blue),</span><br><span class="line">                  ),</span><br><span class="line">                ],</span><br><span class="line">              ),</span><br><span class="line">            ));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="builder模式来设置分割线"><a href="#builder模式来设置分割线" class="headerlink" title="builder模式来设置分割线"></a>builder模式来设置分割线</h5><p>我们在正常的需求中大部分是需要<strong>item</strong>的分割线的，而在<strong>builder</strong>模式中使用<strong>divide</strong> 会有种情况（<strong>divide</strong>放在<strong>item</strong>的布局中 通过<strong>Column</strong>），我们会发现<strong>divide</strong>并没有直接延时到<strong>item</strong>两端而是会有左右<strong>padding</strong>。<br>所以我们可以通过另外一种方式去实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.扩大list容积 为什么是两倍，因为我们给了divide的index</span><br><span class="line"> Widget listView &#x3D; new ListView.builder(</span><br><span class="line">              itemCount: list.length * 2 ,</span><br><span class="line">              itemBuilder: (context, index) &#x3D;&gt; itemDividerRow(context, index));</span><br><span class="line">2. 根据下标分配item类型</span><br><span class="line">itemDividerRow(context, int i) &#123;</span><br><span class="line">if (i.isOdd) &#123;&#x2F;&#x2F;是奇数</span><br><span class="line">        return new Divider( &#x2F;&#x2F;返回分割线</span><br><span class="line">          height: 1.0,</span><br><span class="line">        );</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        i &#x3D; i ~&#x2F; 2;</span><br><span class="line">        return getRowWidget(context, orderList[i]);  &#x2F;&#x2F;返回item 布局</span><br><span class="line">      &#125;</span><br><span class="line">     &#125; </span><br><span class="line">     </span><br><span class="line">这样我们就可以去实现了，builder模式分割线</span><br></pre></td></tr></table></figure>
+
+<h3 id="ListView-separated"><a href="#ListView-separated" class="headerlink" title="ListView separated"></a>ListView separated</h3><p><strong>separated</strong> 有分离的意思，其实它就相当于我们<strong>Android</strong>中的多类型<strong>adapter</strong>，那么关键就是在我们的这个属性上<strong>separatorBuilder</strong></p>
+<h4 id="separatorBuilder"><a href="#separatorBuilder" class="headerlink" title="separatorBuilder"></a>separatorBuilder</h4><p>它和<strong>itemBuilder</strong>同时进行渲染，在同一个<strong>item</strong>下标中可以额外的修饰或者区分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">separatorBuilder: (content, index) </span><br><span class="line"></span><br><span class="line">itemBuilder: (content, index)</span><br></pre></td></tr></table></figure>
+
+<h5 id="separated设置分割线"><a href="#separated设置分割线" class="headerlink" title="separated设置分割线"></a>separated设置分割线</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">separated设置分割线就非常的简单了，我们直接在separatorBuilder进行操作</span><br><span class="line"> separatorBuilder: (content, index) &#123;</span><br><span class="line">   </span><br><span class="line">        return new Divider(）</span><br><span class="line">        ｝</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F;  listView separated 构建 用于多类型 分割</span><br><span class="line">Widget listViewLayoutSeparated(List&lt;BaseBean&gt; list) &#123;</span><br><span class="line">  return ListView.separated(</span><br><span class="line">    itemCount: list.length,</span><br><span class="line">    separatorBuilder: (content, index) &#123;</span><br><span class="line">      &#x2F;&#x2F;和itemBuilder 同级别的执行</span><br><span class="line">      if (index &#x3D;&#x3D; 2) &#123;</span><br><span class="line">        return new Container(</span><br><span class="line">          height: 40.0,</span><br><span class="line">          child: new Center(</span><br><span class="line">            child: new Text(&quot;类型1&quot;),</span><br><span class="line">          ),</span><br><span class="line">          color: Colors.red,</span><br><span class="line">        );</span><br><span class="line">      &#125; else if (index &#x3D;&#x3D; 7) &#123;</span><br><span class="line">        return new Container(</span><br><span class="line">          height: 40.0,</span><br><span class="line">          child: new Center(</span><br><span class="line">            child: new Text(&quot;类型2&quot;),</span><br><span class="line">          ),</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">        );</span><br><span class="line">      &#125; else if (index &#x3D;&#x3D; 14) &#123;</span><br><span class="line">        return new Container(</span><br><span class="line">          height: 40.0,</span><br><span class="line">          child: new Center(</span><br><span class="line">            child: new Text(&quot;类型3&quot;),</span><br><span class="line">          ),</span><br><span class="line">          color: Colors.yellow,</span><br><span class="line">        );</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        return new Container();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    itemBuilder: (content, i) &#123;</span><br><span class="line">      return new InkWell(</span><br><span class="line">        child: new Container(</span><br><span class="line">            height: 30.0,</span><br><span class="line">            child: new Row(</span><br><span class="line">              mainAxisAlignment: MainAxisAlignment.spaceEvenly,</span><br><span class="line">              children: &lt;Widget&gt;[</span><br><span class="line">                new Text(</span><br><span class="line">                  &quot;$&#123;list[i].name&#125;&quot;,</span><br><span class="line">                  style: new TextStyle(fontSize: 18.0, color: Colors.red),</span><br><span class="line">                ),</span><br><span class="line">                new Text(</span><br><span class="line">                  &quot;$&#123;list[i].age&#125;&quot;,</span><br><span class="line">                  style: new TextStyle(fontSize: 18.0, color: Colors.green),</span><br><span class="line">                ),</span><br><span class="line">                new Text(</span><br><span class="line">                  &quot;$&#123;list[i].content&#125;&quot;,</span><br><span class="line">                  style: new TextStyle(fontSize: 18.0, color: Colors.blue),</span><br><span class="line">                ),</span><br><span class="line">              ],</span><br><span class="line">            )),</span><br><span class="line">        onTap: () &#123;</span><br><span class="line">          print(&quot;1111&quot;);</span><br><span class="line">        &#125;,</span><br><span class="line">      );</span><br><span class="line">&#x2F;&#x2F;      return ;</span><br><span class="line">    &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ListView-custom"><a href="#ListView-custom" class="headerlink" title="ListView custom"></a>ListView custom</h3><p>大家可能对前两种比较熟悉，分别是传入一个子元素列表或是传入一个根据索引创建子元素的函数。<br>其实前两种方式都是第三种方式的“快捷方式”。因为 <strong>ListView</strong> 内部是靠这个 <strong>childrenDelegate</strong> 属性动态初始化子元素的。<br>我们使用<strong>builder</strong>和<strong>separated</strong>比较多，这个<strong>custom</strong>相对来说就比较少了。但是我们是需要了解的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">  &#x2F;&#x2F;&#x2F;listView custom 构建</span><br><span class="line">  Widget listViewLayoutCustom(list) &#123;</span><br><span class="line">&#x2F;&#x2F;    return ListView.custom(childrenDelegate: new MyChildrenDelegate());</span><br><span class="line">    return ListView.custom(</span><br><span class="line">      itemExtent: 40.0,</span><br><span class="line">      childrenDelegate: MyChildrenDelegate(</span><br><span class="line">        (BuildContext context, int i) &#123;</span><br><span class="line">          return new Container(</span><br><span class="line">              child: new Row(</span><br><span class="line">            mainAxisAlignment: MainAxisAlignment.spaceEvenly,</span><br><span class="line">            children: &lt;Widget&gt;[</span><br><span class="line">              new Text(</span><br><span class="line">                &quot;$&#123;list[i].name&#125;&quot;,</span><br><span class="line">                style: new TextStyle(fontSize: 18.0, color: Colors.red),</span><br><span class="line">              ),</span><br><span class="line">              new Text(</span><br><span class="line">                &quot;$&#123;list[i].age&#125;&quot;,</span><br><span class="line">                style: new TextStyle(fontSize: 18.0, color: Colors.green),</span><br><span class="line">              ),</span><br><span class="line">              new Text(</span><br><span class="line">                &quot;$&#123;list[i].content&#125;&quot;,</span><br><span class="line">                style: new TextStyle(fontSize: 18.0, color: Colors.blue),</span><br><span class="line">              ),</span><br><span class="line">            ],</span><br><span class="line">          ));</span><br><span class="line">        &#125;,</span><br><span class="line">        childCount: list.length,</span><br><span class="line">      ),</span><br><span class="line">      cacheExtent: 0.0,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="childrenDelegate"><a href="#childrenDelegate" class="headerlink" title="childrenDelegate"></a>childrenDelegate</h5><p>自定义childrenDelegate 当然我们可以对ListView中的child进行自己需要的操作。最难定义的也就是这个而已。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; ignore: slash_for_doc_comments</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 继承SliverChildBuilderDelegate  可以对列表的监听</span><br><span class="line"> *&#x2F;</span><br><span class="line">class MyChildrenDelegate extends SliverChildBuilderDelegate &#123;</span><br><span class="line">  MyChildrenDelegate(</span><br><span class="line">    Widget Function(BuildContext, int) builder, &#123;</span><br><span class="line">    int childCount,</span><br><span class="line">    bool addAutomaticKeepAlive &#x3D; true,</span><br><span class="line">    bool addRepaintBoundaries &#x3D; true,</span><br><span class="line">  &#125;) : super(builder,</span><br><span class="line">            childCount: childCount,</span><br><span class="line">            addAutomaticKeepAlives: addAutomaticKeepAlive,</span><br><span class="line">            addRepaintBoundaries: addRepaintBoundaries);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;&#x2F;监听 在可见的列表中 显示的第一个位置和最后一个位置</span><br><span class="line">  @override</span><br><span class="line">  void didFinishLayout(int firstIndex, int lastIndex) &#123;</span><br><span class="line">    print(&#39;firstIndex: $firstIndex, lastIndex: $lastIndex&#39;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;&#x2F;可不重写 重写不能为null  默认是true  添加进来的实例与之前的实例是否相同 相同返回true 反之false</span><br><span class="line">  &#x2F;&#x2F;&#x2F;listView 暂时没有看到应用场景 源码中使用在 SliverFillViewport 中</span><br><span class="line">  @override</span><br><span class="line">  bool shouldRebuild(SliverChildBuilderDelegate oldDelegate) &#123;</span><br><span class="line">    &#x2F;&#x2F; TODO: implement shouldRebuild</span><br><span class="line">    print(&quot;oldDelegate$oldDelegate&quot;);</span><br><span class="line">    return super.shouldRebuild(oldDelegate);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/Container/" rel="next" title="Container">
+                <i class="fa fa-chevron-left"></i> Container
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/24/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/provider%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="prev" title="provider状态管理">
+                provider状态管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ListView常用构造"><span class="nav-number">1.</span> <span class="nav-text">ListView常用构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ListView"><span class="nav-number">1.1.</span> <span class="nav-text">ListView</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ListView-默认构建"><span class="nav-number">1.1.1.</span> <span class="nav-text">ListView 默认构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ListView-ListTile"><span class="nav-number">1.2.</span> <span class="nav-text">ListView ListTile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ListTile-属性"><span class="nav-number">1.2.1.</span> <span class="nav-text">ListTile 属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ListTile-使用"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">ListTile 使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ListView-builder"><span class="nav-number">1.3.</span> <span class="nav-text">ListView builder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#builder属性详细介绍"><span class="nav-number">1.3.1.</span> <span class="nav-text">builder属性详细介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析几个比较难理解的属性"><span class="nav-number">1.3.2.</span> <span class="nav-text">分析几个比较难理解的属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#builder模式来设置分割线"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">builder模式来设置分割线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ListView-separated"><span class="nav-number">1.4.</span> <span class="nav-text">ListView separated</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#separatorBuilder"><span class="nav-number">1.4.1.</span> <span class="nav-text">separatorBuilder</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#separated设置分割线"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">separated设置分割线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ListView-custom"><span class="nav-number">1.5.</span> <span class="nav-text">ListView custom</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#childrenDelegate"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">childrenDelegate</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

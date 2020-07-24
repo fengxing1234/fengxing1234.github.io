@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,ThemeData," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="App主题色控制 Theme有两种： 全局Theme和局部Theme。 全局Theme是由应用程序根MaterialApp创建的Theme 。 Theme作用： 可以设置Widget的主题，提高开发效率和速度，保持App主题统一性或某种一致性。  ThemeTheme组件可以为material APP定义主题数据（ThemeData）。Material组件库里很多组件都使用了主题数据， 如导航栏颜">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThemeData">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/ThemeData/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="App主题色控制 Theme有两种： 全局Theme和局部Theme。 全局Theme是由应用程序根MaterialApp创建的Theme 。 Theme作用： 可以设置Widget的主题，提高开发效率和速度，保持App主题统一性或某种一致性。  ThemeTheme组件可以为material APP定义主题数据（ThemeData）。Material组件库里很多组件都使用了主题数据， 如导航栏颜">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://book.flutterj.com/img/material_color.png">
+<meta property="og:image" content="http://book.flutterj.com/img/theme_dark.gif">
+<meta property="article:published_time" content="2020-06-23T13:24:07.000Z">
+<meta property="article:modified_time" content="2020-06-23T13:31:24.313Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="ThemeData">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://book.flutterj.com/img/material_color.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/23/flutter/widget组件/ThemeData/"/>
+
+
+
+
+
+  <title>ThemeData | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/ThemeData/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ThemeData</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-23T21:24:07+08:00">
+                2020-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/ThemeData/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/ThemeData/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="App主题色控制"><a href="#App主题色控制" class="headerlink" title="App主题色控制"></a>App主题色控制</h1><ul>
+<li>Theme有两种： 全局<code>Theme</code>和局部<code>Theme</code>。 全局<code>Theme</code>是由应用程序根<code>MaterialApp</code>创建的Theme 。</li>
+<li>Theme作用： 可以设置<code>Widget</code>的主题，提高开发效率和速度，保持App主题统一性或某种一致性。</li>
+</ul>
+<h2 id="Theme"><a href="#Theme" class="headerlink" title="Theme"></a>Theme</h2><p><code>Theme</code>组件可以为<code>material</code> <code>APP</code>定义主题数据（<code>ThemeData</code>）。<code>Material</code>组件库里很多组件都使用了主题数据， 如导航栏颜色、标题字体、<code>Icon</code>样式等。Theme内会使用<code>InheritedWidget</code>来为其子树共享样式数据。</p>
+<h2 id="ThemeData构造"><a href="#ThemeData构造" class="headerlink" title="ThemeData构造"></a>ThemeData构造</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    Brightness brightness,</span><br><span class="line">    VisualDensity visualDensity,</span><br><span class="line">    MaterialColor primarySwatch,</span><br><span class="line">    Color primaryColor,</span><br><span class="line">    Brightness primaryColorBrightness,</span><br><span class="line">    Color primaryColorLight,</span><br><span class="line">    Color primaryColorDark,</span><br><span class="line">    Color accentColor,</span><br><span class="line">    Brightness accentColorBrightness,</span><br><span class="line">    Color canvasColor,</span><br><span class="line">    Color scaffoldBackgroundColor,</span><br><span class="line">    Color bottomAppBarColor,</span><br><span class="line">    Color cardColor,</span><br><span class="line">    Color dividerColor,</span><br><span class="line">    Color focusColor,</span><br><span class="line">    Color hoverColor,</span><br><span class="line">    Color highlightColor,</span><br><span class="line">    Color splashColor,</span><br><span class="line">    InteractiveInkFeatureFactory splashFactory,</span><br><span class="line">    Color selectedRowColor,</span><br><span class="line">    Color unselectedWidgetColor,</span><br><span class="line">    Color disabledColor,</span><br><span class="line">    Color buttonColor,</span><br><span class="line">    ButtonThemeData buttonTheme,</span><br><span class="line">    ToggleButtonsThemeData toggleButtonsTheme,</span><br><span class="line">    Color secondaryHeaderColor,</span><br><span class="line">    Color textSelectionColor,</span><br><span class="line">    Color cursorColor,</span><br><span class="line">    Color textSelectionHandleColor,</span><br><span class="line">    Color backgroundColor,</span><br><span class="line">    Color dialogBackgroundColor,</span><br><span class="line">    Color indicatorColor,</span><br><span class="line">    Color hintColor,</span><br><span class="line">    Color errorColor,</span><br><span class="line">    Color toggleableActiveColor,</span><br><span class="line">    String fontFamily,</span><br><span class="line">    TextTheme textTheme,</span><br><span class="line">    TextTheme primaryTextTheme,</span><br><span class="line">    TextTheme accentTextTheme,</span><br><span class="line">    InputDecorationTheme inputDecorationTheme,</span><br><span class="line">    IconThemeData iconTheme,</span><br><span class="line">    IconThemeData primaryIconTheme,</span><br><span class="line">    IconThemeData accentIconTheme,</span><br><span class="line">    SliderThemeData sliderTheme,</span><br><span class="line">    TabBarTheme tabBarTheme,</span><br><span class="line">    TooltipThemeData tooltipTheme,</span><br><span class="line">    CardTheme cardTheme,</span><br><span class="line">    ChipThemeData chipTheme,</span><br><span class="line">    TargetPlatform platform,</span><br><span class="line">    MaterialTapTargetSize materialTapTargetSize,</span><br><span class="line">    bool applyElevationOverlayColor,</span><br><span class="line">    PageTransitionsTheme pageTransitionsTheme,</span><br><span class="line">    AppBarTheme appBarTheme,</span><br><span class="line">    BottomAppBarTheme bottomAppBarTheme,</span><br><span class="line">    ColorScheme colorScheme,</span><br><span class="line">    DialogTheme dialogTheme,</span><br><span class="line">    FloatingActionButtonThemeData floatingActionButtonTheme,</span><br><span class="line">    NavigationRailThemeData navigationRailTheme,</span><br><span class="line">    Typography typography,</span><br><span class="line">    CupertinoThemeData cupertinoOverrideTheme,</span><br><span class="line">    SnackBarThemeData snackBarTheme,</span><br><span class="line">    BottomSheetThemeData bottomSheetTheme,</span><br><span class="line">    PopupMenuThemeData popupMenuTheme,</span><br><span class="line">    MaterialBannerThemeData bannerTheme,</span><br><span class="line">    DividerThemeData dividerTheme,</span><br><span class="line">    ButtonBarThemeData buttonBarTheme,</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="设置主题栗子"><a href="#设置主题栗子" class="headerlink" title="设置主题栗子"></a>设置主题栗子</h1><h5 id="全局："><a href="#全局：" class="headerlink" title="全局："></a>全局：</h5><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">全局主题在MaterialApp的theme属性</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">全局生效</span></span></span><br><span class="line"><span class="keyword">new</span> MaterialApp(</span><br><span class="line">  title: <span class="string">'demo'</span>,</span><br><span class="line">  theme: <span class="keyword">new</span> ThemeData( <span class="comment">// 这里就是参数</span></span><br><span class="line">    brightness: Brightness.dark,</span><br><span class="line">    primaryColor: Colors.lightBlue[<span class="number">800</span>],</span><br><span class="line">    accentColor: Colors.cyan[<span class="number">600</span>],</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h5 id="局部："><a href="#局部：" class="headerlink" title="局部："></a>局部：</h5><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">假如我们要给FloatingActionButton设置主题样式</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">直接写个Theme包裹FloatingActionButton组件</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">然后设置data，接收类型依然是ThemeData，里面填写我们的参数</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">（如果没有设置局部主题则默认使用全局主题）</span></span></span><br><span class="line"><span class="keyword">new</span> Theme(</span><br><span class="line">  data: <span class="keyword">new</span> ThemeData(</span><br><span class="line">    accentColor: Colors.yellow,</span><br><span class="line">  ),</span><br><span class="line">  child: <span class="keyword">new</span> FloatingActionButton(</span><br><span class="line">    onPressed: () &#123;&#125;,</span><br><span class="line">    child: <span class="keyword">new</span> Icon(Icons.add),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h5 id="扩展父主题："><a href="#扩展父主题：" class="headerlink" title="扩展父主题："></a>扩展父主题：</h5><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">扩展父主题时无需覆盖所有的主题属性，可以通过使用copyWith方法来实现</span></span></span><br><span class="line"><span class="keyword">new</span> Theme(</span><br><span class="line">  data: Theme.of(context).copyWith(accentColor: Colors.yellow),</span><br><span class="line">  child: <span class="keyword">new</span> FloatingActionButton(</span><br><span class="line">    onPressed: <span class="keyword">null</span>,</span><br><span class="line">    child: <span class="keyword">new</span> Icon(Icons.add),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><code>Theme.of(context)</code>将查找Widget树并返回树中最近的Theme。如果Widget之上有一个单独的Theme定义， 则返回该值。如果不是，则返回App主题。</p>
+<h5 id="判断平台显示指定主题："><a href="#判断平台显示指定主题：" class="headerlink" title="判断平台显示指定主题："></a>判断平台显示指定主题：</h5><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">defaultTargetPlatform在foundation包里。</span></span></span><br><span class="line"><span class="comment">/// </span></span><br><span class="line"><span class="comment">/// <span class="markdown">我们也可以使用io包里的Platform来进行判断。</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">那么判断就是</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">theme: Platform.isIOS ? iOSTheme : AndroidTheme,</span></span></span><br><span class="line"><span class="keyword">new</span> MaterialApp(</span><br><span class="line">  theme: defaultTargetPlatform == TargetPlatform.iOS</span><br><span class="line">      ? iOSTheme</span><br><span class="line">      : AndroidTheme,</span><br><span class="line">  title: <span class="string">'Flutter Theme'</span>,</span><br><span class="line">  home: <span class="keyword">new</span> MyHomePage(),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h5 id="Tips"><a href="#Tips" class="headerlink" title="Tips:"></a>Tips:</h5><p>Flutter的Color中大多数颜色从100到900，增量为100，加上颜色50，数字越小颜色越浅， 数字越大颜色越深。强调色调只有100、200、400和700。</p>
+<h5 id="栗子："><a href="#栗子：" class="headerlink" title="栗子："></a>栗子：</h5><p><img src="http://book.flutterj.com/img/material_color.png" alt="img"></p>
+<h5 id="推荐站点-Material-design-："><a href="#推荐站点-Material-design-：" class="headerlink" title="推荐站点(Material design)："></a>推荐站点(Material design)：</h5><p><a href="https://material.io/resources/color" target="_blank" rel="noopener">https://material.io/resources/color</a>,</p>
+<p>为你的UI创建共享调色板，并衡量任何颜色组合的可观性【非常实用的工具】。</p>
+<h3 id="ThemeData（Color类型属性）："><a href="#ThemeData（Color类型属性）：" class="headerlink" title="ThemeData（Color类型属性）："></a>ThemeData（Color类型属性）：</h3><ul>
+<li>accentColor - 前景色（文本、按钮等）</li>
+<li>backgroundColor - 与<code>primaryColor</code>对比的颜色(例如 用作进度条的剩余部分)。</li>
+<li>bottomAppBarColor - <code>BottomAppBar</code>的默认颜色。</li>
+<li>buttonColor - <code>Material</code>中<code>RaisedButtons</code>使用的默认填充色。</li>
+<li>canvasColor - <code>MaterialType.canvas Material</code>的默认颜色。</li>
+<li>cardColor - <code>Material</code>被用作<code>Card</code>时的颜色。</li>
+<li>dialogBackgroundColor - <code>Dialog</code>元素的背景色。</li>
+<li>disabledColor - 用于<code>Widget</code>无效的颜色，无论任何状态。例如禁用复选框。</li>
+<li>dividerColor - <code>Dividers和PopupMenuDividers</code>的颜色，也用于<code>ListTiles</code>中间，和DataTables的每行中间.</li>
+<li>errorColor - 用于输入验证错误的颜色，例如在<code>TextField</code>中。</li>
+<li>highlightColor - 用于类似墨水喷溅动画或指示菜单被选中的高亮颜色。</li>
+<li>hintColor - 用于提示文本或占位符文本的颜色，例如在<code>TextField</code>中。</li>
+<li>indicatorColor - <code>TabBar</code>中选项选中的指示器颜色。</li>
+<li>primaryColor - App主要部分的背景色（<code>ToolBar</code>,<code>TabBar</code>等）。</li>
+<li>primaryColorDark - <code>primaryColor</code>的较暗版本。</li>
+<li>primaryColorLight - <code>primaryColor</code>的较亮版本。</li>
+<li>scaffoldBackgroundColor - 作为<code>Scaffold</code>基础的<code>Material</code>默认颜色，典型<code>Material</code>应用或应用内页面的背景颜色。</li>
+<li>secondaryHeaderColor - 有选定行时<code>PaginatedDataTable</code>标题的颜色。</li>
+<li>selectedRowColor - 选中行时的高亮颜色。</li>
+<li>splashColor - 墨水喷溅的颜色。</li>
+<li>textSelectionColor - 文本字段中选中文本的颜色，例如<code>TextField</code>。</li>
+<li>textSelectionHandleColor - 用于调整当前文本的哪个部分的句柄颜色。</li>
+<li>toggleableActiveColor - 用于突出显示切换<code>Widget</code>（如<code>Switch</code>，<code>Radio</code>和<code>Checkbox</code>）的活动状态的颜色。</li>
+<li>unselectedWidgetColor - 用于<code>Widget</code>处于非活动（但已启用）状态的颜色。 例如，未选中的复选框。 通常与<code>accentColor</code>形成对比。</li>
+<li>focusColor - 焦点获取时的颜色，例如，一些按钮焦点、输入框焦点。</li>
+<li>hoverColor - 点击之后徘徊中的颜色，例如，按钮长按，按住之后的颜色。</li>
+<li>cursorColor - 输入框光标颜色。</li>
+</ul>
+<h3 id="ThemeData（Theme相关类型属性）："><a href="#ThemeData（Theme相关类型属性）：" class="headerlink" title="ThemeData（Theme相关类型属性）："></a>ThemeData（Theme相关类型属性）：</h3><ul>
+<li>accentIconTheme - <code>IconThemeData</code>类型，与突出颜色对照的图片主题。</li>
+<li>accentTextTheme - <code>TextTheme</code>类型，与突出颜色对照的文本主题。</li>
+<li>chipTheme - <code>ChipThemeData</code>类型，用于渲染<code>Chip</code>的颜色和样式。</li>
+<li>buttonTheme - <code>ButtonThemeData</code>类型，定义了按钮等控件的默认配置，像<code>RaisedButton</code>和<code>FlatButton</code>。</li>
+<li>primaryIconTheme - <code>IconThemeData</code>类型，一个与主色对比的图片主题。</li>
+<li>primaryTextTheme - <code>TextThemeData</code>类型，一个与主色对比的文本主题。</li>
+<li>iconTheme - <code>IconThemeData</code>类型，与卡片和画布颜色形成对比的图标主题。</li>
+<li>inputDecorationTheme - <code>InputDecorationTheme</code>类型，<code>InputDecorator</code>，<code>TextField</code>和<code>TextFormField</code>的默认<code>InputDecoration</code>值基于此主题。</li>
+<li>sliderTheme - <code>SliderThemeData</code>类型，用于渲染<code>Slider</code>的颜色和形状。</li>
+<li>textTheme - <code>TextTheme</code>类型，与卡片和画布对比的文本颜色。</li>
+<li>toggleButtonsTheme - <code>ToggleButtonsThemeData</code>类型，Flutter 1.9 全新组件 <code>ToggleButtons</code> 的主题。</li>
+<li>tabBarTheme - <code>TabBarTheme</code>类型，<code>TabBar</code>的主题样式。</li>
+<li>tooltipTheme - <code>TooltipThemeData</code>类型，<code>tooltip</code>提示的主题样式。</li>
+<li>cardTheme - <code>CardTheme</code>类型，卡片的主题样式。</li>
+<li>pageTransitionsTheme - <code>PageTransitionsTheme</code>类型，页面转场主题样式。</li>
+<li>appBarTheme - <code>AppBarTheme</code>类型，<code>AppBar</code>主题样式。</li>
+<li>bottomAppBarTheme - <code>BottomAppBarTheme</code>类型，底部导航主题样式。</li>
+<li>dialogTheme - <code>DialogTheme</code>类型，对话框主题样式。</li>
+<li>floatingActionButtonTheme - <code>FloatingActionButtonThemeData</code>类型，<code>FloatingActionButton</code>的主题样式，也就是<code>Scaffold</code>属性的那个。</li>
+<li>cupertinoOverrideTheme - <code>CupertinoThemeData</code>类型，<code>cupertino</code>覆盖的主题样式。</li>
+<li>snackBarTheme - <code>SnackBarThemeData</code>类型，弹出的<code>snackBar</code>的主题样式。</li>
+<li>bottomSheetTheme - <code>BottomSheetThemeData</code>类型，底部滑出对话框的主题样式。</li>
+<li>popupMenuTheme - <code>PopupMenuThemeData</code>类型，弹出菜单对话框的主题样式。</li>
+<li>bannerTheme - <code>MaterialBannerThemeData</code>类型，<code>Material</code>材质的<code>Banner</code>主题样式。</li>
+<li>dividerTheme - <code>DividerThemeData</code>类型，<code>Divider</code>组件的主题样式，也就是那个横向线条组件。</li>
+</ul>
+<h3 id="ThemeData（其他类型属性）："><a href="#ThemeData（其他类型属性）：" class="headerlink" title="ThemeData（其他类型属性）："></a>ThemeData（其他类型属性）：</h3><ul>
+<li>accentColorBrightness - <code>Brightness</code>类型，<code>accentColor</code>的亮度。 用于确定放置在突出颜色顶部的文本和图标的颜色（例如<code>FloatingButton</code>上的图标）。</li>
+<li>brightness - <code>Brightness</code>类型，应用程序整体主题的亮度。 由按钮等<code>Widget</code>使用，以确定在不使用主色或强调色时要选择的颜色。</li>
+<li>platform - <code>TargetPlatform</code>类型，<code>Widget</code>需要适配的目标类型。</li>
+<li>splashFactory - <code>InteractiveInkFeatureFactory</code>类型，定义<code>InkWall</code>和<code>InkResponse</code>生成的墨水喷溅的外观。</li>
+<li>primaryColorBrightness - <code>Brightness</code>类型，<code>primaryColor</code>的亮度。</li>
+<li>fontFamily - <code>String</code>类型，字体样式。</li>
+<li>applyElevationOverlayColor <code>bool</code>类型，是否应用<code>elevation</code>覆盖颜色。</li>
+<li>materialTapTargetSize - <code>MaterialTapTargetSize</code>类型，<code>Chip</code>等组件的尺寸主题设置，如：设置为<code>MaterialTapTargetSize.shrinkWrap</code>时，<code>clip</code>距顶部距离为0；设置为<code>MaterialTapTargetSize.padded</code>时距顶部有一个距离</li>
+<li>colorScheme - <code>ColorScheme</code>类型，scheme组颜色，一组13种颜色，可用于配置大多数组件的颜色属性。</li>
+<li>typography - <code>Typography</code>类型,用于配置<code>TextTheme</code>、<code>primaryTextTheme</code>和<code>accentTextTheme</code>的颜色和几何文本主题值。</li>
+</ul>
+<h1 id="适配夜间模式"><a href="#适配夜间模式" class="headerlink" title="适配夜间模式"></a>适配夜间模式</h1><h5 id="实现效果："><a href="#实现效果：" class="headerlink" title="实现效果："></a>实现效果：</h5><p><img src="http://book.flutterj.com/img/theme_dark.gif" alt="img"></p>
+<h5 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h5><p>这次是使用局部的实现，哪个页面需要同步就加个Theme就行了，全局也是类似的实现方式，主体代码不到100行。</p>
+<h5 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h5><p>首先写个配置类，主要配置主题的是否为黑夜模式和主题样式：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Config</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="built_in">bool</span> dark = <span class="keyword">true</span>; <span class="comment">// 是否为黑夜模式</span></span><br><span class="line">  <span class="keyword">static</span> ThemeData themeData = <span class="keyword">new</span> ThemeData.dark(); <span class="comment">// 主题为暗色</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们正常的执行代码：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'global_config.dart'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() =&gt; runApp(<span class="keyword">new</span> MyApp());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MaterialApp(title: <span class="string">"Flutter高级进阶"</span>, home: <span class="keyword">new</span> MyScaffold());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyScaffold</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _MyScaffoldState createState() =&gt; _MyScaffoldState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_MyScaffoldState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">MyScaffold</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">  * 主题改变</span></span><br><span class="line"><span class="comment">  * */</span></span><br><span class="line">  changeTheme() &#123;</span><br><span class="line">    <span class="keyword">if</span> (Config.dark) &#123;</span><br><span class="line">      Config.themeData = <span class="keyword">new</span> ThemeData(</span><br><span class="line">        primaryColor: Colors.white,</span><br><span class="line">        scaffoldBackgroundColor: <span class="keyword">new</span> Color(<span class="number">0xFFEBEBEB</span>),</span><br><span class="line">      );</span><br><span class="line">      Config.dark = <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      Config.themeData = <span class="keyword">new</span> ThemeData.dark();</span><br><span class="line">      Config.dark = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    setState(() &#123;&#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Widget body(context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ListView(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        <span class="keyword">new</span> Container(</span><br><span class="line">          width: MediaQuery.of(context).size.width / <span class="number">4</span>, <span class="comment">// 整宽除4</span></span><br><span class="line">          child: <span class="keyword">new</span> GestureDetector(</span><br><span class="line">            onTap: () =&gt; changeTheme(), <span class="comment">// 触发更换主题的事件</span></span><br><span class="line">            child: <span class="keyword">new</span> Column(</span><br><span class="line">              children: &lt;Widget&gt;[</span><br><span class="line">                <span class="keyword">new</span> FlutterLogo(</span><br><span class="line">                  size: <span class="number">150.0</span>,</span><br><span class="line">                  style: FlutterLogoStyle.horizontal,</span><br><span class="line">                  duration: <span class="built_in">Duration</span>(milliseconds: <span class="number">100</span>),</span><br><span class="line">                  textColor: Theme.of(context).colorScheme.background, <span class="comment">// 从上下文拿到背景</span></span><br><span class="line">                ),</span><br><span class="line">                <span class="keyword">new</span> Text( <span class="comment">// 如果为黑夜模式则按钮文字为白天模式，否则文字显示为黑夜模式</span></span><br><span class="line">                  <span class="string">'点击Logo更换<span class="subst">$&#123;Config.dark ? <span class="string">"白天模式"</span> : <span class="string">"黑夜模式"</span>&#125;</span>'</span>,</span><br><span class="line">                  style: <span class="keyword">new</span> TextStyle(fontSize: <span class="number">25.0</span>),</span><br><span class="line">                ),</span><br><span class="line">              ],</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">        <span class="keyword">new</span> MaterialButton( <span class="comment">// 跳转按钮</span></span><br><span class="line">          onPressed: () &#123;</span><br><span class="line">            Navigator.of(context).push(<span class="keyword">new</span> MaterialPageRoute(</span><br><span class="line">                builder: (context) =&gt; <span class="keyword">new</span> NewPage(<span class="string">'Flutter高级进阶页面二'</span>)));</span><br><span class="line">          &#125;,</span><br><span class="line">          child: <span class="keyword">new</span> Text(<span class="string">'跳转到新页面'</span>),</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Theme( <span class="comment">// 主题组件，可设置局部的主题样式</span></span><br><span class="line">      data: Config.themeData, <span class="comment">// 设置为配置的主题数据</span></span><br><span class="line">      child: <span class="keyword">new</span> Scaffold(</span><br><span class="line">        appBar: <span class="keyword">new</span> AppBar(elevation: <span class="number">0</span>),</span><br><span class="line">        body: body(context), <span class="comment">// 身体页面body</span></span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再把NewPage测试页面写上：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NewPage</span> <span class="keyword">extends</span> <span class="title">StatefulWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title; <span class="comment">// 接收的标题</span></span><br><span class="line"></span><br><span class="line">  NewPage(<span class="keyword">this</span>.title);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _NewPageState createState() =&gt; <span class="keyword">new</span> _NewPageState(); <span class="comment">// 创建有状态页面</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_NewPageState</span> <span class="keyword">extends</span> <span class="title">State</span>&lt;<span class="title">NewPage</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Theme(</span><br><span class="line">      child: <span class="keyword">new</span> Scaffold( <span class="comment">// title就是我们的标题</span></span><br><span class="line">        appBar: <span class="keyword">new</span> AppBar(title: <span class="keyword">new</span> Text(<span class="string">'页面：<span class="subst">$&#123;widget.title&#125;</span>'</span>), elevation: <span class="number">0</span>),</span><br><span class="line">        body: <span class="keyword">new</span> Center(</span><br><span class="line">          child: <span class="keyword">new</span> Text(</span><br><span class="line">            <span class="string">'这是<span class="subst">$&#123;widget.title&#125;</span>'</span>,</span><br><span class="line">            style: TextStyle(fontSize: <span class="number">30.0</span>),</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">      data: Config.themeData, <span class="comment">// 设置为配置的主题数据</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>直接复制到自己的项目内即可运行。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/ThemeData/" rel="tag"># ThemeData</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/23/flutter/widget%E7%BB%84%E4%BB%B6/MaterialApp%E7%BB%84%E4%BB%B6/" rel="next" title="MaterialApp组件">
+                <i class="fa fa-chevron-left"></i> MaterialApp组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/24/flutter/widget%E7%BB%84%E4%BB%B6/Container/" rel="prev" title="Container">
+                Container <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#App主题色控制"><span class="nav-number">1.</span> <span class="nav-text">App主题色控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Theme"><span class="nav-number">1.1.</span> <span class="nav-text">Theme</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThemeData构造"><span class="nav-number">1.2.</span> <span class="nav-text">ThemeData构造</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置主题栗子"><span class="nav-number">2.</span> <span class="nav-text">设置主题栗子</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#全局："><span class="nav-number">2.0.0.0.1.</span> <span class="nav-text">全局：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#局部："><span class="nav-number">2.0.0.0.2.</span> <span class="nav-text">局部：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#扩展父主题："><span class="nav-number">2.0.0.0.3.</span> <span class="nav-text">扩展父主题：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#判断平台显示指定主题："><span class="nav-number">2.0.0.0.4.</span> <span class="nav-text">判断平台显示指定主题：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Tips"><span class="nav-number">2.0.0.0.5.</span> <span class="nav-text">Tips:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#栗子："><span class="nav-number">2.0.0.0.6.</span> <span class="nav-text">栗子：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#推荐站点-Material-design-："><span class="nav-number">2.0.0.0.7.</span> <span class="nav-text">推荐站点(Material design)：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThemeData（Color类型属性）："><span class="nav-number">2.0.1.</span> <span class="nav-text">ThemeData（Color类型属性）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThemeData（Theme相关类型属性）："><span class="nav-number">2.0.2.</span> <span class="nav-text">ThemeData（Theme相关类型属性）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThemeData（其他类型属性）："><span class="nav-number">2.0.3.</span> <span class="nav-text">ThemeData（其他类型属性）：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#适配夜间模式"><span class="nav-number">3.</span> <span class="nav-text">适配夜间模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#实现效果："><span class="nav-number">3.0.0.0.1.</span> <span class="nav-text">实现效果：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分析："><span class="nav-number">3.0.0.0.2.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码："><span class="nav-number">3.0.0.0.3.</span> <span class="nav-text">代码：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

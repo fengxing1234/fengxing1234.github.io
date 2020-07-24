@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Fluter消息机制之微任务在Flutter中，异步任务主要是通过Timer及微任务来实现。在Flutter之Timer原理解析一文中，讲述了通过Timer来实现异步任务的原理，那么本文就来看异步任务的另一种实现，微任务的使用及其实现原理。 1、微任务的使用先来看微任务的使用，代码很简单，如下。 1234567891011121314151617&#x2F;&#x2F;用法一Future.micr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluter消息机制之微任务">
+<meta property="og:url" content="http://yoursite.com/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Fluter%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6%E4%B9%8B%E5%BE%AE%E4%BB%BB%E5%8A%A1/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="Fluter消息机制之微任务在Flutter中，异步任务主要是通过Timer及微任务来实现。在Flutter之Timer原理解析一文中，讲述了通过Timer来实现异步任务的原理，那么本文就来看异步任务的另一种实现，微任务的使用及其实现原理。 1、微任务的使用先来看微任务的使用，代码很简单，如下。 1234567891011121314151617&#x2F;&#x2F;用法一Future.micr">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-29T09:13:29.000Z">
+<meta property="article:modified_time" content="2020-06-29T09:15:27.225Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Java，Android，Flutter">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/29/flutter/未曾理解/Fluter消息机制之微任务/"/>
+
+
+
+
+
+  <title>Fluter消息机制之微任务 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Fluter%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6%E4%B9%8B%E5%BE%AE%E4%BB%BB%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Fluter消息机制之微任务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-29T17:13:29+08:00">
+                2020-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Fluter%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6%E4%B9%8B%E5%BE%AE%E4%BB%BB%E5%8A%A1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Fluter%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6%E4%B9%8B%E5%BE%AE%E4%BB%BB%E5%8A%A1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Fluter消息机制之微任务"><a href="#Fluter消息机制之微任务" class="headerlink" title="Fluter消息机制之微任务"></a>Fluter消息机制之微任务</h1><p>在<code>Flutter</code>中，异步任务主要是通过<code>Timer</code>及微任务来实现。在<a href="https://juejin.im/post/5ee19d11518825433b134766" target="_blank" rel="noopener">Flutter之Timer原理解析</a>一文中，讲述了通过<code>Timer</code>来实现异步任务的原理，那么本文就来看异步任务的另一种实现，微任务的使用及其实现原理。</p>
+<h3 id="1、微任务的使用"><a href="#1、微任务的使用" class="headerlink" title="1、微任务的使用"></a>1、微任务的使用</h3><p>先来看微任务的使用，代码很简单，如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;用法一</span><br><span class="line">Future.microtask(() &#123;</span><br><span class="line">  print(&quot;microtask1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">&#x2F;&#x2F;用法二</span><br><span class="line">scheduleMicrotask(() &#123;</span><br><span class="line">  print(&quot;microtask2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">&#x2F;&#x2F;用法三</span><br><span class="line">Zone.current.scheduleMicrotask(()&#123;</span><br><span class="line">  print(&quot;microtask3&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">&#x2F;&#x2F;用法四</span><br><span class="line">Zone.root.scheduleMicrotask(()&#123;</span><br><span class="line">  print(&quot;microtask4&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>以上就是微任务的所有用法。基本上都是前两种使用方式比较多，但前面两种用法仅是对后面两种用法的封装而已。下面就来看微任务的实现原理，不过在分析微任务的实现原理之前需要先了解一下UI线程是如何创建的。</p>
+<h3 id="2、UI线程的创建"><a href="#2、UI线程的创建" class="headerlink" title="2、UI线程的创建"></a>2、UI线程的创建</h3><p>在<a href="https://juejin.im/post/5e535ca2f265da573e6723f3" target="_blank" rel="noopener">Flutter之Engine启动流程</a>一文中，提过在<code>Engine</code>创建过程中会创建UI线程、IO线程及GPU线程，但未深入。所以这里就以Android平台为例来深入的来了解<code>Flutter</code>中UI线程是如何创建的（IO线程、GPU线程与UI线程都是同一类型的对象，但命名不同）。</p>
+<p>[-&gt; flutter/shell/platform/android/android_shell_holder.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">AndroidShellHolder::AndroidShellHolder(</span><br><span class="line">    flutter::Settings settings,</span><br><span class="line">    fml::jni::JavaObjectWeakGlobalRef java_object,</span><br><span class="line">    bool is_background_view)</span><br><span class="line">    : settings_(std::move(settings)), java_object_(java_object) &#123;</span><br><span class="line">  static size_t shell_count &#x3D; 1;</span><br><span class="line">  auto thread_label &#x3D; std::to_string(shell_count++);</span><br><span class="line">            </span><br><span class="line">  &#x2F;&#x2F;创建目标线程</span><br><span class="line">  if (is_background_view) &#123;</span><br><span class="line">    &#x2F;&#x2F;仅创建UI线程</span><br><span class="line">    thread_host_ &#x3D; &#123;thread_label, ThreadHost::Type::UI&#125;;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    &#x2F;&#x2F;创建UI线程、GPU线程及IO线程</span><br><span class="line">    thread_host_ &#x3D; &#123;thread_label, ThreadHost::Type::UI | ThreadHost::Type::GPU |</span><br><span class="line">                                      ThreadHost::Type::IO&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>thread_host_</code>是一个结构体，所以直接来看该结构体中的具体实现。</p>
+<p>[-&gt; flutter/shell/common/thread_host.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;flutter&#x2F;shell&#x2F;common&#x2F;thread_host.h&quot;</span><br><span class="line"></span><br><span class="line">namespace flutter &#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">ThreadHost::ThreadHost(std::string name_prefix, uint64_t mask) &#123;</span><br><span class="line">  if (mask &amp; ThreadHost::Type::Platform) &#123;</span><br><span class="line">    &#x2F;&#x2F;Platform线程的创建，在Android中，由于Platform线程是Android中的主线程，所以名称为xxxx.platform的platform_thread不会创建</span><br><span class="line">    platform_thread &#x3D; std::make_unique&lt;fml::Thread&gt;(name_prefix + &quot;.platform&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (mask &amp; ThreadHost::Type::UI) &#123;</span><br><span class="line">    &#x2F;&#x2F;ui线程的创建</span><br><span class="line">    ui_thread &#x3D; std::make_unique&lt;fml::Thread&gt;(name_prefix + &quot;.ui&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (mask &amp; ThreadHost::Type::GPU) &#123;</span><br><span class="line">    &#x2F;&#x2F;gpu线程的创建</span><br><span class="line">    gpu_thread &#x3D; std::make_unique&lt;fml::Thread&gt;(name_prefix + &quot;.gpu&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (mask &amp; ThreadHost::Type::IO) &#123;</span><br><span class="line">    &#x2F;&#x2F;io线程的创建</span><br><span class="line">    io_thread &#x3D; std::make_unique&lt;fml::Thread&gt;(name_prefix + &quot;.io&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>从上面就可以看出ui线程、io线程及GPU线程是同一类型的对象，但命名不同。那么再来看UI线程的具体实现。</p>
+<p>[-&gt; flutter/fml/thread.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Thread::Thread(const std::string&amp; name) : joined_(false) &#123;</span><br><span class="line">  fml::AutoResetWaitableEvent latch;</span><br><span class="line">  fml::RefPtr&lt;fml::TaskRunner&gt; runner;</span><br><span class="line">  &#x2F;&#x2F;创建一个thread对象</span><br><span class="line">  thread_ &#x3D; std::make_unique&lt;std::thread&gt;([&amp;latch, &amp;runner, name]() -&gt; void &#123;</span><br><span class="line">    &#x2F;&#x2F;设置当前线程名称，由于这里是UI线程的创建，所以name是xxx.ui</span><br><span class="line">    SetCurrentThreadName(name);</span><br><span class="line">    &#x2F;&#x2F;创建一个MessageLoop对象</span><br><span class="line">    fml::MessageLoop::EnsureInitializedForCurrentThread();</span><br><span class="line">    &#x2F;&#x2F;获取MessageLoop对应的loop</span><br><span class="line">    auto&amp; loop &#x3D; MessageLoop::GetCurrent();</span><br><span class="line">    runner &#x3D; loop.GetTaskRunner();</span><br><span class="line">    &#x2F;&#x2F;唤醒</span><br><span class="line">    latch.Signal();</span><br><span class="line">    &#x2F;&#x2F;运行loop</span><br><span class="line">    loop.Run();</span><br><span class="line">  &#125;);</span><br><span class="line">  &#x2F;&#x2F;等待</span><br><span class="line">  latch.Wait();</span><br><span class="line">  task_runner_ &#x3D; runner;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>Thread</code>的构造函数中，会创建一个新线程。在该线程创建成功后，会给线程设置名称，如xxxxx.ui、xxxxx.gpu、xxxxx.io等。还会给该线程设置一个<code>MessageLoop</code>对象，最后再来执行<code>MessageLoop</code>的<code>run</code>函数，即使<code>MessageLoop</code>跑起来。</p>
+<p>这里重点来看<code>MessageLoop</code>对象的创建，它的实现如下。</p>
+<p>[-&gt; flutter/fml/message_loop.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;tls_message_loop类似Java中的ThreadLocal，用来保证MessageLoop仅属于某个线程，其他线程不可访问该MessageLoop</span><br><span class="line">FML_THREAD_LOCAL ThreadLocalUniquePtr&lt;MessageLoop&gt; tls_message_loop;</span><br><span class="line"></span><br><span class="line">void MessageLoop::EnsureInitializedForCurrentThread() &#123;</span><br><span class="line">  &#x2F;&#x2F;保证每个进行仅有一个MessageLoop对象</span><br><span class="line">  if (tls_message_loop.get() !&#x3D; nullptr) &#123;</span><br><span class="line">    &#x2F;&#x2F; Already initialized.</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  tls_message_loop.reset(new MessageLoop());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;创建MessageLoop对象</span><br><span class="line">MessageLoop::MessageLoop()</span><br><span class="line">      &#x2F;&#x2F;MessageLoopImpl对象的创建</span><br><span class="line">    : loop_(MessageLoopImpl::Create()),</span><br><span class="line">      &#x2F;&#x2F;TaskRunner对象的创建</span><br><span class="line">      task_runner_(fml::MakeRefCounted&lt;fml::TaskRunner&gt;(loop_)) &#123;&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里重点在<code>loop_</code>。它是一个<code>MessageLoopImpl</code>对象，由于各个平台不同，所以<code>MessageLoopImpl</code>的具体实现也不一样。这里以Android为例，当调用<code>create</code>方法时会创建一个继承自<code>MessageLoopImpl</code>的<code>MessageLoopAndroid</code>对象。</p>
+<p>[-&gt; flutter/fml/platform/android/message_loop_android.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">static constexpr int kClockType &#x3D; CLOCK_MONOTONIC;</span><br><span class="line"></span><br><span class="line">static ALooper* AcquireLooperForThread() &#123;</span><br><span class="line">  ALooper* looper &#x3D; ALooper_forThread();</span><br><span class="line"></span><br><span class="line">  if (looper &#x3D;&#x3D; nullptr) &#123;</span><br><span class="line">    &#x2F;&#x2F;如果当前线程不存在looper，则创建一个新的looper</span><br><span class="line">    looper &#x3D; ALooper_prepare(0);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;如果当前线程存在looper，则获取其引用并返回</span><br><span class="line">  ALooper_acquire(looper);</span><br><span class="line">  return looper;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;构造函数</span><br><span class="line">MessageLoopAndroid::MessageLoopAndroid()</span><br><span class="line">      &#x2F;&#x2F;创建一个looper对象</span><br><span class="line">    : looper_(AcquireLooperForThread()),</span><br><span class="line">      timer_fd_(::timerfd_create(kClockType, TFD_NONBLOCK | TFD_CLOEXEC)),</span><br><span class="line">      running_(false) &#123;</span><br><span class="line"></span><br><span class="line">  static const int kWakeEvents &#x3D; ALOOPER_EVENT_INPUT;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;执行回调方法</span><br><span class="line">  ALooper_callbackFunc read_event_fd &#x3D; [](int, int events, void* data) -&gt; int &#123;</span><br><span class="line">    if (events &amp; kWakeEvents) &#123;</span><br><span class="line">      reinterpret_cast&lt;MessageLoopAndroid*&gt;(data)-&gt;OnEventFired();</span><br><span class="line">    &#125;</span><br><span class="line">    return 1;  &#x2F;&#x2F; continue receiving callbacks</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  int add_result &#x3D; ::ALooper_addFd(looper_.get(),          &#x2F;&#x2F; looper</span><br><span class="line">                                   timer_fd_.get(),        &#x2F;&#x2F; fd</span><br><span class="line">                                   ALOOPER_POLL_CALLBACK,  &#x2F;&#x2F; ident</span><br><span class="line">                                   kWakeEvents,            &#x2F;&#x2F; events</span><br><span class="line">                                   read_event_fd,          &#x2F;&#x2F; callback</span><br><span class="line">                                   this                    &#x2F;&#x2F; baton</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MessageLoopAndroid::~MessageLoopAndroid() &#123;</span><br><span class="line">  int remove_result &#x3D; ::ALooper_removeFd(looper_.get(), timer_fd_.get());</span><br><span class="line">  FML_CHECK(remove_result &#x3D;&#x3D; 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;looper的运行</span><br><span class="line">void MessageLoopAndroid::Run() &#123;</span><br><span class="line">  FML_DCHECK(looper_.get() &#x3D;&#x3D; ALooper_forThread());</span><br><span class="line"></span><br><span class="line">  running_ &#x3D; true;</span><br><span class="line"></span><br><span class="line">  while (running_) &#123;</span><br><span class="line">    &#x2F;&#x2F;等待事件执行</span><br><span class="line">    int result &#x3D; ::ALooper_pollOnce(-1,       &#x2F;&#x2F; infinite timeout</span><br><span class="line">                                    nullptr,  &#x2F;&#x2F; out fd,</span><br><span class="line">                                    nullptr,  &#x2F;&#x2F; out events,</span><br><span class="line">                                    nullptr   &#x2F;&#x2F; out data</span><br><span class="line">    );</span><br><span class="line">    if (result &#x3D;&#x3D; ALOOPER_POLL_TIMEOUT || result &#x3D;&#x3D; ALOOPER_POLL_ERROR) &#123;</span><br><span class="line">      &#x2F;&#x2F; This handles the case where the loop is terminated using ALooper APIs.</span><br><span class="line">      running_ &#x3D; false;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;终止事件执行</span><br><span class="line">void MessageLoopAndroid::Terminate() &#123;</span><br><span class="line">  running_ &#x3D; false;</span><br><span class="line">  ALooper_wake(looper_.get());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;唤醒事件的执行</span><br><span class="line">void MessageLoopAndroid::WakeUp(fml::TimePoint time_point) &#123;</span><br><span class="line">  bool result &#x3D; TimerRearm(timer_fd_.get(), time_point);</span><br><span class="line">  FML_DCHECK(result);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;监听Loop的回调函数</span><br><span class="line">void MessageLoopAndroid::OnEventFired() &#123;</span><br><span class="line">  if (TimerDrain(timer_fd_.get())) &#123;</span><br><span class="line">    RunExpiredTasksNow();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码其实就是通过<code>ALooper</code>来实现一个异步IO。在Android中，<code>ALooper</code>可以认为是一个对<code>Looper</code>的包装，也就是通过<code>ALooper</code>来操作<code>Looper</code>。</p>
+<p><strong>注意</strong>：这里所说的<code>ALooper</code>来操作<code>Looper</code>指的是Native层中的<code>Looper</code>，而不是framework层的<code>Looper</code>。</p>
+<p>当<code>MessageLoopAndroid</code>对象创建成功后，再调用该对象的<code>run</code>函数使UI线程中的任务处理跑起来。这时候UI线程就成功创建完毕并做了相应的初始化。</p>
+<p>以上就是在<code>Android</code>平台中UI线程的创建，而在其他平台，UI线程的创建也与Android平台类似，唯一的不同之处就在于异步IO的实现。比如在iOS中，异步IO是采用<code>CFRunLoop</code>来实现的。</p>
+<h3 id="3、微任务实现原理"><a href="#3、微任务实现原理" class="headerlink" title="3、微任务实现原理"></a>3、微任务实现原理</h3><p>再回到微任务的实现中。以<code>scheduleMicrotask</code>方法为例，来看其代码实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void scheduleMicrotask(void callback()) &#123;</span><br><span class="line">  _Zone currentZone &#x3D; Zone.current;</span><br><span class="line">  &#x2F;&#x2F;当前Zone与_rootZone是否是同一个Zone对象。</span><br><span class="line">  if (identical(_rootZone, currentZone)) &#123;</span><br><span class="line">    &#x2F;&#x2F; No need to bind the callback. We know that the root&#39;s scheduleMicrotask</span><br><span class="line">    &#x2F;&#x2F; will be invoked in the root zone.</span><br><span class="line">    _rootScheduleMicrotask(null, null, _rootZone, callback);</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>基本上自定义<code>Zone</code>都不会来自定义<code>scheduleMicrotask</code>方法的实现，所以自定义<code>Zone</code>的<code>scheduleMicrotask</code>方法最终都是调用<code>_rootScheduleMicrotask</code>方法。下面就来看该方法的实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void _rootScheduleMicrotask(</span><br><span class="line">    Zone self, ZoneDelegate parent, Zone zone, void f()) &#123;</span><br><span class="line">  ...</span><br><span class="line">  _scheduleAsyncCallback(f);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码很简单，就是调用<code>_scheduleAsyncCallback</code>方法，再来看该方法的实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;节点为_AsyncCallbackEntry对象的单链表的头节点</span><br><span class="line">_AsyncCallbackEntry _nextCallback;</span><br><span class="line">&#x2F;&#x2F;节点为_AsyncCallbackEntry对象的单链表的尾节点</span><br><span class="line">_AsyncCallbackEntry _lastCallback;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F;优先级回调方法放在链表的头部，如果存在多个，则按照添加顺序排列</span><br><span class="line">_AsyncCallbackEntry _lastPriorityCallback;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;当前是否在执行回调方法</span><br><span class="line">bool _isInCallbackLoop &#x3D; false;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;遍历链表并执行相应的回调方法</span><br><span class="line">void _microtaskLoop() &#123;</span><br><span class="line">  while (_nextCallback !&#x3D; null) &#123;</span><br><span class="line">    _lastPriorityCallback &#x3D; null;</span><br><span class="line">    _AsyncCallbackEntry entry &#x3D; _nextCallback;</span><br><span class="line">    _nextCallback &#x3D; entry.next;</span><br><span class="line">    if (_nextCallback &#x3D;&#x3D; null) _lastCallback &#x3D; null;</span><br><span class="line">    (entry.callback)();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;开始执行回调方法</span><br><span class="line">void _startMicrotaskLoop() &#123;</span><br><span class="line">  _isInCallbackLoop &#x3D; true;</span><br><span class="line">  try &#123;</span><br><span class="line">    &#x2F;&#x2F; Moved to separate function because try-finally prevents</span><br><span class="line">    &#x2F;&#x2F; good optimization.</span><br><span class="line">    _microtaskLoop();</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    _lastPriorityCallback &#x3D; null;</span><br><span class="line">    _isInCallbackLoop &#x3D; false;</span><br><span class="line">    if (_nextCallback !&#x3D; null) &#123;</span><br><span class="line">      _AsyncRun._scheduleImmediate(_startMicrotaskLoop);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;将回调方法添加到链表中</span><br><span class="line">void _scheduleAsyncCallback(_AsyncCallback callback) &#123;</span><br><span class="line">  _AsyncCallbackEntry newEntry &#x3D; new _AsyncCallbackEntry(callback);</span><br><span class="line">  if (_nextCallback &#x3D;&#x3D; null) &#123;</span><br><span class="line">    _nextCallback &#x3D; _lastCallback &#x3D; newEntry;</span><br><span class="line">    &#x2F;&#x2F;如果当前还未处理回调方法</span><br><span class="line">    if (!_isInCallbackLoop) &#123;</span><br><span class="line">      _AsyncRun._scheduleImmediate(_startMicrotaskLoop);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    _lastCallback.next &#x3D; newEntry;</span><br><span class="line">    _lastCallback &#x3D; newEntry;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void _schedulePriorityAsyncCallback(_AsyncCallback callback) &#123;</span><br><span class="line">  if (_nextCallback &#x3D;&#x3D; null) &#123;</span><br><span class="line">    _scheduleAsyncCallback(callback);</span><br><span class="line">    _lastPriorityCallback &#x3D; _lastCallback;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  _AsyncCallbackEntry entry &#x3D; new _AsyncCallbackEntry(callback);</span><br><span class="line">  if (_lastPriorityCallback &#x3D;&#x3D; null) &#123;</span><br><span class="line">    entry.next &#x3D; _nextCallback;</span><br><span class="line">    _nextCallback &#x3D; _lastPriorityCallback &#x3D; entry;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    entry.next &#x3D; _lastPriorityCallback.next;</span><br><span class="line">    _lastPriorityCallback.next &#x3D; entry;</span><br><span class="line">    _lastPriorityCallback &#x3D; entry;</span><br><span class="line">    if (entry.next &#x3D;&#x3D; null) &#123;</span><br><span class="line">      _lastCallback &#x3D; entry;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码很简单，在<code>_scheduleAsyncCallback</code>方法中，就是将要执行的微任务包装成一个<code>_AsyncCallbackEntry</code>对象，并将该对象添加到链表中，也就是所有微任务都是链表中的一个节点，当遍历该链表并执行节点中的回调方法即是微任务的执行。</p>
+<p>这里要注意一下<code>_schedulePriorityAsyncCallback</code>方法，它也是将微任务包装成一个<code>_AsyncCallbackEntry</code>对象并添加到链表中。但这里的微任务优先级高，是直接将微任务添加到链表的头部。目前仅有当前<code>Zone</code>对象的<code>handleUncaughtError</code>方法中才会调用<code>_schedulePriorityAsyncCallback</code>，也就是捕获错误的优先级比普通微任务的优先级都要高。</p>
+<p>链表创建成功后，就需要能够在合适的时机来遍历该链表，这时候就来看<code>_scheduleImmediate</code>方法的执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class _AsyncRun &#123;</span><br><span class="line">  &#x2F;&#x2F;这里的callback对应的就是_startMicrotaskLoop方法</span><br><span class="line">  external static void _scheduleImmediate(void callback());</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1、微任务集合"><a href="#3-1、微任务集合" class="headerlink" title="3.1、微任务集合"></a>3.1、微任务集合</h4><p>来看<code>_scheduleImmediate</code>方法的实现，实现代码很简单，如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@patch</span><br><span class="line">class _AsyncRun &#123;</span><br><span class="line">  @patch</span><br><span class="line">  static void _scheduleImmediate(void callback()) &#123;</span><br><span class="line">    if (_ScheduleImmediate._closure &#x3D;&#x3D; null) &#123;</span><br><span class="line">      throw new UnsupportedError(&quot;Microtasks are not supported&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    _ScheduleImmediate._closure(callback);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">typedef void _ScheduleImmediateClosure(void callback());</span><br><span class="line"></span><br><span class="line">class _ScheduleImmediate &#123;</span><br><span class="line">  static _ScheduleImmediateClosure _closure;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;在Engine初始化时调用</span><br><span class="line">@pragma(&quot;vm:entry-point&quot;, &quot;call&quot;)</span><br><span class="line">void _setScheduleImmediateClosure(_ScheduleImmediateClosure closure) &#123;</span><br><span class="line">  _ScheduleImmediate._closure &#x3D; closure;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@pragma(&quot;vm:entry-point&quot;, &quot;call&quot;)</span><br><span class="line">void _ensureScheduleImmediate() &#123;</span><br><span class="line">  _AsyncRun._scheduleImmediate(_startMicrotaskLoop);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>_setScheduleImmediateClosure</code>是在<code>RootIsolate</code>创建成功后的<code>InitDartAsync</code>函数中调用的，所以来看<code>InitDartAsync</code>函数的实现。</p>
+<p>[-&gt; flutter/lib/ui/dart_runtime_hooks.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">static void InitDartAsync(Dart_Handle builtin_library, bool is_ui_isolate) &#123;</span><br><span class="line">  Dart_Handle schedule_microtask;</span><br><span class="line">  if (is_ui_isolate) &#123;</span><br><span class="line">    schedule_microtask &#x3D;</span><br><span class="line">        GetFunction(builtin_library, &quot;_getScheduleMicrotaskClosure&quot;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    Dart_Handle isolate_lib &#x3D; Dart_LookupLibrary(ToDart(&quot;dart:isolate&quot;));</span><br><span class="line">    Dart_Handle method_name &#x3D;</span><br><span class="line">        Dart_NewStringFromCString(&quot;_getIsolateScheduleImmediateClosure&quot;);</span><br><span class="line">    schedule_microtask &#x3D; Dart_Invoke(isolate_lib, method_name, 0, NULL);</span><br><span class="line">  &#125;</span><br><span class="line">  Dart_Handle async_library &#x3D; Dart_LookupLibrary(ToDart(&quot;dart:async&quot;));</span><br><span class="line">  Dart_Handle set_schedule_microtask &#x3D; ToDart(&quot;_setScheduleImmediateClosure&quot;);</span><br><span class="line">  Dart_Handle result &#x3D; Dart_Invoke(async_library, set_schedule_microtask, 1,</span><br><span class="line">                                   &amp;schedule_microtask);</span><br><span class="line">  PropagateIfError(result);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>代码很简单，根据不同<code>isolate</code>有不同实现。先来看ui_isolate，也就是<code>RootIsolate</code>，在<code>RootIsolate</code>中，赋给<code>_ScheduleImmediate._closure</code>的值是<code>_getScheduleMicrotaskClosure</code>方法，所以来看该方法的实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void _scheduleMicrotask(void callback()) native &#39;ScheduleMicrotask&#39;;</span><br><span class="line"></span><br><span class="line">@pragma(&#39;vm:entry-point&#39;)</span><br><span class="line">Function _getScheduleMicrotaskClosure() &#x3D;&gt; _scheduleMicrotask; </span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>上面代码很简单，就是对应着<code>ScheduleMicrotask</code>函数。</p>
+<p>[-&gt; flutter/lib/ui/dart_runtime_hooks.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void ScheduleMicrotask(Dart_NativeArguments args) &#123;</span><br><span class="line">  Dart_Handle closure &#x3D; Dart_GetNativeArgument(args, 0);</span><br><span class="line">  UIDartState::Current()-&gt;ScheduleMicrotask(closure);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>ScheduleMicrotask</code>函数中解析传递的参数，然后在调用当前<code>UIDartState</code>对象的<code>ScheduleMicrotask</code>函数。</p>
+<p>[-&gt; flutter/lib/ui/ui_dart_state.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void UIDartState::ScheduleMicrotask(Dart_Handle closure) &#123;</span><br><span class="line">  if (tonic::LogIfError(closure) || !Dart_IsClosure(closure)) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  microtask_queue_.ScheduleMicrotask(closure);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>UIDartState</code>对象的<code>ScheduleMicrotask</code>函数中，又会调用<code>DartMicrotaskQueue</code>对象的<code>ScheduleMicrotask</code>函数。</p>
+<p>[-&gt; tonic/dart_microtask_queue.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void DartMicrotaskQueue::ScheduleMicrotask(Dart_Handle callback) &#123;</span><br><span class="line">  queue_.emplace_back(DartState::Current(), callback);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最终来到<code>DartMicrotaskQueue</code>对象，在该对象中存在一个集合<code>queue_</code>，而<code>ScheduleMicrotask</code>函数中就是把<code>callback</code>添加到该集合中。也就是在<code>RootIsolate</code>中，最终是把<code>_startMicrotaskLoop</code>方法作为参数添加到集合<code>queue_</code>中。</p>
+<p>再来看非<code>ui_isolate</code>中的处理情况，在非<code>ui_isolate</code>中，赋给<code>_ScheduleImmediate._closure</code>的值就变成了<code>_getIsolateScheduleImmediateClosure</code>方法。该方法的实现就简单多了，来看下面代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_ImmediateCallback _pendingImmediateCallback;</span><br><span class="line"></span><br><span class="line">void _isolateScheduleImmediate(void callback()) &#123;</span><br><span class="line">  _pendingImmediateCallback &#x3D; callback;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@pragma(&quot;vm:entry-point&quot;, &quot;call&quot;)</span><br><span class="line">Function _getIsolateScheduleImmediateClosure() &#123;</span><br><span class="line">  return _isolateScheduleImmediate;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在上面代码中，仅是把赋给了<code>_pendingImmediateCallback</code>，也就是把<code>_startMicrotaskLoop</code>方法作为值赋给了<code>_pendingImmediateCallback</code>。</p>
+<h4 id="3-2、微任务的执行"><a href="#3-2、微任务的执行" class="headerlink" title="3.2、微任务的执行"></a>3.2、微任务的执行</h4><p>经过前面的准备，下面就可以在合适的时机来执行<code>_startMicrotaskLoop</code>方法，从而来处理所有微任务。</p>
+<p>这里也分为<code>ui_isolate</code>及非<code>ui_isolate</code>两种情况，先来看当前<code>isolate</code>是<code>ui_isolate</code>的情况。</p>
+<p>再来看<code>UIDartState</code>对象的实现，除了将<code>_startMicrotaskLoop</code>添加到集合中，也会在该对象中通过<code>FlushMicrotasksNow</code>函数来执行<code>_startMicrotaskLoop</code>方法，代码如下。</p>
+<p>[-&gt; flutter/lib/ui/ui_dart_state.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void UIDartState::FlushMicrotasksNow() &#123;</span><br><span class="line">  microtask_queue_.RunMicrotasks();</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>再来看<code>RunMicrotasks</code>的实现，代码如下。</p>
+<p>[-&gt; tonic/dart_microtask_queue.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void DartMicrotaskQueue::RunMicrotasks() &#123;</span><br><span class="line">  while (!queue_.empty()) &#123;</span><br><span class="line">    MicrotaskQueue local;</span><br><span class="line">    std::swap(queue_, local);</span><br><span class="line">    &#x2F;&#x2F;遍历集合中的所有元素</span><br><span class="line">    for (const auto&amp; callback : local) &#123;</span><br><span class="line">      if (auto dart_state &#x3D; callback.dart_state().lock()) &#123;</span><br><span class="line">        DartState::Scope dart_scope(dart_state.get());</span><br><span class="line">        &#x2F;&#x2F;调用_startMicrotaskLoop方法，callback.value()对应是_startMicrotaskLoop</span><br><span class="line">        Dart_Handle result &#x3D; Dart_InvokeClosure(callback.value(), 0, nullptr);</span><br><span class="line">        ...</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>至此，知道了在<code>ui_isolate</code>中，微任务是如何添加到集合中、如何执行的。那么再来想一个问题，微任务的执行时机是在什么时候尼？这就需要来看调用<code>FlushMicrotasksNow</code>函数的时机。</p>
+<p>经过查看<code>Flutter</code>源码。可以发现，<code>Flutter</code>中仅在<code>Window</code>对象的<code>BeginFrame</code>函数及<code>UIDartState</code>对象的<code>AddOrRemoveTaskObserver</code>函数中调用了调用了<code>FlushMicrotasksNow</code>函数。因此先来看<code>BeginFrame</code>的实现。</p>
+<p>[-&gt; flutter/lib/ui/window/window.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void Window::BeginFrame(fml::TimePoint frameTime) &#123;</span><br><span class="line">  std::shared_ptr&lt;tonic::DartState&gt; dart_state &#x3D; library_.dart_state().lock();</span><br><span class="line">  if (!dart_state)</span><br><span class="line">    return;</span><br><span class="line">  tonic::DartState::Scope scope(dart_state);</span><br><span class="line"></span><br><span class="line">  int64_t microseconds &#x3D; (frameTime - fml::TimePoint()).ToMicroseconds();</span><br><span class="line">  &#x2F;&#x2F;调用_beginFrame方法来开始绘制</span><br><span class="line">  tonic::LogIfError(tonic::DartInvokeField(library_.value(), &quot;_beginFrame&quot;,</span><br><span class="line">                                           &#123;</span><br><span class="line">                                               Dart_NewInteger(microseconds),</span><br><span class="line">                                           &#125;));</span><br><span class="line">  &#x2F;&#x2F;执行所有微任务</span><br><span class="line">  UIDartState::Current()-&gt;FlushMicrotasksNow();</span><br><span class="line">  &#x2F;&#x2F;调用_drawFrame来绘制UI</span><br><span class="line">  tonic::LogIfError(tonic::DartInvokeField(library_.value(), &quot;_drawFrame&quot;, &#123;&#125;));</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>代码很简单，但也说明了，在<code>Flutter</code>中的<code>window</code>调用<code>_beginFrame</code>与<code>_drawFrame</code>方法之间会把所有微任务处理掉。也就注定了不能在微任务中做耗时操作，否则影响UI的绘制。</p>
+<p>再来看<code>AddOrRemoveTaskObserver</code>函数。</p>
+<p>[-&gt; flutter/lib/ui/ui_dart_state.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">UIDartState::UIDartState(</span><br><span class="line">    TaskRunners task_runners,</span><br><span class="line">    TaskObserverAdd add_callback,</span><br><span class="line">    TaskObserverRemove remove_callback,</span><br><span class="line">    fml::WeakPtr&lt;SnapshotDelegate&gt; snapshot_delegate,</span><br><span class="line">    fml::WeakPtr&lt;IOManager&gt; io_manager,</span><br><span class="line">    fml::RefPtr&lt;SkiaUnrefQueue&gt; skia_unref_queue,</span><br><span class="line">    fml::WeakPtr&lt;ImageDecoder&gt; image_decoder,</span><br><span class="line">    std::string advisory_script_uri,</span><br><span class="line">    std::string advisory_script_entrypoint,</span><br><span class="line">    std::string logger_prefix,</span><br><span class="line">    UnhandledExceptionCallback unhandled_exception_callback,</span><br><span class="line">    std::shared_ptr&lt;IsolateNameServer&gt; isolate_name_server)</span><br><span class="line">    : task_runners_(std::move(task_runners)),</span><br><span class="line">      &#x2F;&#x2F;给add_callback_赋值</span><br><span class="line">      add_callback_(std::move(add_callback)),</span><br><span class="line">      ...</span><br><span class="line">      isolate_name_server_(std::move(isolate_name_server)) &#123;</span><br><span class="line">  AddOrRemoveTaskObserver(true &#x2F;* add *&#x2F;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void UIDartState::AddOrRemoveTaskObserver(bool add) &#123;</span><br><span class="line">  auto task_runner &#x3D; task_runners_.GetUITaskRunner();</span><br><span class="line">  if (!task_runner) &#123;</span><br><span class="line">    &#x2F;&#x2F; This may happen in case the isolate has no thread affinity (for example,</span><br><span class="line">    &#x2F;&#x2F; the service isolate).</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  FML_DCHECK(add_callback_ &amp;&amp; remove_callback_);</span><br><span class="line">  if (add) &#123;</span><br><span class="line">    &#x2F;&#x2F;这里是一个lambda表达式，传递给add_callback_一个函数</span><br><span class="line">    add_callback_(reinterpret_cast&lt;intptr_t&gt;(this),</span><br><span class="line">                  [this]() &#123; this-&gt;FlushMicrotasksNow(); &#125;);&#x2F;&#x2F;执行所有微任务</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    remove_callback_(reinterpret_cast&lt;intptr_t&gt;(this));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里重点来看<code>add_callback_</code>，它是在<code>UIDartState</code>对象初始化的时候赋值的。由于<code>DartIsolate</code>继承自<code>UIDartState</code>，所以来看<code>DartIsolate</code>对象的创建。</p>
+<p>[-&gt; flutter/runtime/dart_isolate.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">DartIsolate::DartIsolate(const Settings&amp; settings,</span><br><span class="line">                         TaskRunners task_runners,</span><br><span class="line">                         fml::WeakPtr&lt;SnapshotDelegate&gt; snapshot_delegate,</span><br><span class="line">                         fml::WeakPtr&lt;IOManager&gt; io_manager,</span><br><span class="line">                         fml::RefPtr&lt;SkiaUnrefQueue&gt; unref_queue,</span><br><span class="line">                         fml::WeakPtr&lt;ImageDecoder&gt; image_decoder,</span><br><span class="line">                         std::string advisory_script_uri,</span><br><span class="line">                         std::string advisory_script_entrypoint,</span><br><span class="line">                         bool is_root_isolate)</span><br><span class="line">    : UIDartState(std::move(task_runners),</span><br><span class="line">                  &#x2F;&#x2F;add_callback_对应的值</span><br><span class="line">                  settings.task_observer_add,</span><br><span class="line">                  settings.task_observer_remove,</span><br><span class="line">                  std::move(snapshot_delegate),</span><br><span class="line">                  std::move(io_manager),</span><br><span class="line">                  std::move(unref_queue),</span><br><span class="line">                  std::move(image_decoder),</span><br><span class="line">                  advisory_script_uri,</span><br><span class="line">                  advisory_script_entrypoint,</span><br><span class="line">                  settings.log_tag,</span><br><span class="line">                  settings.unhandled_exception_callback,</span><br><span class="line">                  DartVMRef::GetIsolateNameServer()),</span><br><span class="line">      is_root_isolate_(is_root_isolate) &#123;</span><br><span class="line">  phase_ &#x3D; Phase::Uninitialized;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在上面代码中，把<code>settings</code>对象的<code>task_observer_add</code>赋给了<code>add_callback_</code>。而<code>settings</code>是在<code>FlutterMain</code>的<code>Init</code>函数中创建并初始化的，所以在<code>FlutterMain</code>初始化时，就会给<code>settings</code>对象的<code>task_observer_add</code>赋值。</p>
+<p>[-&gt; flutter/shell/platform/android/flutter_main.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void FlutterMain::Init(JNIEnv* env,</span><br><span class="line">                       jclass clazz,</span><br><span class="line">                       jobject context,</span><br><span class="line">                       jobjectArray jargs,</span><br><span class="line">                       jstring kernelPath,</span><br><span class="line">                       jstring appStoragePath,</span><br><span class="line">                       jstring engineCachesPath) &#123;</span><br><span class="line">  std::vector&lt;std::string&gt; args;</span><br><span class="line">  args.push_back(&quot;flutter&quot;);</span><br><span class="line">  for (auto&amp; arg : fml::jni::StringArrayToVector(env, jargs)) &#123;</span><br><span class="line">    args.push_back(std::move(arg));</span><br><span class="line">  &#125;</span><br><span class="line">  auto command_line &#x3D; fml::CommandLineFromIterators(args.begin(), args.end());</span><br><span class="line"></span><br><span class="line">  auto settings &#x3D; SettingsFromCommandLine(command_line);</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;add_callback_对应的函数</span><br><span class="line">  settings.task_observer_add &#x3D; [](intptr_t key, fml::closure callback) &#123;</span><br><span class="line">    fml::MessageLoop::GetCurrent().AddTaskObserver(key, std::move(callback));</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  settings.task_observer_remove &#x3D; [](intptr_t key) &#123;</span><br><span class="line">    fml::MessageLoop::GetCurrent().RemoveTaskObserver(key);</span><br><span class="line">  &#125;;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>再来看线程所对应的<code>MessageLoopImpl</code>对象，前面说过<code>MessageLoopAndroid</code>继承自<code>MessageLoopImpl</code>。所以来看<code>AddTaskObserver</code>函数的实现。</p>
+<p>[-&gt; flutter/fml/message_loop_impl.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopImpl::AddTaskObserver(intptr_t key,</span><br><span class="line">                                      const fml::closure&amp; callback) &#123;</span><br><span class="line">  if (callback !&#x3D; nullptr) &#123;</span><br><span class="line">    &#x2F;&#x2F;每个MessageLoopImpl对象拥有唯一的queue_id_</span><br><span class="line">    task_queue_-&gt;AddTaskObserver(queue_id_, key, callback);</span><br><span class="line">  &#125; else &#123;...&#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>task_queue_</code>是一个<code>MessageLoopTaskQueues</code>对象，它的<code>AddTaskObserver</code>函数实现如下。</p>
+<p>[-&gt; flutter/fml/message_loop_task_queues.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopTaskQueues::AddTaskObserver(TaskQueueId queue_id,</span><br><span class="line">                                            intptr_t key,</span><br><span class="line">                                            const fml::closure&amp; callback) &#123;</span><br><span class="line">  std::scoped_lock queue_lock(GetMutex(queue_id));</span><br><span class="line">  &#x2F;&#x2F;UIDartState为key。包含FlushMicrotasksNow函数调用的callback为value</span><br><span class="line">  queue_entries_[queue_id]-&gt;task_observers[key] &#x3D; std::move(callback);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>代码中的<code>queue_entries_</code>是一个以<code>TaskQueueId</code>为key、<code>TaskQueueEntry</code>对象为value的map，而<code>TaskQueueEntry</code>中的<code>task_observers</code>也是一个map。所以<code>AddTaskObserver</code>函数就是把包含<code>FlushMicrotasksNow</code>函数调用的<code>callback</code>以<code>UIDartState</code>对象为key存入map中。</p>
+<p>在<a href="https://juejin.im/post/5ee19d11518825433b134766" target="_blank" rel="noopener">Flutter之Timer原理解析</a>一文中，如果在<code>ui_isolate</code>中，最终是通过<code>DartMessageHandler</code>的<code>OnMessage</code>函数来处理<code>event handler</code>消息及普通消息，代码如下。</p>
+<p>[-&gt;third_party/tonic/dart_message_handler.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void DartMessageHandler::Initialize(TaskDispatcher dispatcher) &#123;</span><br><span class="line">  &#x2F;&#x2F; Only can be called once.</span><br><span class="line">  TONIC_CHECK(!task_dispatcher_ &amp;&amp; dispatcher);</span><br><span class="line">  task_dispatcher_ &#x3D; dispatcher;</span><br><span class="line">  Dart_SetMessageNotifyCallback(MessageNotifyCallback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void DartMessageHandler::OnMessage(DartState* dart_state) &#123;</span><br><span class="line">  auto task_dispatcher_ &#x3D; dart_state-&gt;message_handler().task_dispatcher_;</span><br><span class="line"></span><br><span class="line">  auto weak_dart_state &#x3D; dart_state-&gt;GetWeakPtr();</span><br><span class="line">  &#x2F;&#x2F;在Android中，任务交给UI线程中的loop来执行。</span><br><span class="line">  &#x2F;&#x2F;在iOS中，也是通过类似loop的消息处理器来执行</span><br><span class="line">  task_dispatcher_([weak_dart_state]() &#123;</span><br><span class="line">    if (auto dart_state &#x3D; weak_dart_state.lock()) &#123;</span><br><span class="line">      dart_state-&gt;message_handler().OnHandleMessage(dart_state.get());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>代码中的<code>task_dispatcher_</code>是在<code>DartMessageHandler</code>对象调用<code>Initialize</code>函数时设置的。根据<a href="https://juejin.im/post/5e535ca2f265da573e6723f3" target="_blank" rel="noopener">Flutter之Engine启动流程</a>，知道是在<code>Initialize</code>函数是在<code>RootIsolate</code>初始化时调用的，那么就来看一下<code>Initialize</code>函数的实现。</p>
+<p>[-&gt; flutter/runtime/dart_isolate.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">bool DartIsolate::InitializeIsolate(</span><br><span class="line">    std::shared_ptr&lt;DartIsolate&gt; embedder_isolate,</span><br><span class="line">    Dart_Isolate isolate,</span><br><span class="line">    char** error) &#123;</span><br><span class="line">  ...</span><br><span class="line">  &#x2F;&#x2F;设置UI线程的消息处理器</span><br><span class="line">  SetMessageHandlingTaskRunner(GetTaskRunners().GetUITaskRunner());</span><br><span class="line">  ...</span><br><span class="line">  return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void DartIsolate::SetMessageHandlingTaskRunner(</span><br><span class="line">    fml::RefPtr&lt;fml::TaskRunner&gt; runner) &#123;</span><br><span class="line">  if (!IsRootIsolate() || !runner) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  message_handling_task_runner_ &#x3D; runner;</span><br><span class="line">  </span><br><span class="line">  &#x2F;&#x2F;设置消息处理器</span><br><span class="line">  message_handler().Initialize(</span><br><span class="line">      [runner](std::function&lt;void()&gt; task) &#123; runner-&gt;PostTask(task); &#125;);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>根据上面代码，可以知道<code>task_dispatcher_</code>中其实就是将任务task通过<code>PostTask</code>函数添加到<code>looper</code>中。</p>
+<p>[-&gt; flutter/fml/task_runner.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TaskRunner::TaskRunner(fml::RefPtr&lt;MessageLoopImpl&gt; loop)</span><br><span class="line">    : loop_(std::move(loop)) &#123;&#125;</span><br><span class="line">void TaskRunner::PostTask(const fml::closure&amp; task) &#123;</span><br><span class="line">  loop_-&gt;PostTask(task, fml::TimePoint::Now());</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>以Android平台为例，这里的<code>loop_</code>就是一个<code>MessageLoopAndroid</code>对象。所以再来看<code>MessageLoopAndroid</code>中<code>PostTask</code>的实现。</p>
+<p>[-&gt; flutter/fml/message_loop_impl.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopImpl::PostTask(const fml::closure&amp; task,</span><br><span class="line">                               fml::TimePoint target_time) &#123;</span><br><span class="line">  ...</span><br><span class="line">  task_queue_-&gt;RegisterTask(queue_id_, task, target_time);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>PostTask</code>函数中最终还是调用的<code>task_queue_</code>的<code>RegisterTask</code>函数，再来看该函数的实现。</p>
+<p>[-&gt; flutter/fml/message_loop_task_queues.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopTaskQueues::RegisterTask(TaskQueueId queue_id,</span><br><span class="line">                                         const fml::closure&amp; task,</span><br><span class="line">                                         fml::TimePoint target_time) &#123;</span><br><span class="line">  std::scoped_lock queue_lock(GetMutex(queue_id));</span><br><span class="line"></span><br><span class="line">  size_t order &#x3D; order_++;</span><br><span class="line">  const auto&amp; queue_entry &#x3D; queue_entries_[queue_id];</span><br><span class="line">  queue_entry-&gt;delayed_tasks.push(&#123;order, task, target_time&#125;);</span><br><span class="line">  TaskQueueId loop_to_wake &#x3D; queue_id;</span><br><span class="line">  if (queue_entry-&gt;subsumed_by !&#x3D; _kUnmerged) &#123;</span><br><span class="line">    loop_to_wake &#x3D; queue_entry-&gt;subsumed_by;</span><br><span class="line">  &#125;</span><br><span class="line">  WakeUpUnlocked(loop_to_wake,</span><br><span class="line">                 queue_entry-&gt;delayed_tasks.top().GetTargetTime());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void MessageLoopTaskQueues::WakeUpUnlocked(TaskQueueId queue_id,</span><br><span class="line">                                           fml::TimePoint time) const &#123;</span><br><span class="line">  if (queue_entries_.at(queue_id)-&gt;wakeable) &#123;</span><br><span class="line">    queue_entries_.at(queue_id)-&gt;wakeable-&gt;WakeUp(time);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>RegisterTask</code>函数中，把任务task添加到优先级队列<code>delayed_tasks</code>中。然后再调用<code>MessageLoopAndroid</code>对象的<code>WakeUp</code>函数。</p>
+<p>[-&gt; flutter/fml/platform/android/message_loop_android.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopAndroid::WakeUp(fml::TimePoint time_point) &#123;</span><br><span class="line">  bool result &#x3D; TimerRearm(timer_fd_.get(), time_point);</span><br><span class="line">  FML_DCHECK(result);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>WakeUp</code>函数就是通过<code>TimerRearm</code>函数来在合适的时机唤醒<code>looper</code>。根据前面UI线程的创建过程，可得知在<code>looper</code>唤醒后的回调函数<code>read_event_fd</code>中是执行<code>MessageLoopAndroid</code>对象的<code>OnEventFired</code>函数，而在该函数中又直接调用<code>MessageLoopAndroid</code>对象的<code>FlushTasks</code>函数，下面就来看<code>FlushTasks</code>函数的实现。</p>
+<p>[-&gt; flutter/fml/message_loop_impl.cc]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void MessageLoopImpl::FlushTasks(FlushType type) &#123;</span><br><span class="line">  TRACE_EVENT0(&quot;fml&quot;, &quot;MessageLoop::FlushTasks&quot;);</span><br><span class="line">  std::vector&lt;fml::closure&gt; invocations;</span><br><span class="line"></span><br><span class="line">  task_queue_-&gt;GetTasksToRunNow(queue_id_, type, invocations);</span><br><span class="line"></span><br><span class="line">  for (const auto&amp; invocation : invocations) &#123;</span><br><span class="line">    &#x2F;&#x2F;执行普通回调方法</span><br><span class="line">    invocation();</span><br><span class="line">    std::vector&lt;fml::closure&gt; observers &#x3D;</span><br><span class="line">        task_queue_-&gt;GetObserversToNotify(queue_id_);</span><br><span class="line">    for (const auto&amp; observer : observers) &#123;</span><br><span class="line">      &#x2F;&#x2F;observer对应着UIDartState对象的FlushMicrotasksNow函数，这里也就是执行所有的微任务</span><br><span class="line">      observer();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void MessageLoopImpl::RunExpiredTasksNow() &#123;</span><br><span class="line">  FlushTasks(FlushType::kAll);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>在<code>FlushTasks</code>函数中，每一个已到期的<code>event handler</code>任务或异步任务执行完毕后，都会执行所有的微任务。</p>
+<p>到此，在<code>ui_isolate</code>中，最终在以下两种时机来执行微任务。</p>
+<ol>
+<li>在调用<code>window</code>的<code>_beginFrame</code>与<code>_drawFrame</code>方法之间会把所有微任务处理掉。也就注定了不能在微任务中做耗时操作，否则影响UI的绘制。</li>
+<li>在每一个已到期的<code>event handler</code>任务或异步任务执行完毕后，都会执行所有的微任务。</li>
+</ol>
+<p>再来看在非<code>ui_isolate</code>中微任务的执行时机。也主要分为以下几种情况。</p>
+<ol>
+<li>根据<a href="https://juejin.im/post/5ee19d11518825433b134766" target="_blank" rel="noopener">Flutter之Timer原理解析</a>一文可得知，在每一个<code>event handler</code>任务或异步任务执行完毕后，都会执行所有的微任务。</li>
+<li>如果当前是生产环境，<code>Isolate</code>中消息类型是<code>kDrainServiceExtensionsMsg</code>且消息优先级是<code>kImmediateAction</code>，则也会执行所有微任务</li>
+</ol>
+<h3 id="4、总结"><a href="#4、总结" class="headerlink" title="4、总结"></a>4、总结</h3><p>以上就是微任务的使用及使用原理。还是有一定难度的。结合<a href="https://juejin.im/post/5ee19d11518825433b134766" target="_blank" rel="noopener">Flutter之Timer原理解析</a>一文，基本上就可以了解<code>Flutter</code>中的消息机制，这样在使用微任务及其他异步任务时也能做到了然于胸。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/28/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/BLoC%E6%A8%A1%E5%BC%8F/" rel="next" title="BLoC模式">
+                <i class="fa fa-chevron-left"></i> BLoC模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/29/flutter/%E6%9C%AA%E6%9B%BE%E7%90%86%E8%A7%A3/Flutter%E4%B9%8BTimer%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" rel="prev" title="Flutter之Timer原理解析">
+                Flutter之Timer原理解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fluter消息机制之微任务"><span class="nav-number">1.</span> <span class="nav-text">Fluter消息机制之微任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、微任务的使用"><span class="nav-number">1.0.1.</span> <span class="nav-text">1、微任务的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、UI线程的创建"><span class="nav-number">1.0.2.</span> <span class="nav-text">2、UI线程的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、微任务实现原理"><span class="nav-number">1.0.3.</span> <span class="nav-text">3、微任务实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1、微任务集合"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">3.1、微任务集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2、微任务的执行"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">3.2、微任务的执行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、总结"><span class="nav-number">1.0.4.</span> <span class="nav-text">4、总结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

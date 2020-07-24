@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Flutter," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Flutter异常捕获在介绍Flutter异常捕获之前必须先了解一下Dart单线程模型，只有了解了Dart的代码执行流程，我们才能知道该在什么地方去捕获异常。 一、Dart单线程模型在Java和Objective-C（以下简称“OC”）中，如果程序发生异常且没有被捕获，那么程序将会终止，但是这在Dart或JavaScript中则不会！究其原因，这和它们的运行机制有关系。Java和OC都是多线程模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flutter&#x2F;实战开发&#x2F;runZoned">
+<meta property="og:url" content="http://yoursite.com/2020/06/25/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/runZoned/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="Flutter异常捕获在介绍Flutter异常捕获之前必须先了解一下Dart单线程模型，只有了解了Dart的代码执行流程，我们才能知道该在什么地方去捕获异常。 一、Dart单线程模型在Java和Objective-C（以下简称“OC”）中，如果程序发生异常且没有被捕获，那么程序将会终止，但是这在Dart或JavaScript中则不会！究其原因，这和它们的运行机制有关系。Java和OC都是多线程模型">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pcdn.flutterchina.club/imgs/2-12.png">
+<meta property="article:published_time" content="2020-06-25T13:11:14.803Z">
+<meta property="article:modified_time" content="2020-07-22T06:45:17.817Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="Flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pcdn.flutterchina.club/imgs/2-12.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/25/flutter/实战开发/runZoned/"/>
+
+
+
+
+
+  <title>flutter/实战开发/runZoned | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/25/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/runZoned/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flutter/实战开发/runZoned</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-25T21:11:14+08:00">
+                2020-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">Flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/Flutter%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">Flutter实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/25/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/runZoned/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/25/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/runZoned/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Flutter异常捕获"><a href="#Flutter异常捕获" class="headerlink" title="Flutter异常捕获"></a>Flutter异常捕获</h1><p>在介绍Flutter异常捕获之前必须先了解一下Dart单线程模型，只有了解了Dart的代码执行流程，我们才能知道该在什么地方去捕获异常。</p>
+<h2 id="一、Dart单线程模型"><a href="#一、Dart单线程模型" class="headerlink" title="一、Dart单线程模型"></a>一、Dart单线程模型</h2><p>在Java和Objective-C（以下简称“OC”）中，如果程序发生异常且没有被捕获，那么程序将会终止，但是这在Dart或JavaScript中则不会！究其原因，这和它们的运行机制有关系。Java和OC都是多线程模型的编程语言，任意一个线程触发异常且该异常未被捕获时，就会导致整个进程退出。但Dart和JavaScript不会，它们都是单线程模型，运行机制很相似(但有区别)，下面我们通过Dart官方提供的一张图来看看Dart大致运行原理：</p>
+<p><img src="https://pcdn.flutterchina.club/imgs/2-12.png" alt="图2-12"></p>
+<p>Dart 在单线程中是以消息循环机制来运行的，其中包含两个任务队列，一个是“微任务队列” <strong>microtask queue</strong>，另一个叫做“事件队列” <strong>event queue</strong>。从图中可以发现，微任务队列的执行优先级高于事件队列。</p>
+<p>现在我们来介绍一下Dart线程运行过程，如上图中所示，入口函数 main() 执行完后，消息循环机制便启动了。首先会按照先进先出的顺序逐个执行微任务队列中的任务，事件任务执行完毕后程序便会退出，但是，在事件任务执行的过程中也可以插入新的微任务和事件任务，在这种情况下，整个线程的执行过程便是一直在循环，不会退出，而Flutter中，主线程的执行过程正是如此，永不终止。</p>
+<p>在Dart中，所有的外部事件任务都在事件队列中，如IO、计时器、点击、以及绘制事件等，而微任务通常来源于Dart内部，并且微任务非常少，之所以如此，是因为微任务队列优先级高，如果微任务太多，执行时间总和就越久，事件队列任务的延迟也就越久，对于GUI应用来说最直观的表现就是比较卡，所以必须得保证微任务队列不会太长。值得注意的是，我们可以通过<code>Future.microtask(…)</code>方法向微任务队列插入一个任务。</p>
+<p>在事件循环中，当某个任务发生异常并没有被捕获时，程序并不会退出，而直接导致的结果是<strong>当前任务</strong>的后续代码就不会被执行了，也就是说一个任务中的异常是不会影响其它任务执行的。</p>
+<h2 id="二、Flutter异常捕获"><a href="#二、Flutter异常捕获" class="headerlink" title="二、Flutter异常捕获"></a>二、Flutter异常捕获</h2><p>Dart中可以通过<code>try/catch/finally</code>来捕获代码块异常，这个和其它编程语言类似，如果读者不清楚，可以查看Dart语言文档，不再赘述，下面我们看看Flutter中的异常捕获。</p>
+<h3 id="Flutter框架异常捕获"><a href="#Flutter框架异常捕获" class="headerlink" title="Flutter框架异常捕获"></a>Flutter框架异常捕获</h3><p>Flutter 框架为我们在很多关键的方法进行了异常捕获。这里举一个例子，当我们布局发生越界或不合规范时，Flutter就会自动弹出一个错误界面，这是因为Flutter已经在执行build方法时添加了异常捕获，最终的源码如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> performRebuild() &#123;</span><br><span class="line"> ...</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//执行build方法  </span></span><br><span class="line">    built = build();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e, stack) &#123;</span><br><span class="line">    <span class="comment">// 有异常时则弹出错误提示  </span></span><br><span class="line">    built = ErrorWidget.builder(_debugReportException(<span class="string">'building <span class="subst">$this</span>'</span>, e, stack));</span><br><span class="line">  &#125; </span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，在发生异常时，Flutter默认的处理方式是弹一个ErrorWidget，但如果我们想自己捕获异常并上报到报警平台的话应该怎么做？我们进入<code>_debugReportException()</code>方法看看：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">FlutterErrorDetails _debugReportException(</span><br><span class="line">  <span class="built_in">String</span> context,</span><br><span class="line">  <span class="built_in">dynamic</span> exception,</span><br><span class="line">  StackTrace stack, &#123;</span><br><span class="line">  InformationCollector informationCollector</span><br><span class="line">&#125;) &#123;</span><br><span class="line">  <span class="comment">//构建错误详情对象  </span></span><br><span class="line">  <span class="keyword">final</span> FlutterErrorDetails details = FlutterErrorDetails(</span><br><span class="line">    exception: exception,</span><br><span class="line">    stack: stack,</span><br><span class="line">    <span class="keyword">library</span>: <span class="string">'widgets library'</span>,</span><br><span class="line">    context: context,</span><br><span class="line">    informationCollector: informationCollector,</span><br><span class="line">  );</span><br><span class="line">  <span class="comment">//报告错误 </span></span><br><span class="line">  FlutterError.reportError(details);</span><br><span class="line">  <span class="keyword">return</span> details;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现，错误是通过<code>FlutterError.reportError</code>方法上报的，继续跟踪：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> reportError(FlutterErrorDetails details) &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">if</span> (onError != <span class="keyword">null</span>)</span><br><span class="line">    onError(details); <span class="comment">//调用了onError回调</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现<code>onError</code>是<code>FlutterError</code>的一个静态属性，它有一个默认的处理方法 <code>dumpErrorToConsole</code>，到这里就清晰了，如果我们想自己上报异常，只需要提供一个自定义的错误处理回调即可，如：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  FlutterError.onError = (FlutterErrorDetails details) &#123;</span><br><span class="line">    reportError(details);</span><br><span class="line">  &#125;;</span><br><span class="line"> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就可以处理那些Flutter为我们捕获的异常了，接下来我们看看如何捕获其它异常。</p>
+<h3 id="其它异常捕获与日志收集"><a href="#其它异常捕获与日志收集" class="headerlink" title="其它异常捕获与日志收集"></a>其它异常捕获与日志收集</h3><p>在Flutter中，还有一些Flutter没有为我们捕获的异常，如调用空对象方法异常、Future中的异常。在Dart中，异常分两类：同步异常和异步异常，同步异常可以通过<code>try/catch</code>捕获，而异步异常则比较麻烦，如下面的代码是捕获不了<code>Future</code>的异常的：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">1</span>)).then((e) =&gt; Future.error(<span class="string">"xxx"</span>));</span><br><span class="line">&#125;<span class="keyword">catch</span> (e)&#123;</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dart中有一个<code>runZoned(...)</code> 方法，可以给执行对象指定一个Zone。Zone表示一个代码执行的环境范围，为了方便理解，读者可以将Zone类比为一个代码执行沙箱，不同沙箱的之间是隔离的，沙箱可以捕获、拦截或修改一些代码行为，如Zone中可以捕获日志输出、Timer创建、微任务调度的行为，同时Zone也可以捕获所有未处理的异常。下面我们看看<code>runZoned(...)</code>方法定义：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">R runZoned&lt;R&gt;(R body(), &#123;</span><br><span class="line">    <span class="built_in">Map</span> zoneValues, </span><br><span class="line">    ZoneSpecification zoneSpecification,</span><br><span class="line">    <span class="built_in">Function</span> onError,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>zoneValues</code>: Zone 的私有数据，可以通过实例<code>zone[key]</code>获取，可以理解为每个“沙箱”的私有数据。</p>
+</li>
+<li><p><code>zoneSpecification</code>：Zone的一些配置，可以自定义一些代码行为，比如拦截日志输出行为等，举个例子：</p>
+<p>下面是拦截应用中所有调用<code>print</code>输出日志的行为。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">main() &#123;</span><br><span class="line">  runZoned(() =&gt; runApp(MyApp()), zoneSpecification: <span class="keyword">new</span> ZoneSpecification(</span><br><span class="line">      <span class="built_in">print</span>: (Zone self, ZoneDelegate parent, Zone zone, <span class="built_in">String</span> line) &#123;</span><br><span class="line">        parent.<span class="built_in">print</span>(zone, <span class="string">"Intercepted: <span class="subst">$line</span>"</span>);</span><br><span class="line">      &#125;),</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，我们APP中所有调用<code>print</code>方法输出日志的行为都会被拦截，通过这种方式，我们也可以在应用中记录日志，等到应用触发未捕获的异常时，将异常信息和日志统一上报。ZoneSpecification还可以自定义一些其他行为，读者可以查看API文档。</p>
+</li>
+<li><p><code>onError</code>：Zone中未捕获异常处理回调，如果开发者提供了onError回调或者通过<code>ZoneSpecification.handleUncaughtError</code>指定了错误处理回调，那么这个zone将会变成一个error-zone，该error-zone中发生未捕获异常(无论同步还是异步)时都会调用开发者提供的回调，如：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">runZoned(() &#123;</span><br><span class="line">    runApp(MyApp());</span><br><span class="line">&#125;, onError: (<span class="built_in">Object</span> obj, StackTrace stack) &#123;</span><br><span class="line">    <span class="keyword">var</span> details=makeDetails(obj,stack);</span><br><span class="line">    reportError(details);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，结合上面的<code>FlutterError.onError</code>我们就可以捕获我们Flutter应用中全部错误了！需要注意的是，error-zone内部发生的错误是不会跨越当前error-zone的边界的，如果想跨越error-zone边界去捕获异常，可以通过共同的“源”zone来捕获，如：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> future = <span class="keyword">new</span> Future.value(<span class="number">499</span>);</span><br><span class="line">runZoned(() &#123;</span><br><span class="line">    <span class="keyword">var</span> future2 = future.then((_) &#123; <span class="keyword">throw</span> <span class="string">"error in first error-zone"</span>; &#125;);</span><br><span class="line">    runZoned(() &#123;</span><br><span class="line">        <span class="keyword">var</span> future3 = future2.catchError((e) &#123; <span class="built_in">print</span>(<span class="string">"Never reached!"</span>); &#125;);</span><br><span class="line">    &#125;, onError: (e) &#123; <span class="built_in">print</span>(<span class="string">"unused error handler"</span>); &#125;);</span><br><span class="line">&#125;, onError: (e) &#123; <span class="built_in">print</span>(<span class="string">"catches error of first error-zone."</span>); &#125;);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们最终的异常捕获和上报代码大致如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> collectLog(<span class="built_in">String</span> line)&#123;</span><br><span class="line">    ... <span class="comment">//收集日志</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> reportErrorAndLog(FlutterErrorDetails details)&#123;</span><br><span class="line">    ... <span class="comment">//上报错误和日志逻辑</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">FlutterErrorDetails makeDetails(<span class="built_in">Object</span> obj, StackTrace stack)&#123;</span><br><span class="line">    ...<span class="comment">// 构建错误信息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() &#123;</span><br><span class="line">  FlutterError.onError = (FlutterErrorDetails details) &#123;</span><br><span class="line">    reportErrorAndLog(details);</span><br><span class="line">  &#125;;</span><br><span class="line">  runZoned(</span><br><span class="line">    () =&gt; runApp(MyApp()),</span><br><span class="line">    zoneSpecification: ZoneSpecification(</span><br><span class="line">      <span class="built_in">print</span>: (Zone self, ZoneDelegate parent, Zone zone, <span class="built_in">String</span> line) &#123;</span><br><span class="line">        collectLog(line); <span class="comment">// 收集日志</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ),</span><br><span class="line">    onError: (<span class="built_in">Object</span> obj, StackTrace stack) &#123;</span><br><span class="line">      <span class="keyword">var</span> details = makeDetails(obj, stack);</span><br><span class="line">      reportErrorAndLog(details);</span><br><span class="line">    &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Flutter/" rel="tag"># Flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/25/flutter/widget%E7%BB%84%E4%BB%B6/WillPopScope/" rel="next" title="WillPopScope">
+                <i class="fa fa-chevron-left"></i> WillPopScope
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/28/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/BLoC%E6%A8%A1%E5%BC%8F/" rel="prev" title="BLoC模式">
+                BLoC模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flutter异常捕获"><span class="nav-number">1.</span> <span class="nav-text">Flutter异常捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Dart单线程模型"><span class="nav-number">1.1.</span> <span class="nav-text">一、Dart单线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Flutter异常捕获"><span class="nav-number">1.2.</span> <span class="nav-text">二、Flutter异常捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Flutter框架异常捕获"><span class="nav-number">1.2.1.</span> <span class="nav-text">Flutter框架异常捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它异常捕获与日志收集"><span class="nav-number">1.2.2.</span> <span class="nav-text">其它异常捕获与日志收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.2.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="和尚在学习矩阵变换时需要用到 Transform 类，可以实现子 Widget 的 scale 缩放 &#x2F; translate 平移 &#x2F; rotate 旋转 &#x2F; skew 斜切 等效果，对应于 Canvas 绘制过程中的矩阵变换等；和尚今对此进行初步整理； 一、scale 缩放 scale 缩放 可以通过 Transform 提供的构造方法或 Matrix4 矩阵变化来实现； Transform.s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矩阵变换Transform类基本使用">
+<meta property="og:url" content="http://yoursite.com/2020/07/22/flutter/widget%E7%BB%84%E4%BB%B6/%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2Transform%E7%B1%BB%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="和尚在学习矩阵变换时需要用到 Transform 类，可以实现子 Widget 的 scale 缩放 &#x2F; translate 平移 &#x2F; rotate 旋转 &#x2F; skew 斜切 等效果，对应于 Canvas 绘制过程中的矩阵变换等；和尚今对此进行初步整理； 一、scale 缩放 scale 缩放 可以通过 Transform 提供的构造方法或 Matrix4 矩阵变化来实现； Transform.s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-6db544c72d1c62df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-45808af4509c7d2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-59710ac9b087e311.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-d3716bf6327ce8f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-7ae245fad8193302.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-07-22T06:43:29.000Z">
+<meta property="article:modified_time" content="2020-07-22T07:18:14.146Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4118241-6db544c72d1c62df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/22/flutter/widget组件/矩阵变换Transform类基本使用/"/>
+
+
+
+
+
+  <title>矩阵变换Transform类基本使用 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/22/flutter/widget%E7%BB%84%E4%BB%B6/%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2Transform%E7%B1%BB%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">矩阵变换Transform类基本使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-22T14:43:29+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/22/flutter/widget%E7%BB%84%E4%BB%B6/%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2Transform%E7%B1%BB%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/22/flutter/widget%E7%BB%84%E4%BB%B6/%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2Transform%E7%B1%BB%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>和尚在学习矩阵变换时需要用到 <strong>Transform</strong> 类，可以实现子 <strong>Widget</strong> 的 <strong>scale 缩放 / translate 平移 / rotate 旋转 / skew 斜切</strong> 等效果，对应于 <strong>Canvas</strong> 绘制过程中的矩阵变换等；和尚今对此进行初步整理；</p>
+<h3 id="一、scale-缩放"><a href="#一、scale-缩放" class="headerlink" title="一、scale 缩放"></a>一、scale 缩放</h3><p> <strong>scale 缩放</strong> 可以通过 <strong>Transform</strong> 提供的构造方法或 <strong>Matrix4</strong> 矩阵变化来实现；</p>
+<h4 id="Transform-scale-构造方法"><a href="#Transform-scale-构造方法" class="headerlink" title="Transform.scale 构造方法"></a><strong>Transform.scale 构造方法</strong></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Transform.scale(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    @required double scale,     <span class="comment">// 缩放比例</span></span><br><span class="line">    <span class="keyword">this</span>.origin,    <span class="comment">// 缩放原点</span></span><br><span class="line">    <span class="keyword">this</span>.alignment = Alignment.center,  <span class="comment">// 对齐方式</span></span><br><span class="line">    <span class="keyword">this</span>.transformHitTests = <span class="literal">true</span>,</span><br><span class="line">    Widget child,</span><br><span class="line">&#125;) : transform = Matrix4.diagonal3Values(scale, scale, <span class="number">1.0</span>),</span><br><span class="line">    <span class="keyword">super</span>(key: key, <span class="attr">child</span>: child);</span><br></pre></td></tr></table></figure>
+
+<p><strong>Tips:</strong></p>
+<ol>
+<li>设置缩放比例后，水平/竖直方向按同比例缩放，<strong>z</strong> 轴方向不缩放；</li>
+<li>对齐方式是与初始位置为准;</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform.scale(</span><br><span class="line">        scale: <span class="number">1.2</span>,</span><br><span class="line"><span class="comment">//      origin: Offset(120.0, 120.0),</span></span><br><span class="line">        alignment: Alignment.bottomRight,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent))))),</span><br></pre></td></tr></table></figure>
+
+<h4 id="Transform-Matrix4-方式"><a href="#Transform-Matrix4-方式" class="headerlink" title="Transform Matrix4 方式"></a><strong>Transform Matrix4 方式</strong></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> scale(dynamic x, [double y, double z]) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>Matrix4</strong> 为 <strong>4D</strong> 矩阵，使用更灵活，可以分别设置 <strong>x / y / z</strong> 轴方向缩放比例；若只设置一个则水平/垂直方向同比例缩放；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.identity()</span><br><span class="line">          ..scale(<span class="number">1.2</span>, <span class="number">1.0</span>, <span class="number">0.5</span>),</span><br><span class="line">        alignment: Alignment.bottomRight,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent)))))</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-6db544c72d1c62df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="二、translate-平移"><a href="#二、translate-平移" class="headerlink" title="二、translate 平移"></a>二、translate 平移</h3><p> <strong>translate 平移</strong> 可通过构造方法或 <strong>Matrix4</strong> 矩阵变化来实现；</p>
+<h4 id="Transform-translate-构造方法"><a href="#Transform-translate-构造方法" class="headerlink" title="Transform.translate 构造方法"></a><strong>Transform.translate 构造方法</strong></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Transform.translate(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    @required Offset offset,</span><br><span class="line">    <span class="keyword">this</span>.transformHitTests = <span class="literal">true</span>,</span><br><span class="line">    Widget child,</span><br><span class="line">&#125;) : transform = Matrix4.translationValues(offset.dx, offset.dy, <span class="number">0.0</span>),</span><br><span class="line">    origin = <span class="literal">null</span>,</span><br><span class="line">    alignment = <span class="literal">null</span>,</span><br><span class="line">    <span class="keyword">super</span>(key: key, <span class="attr">child</span>: child);</span><br></pre></td></tr></table></figure>
+
+<p> <strong>translate</strong> 按坐标点 <strong>Offset</strong> 平移，水平向右为正向，竖直向下为正向；<strong>z</strong> 轴方向不平移；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform.translate(</span><br><span class="line">        offset: Offset(<span class="number">60.0</span>, <span class="number">-40.0</span>),</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent))))),</span><br></pre></td></tr></table></figure>
+
+<h4 id="Transform-Matrix4-方式-1"><a href="#Transform-Matrix4-方式-1" class="headerlink" title="Transform Matrix4 方式"></a>Transform Matrix4 方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> translate(dynamic x, [double y = <span class="number">0.0</span>, double z = <span class="number">0.0</span>]) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>Matrix4</strong> 平移方式可分别设置 <strong>x / y / z</strong> 轴方向平移量，必须设置 <strong>x</strong> 轴方向平移量；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.identity()</span><br><span class="line">          ..translate(<span class="number">60.0</span>, <span class="number">-40.0</span>, <span class="number">100.0</span>),</span><br><span class="line">        alignment: Alignment.bottomRight,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent))))),</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-45808af4509c7d2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="三、rotate-旋转"><a href="#三、rotate-旋转" class="headerlink" title="三、rotate 旋转"></a>三、rotate 旋转</h3><p> <strong>rotate 旋转</strong>可通过构造方法或 <strong>Matrix4</strong> 矩阵变化来实现；</p>
+<h4 id="Taransform-rotate-构造方法"><a href="#Taransform-rotate-构造方法" class="headerlink" title="Taransform.rotate 构造方法"></a><strong>Taransform.rotate 构造方法</strong></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Transform.rotate(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    @required double angle,     <span class="comment">// 旋转角度</span></span><br><span class="line">    <span class="keyword">this</span>.origin,</span><br><span class="line">    <span class="keyword">this</span>.alignment = Alignment.center,</span><br><span class="line">    <span class="keyword">this</span>.transformHitTests = <span class="literal">true</span>,</span><br><span class="line">    Widget child,</span><br><span class="line">&#125;) : transform = Matrix4.rotationZ(angle),</span><br><span class="line">       <span class="keyword">super</span>(key: key, <span class="attr">child</span>: child);</span><br></pre></td></tr></table></figure>
+
+<p>​      由此可看出旋转是沿 <strong>z</strong> 轴旋转，即垂直手机屏幕方向，视觉上的正常旋转；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform.rotate(</span><br><span class="line">        angle: pi / <span class="number">4</span>,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent))))),</span><br></pre></td></tr></table></figure>
+
+<h4 id="Transform-Matrix4-方式-2"><a href="#Transform-Matrix4-方式-2" class="headerlink" title="Transform Matrix4 方式"></a><strong>Transform Matrix4 方式</strong></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> rotate(Vector3 axis, double angle) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>Matrix4</strong> 可灵活设置旋转方向，包括沿 <strong>x / y / z</strong> 轴方向立体旋转，且旋转效果可以重叠；而 <strong>Matrix4</strong> 也提供了两种旋转方式；</p>
+<ol>
+<li><strong>Matrix4.rotationZ</strong></li>
+<li><strong>Matrix4.identity()..rotateZ</strong></li>
+</ol>
+<p>​      对于单轴旋转，两种方式实际是完全相同的，且第一种方式只可进行单轴旋转；第二种方式更灵活，可以多个轴叠加；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.rotationZ(pi / <span class="number">4</span>),</span><br><span class="line">        alignment: Alignment.center,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.blueAccent))))),</span><br><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.identity()..rotateX(pi / <span class="number">4</span>),</span><br><span class="line">        alignment: Alignment.center,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(</span><br><span class="line">                    color: Colors.greenAccent))))),</span><br><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.identity()..rotateY(pi / <span class="number">4</span>),</span><br><span class="line">        alignment: Alignment.center,</span><br><span class="line">        child: ClipOval(</span><br><span class="line">            child: SizedBox(</span><br><span class="line">                width: <span class="number">120.0</span>,</span><br><span class="line">                height: <span class="number">80.0</span>,</span><br><span class="line">                child: Container(color: Colors.brown))))),</span><br><span class="line">Center(</span><br><span class="line">    child: ClipOval(</span><br><span class="line">        child: SizedBox(</span><br><span class="line">            width: <span class="number">120.0</span>,</span><br><span class="line">            height: <span class="number">80.0</span>,</span><br><span class="line">            child: Container(color: Colors.black12))))</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-59710ac9b087e311.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">)<img src="https://upload-images.jianshu.io/upload_images/4118241-d3716bf6327ce8f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="四、skew-斜切"><a href="#四、skew-斜切" class="headerlink" title="四、skew 斜切"></a>四、skew 斜切</h3><p> <strong>Transform</strong> 未提供关于 <strong>skew</strong> 斜切的构造方法，只能用 <strong>Matrix4</strong> 方式构建；</p>
+<ol>
+<li><strong>skewX</strong> 沿水平方向斜切；</li>
+<li><strong>skewY</strong> 沿竖直方向斜切；</li>
+<li><strong>skew</strong> 与 <strong>x / y</strong> 轴共同矩阵转换产生斜切；</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.skewY(pi / <span class="number">4</span>),</span><br><span class="line">        alignment: Alignment.topLeft,</span><br><span class="line">        child: Container(</span><br><span class="line">            width: <span class="number">120.0</span>,</span><br><span class="line">            height: <span class="number">80.0</span>,</span><br><span class="line">            color: Colors.brown))),</span><br><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.skewX(pi / <span class="number">4</span>),</span><br><span class="line">        alignment: Alignment.topLeft,</span><br><span class="line">        child: Container(</span><br><span class="line">            width: <span class="number">120.0</span>,</span><br><span class="line">            height: <span class="number">80.0</span>,</span><br><span class="line">            color: Colors.redAccent))),</span><br><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.skew(pi / <span class="number">6</span>, pi / <span class="number">6</span>),</span><br><span class="line">        alignment: Alignment.topLeft,</span><br><span class="line">        child: Container(</span><br><span class="line">            width: <span class="number">120.0</span>,</span><br><span class="line">            height: <span class="number">80.0</span>,</span><br><span class="line">            color: Colors.white70))),</span><br><span class="line">Center(</span><br><span class="line">    child: Transform(</span><br><span class="line">        transform: Matrix4.skew(<span class="number">0.0</span>, <span class="number">0.0</span>),</span><br><span class="line">        alignment: Alignment.topLeft,</span><br><span class="line">        child: Container(</span><br><span class="line">            width: <span class="number">120.0</span>,</span><br><span class="line">            height: <span class="number">80.0</span>,</span><br><span class="line">            color: Colors.black12))),</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-7ae245fad8193302.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png">      所有的矩阵变换均可通过 <strong>Matrix4</strong> 叠加，在实际应用中更加灵活，下节会重点学习 <strong>Matrix4</strong> 矩阵方面的小知识点；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/22/flutter/%E5%AE%9E%E6%88%98%E5%BC%80%E5%8F%91/Flutter%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%B8%83%E5%B1%80%E7%BA%A6%E6%9D%9F/" rel="next" title="Flutter深入理解布局约束">
+                <i class="fa fa-chevron-left"></i> Flutter深入理解布局约束
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/22/flutter/widget%E7%BB%84%E4%BB%B6/%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2Transform%E7%B1%BBMatrix4/" rel="prev" title="矩阵变换Transform类Matrix4">
+                矩阵变换Transform类Matrix4 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、scale-缩放"><span class="nav-number">1.</span> <span class="nav-text">一、scale 缩放</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform-scale-构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">Transform.scale 构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform-Matrix4-方式"><span class="nav-number">1.2.</span> <span class="nav-text">Transform Matrix4 方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、translate-平移"><span class="nav-number">2.</span> <span class="nav-text">二、translate 平移</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform-translate-构造方法"><span class="nav-number">2.1.</span> <span class="nav-text">Transform.translate 构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform-Matrix4-方式-1"><span class="nav-number">2.2.</span> <span class="nav-text">Transform Matrix4 方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、rotate-旋转"><span class="nav-number">3.</span> <span class="nav-text">三、rotate 旋转</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Taransform-rotate-构造方法"><span class="nav-number">3.1.</span> <span class="nav-text">Taransform.rotate 构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transform-Matrix4-方式-2"><span class="nav-number">3.2.</span> <span class="nav-text">Transform Matrix4 方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、skew-斜切"><span class="nav-number">4.</span> <span class="nav-text">四、skew 斜切</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

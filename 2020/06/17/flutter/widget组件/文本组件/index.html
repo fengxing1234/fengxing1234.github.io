@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,文本组件," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="TextText是显示文本的组件，最常用的组件，没有之一。基本用法如下： 1Text(&#39;老孟&#39;)复制代码   注意：Text组件一定要包裹在Scaffold组件下，否则效果如下：  文本的样式在style中设置，类型为TextStyle，TextStyle中包含很多文本样式属性，下面介绍一些常用的。 设置文本大小和颜色： 1Text(&#39;老孟&#39;,style: TextStyle(color: Col">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本组件">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/flutter/widget%E7%BB%84%E4%BB%B6/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="TextText是显示文本的组件，最常用的组件，没有之一。基本用法如下： 1Text(&#39;老孟&#39;)复制代码   注意：Text组件一定要包裹在Scaffold组件下，否则效果如下：  文本的样式在style中设置，类型为TextStyle，TextStyle中包含很多文本样式属性，下面介绍一些常用的。 设置文本大小和颜色： 1Text(&#39;老孟&#39;,style: TextStyle(color: Col">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-328059fa4e353358.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-9f7f6b43e05ee1fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-c73b3977c657af7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-5ecdaa3bd56a7a38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-ca7dfcdf47fd81d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-ddda82bcb6c6fa46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-a2b56b1f8e551cdb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-6832d2dc062a0599.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-3a92280079c3ec1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-4cf4abe5c34df25f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-d2e42861c5427a68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-e3e7a2d63fff19aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a1d408eb70?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a20fd89d2a?imageslim">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a250c4ddba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a27d2b9d26?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2aabcb155?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2da628012?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2fec27b09?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/6/11/172a08a349afb673?imageslim">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-4edd61c6c2861489.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-be65bac24ebf9421.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-11c2a9f7cbb9ac94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-34261fddb5ad29c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-565918c864581b8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-d9d82e5998a098cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-b560dc681b7fe9cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-06-17T15:34:01.000Z">
+<meta property="article:modified_time" content="2020-06-17T15:53:39.856Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="文本组件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4118241-328059fa4e353358.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/17/flutter/widget组件/文本组件/"/>
+
+
+
+
+
+  <title>文本组件 | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/17/flutter/widget%E7%BB%84%E4%BB%B6/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文本组件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-17T23:34:01+08:00">
+                2020-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">文本组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/17/flutter/widget%E7%BB%84%E4%BB%B6/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/17/flutter/widget%E7%BB%84%E4%BB%B6/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h3><p>Text是显示文本的组件，最常用的组件，没有之一。基本用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-328059fa4e353358.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>注意：Text组件一定要包裹在Scaffold组件下，否则效果如下：</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-9f7f6b43e05ee1fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>文本的样式在<code>style</code>中设置，类型为<code>TextStyle</code>，<code>TextStyle</code>中包含很多文本样式属性，下面介绍一些常用的。</p>
+<p>设置文本大小和颜色：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>,style: TextStyle(color: Colors.red,fontSize: <span class="number">20</span>),),复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-c73b3977c657af7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>上面黑色的字体为没有设置的效果，作为对比。</p>
+<p>设置字体粗细：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>,style: TextStyle(fontWeight: FontWeight.bold))复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-5ecdaa3bd56a7a38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>字体粗细共有9个级别，为<code>w100</code>至<code>w900</code>，<strong>FontWeight.bold</strong>是<code>w700</code>。</p>
+<p>设置斜体：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>,style: TextStyle(fontStyle: FontStyle.italic,))复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-ca7dfcdf47fd81d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>设置自定义的字体：</p>
+<ol>
+<li>首先下载字体库（比如中华字体库）</li>
+<li>将字体文件拷贝的项目中，一般目录是：assets/fonts/，assets和fonts都需要手动创建，此目录不是必须的，而是约定俗成，资源一般都放在assets目录下。</li>
+<li>配置<code>pubspec.yaml</code>：</li>
+</ol>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fonts:</span><br><span class="line">  - family: maobi </span><br><span class="line">    fonts:</span><br><span class="line">      - asset: assets/fonts/maobi.ttf复制代码</span><br></pre></td></tr></table></figure>
+
+<p>maobi：是自己对当前字体的命名，有意义即可。</p>
+<p>asset：字体文件的目录。</p>
+<p>使用：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>, style: TextStyle(fontFamily: <span class="string">'maobi'</span>,)),复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-ddda82bcb6c6fa46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>设置对齐方式：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  height: <span class="number">100</span>,</span><br><span class="line">  width: <span class="number">200</span>,</span><br><span class="line">  color: Colors.blue.withOpacity(<span class="number">.4</span>),</span><br><span class="line">  child: Text(<span class="string">'老孟'</span>, textAlign: TextAlign.center),</span><br><span class="line">),复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-a2b56b1f8e551cdb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>textAlign</code>只是控制水平方向的对齐方式，值说明如下：</p>
+<ul>
+<li>left：左对齐</li>
+<li>right：右对齐</li>
+<li>center：居中</li>
+<li>justify：两端对齐，此属性中文存在bug（Flutter版本：1.17.3）也可以在<a href="https://github.com/flutter/flutter/issues/35734" target="_blank" rel="noopener">官方issue中关注此问题</a></li>
+<li>start：前端对齐，和<code>TextDirection</code>属性有关，如果设置<code>TextDirection.ltr</code>，则左对齐，设置<code>TextDirection.rtl</code>则右对齐。</li>
+<li>end：末端对齐，和<code>TextDirection</code>属性有关，如果设置<code>TextDirection.ltr</code>，则右对齐，设置<code>TextDirection.rtl</code>则左对齐。</li>
+</ul>
+<p>设置文本自动换行：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  height: <span class="number">100</span>,</span><br><span class="line">  width: <span class="number">200</span>,</span><br><span class="line">  color: Colors.blue.withOpacity(<span class="number">.4</span>),</span><br><span class="line">  child: Text(<span class="string">'老孟，专注分享Flutter技术和应用实战'</span>,softWrap: <span class="keyword">true</span>,),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-6832d2dc062a0599.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>文本超出范围时的处理：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  height: <span class="number">100</span>,</span><br><span class="line">  width: <span class="number">200</span>,</span><br><span class="line">  color: Colors.blue.withOpacity(<span class="number">.4</span>),</span><br><span class="line">  child: Text(<span class="string">'老孟，专注分享Flutter技术和应用实战'</span>,overflow: TextOverflow.ellipsis,),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-3a92280079c3ec1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>溢出的处理方式：</p>
+<ul>
+<li>clip：直接裁剪。</li>
+<li>fade：越来越透明。</li>
+<li>ellipsis：省略号结尾。</li>
+<li>visible：依然显示，此时将会溢出父组件。</li>
+</ul>
+<p>设置全局字体样式：</p>
+<p>在<code>MaterialApp</code>的<code>theme</code>中设置如下</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MaterialApp(</span><br><span class="line">  title: <span class="string">'Flutter Demo'</span>,</span><br><span class="line">  theme: ThemeData(</span><br><span class="line">   ...</span><br><span class="line">    textTheme: TextTheme(</span><br><span class="line">        bodyText2: TextStyle(color: Colors.red,fontSize: <span class="number">24</span>),</span><br><span class="line">    )</span><br><span class="line">  ),</span><br><span class="line">  home: Scaffold(</span><br><span class="line">    body: TextDemo(),</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>Text组件默认为红色，</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Text(<span class="string">'老孟'</span>),</span><br><span class="line"></span><br><span class="line">Text(<span class="string">'老孟'</span>,style: TextStyle(color: Colors.blue,fontSize: <span class="number">20</span>),),复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-4cf4abe5c34df25f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="RichText"><a href="#RichText" class="headerlink" title="RichText"></a>RichText</h3><p>RichText的属性和Text基本一样，使用如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">RichText(</span><br><span class="line">  text: TextSpan(</span><br><span class="line">      style: DefaultTextStyle.of(context).style,</span><br><span class="line">      children: &lt;InlineSpan&gt;[</span><br><span class="line">        TextSpan(text: <span class="string">'老孟'</span>, style: TextStyle(color: Colors.red)),</span><br><span class="line">        TextSpan(text: <span class="string">'，'</span>),</span><br><span class="line">        TextSpan(text: <span class="string">'专注分享Flutter技术和应用实战'</span>),</span><br><span class="line">      ]),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-d2e42861c5427a68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="TextField"><a href="#TextField" class="headerlink" title="TextField"></a>TextField</h3><p>TextField是文本输入组件，即输入框，常用组件之一。基本用法：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TextField()复制代码</span><br></pre></td></tr></table></figure>
+
+<p>不需要任何参数，一个最简单的文本输入组件就出来了，效果如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-e3e7a2d63fff19aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>decoration</code>是TextField组件的装饰（外观）参数，类型是InputDecoration。</p>
+<p><code>icon</code>显示在输入框的前面，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    icon: Icon(Icons.person),</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a1d408eb70?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>当输入框是空而且没有焦点时，labelText显示在输入框上边，当获取焦点或者不为空时labelText往上移动一点，<code>labelStyle</code>参数表示文本样式，具体参考<code>TextStyle</code>， 用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    labelText: <span class="string">'姓名：'</span>,</span><br><span class="line">    labelStyle: TextStyle(color:Colors.red)</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a20fd89d2a?imageslim" alt="img"></p>
+<p><code>hasFloatingPlaceholder</code>参数控制当输入框获取焦点或者不为空时是否还显示<code>labelText</code>，默认为true，显示。</p>
+<p><code>helperText</code>显示在输入框的左下部，用于提示用户，<code>helperStyle</code>参数表示文本样式，具体参考<code>TextStyle</code>用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    helperText: <span class="string">'用户名长度为6-10个字母'</span>,</span><br><span class="line">    helperStyle: TextStyle(color: Colors.blue),</span><br><span class="line">    helperMaxLines: <span class="number">1</span></span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a250c4ddba?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>hintText</code>是当输入框为空时的提示，不为空时不在显示，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    hintText: <span class="string">'请输入用户名'</span>,</span><br><span class="line">    hintStyle: TextStyle(color: Colors.grey),</span><br><span class="line">    hintMaxLines: <span class="number">1</span></span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a27d2b9d26?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>errorText</code>显示在输入框的左下部，默认字体为红色，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    errorText: <span class="string">'用户名输入错误'</span>,</span><br><span class="line">    errorStyle: TextStyle(fontSize: <span class="number">12</span>),</span><br><span class="line">    errorMaxLines: <span class="number">1</span>,</span><br><span class="line">    errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2aabcb155?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>prefix</code>系列的组件是输入框前面的部分，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    prefixIcon: Icon(Icons.person)</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2da628012?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>注意prefix和icon的区别，icon是在输入框边框的外部，而prefix在里面。</p>
+<p>suffix和prefix相反，suffix在输入框的尾部，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">      suffixIcon: Icon(Icons.person)</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a2fec27b09?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>counter</code>组件统计输入框文字的个数，counter仅仅是展示效果，不具备自动统计字数的功能， 自动统计字数代码如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _textFieldValue = <span class="string">''</span>;</span><br><span class="line">TextField(</span><br><span class="line">  onChanged: (value)&#123;</span><br><span class="line">    setState(() &#123;</span><br><span class="line">      _textFieldValue = value;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    counterText: <span class="string">'<span class="subst">$&#123;_textFieldValue.length&#125;</span>/32'</span></span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://user-gold-cdn.xitu.io/2020/6/11/172a08a349afb673?imageslim" alt="img"></p>
+<p><code>filled</code>为true时，输入框将会被<code>fillColor</code>填充，仿QQ登录输入框代码如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  height: <span class="number">60</span>,</span><br><span class="line">  width: <span class="number">250</span>,</span><br><span class="line">  child: TextField(</span><br><span class="line">    decoration: InputDecoration(</span><br><span class="line">      fillColor: Color(<span class="number">0x30cccccc</span>),</span><br><span class="line">      filled: <span class="keyword">true</span>,</span><br><span class="line">      enabledBorder: OutlineInputBorder(</span><br><span class="line">          borderSide: BorderSide(color: Color(<span class="number">0x00FF0000</span>)),</span><br><span class="line">          borderRadius: BorderRadius.all(Radius.circular(<span class="number">100</span>))),</span><br><span class="line">      hintText: <span class="string">'QQ号/手机号/邮箱'</span>,</span><br><span class="line">      focusedBorder: OutlineInputBorder(</span><br><span class="line">          borderSide: BorderSide(color: Color(<span class="number">0x00000000</span>)),</span><br><span class="line">          borderRadius: BorderRadius.all(Radius.circular(<span class="number">100</span>))),</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-4edd61c6c2861489.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>controller</code>是输入框文本编辑的控制器，可以获取TextField的内容、设置TextField的内容，下面将输入的英文变为大写：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">TextEditingController _controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">  <span class="keyword">super</span>.initState();</span><br><span class="line">  _controller = TextEditingController()</span><br><span class="line">    ..addListener(() &#123;</span><br><span class="line">      <span class="comment">//获取输入框的内容，变为大写</span></span><br><span class="line">      _controller.text = _controller.text.toUpperCase();</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line">Widget build(BuildContext context) &#123;</span><br><span class="line">  <span class="keyword">return</span> TextField(</span><br><span class="line">    controller: _controller,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line">dispose() &#123;</span><br><span class="line">  <span class="keyword">super</span>.dispose();</span><br><span class="line">  _controller.dispose();</span><br><span class="line">&#125;复制代码</span><br></pre></td></tr></table></figure>
+
+<p>有时输入框后面带有“清除”功能，需要controller来实现。如果需要2个TextField的内容进行同步，只需要给2个TextField设置同一个controller即可实现。</p>
+<p><code>keyboardType</code>参数控制软键盘的类型，说明如下：</p>
+<ul>
+<li>text：通用键盘。</li>
+<li>multiline：当TextField为多行时（maxLines设置大于1），右下角的为“换行” 按键。</li>
+<li>number：数字键盘。</li>
+<li>phone：手机键盘，比数字键盘多”*”和 “#”。</li>
+<li>datetime：在ios上和text一样，在android上出现数字键盘、”:”和 “-“。</li>
+<li>emailAddress：邮箱键盘，有”@” 和 “.”按键。</li>
+<li>url：url键盘，有”/“ 和 “.”按键。</li>
+<li>visiblePassword：既有字幕又有数字的键盘。</li>
+</ul>
+<p><code>textInputAction</code>参数控制软键盘右下角的按键，说明如下：</p>
+<ul>
+<li>none：android上显示返回键，ios不支持。</li>
+<li>unspecified：让操作系统自己决定哪个合适，一般情况下，android显示“完成”或者“返回”。 </li>
+<li>done：android显示代表“完成”的按钮，ios显示“Done”（中文：完成）。</li>
+<li>go：android显示表达用户去向目的地的图标，比如向右的箭头，ios显示“Go”（中文：前往）。</li>
+<li>search：android显示表达搜索的按钮，ios显示”Search”（中文：搜索）。</li>
+<li>send：android显示表达发送意思的按钮，比如“纸飞机”按钮，ios显示”Send”（中文：发送）。</li>
+<li>next：android显示表达“前进”的按钮，比如“向右的箭头”,ios显示”Next”（中文：下一项）。</li>
+<li>previous：android显示表达“后退”的按钮，比如“向左的箭头”,ios不支持。</li>
+<li>continueAction：android 不支持，ios仅在ios9.0+显示”Continue”（中文：继续）。</li>
+<li>join：Android和ios显示”Join”（中文：加入）。</li>
+<li>route：android 不支持，ios显示”Route”（中文：路线）。</li>
+<li>emergencyCall：android 不支持，ios显示”Emergency Call”（中文：紧急电话）。</li>
+<li>newline：android显示表达“换行”的按钮，ios显示”换行“。</li>
+</ul>
+<p>大家可能发现了，Android上显示的按钮大部分是不确定的，比如<code>next</code>有的显示向右的箭头，有的显示前进，这是因为各大厂商对Android ROM定制引发的。</p>
+<p><code>textCapitalization</code>参数是配置键盘是大写还是小写，仅支持键盘模式为<code>text</code>，其他模式下忽略此配置，说明如下：</p>
+<ul>
+<li>words：每一个单词的首字母大写。</li>
+<li>sentences：每一句话的首字母大写。</li>
+<li>characters：每个字母都大写</li>
+<li>none：都小写</li>
+</ul>
+<p>这里仅仅是控制软键盘是大写模式还是小写模式，你也可以切换大小写，系统并不会改变输入框内的内容。</p>
+<p><code>textAlignVertical</code>表示垂直方向的对齐方式，<code>textDirection</code>表示文本方向，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  textAlignVertical: TextAlignVertical.center,</span><br><span class="line">  textDirection: TextDirection.rtl,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>toolbarOptions</code>表示长按时弹出的菜单，有<code>copy</code>、<code>cut</code>、<code>paste</code>、<code>selectAll</code>，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  toolbarOptions: ToolbarOptions(</span><br><span class="line">    copy: <span class="keyword">true</span>,</span><br><span class="line">    cut: <span class="keyword">true</span>,</span><br><span class="line">    paste: <span class="keyword">true</span>,</span><br><span class="line">    selectAll: <span class="keyword">true</span></span><br><span class="line">  ),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>cursor</code>表示光标，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  showCursor: <span class="keyword">true</span>,</span><br><span class="line">  cursorWidth: <span class="number">3</span>,</span><br><span class="line">  cursorRadius: Radius.circular(<span class="number">10</span>),</span><br><span class="line">  cursorColor: Colors.red,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-be65bac24ebf9421.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>将输入框设置为密码框，只需<code>obscureText</code>属性设置true即可，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  obscureText: <span class="keyword">true</span>,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>inputFormatters</code>可以限制用户输入的内容，比如只想让用户输入字符，设置如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  inputFormatters: [</span><br><span class="line">    WhitelistingTextInputFormatter(<span class="built_in">RegExp</span>(<span class="string">"[a-zA-Z]"</span>)),</span><br><span class="line">  ],</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这时用户是无法输入数字的。</p>
+<p><code>onChanged</code>是当内容发生变化时回调，<code>onSubmitted</code>是点击回车或者点击软键盘上的完成回调，<code>onTap</code>点击输入框时回调，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  onChanged: (value)&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'onChanged:<span class="subst">$value</span>'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  onEditingComplete: ()&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'onEditingComplete'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  onTap: ()&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'onTap'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>输入框右下角经常需要字数统计，除了使用上面介绍的方法外，还可以使用<code>buildCounter</code>，建议使用此方法，用法如下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  maxLength: <span class="number">100</span>,</span><br><span class="line">  buildCounter: (</span><br><span class="line">    BuildContext context, &#123;</span><br><span class="line">    <span class="built_in">int</span> currentLength,</span><br><span class="line">    <span class="built_in">int</span> maxLength,</span><br><span class="line">    <span class="built_in">bool</span> isFocused,</span><br><span class="line">  &#125;) &#123;</span><br><span class="line">    <span class="keyword">return</span> Text(</span><br><span class="line">      <span class="string">'<span class="subst">$currentLength</span>/<span class="subst">$maxLength</span>'</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125;,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>动态获取焦点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FocusScope.of(context).requestFocus(_focusNode);复制代码</span><br></pre></td></tr></table></figure>
+
+<p><code>_focusNode</code>为TextField的focusNode：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">_focusNode = FocusNode();</span><br><span class="line"></span><br><span class="line">TextField(</span><br><span class="line">    focusNode: _focusNode,</span><br><span class="line">    ...</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p>动态失去焦点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_focusNode.unfocus();复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="过渡颜色的文字"><a href="#过渡颜色的文字" class="headerlink" title="过渡颜色的文字"></a>过渡颜色的文字</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Builder(</span><br><span class="line">  builder: (BuildContext context) &#123;</span><br><span class="line">    RenderBox box = context.findRenderObject();</span><br><span class="line">    <span class="keyword">final</span> Shader linearGradient = LinearGradient(</span><br><span class="line">      colors: &lt;Color&gt;[Colors.purple, Colors.blue],</span><br><span class="line">    ).createShader(</span><br><span class="line">        Rect.fromLTWH(<span class="number">0.0</span>, <span class="number">0.0</span>, box?.size?.width, box?.size?.height));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Text(</span><br><span class="line">      <span class="string">'老孟，专注分享Flutter技术和应用实战'</span>,</span><br><span class="line">      style: <span class="keyword">new</span> TextStyle(</span><br><span class="line">          fontSize: <span class="number">18.0</span>,</span><br><span class="line">          fontWeight: FontWeight.bold,</span><br><span class="line">          foreground: Paint()..shader = linearGradient),</span><br><span class="line">    );</span><br><span class="line">  &#125;,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-11c2a9f7cbb9ac94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><code>Builder</code>组件是为了计算当前Text组件大小，生成LinearGradient。</p>
+<h3 id="带前后置标签的文本"><a href="#带前后置标签的文本" class="headerlink" title="带前后置标签的文本"></a>带前后置标签的文本</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">RichText(</span><br><span class="line">  text: TextSpan(</span><br><span class="line">      style: DefaultTextStyle.of(context).style,</span><br><span class="line">      children: &lt;InlineSpan&gt;[</span><br><span class="line">        WidgetSpan(</span><br><span class="line">            child: Container(</span><br><span class="line">              margin: EdgeInsets.only(right: <span class="number">10</span>),</span><br><span class="line">              padding: EdgeInsets.symmetric(horizontal: <span class="number">10</span>),</span><br><span class="line">              decoration: BoxDecoration(</span><br><span class="line">                  shape: BoxShape.rectangle,</span><br><span class="line">                  borderRadius: BorderRadius.all(Radius.circular(<span class="number">20</span>)),</span><br><span class="line">                  color: Colors.blue),</span><br><span class="line">              child: Text(</span><br><span class="line">                <span class="string">'判断题'</span>,</span><br><span class="line">                style: TextStyle(color: Colors.white),</span><br><span class="line">              ),</span><br><span class="line">            )),</span><br><span class="line">        TextSpan(text: <span class="string">'泡沫灭火器可用于带电灭火'</span>),</span><br><span class="line"></span><br><span class="line">      ]),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-34261fddb5ad29c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="“服务协议”"><a href="#“服务协议”" class="headerlink" title="“服务协议”"></a>“服务协议”</h3><p>通常在登录页面的底部会出现<strong>登录即代表同意并阅读 《服务协议》</strong>，其中<strong>《服务协议》</strong>为蓝色且可点击：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Text.rich(</span><br><span class="line">  TextSpan(</span><br><span class="line">      text: <span class="string">'登录即代表同意并阅读'</span>,</span><br><span class="line">      style: TextStyle(fontSize: <span class="number">11</span>, color: Color(<span class="number">0xFF999999</span>)),</span><br><span class="line">      children: [</span><br><span class="line">        TextSpan(</span><br><span class="line">          text: <span class="string">'《服务协议》'</span>,</span><br><span class="line">          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),</span><br><span class="line">          recognizer: TapGestureRecognizer()</span><br><span class="line">            ..onTap = () &#123;</span><br><span class="line">              <span class="built_in">print</span>(<span class="string">'onTap'</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">        ),</span><br><span class="line">      ]),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-565918c864581b8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="登录密码输入框"><a href="#登录密码输入框" class="headerlink" title="登录密码输入框"></a>登录密码输入框</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">  decoration: InputDecoration(</span><br><span class="line">    fillColor: Color(<span class="number">0x30cccccc</span>),</span><br><span class="line">    filled: <span class="keyword">true</span>,</span><br><span class="line">    enabledBorder: OutlineInputBorder(</span><br><span class="line">        borderSide: BorderSide(color: Color(<span class="number">0x00FF0000</span>)),</span><br><span class="line">        borderRadius: BorderRadius.all(Radius.circular(<span class="number">100</span>))),</span><br><span class="line">    hintText: <span class="string">'输入密码'</span>,</span><br><span class="line">    focusedBorder: OutlineInputBorder(</span><br><span class="line">        borderSide: BorderSide(color: Color(<span class="number">0x00000000</span>)),</span><br><span class="line">        borderRadius: BorderRadius.all(Radius.circular(<span class="number">100</span>))),</span><br><span class="line"></span><br><span class="line">  ),</span><br><span class="line">  textAlign: TextAlign.center,</span><br><span class="line">  obscureText: <span class="keyword">true</span>,</span><br><span class="line">  onChanged: (value) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;,</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-d9d82e5998a098cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="评论回复"><a href="#评论回复" class="headerlink" title="评论回复"></a>评论回复</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Text.rich(</span><br><span class="line">  TextSpan(</span><br><span class="line">      text: <span class="string">'回复'</span>,</span><br><span class="line">      style: TextStyle(fontSize: <span class="number">11</span>, color: Color(<span class="number">0xFF999999</span>)),</span><br><span class="line">      children: [</span><br><span class="line">        TextSpan(</span><br><span class="line">          text: <span class="string">'@老孟：'</span>,</span><br><span class="line">          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),</span><br><span class="line">          recognizer: TapGestureRecognizer()</span><br><span class="line">            ..onTap = () &#123;</span><br><span class="line">              <span class="built_in">print</span>(<span class="string">'onTap'</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">        ),</span><br><span class="line">        TextSpan(</span><br><span class="line">          text: <span class="string">'你好，想知道Flutter发展前景如何？'</span>,</span><br><span class="line">        ),</span><br><span class="line">      ]),</span><br><span class="line">)复制代码</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-b560dc681b7fe9cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>作者：老孟Flutter<br>链接：<a href="https://juejin.im/post/5ee16b1751882542fd35284e" target="_blank" rel="noopener">https://juejin.im/post/5ee16b1751882542fd35284e</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/%E6%96%87%E6%9C%AC%E7%BB%84%E4%BB%B6/" rel="tag"># 文本组件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/14/flutter/Flutter%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%A7%86%E5%9B%BE%E4%BD%93%E7%B3%BB/" rel="next" title="Flutter学习之视图体系">
+                <i class="fa fa-chevron-left"></i> Flutter学习之视图体系
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/19/flutter/dart/Dart%E4%B8%ADList%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/" rel="prev" title="Dart中List常用方法记录">
+                Dart中List常用方法记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Text"><span class="nav-number">1.</span> <span class="nav-text">Text</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RichText"><span class="nav-number">2.</span> <span class="nav-text">RichText</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TextField"><span class="nav-number">3.</span> <span class="nav-text">TextField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过渡颜色的文字"><span class="nav-number">4.</span> <span class="nav-text">过渡颜色的文字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#带前后置标签的文本"><span class="nav-number">5.</span> <span class="nav-text">带前后置标签的文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“服务协议”"><span class="nav-number">6.</span> <span class="nav-text">“服务协议”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录密码输入框"><span class="nav-number">7.</span> <span class="nav-text">登录密码输入框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#评论回复"><span class="nav-number">8.</span> <span class="nav-text">评论回复</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

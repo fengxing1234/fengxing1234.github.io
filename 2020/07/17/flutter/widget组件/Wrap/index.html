@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="看名字我们也能看出来，它就是一个包裹住子布局的 Widget，并且可以自动换行。 先看一下构造函数，来确定一下需要传入什么参数： 123456789101112Wrap(&amp;#123;  Key key,  this.direction &#x3D; Axis.horizontal, &#x2F;&#x2F; 子布局排列方向  this.alignment &#x3D; WrapAlignment.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wrap">
+<meta property="og:url" content="http://yoursite.com/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Wrap/index.html">
+<meta property="og:site_name" content="冯星的博客">
+<meta property="og:description" content="看名字我们也能看出来，它就是一个包裹住子布局的 Widget，并且可以自动换行。 先看一下构造函数，来确定一下需要传入什么参数： 123456789101112Wrap(&amp;#123;  Key key,  this.direction &#x3D; Axis.horizontal, &#x2F;&#x2F; 子布局排列方向  this.alignment &#x3D; WrapAlignment.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-f9c3c946d32523da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-30ad26c5cf40a62f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4118241-aa1ba6cc2a6a1b9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2020-07-17T13:19:15.000Z">
+<meta property="article:modified_time" content="2020-07-17T14:01:39.655Z">
+<meta property="article:author" content="冯星">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4118241-f9c3c946d32523da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/17/flutter/widget组件/Wrap/"/>
+
+
+
+
+
+  <title>Wrap | 冯星的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">冯星的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is like a Markov chain, your future only depends on what you are doing now, and independent of your past.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Wrap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="冯星">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冯星的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wrap</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-17T21:19:15+08:00">
+                2020-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/widget%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">widget组件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Wrap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Wrap/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>看名字我们也能看出来，它就是一个包裹住子布局的 Widget，并且可以自动换行。</p>
+<p>先看一下构造函数，来确定一下需要传入什么参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Wrap(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  this.direction &#x3D; Axis.horizontal, &#x2F;&#x2F; 子布局排列方向</span><br><span class="line">  this.alignment &#x3D; WrapAlignment.start, &#x2F;&#x2F; 子布局对齐方向</span><br><span class="line">  this.spacing &#x3D; 0.0, &#x2F;&#x2F; 间隔</span><br><span class="line">  this.runAlignment &#x3D; WrapAlignment.start, &#x2F;&#x2F; run 可以理解为新的一行，新的一行的对齐方向</span><br><span class="line">  this.runSpacing &#x3D; 0.0, &#x2F;&#x2F; 两行的间距</span><br><span class="line">  this.crossAxisAlignment &#x3D; WrapCrossAlignment.start,</span><br><span class="line">  this.textDirection,</span><br><span class="line">  this.verticalDirection &#x3D; VerticalDirection.down,</span><br><span class="line">  List&lt;Widget&gt; children &#x3D; const &lt;Widget&gt;[],</span><br><span class="line">&#125;) : super(key: key, children: children);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>本文主要介绍Flutter布局中的Flow、Table、Wrap控件，详细介绍了其布局行为以及使用场景，并对源码进行了分析。</p>
+</blockquote>
+<h2 id="1-Flow"><a href="#1-Flow" class="headerlink" title="1. Flow"></a>1. Flow</h2><blockquote>
+<p>A widget that implements the flow layout algorithm.</p>
+</blockquote>
+<h3 id="1-1-简介"><a href="#1-1-简介" class="headerlink" title="1.1 简介"></a>1.1 简介</h3><p>Flow按照解释的那样，是一个实现流式布局算法的控件。流式布局在大前端是很常见的布局方式，但是一般使用Flow很少，因为其过于复杂，很多场景下都会去使用Wrap。</p>
+<h3 id="1-2-布局行为"><a href="#1-2-布局行为" class="headerlink" title="1.2 布局行为"></a>1.2 布局行为</h3><p>Flow官方介绍是一个对child尺寸以及位置调整非常高效的控件，主要是得益于其FlowDelegate。另外Flow在用转换矩阵（transformation matrices）对child进行位置调整的时候进行了优化。</p>
+<p>Flow以及其child的一些约束都会受到FlowDelegate的控制，例如重写FlowDelegate中的geiSize，可以设置Flow的尺寸，重写其getConstraintsForChild方法，可以设置每个child的布局约束条件。</p>
+<p>Flow之所以高效，是因为其在定位过后，如果使用FlowDelegate中的paintChildren改变child的尺寸或者位置，只是重绘，并没有实际调整其位置。</p>
+<h3 id="1-3-继承关系"><a href="#1-3-继承关系" class="headerlink" title="1.3 继承关系"></a>1.3 继承关系</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; MultiChildRenderObjectWidget &gt; Flow</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-示例代码"><a href="#1-4-示例代码" class="headerlink" title="1.4 示例代码"></a>1.4 示例代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">const width &#x3D; 80.0;</span><br><span class="line">const height &#x3D; 60.0;</span><br><span class="line"></span><br><span class="line">Flow(</span><br><span class="line">  delegate: TestFlowDelegate(margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0)),</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">    new Container(width: width, height: height, color: Colors.yellow,),</span><br><span class="line">    new Container(width: width, height: height, color: Colors.green,),</span><br><span class="line">    new Container(width: width, height: height, color: Colors.red,),</span><br><span class="line">    new Container(width: width, height: height, color: Colors.black,),</span><br><span class="line">    new Container(width: width, height: height, color: Colors.blue,),</span><br><span class="line">    new Container(width: width, height: height, color: Colors.lightGreenAccent,),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">class TestFlowDelegate extends FlowDelegate &#123;</span><br><span class="line">  EdgeInsets margin &#x3D; EdgeInsets.zero;</span><br><span class="line"></span><br><span class="line">  TestFlowDelegate(&#123;this.margin&#125;);</span><br><span class="line">  @override</span><br><span class="line">  void paintChildren(FlowPaintingContext context) &#123;</span><br><span class="line">    var x &#x3D; margin.left;</span><br><span class="line">    var y &#x3D; margin.top;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; context.childCount; i++) &#123;</span><br><span class="line">      var w &#x3D; context.getChildSize(i).width + x + margin.right;</span><br><span class="line">      if (w &lt; context.size.width) &#123;</span><br><span class="line">        context.paintChild(i,</span><br><span class="line">            transform: new Matrix4.translationValues(</span><br><span class="line">                x, y, 0.0));</span><br><span class="line">        x &#x3D; w + margin.left;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        x &#x3D; margin.left;</span><br><span class="line">        y +&#x3D; context.getChildSize(i).height + margin.top + margin.bottom;</span><br><span class="line">        context.paintChild(i,</span><br><span class="line">            transform: new Matrix4.translationValues(</span><br><span class="line">                x, y, 0.0));</span><br><span class="line">        x +&#x3D; context.getChildSize(i).width + margin.left + margin.right;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  bool shouldRepaint(FlowDelegate oldDelegate) &#123;</span><br><span class="line">    return oldDelegate !&#x3D; this;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>样例其实并不复杂，FlowDelegate需要自己实现child的绘制，其实大多数时候就是位置的摆放。上面例子中，对每个child按照给定的margin值，进行排列，如果超出一行，则在下一行进行布局。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-f9c3c946d32523da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>另外，对这个例子多做一个说明，对于上述child宽度的变化，这个例子是没问题的，如果每个child的高度不同，则需要对代码进行调整，具体的调整是换行的时候，需要根据上一行的最大高度来确定下一行的起始y坐标。</p>
+<h3 id="1-5-源码解析"><a href="#1-5-源码解析" class="headerlink" title="1.5 源码解析"></a>1.5 源码解析</h3><p>构造函数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Flow(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  @required this.delegate,</span><br><span class="line">  List&lt;Widget&gt; children &#x3D; const &lt;Widget&gt;[],</span><br><span class="line">&#125;)</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-5-1-属性解析"><a href="#1-5-1-属性解析" class="headerlink" title="1.5.1 属性解析"></a>1.5.1 属性解析</h4><p><strong>delegate</strong>：影响Flow具体布局的FlowDelegate。</p>
+<p>其中FlowDelegate包含如下几个方法：</p>
+<ul>
+<li>getConstraintsForChild: 设置每个child的布局约束条件，会覆盖已有的；</li>
+<li>getSize：设置Flow的尺寸；</li>
+<li>paintChildren：child的绘制控制代码，可以调整尺寸位置，写起来比较的繁琐；</li>
+<li>shouldRepaint：是否需要重绘；</li>
+<li>shouldRelayout：是否需要重新布局。</li>
+</ul>
+<p>其中，我们平时使用的时候，一般会使用到paintChildren以及shouldRepaint两个方法。</p>
+<h4 id="1-5-2-源码"><a href="#1-5-2-源码" class="headerlink" title="1.5.2 源码"></a>1.5.2 源码</h4><p>我们先来看一下Flow的布局代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Size _getSize(BoxConstraints constraints) &#123;</span><br><span class="line">  assert(constraints.debugAssertIsValid());</span><br><span class="line">  return constraints.constrain(_delegate.getSize(constraints));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@override</span><br><span class="line">void performLayout() &#123;</span><br><span class="line">  size &#x3D; _getSize(constraints);</span><br><span class="line">  int i &#x3D; 0;</span><br><span class="line">  _randomAccessChildren.clear();</span><br><span class="line">  RenderBox child &#x3D; firstChild;</span><br><span class="line">  while (child !&#x3D; null) &#123;</span><br><span class="line">    _randomAccessChildren.add(child);</span><br><span class="line">    final BoxConstraints innerConstraints &#x3D; _delegate.getConstraintsForChild(i, constraints);</span><br><span class="line">    child.layout(innerConstraints, parentUsesSize: true);</span><br><span class="line">    final FlowParentData childParentData &#x3D; child.parentData;</span><br><span class="line">    childParentData.offset &#x3D; Offset.zero;</span><br><span class="line">    child &#x3D; childParentData.nextSibling;</span><br><span class="line">    i +&#x3D; 1;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>可以看到Flow尺寸的取值，直接来自于delegate的getSize方法。对于每一个child，则是将delegate中的getConstraintsForChild设置的约束条件，设置在child上。</p>
+<p>Flow布局上的表现，受Delegate中getSize以及getConstraintsForChild两个方法的影响。第一个方法设置其尺寸，第二个方法设置其children的布局约束条件。</p>
+<p>接下来我们来看一下其绘制方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void _paintWithDelegate(PaintingContext context, Offset offset) &#123;</span><br><span class="line">  _lastPaintOrder.clear();</span><br><span class="line">  _paintingContext &#x3D; context;</span><br><span class="line">  _paintingOffset &#x3D; offset;</span><br><span class="line">  for (RenderBox child in _randomAccessChildren) &#123;</span><br><span class="line">    final FlowParentData childParentData &#x3D; child.parentData;</span><br><span class="line">    childParentData._transform &#x3D; null;</span><br><span class="line">  &#125;</span><br><span class="line">  try &#123;</span><br><span class="line">    _delegate.paintChildren(this);</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    _paintingContext &#x3D; null;</span><br><span class="line">    _paintingOffset &#x3D; null;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>它的绘制方法非常的简单，先将上次设置的参数都初始化，然后调用delegate中的paintChildren进行绘制。在paintChildren中会调用paintChild方法去绘制每个child，我们接下来看下其代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@override</span><br><span class="line">  void paintChild(int i, &#123; Matrix4 transform, double opacity &#x3D; 1.0 &#125;) &#123;</span><br><span class="line">    transform ??&#x3D; new Matrix4.identity();</span><br><span class="line">    final RenderBox child &#x3D; _randomAccessChildren[i];</span><br><span class="line">    final FlowParentData childParentData &#x3D; child.parentData;</span><br><span class="line">    _lastPaintOrder.add(i);</span><br><span class="line">    childParentData._transform &#x3D; transform;</span><br><span class="line">    </span><br><span class="line">    if (opacity &#x3D;&#x3D; 0.0)</span><br><span class="line">      return;</span><br><span class="line"></span><br><span class="line">    void painter(PaintingContext context, Offset offset) &#123;</span><br><span class="line">      context.paintChild(child, offset);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (opacity &#x3D;&#x3D; 1.0) &#123;</span><br><span class="line">      _paintingContext.pushTransform(needsCompositing, _paintingOffset, transform, painter);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      _paintingContext.pushOpacity(_paintingOffset, _getAlphaFromOpacity(opacity), (PaintingContext context, Offset offset) &#123;</span><br><span class="line">        context.pushTransform(needsCompositing, offset, transform, painter);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>paitChild函数首先会将transform值设在child上，然后根据opacity值，决定其绘制的表现。</p>
+<ul>
+<li>当opacity为0时，只是设置了transform值，这样做是为了让其响应区域跟随调整，虽然不显示出来；</li>
+<li>当opacity为1的时候，只是进行Transform操作；</li>
+<li>当opacity大于0小于1时，先调整其透明度，再进行Transform操作。</li>
+</ul>
+<p>至于其为什么高效，主要是因为它的布局函数不牵涉到child的布局，而在绘制的时候，则根据delegate中的策略，进行有效的绘制。</p>
+<h3 id="1-6-使用场景"><a href="#1-6-使用场景" class="headerlink" title="1.6 使用场景"></a>1.6 使用场景</h3><p>Flow在一些定制化的流式布局中，有可用场景，但是一般写起来比较复杂，但胜在灵活性以及其高效。</p>
+<h2 id="2-Table"><a href="#2-Table" class="headerlink" title="2. Table"></a>2. Table</h2><blockquote>
+<p>A widget that uses the table layout algorithm for its children.</p>
+</blockquote>
+<h3 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h3><p>每一种移动端布局中都会有一种table布局，这种控件太常见了。至于其表现形式，完全可以借鉴其他移动端的，通俗点讲，就是表格。</p>
+<h3 id="2-2-布局行为"><a href="#2-2-布局行为" class="headerlink" title="2.2 布局行为"></a>2.2 布局行为</h3><p>表格的每一行的高度，由其内容决定，每一列的宽度，则由columnWidths属性单独控制。</p>
+<h3 id="2-3-继承关系"><a href="#2-3-继承关系" class="headerlink" title="2.3 继承关系"></a>2.3 继承关系</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; Table</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-示例代码"><a href="#2-4-示例代码" class="headerlink" title="2.4 示例代码"></a>2.4 示例代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Table(</span><br><span class="line">  columnWidths: const &lt;int, TableColumnWidth&gt;&#123;</span><br><span class="line">    0: FixedColumnWidth(50.0),</span><br><span class="line">    1: FixedColumnWidth(100.0),</span><br><span class="line">    2: FixedColumnWidth(50.0),</span><br><span class="line">    3: FixedColumnWidth(100.0),</span><br><span class="line">  &#125;,</span><br><span class="line">  border: TableBorder.all(color: Colors.red, width: 1.0, style: BorderStyle.solid),</span><br><span class="line">  children: const &lt;TableRow&gt;[</span><br><span class="line">    TableRow(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        Text(&#39;A1&#39;),</span><br><span class="line">        Text(&#39;B1&#39;),</span><br><span class="line">        Text(&#39;C1&#39;),</span><br><span class="line">        Text(&#39;D1&#39;),</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">    TableRow(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        Text(&#39;A2&#39;),</span><br><span class="line">        Text(&#39;B2&#39;),</span><br><span class="line">        Text(&#39;C2&#39;),</span><br><span class="line">        Text(&#39;D2&#39;),</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">    TableRow(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        Text(&#39;A3&#39;),</span><br><span class="line">        Text(&#39;B3&#39;),</span><br><span class="line">        Text(&#39;C3&#39;),</span><br><span class="line">        Text(&#39;D3&#39;),</span><br><span class="line">      ],</span><br><span class="line">    ),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>一个三行四列的表格，第一三行宽度为50，第二四行宽度为100。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-30ad26c5cf40a62f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="2-5-源码解析"><a href="#2-5-源码解析" class="headerlink" title="2.5 源码解析"></a>2.5 源码解析</h3><p>构造函数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Table(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  this.children &#x3D; const &lt;TableRow&gt;[],</span><br><span class="line">  this.columnWidths,</span><br><span class="line">  this.defaultColumnWidth &#x3D; const FlexColumnWidth(1.0),</span><br><span class="line">  this.textDirection,</span><br><span class="line">  this.border,</span><br><span class="line">  this.defaultVerticalAlignment &#x3D; TableCellVerticalAlignment.top,</span><br><span class="line">  this.textBaseline,</span><br><span class="line">&#125;)</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-5-1-属性解析"><a href="#2-5-1-属性解析" class="headerlink" title="2.5.1 属性解析"></a>2.5.1 属性解析</h4><p><strong>columnWidths</strong>：设置每一列的宽度。</p>
+<p><strong>defaultColumnWidth</strong>：默认的每一列宽度值，默认情况下均分。</p>
+<p><strong>textDirection</strong>：文字方向，一般无需考虑。</p>
+<p><strong>border</strong>：表格边框。</p>
+<p><strong>defaultVerticalAlignment</strong>：每一个cell的垂直方向的alignment。</p>
+<p>总共包含5种：</p>
+<ul>
+<li>top：被放置在的顶部；</li>
+<li>middle：垂直居中；</li>
+<li>bottom：放置在底部；</li>
+<li>baseline：文本baseline对齐；</li>
+<li>fill：充满整个cell。</li>
+</ul>
+<p><strong>textBaseline</strong>：defaultVerticalAlignment为baseline的时候，会用到这个属性。</p>
+<h4 id="2-5-2-源码"><a href="#2-5-2-源码" class="headerlink" title="2.5.2 源码"></a>2.5.2 源码</h4><p>我们直接来看其布局源码：</p>
+<p>第一步，当行或者列为0的时候，将自身尺寸设为0x0。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (rows * columns &#x3D;&#x3D; 0) &#123;</span><br><span class="line">  size &#x3D; constraints.constrain(const Size(0.0, 0.0));</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第二步，根据textDirection值，设置方向，一般在阿拉伯语系中，一些文本都是从右往左现实的，平时使用时，不需要去考虑这个属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">switch (textDirection) &#123;</span><br><span class="line">  case TextDirection.rtl:</span><br><span class="line">    positions[columns - 1] &#x3D; 0.0;</span><br><span class="line">    for (int x &#x3D; columns - 2; x &gt;&#x3D; 0; x -&#x3D; 1)</span><br><span class="line">      positions[x] &#x3D; positions[x+1] + widths[x+1];</span><br><span class="line">    _columnLefts &#x3D; positions.reversed;</span><br><span class="line">    tableWidth &#x3D; positions.first + widths.first;</span><br><span class="line">    break;</span><br><span class="line">  case TextDirection.ltr:</span><br><span class="line">    positions[0] &#x3D; 0.0;</span><br><span class="line">    for (int x &#x3D; 1; x &lt; columns; x +&#x3D; 1)</span><br><span class="line">      positions[x] &#x3D; positions[x-1] + widths[x-1];</span><br><span class="line">    _columnLefts &#x3D; positions;</span><br><span class="line">    tableWidth &#x3D; positions.last + widths.last;</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第三步，设置每一个cell的尺寸。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">  for (int x &#x3D; 0; x &lt; columns; x +&#x3D; 1) &#123;</span><br><span class="line">    final int xy &#x3D; x + y * columns;</span><br><span class="line">    final RenderBox child &#x3D; _children[xy];</span><br><span class="line">    if (child !&#x3D; null) &#123;</span><br><span class="line">      final TableCellParentData childParentData &#x3D; child.parentData;</span><br><span class="line">      childParentData.x &#x3D; x;</span><br><span class="line">      childParentData.y &#x3D; y;</span><br><span class="line">      switch (childParentData.verticalAlignment ?? defaultVerticalAlignment) &#123;</span><br><span class="line">        case TableCellVerticalAlignment.baseline:</span><br><span class="line">          child.layout(new BoxConstraints.tightFor(width: widths[x]), parentUsesSize: true);</span><br><span class="line">          final double childBaseline &#x3D; child.getDistanceToBaseline(textBaseline, onlyReal: true);</span><br><span class="line">          if (childBaseline !&#x3D; null) &#123;</span><br><span class="line">            beforeBaselineDistance &#x3D; math.max(beforeBaselineDistance, childBaseline);</span><br><span class="line">            afterBaselineDistance &#x3D; math.max(afterBaselineDistance, child.size.height - childBaseline);</span><br><span class="line">            baselines[x] &#x3D; childBaseline;</span><br><span class="line">            haveBaseline &#x3D; true;</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">            rowHeight &#x3D; math.max(rowHeight, child.size.height);</span><br><span class="line">            childParentData.offset &#x3D; new Offset(positions[x], rowTop);</span><br><span class="line">          &#125;</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.top:</span><br><span class="line">        case TableCellVerticalAlignment.middle:</span><br><span class="line">        case TableCellVerticalAlignment.bottom:</span><br><span class="line">          child.layout(new BoxConstraints.tightFor(width: widths[x]), parentUsesSize: true);</span><br><span class="line">          rowHeight &#x3D; math.max(rowHeight, child.size.height);</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.fill:</span><br><span class="line">          break;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第四步，如果有baseline则进行相关设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (haveBaseline) &#123;</span><br><span class="line">  if (y &#x3D;&#x3D; 0)</span><br><span class="line">    _baselineDistance &#x3D; beforeBaselineDistance;</span><br><span class="line">    rowHeight &#x3D; math.max(rowHeight, beforeBaselineDistance + afterBaselineDistance);</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第五步，根据alignment，调整child的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  for (int x &#x3D; 0; x &lt; columns; x +&#x3D; 1) &#123;</span><br><span class="line">    final int xy &#x3D; x + y * columns;</span><br><span class="line">    final RenderBox child &#x3D; _children[xy];</span><br><span class="line">    if (child !&#x3D; null) &#123;</span><br><span class="line">      final TableCellParentData childParentData &#x3D; child.parentData;</span><br><span class="line">      switch (childParentData.verticalAlignment ?? defaultVerticalAlignment) &#123;</span><br><span class="line">        case TableCellVerticalAlignment.baseline:</span><br><span class="line">          if (baselines[x] !&#x3D; null)</span><br><span class="line">            childParentData.offset &#x3D; new Offset(positions[x], rowTop + beforeBaselineDistance - baselines[x]);</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.top:</span><br><span class="line">          childParentData.offset &#x3D; new Offset(positions[x], rowTop);</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.middle:</span><br><span class="line">          childParentData.offset &#x3D; new Offset(positions[x], rowTop + (rowHeight - child.size.height) &#x2F; 2.0);</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.bottom:</span><br><span class="line">          childParentData.offset &#x3D; new Offset(positions[x], rowTop + rowHeight - child.size.height);</span><br><span class="line">          break;</span><br><span class="line">        case TableCellVerticalAlignment.fill:</span><br><span class="line">          child.layout(new BoxConstraints.tightFor(width: widths[x], height: rowHeight));</span><br><span class="line">          childParentData.offset &#x3D; new Offset(positions[x], rowTop);</span><br><span class="line">          break;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最后一步，则是根据每一行的宽度以及每一列的高度，设置Table的尺寸。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">size &#x3D; constraints.constrain(new Size(tableWidth, rowTop));</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最后梳理一下整个的布局流程：</p>
+<ul>
+<li>当行或者列为0的时候，将自身尺寸设为0x0；</li>
+<li>根据textDirection进行相关设置；</li>
+<li>设置cell的尺寸；</li>
+<li>如果设置了baseline，则进行相关设置；</li>
+<li>根据alignment设置cell垂直方向的位置；</li>
+<li>设置Table的尺寸。</li>
+</ul>
+<p>如果经常关注系列文章的读者，可能会发现，布局控件的布局流程基本上跟上述流程是相似的。</p>
+<h3 id="2-6-使用场景"><a href="#2-6-使用场景" class="headerlink" title="2.6 使用场景"></a>2.6 使用场景</h3><p>在一些需要表格展示的场景中，可以使用Table控件。</p>
+<h2 id="3-Wrap"><a href="#3-Wrap" class="headerlink" title="3. Wrap"></a>3. Wrap</h2><blockquote>
+<p>A widget that displays its children in multiple horizontal or vertical runs.</p>
+</blockquote>
+<h3 id="3-1-简介"><a href="#3-1-简介" class="headerlink" title="3.1 简介"></a>3.1 简介</h3><p>看简介，其实Wrap实现的效果，Flow可以很轻松，而且可以更加灵活的实现出来。</p>
+<h3 id="3-2-布局行为"><a href="#3-2-布局行为" class="headerlink" title="3.2 布局行为"></a>3.2 布局行为</h3><p>Flow可以很轻易的实现Wrap的效果，但是Wrap更多的是在使用了Flex中的一些概念，某种意义上说是跟Row、Column更加相似的。</p>
+<p>单行的Wrap跟Row表现几乎一致，单列的Wrap则跟Row表现几乎一致。但Row与Column都是单行单列的，Wrap则突破了这个限制，mainAxis上空间不足时，则向crossAxis上去扩展显示。</p>
+<p>从效率上讲，Flow肯定会比Wrap高，但是Wrap使用起来会方便一些。</p>
+<h3 id="3-3-继承关系"><a href="#3-3-继承关系" class="headerlink" title="3.3 继承关系"></a>3.3 继承关系</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; MultiChildRenderObjectWidget &gt; Wrap</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>从继承关系上看，Wrap与Flow都是继承自MultiChildRenderObjectWidget，Flow可以实现Wrap的效果，但是两者却是单独实现的，说明两者有很大的不同。</p>
+<h3 id="3-4-示例代码"><a href="#3-4-示例代码" class="headerlink" title="3.4 示例代码"></a>3.4 示例代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Wrap(</span><br><span class="line">  spacing: 8.0, &#x2F;&#x2F; gap between adjacent chips</span><br><span class="line">  runSpacing: 4.0, &#x2F;&#x2F; gap between lines</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">    Chip(</span><br><span class="line">      avatar: CircleAvatar(</span><br><span class="line">          backgroundColor: Colors.blue.shade900, child: new Text(&#39;AH&#39;, style: TextStyle(fontSize: 10.0),)),</span><br><span class="line">      label: Text(&#39;Hamilton&#39;),</span><br><span class="line">    ),</span><br><span class="line">    Chip(</span><br><span class="line">      avatar: CircleAvatar(</span><br><span class="line">          backgroundColor: Colors.blue.shade900, child: new Text(&#39;ML&#39;, style: TextStyle(fontSize: 10.0),)),</span><br><span class="line">      label: Text(&#39;Lafayette&#39;),</span><br><span class="line">    ),</span><br><span class="line">    Chip(</span><br><span class="line">      avatar: CircleAvatar(</span><br><span class="line">          backgroundColor: Colors.blue.shade900, child: new Text(&#39;HM&#39;, style: TextStyle(fontSize: 10.0),)),</span><br><span class="line">      label: Text(&#39;Mulligan&#39;),</span><br><span class="line">    ),</span><br><span class="line">    Chip(</span><br><span class="line">      avatar: CircleAvatar(</span><br><span class="line">          backgroundColor: Colors.blue.shade900, child: new Text(&#39;JL&#39;, style: TextStyle(fontSize: 10.0),)),</span><br><span class="line">      label: Text(&#39;Laurens&#39;),</span><br><span class="line">    ),</span><br><span class="line">  ],</span><br><span class="line">)</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>示例代码直接使用的官方文档上的，效果跟Flow的例子中相似。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4118241-aa1ba6cc2a6a1b9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h3 id="3-5-源码解析"><a href="#3-5-源码解析" class="headerlink" title="3.5 源码解析"></a>3.5 源码解析</h3><p>构造函数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Wrap(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  this.direction &#x3D; Axis.horizontal,</span><br><span class="line">  this.alignment &#x3D; WrapAlignment.start,</span><br><span class="line">  this.spacing &#x3D; 0.0,</span><br><span class="line">  this.runAlignment &#x3D; WrapAlignment.start,</span><br><span class="line">  this.runSpacing &#x3D; 0.0,</span><br><span class="line">  this.crossAxisAlignment &#x3D; WrapCrossAlignment.start,</span><br><span class="line">  this.textDirection,</span><br><span class="line">  this.verticalDirection &#x3D; VerticalDirection.down,</span><br><span class="line">  List&lt;Widget&gt; children &#x3D; const &lt;Widget&gt;[],</span><br><span class="line">&#125;)</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-5-1-属性解析"><a href="#3-5-1-属性解析" class="headerlink" title="3.5.1 属性解析"></a>3.5.1 属性解析</h4><p><strong>direction</strong>：主轴（mainAxis）的方向，默认为水平。</p>
+<p><strong>alignment</strong>：主轴方向上的对齐方式，默认为start。</p>
+<p><strong>spacing</strong>：主轴方向上的间距。</p>
+<p><strong>runAlignment</strong>：run的对齐方式。run可以理解为新的行或者列，如果是水平方向布局的话，run可以理解为新的一行。</p>
+<p><strong>runSpacing</strong>：run的间距。</p>
+<p><strong>crossAxisAlignment</strong>：交叉轴（crossAxis）方向上的对齐方式。</p>
+<p><strong>textDirection</strong>：文本方向。</p>
+<p><strong>verticalDirection</strong>：定义了children摆放顺序，默认是down，见Flex相关属性介绍。</p>
+<h4 id="3-5-2-源码"><a href="#3-5-2-源码" class="headerlink" title="3.5.2 源码"></a>3.5.2 源码</h4><p>我们来看下其布局代码。</p>
+<p>第一步，如果第一个child为null，则将其设置为最小尺寸。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RenderBox child &#x3D; firstChild;</span><br><span class="line">if (child &#x3D;&#x3D; null) &#123;</span><br><span class="line">  size &#x3D; constraints.smallest;</span><br><span class="line">  return;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第二步，根据direction、textDirection以及verticalDirection属性，计算出相关的mainAxis、crossAxis是否需要调整方向，以及主轴方向上的限制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">double mainAxisLimit &#x3D; 0.0;</span><br><span class="line">bool flipMainAxis &#x3D; false;</span><br><span class="line">bool flipCrossAxis &#x3D; false;</span><br><span class="line">switch (direction) &#123;</span><br><span class="line">  case Axis.horizontal:</span><br><span class="line">    childConstraints &#x3D; new BoxConstraints(maxWidth: constraints.maxWidth);</span><br><span class="line">    mainAxisLimit &#x3D; constraints.maxWidth;</span><br><span class="line">    if (textDirection &#x3D;&#x3D; TextDirection.rtl)</span><br><span class="line">      flipMainAxis &#x3D; true;</span><br><span class="line">    if (verticalDirection &#x3D;&#x3D; VerticalDirection.up)</span><br><span class="line">      flipCrossAxis &#x3D; true;</span><br><span class="line">    break;</span><br><span class="line">  case Axis.vertical:</span><br><span class="line">    childConstraints &#x3D; new BoxConstraints(maxHeight: constraints.maxHeight);</span><br><span class="line">    mainAxisLimit &#x3D; constraints.maxHeight;</span><br><span class="line">    if (verticalDirection &#x3D;&#x3D; VerticalDirection.up)</span><br><span class="line">      flipMainAxis &#x3D; true;</span><br><span class="line">    if (textDirection &#x3D;&#x3D; TextDirection.rtl)</span><br><span class="line">      flipCrossAxis &#x3D; true;</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第三步，计算出主轴以及交叉轴的区域大小。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">while (child !&#x3D; null) &#123;</span><br><span class="line">  child.layout(childConstraints, parentUsesSize: true);</span><br><span class="line">  final double childMainAxisExtent &#x3D; _getMainAxisExtent(child);</span><br><span class="line">  final double childCrossAxisExtent &#x3D; _getCrossAxisExtent(child);</span><br><span class="line">  if (childCount &gt; 0 &amp;&amp; runMainAxisExtent + spacing + childMainAxisExtent &gt; mainAxisLimit) &#123;</span><br><span class="line">    mainAxisExtent &#x3D; math.max(mainAxisExtent, runMainAxisExtent);</span><br><span class="line">    crossAxisExtent +&#x3D; runCrossAxisExtent;</span><br><span class="line">    if (runMetrics.isNotEmpty)</span><br><span class="line">      crossAxisExtent +&#x3D; runSpacing;</span><br><span class="line">    runMetrics.add(new _RunMetrics(runMainAxisExtent, runCrossAxisExtent, childCount));</span><br><span class="line">    runMainAxisExtent &#x3D; 0.0;</span><br><span class="line">    runCrossAxisExtent &#x3D; 0.0;</span><br><span class="line">    childCount &#x3D; 0;</span><br><span class="line">  &#125;</span><br><span class="line">  runMainAxisExtent +&#x3D; childMainAxisExtent;</span><br><span class="line">  if (childCount &gt; 0)</span><br><span class="line">    runMainAxisExtent +&#x3D; spacing;</span><br><span class="line">  runCrossAxisExtent &#x3D; math.max(runCrossAxisExtent, childCrossAxisExtent);</span><br><span class="line">  childCount +&#x3D; 1;</span><br><span class="line">  final WrapParentData childParentData &#x3D; child.parentData;</span><br><span class="line">  childParentData._runIndex &#x3D; runMetrics.length;</span><br><span class="line">  child &#x3D; childParentData.nextSibling;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第四步，根据direction设置Wrap的尺寸。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">switch (direction) &#123;</span><br><span class="line">  case Axis.horizontal:</span><br><span class="line">    size &#x3D; constraints.constrain(new Size(mainAxisExtent, crossAxisExtent));</span><br><span class="line">    containerMainAxisExtent &#x3D; size.width;</span><br><span class="line">    containerCrossAxisExtent &#x3D; size.height;</span><br><span class="line">    break;</span><br><span class="line">  case Axis.vertical:</span><br><span class="line">    size &#x3D; constraints.constrain(new Size(crossAxisExtent, mainAxisExtent));</span><br><span class="line">    containerMainAxisExtent &#x3D; size.height;</span><br><span class="line">    containerCrossAxisExtent &#x3D; size.width;</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第五步，根据runAlignment计算出每一个run之间的距离，几种属性的差异，之前文章介绍过，在此就不做详细阐述。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">final double crossAxisFreeSpace &#x3D; math.max(0.0, containerCrossAxisExtent - crossAxisExtent);</span><br><span class="line">double runLeadingSpace &#x3D; 0.0;</span><br><span class="line">double runBetweenSpace &#x3D; 0.0;</span><br><span class="line">switch (runAlignment) &#123;</span><br><span class="line">  case WrapAlignment.start:</span><br><span class="line">    break;</span><br><span class="line">  case WrapAlignment.end:</span><br><span class="line">    runLeadingSpace &#x3D; crossAxisFreeSpace;</span><br><span class="line">    break;</span><br><span class="line">  case WrapAlignment.center:</span><br><span class="line">    runLeadingSpace &#x3D; crossAxisFreeSpace &#x2F; 2.0;</span><br><span class="line">    break;</span><br><span class="line">  case WrapAlignment.spaceBetween:</span><br><span class="line">    runBetweenSpace &#x3D; runCount &gt; 1 ? crossAxisFreeSpace &#x2F; (runCount - 1) : 0.0;</span><br><span class="line">    break;</span><br><span class="line">  case WrapAlignment.spaceAround:</span><br><span class="line">    runBetweenSpace &#x3D; crossAxisFreeSpace &#x2F; runCount;</span><br><span class="line">    runLeadingSpace &#x3D; runBetweenSpace &#x2F; 2.0;</span><br><span class="line">    break;</span><br><span class="line">  case WrapAlignment.spaceEvenly:</span><br><span class="line">    runBetweenSpace &#x3D; crossAxisFreeSpace &#x2F; (runCount + 1);</span><br><span class="line">    runLeadingSpace &#x3D; runBetweenSpace;</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第六步，根据alignment计算出每一个run中child的主轴方向上的间距。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  switch (alignment) &#123;</span><br><span class="line">    case WrapAlignment.start:</span><br><span class="line">      break;</span><br><span class="line">    case WrapAlignment.end:</span><br><span class="line">      childLeadingSpace &#x3D; mainAxisFreeSpace;</span><br><span class="line">      break;</span><br><span class="line">    case WrapAlignment.center:</span><br><span class="line">      childLeadingSpace &#x3D; mainAxisFreeSpace &#x2F; 2.0;</span><br><span class="line">      break;</span><br><span class="line">    case WrapAlignment.spaceBetween:</span><br><span class="line">      childBetweenSpace &#x3D; childCount &gt; 1 ? mainAxisFreeSpace &#x2F; (childCount - 1) : 0.0;</span><br><span class="line">      break;</span><br><span class="line">    case WrapAlignment.spaceAround:</span><br><span class="line">      childBetweenSpace &#x3D; mainAxisFreeSpace &#x2F; childCount;</span><br><span class="line">      childLeadingSpace &#x3D; childBetweenSpace &#x2F; 2.0;</span><br><span class="line">      break;</span><br><span class="line">    case WrapAlignment.spaceEvenly:</span><br><span class="line">      childBetweenSpace &#x3D; mainAxisFreeSpace &#x2F; (childCount + 1);</span><br><span class="line">      childLeadingSpace &#x3D; childBetweenSpace;</span><br><span class="line">      break;</span><br><span class="line">  &#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>最后一步，调整child的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  while (child !&#x3D; null) &#123;</span><br><span class="line">    final WrapParentData childParentData &#x3D; child.parentData;</span><br><span class="line">    if (childParentData._runIndex !&#x3D; i)</span><br><span class="line">      break;</span><br><span class="line">    final double childMainAxisExtent &#x3D; _getMainAxisExtent(child);</span><br><span class="line">    final double childCrossAxisExtent &#x3D; _getCrossAxisExtent(child);</span><br><span class="line">    final double childCrossAxisOffset &#x3D; _getChildCrossAxisOffset(flipCrossAxis, runCrossAxisExtent, childCrossAxisExtent);</span><br><span class="line">    if (flipMainAxis)</span><br><span class="line">      childMainPosition -&#x3D; childMainAxisExtent;</span><br><span class="line">    childParentData.offset &#x3D; _getOffset(childMainPosition, crossAxisOffset + childCrossAxisOffset);</span><br><span class="line">    if (flipMainAxis)</span><br><span class="line">      childMainPosition -&#x3D; childBetweenSpace;</span><br><span class="line">    else</span><br><span class="line">      childMainPosition +&#x3D; childMainAxisExtent + childBetweenSpace;</span><br><span class="line">    child &#x3D; childParentData.nextSibling;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (flipCrossAxis)</span><br><span class="line">    crossAxisOffset -&#x3D; runBetweenSpace;</span><br><span class="line">  else</span><br><span class="line">    crossAxisOffset +&#x3D; runCrossAxisExtent + runBetweenSpace;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>我们大致梳理一下布局的流程。</p>
+<ul>
+<li>如果第一个child为null，则将Wrap设置为最小尺寸，布局结束；</li>
+<li>根据direction、textDirection以及verticalDirection属性，计算出mainAxis、crossAxis是否需要调整方向；</li>
+<li>计算出主轴以及交叉轴的区域大小；</li>
+<li>根据direction设置Wrap的尺寸；</li>
+<li>根据runAlignment计算出每一个run之间的距离；</li>
+<li>根据alignment计算出每一个run中child的主轴方向上的间距</li>
+<li>调整每一个child的位置。</li>
+</ul>
+<h3 id="3-6-使用场景"><a href="#3-6-使用场景" class="headerlink" title="3.6 使用场景"></a>3.6 使用场景</h3><p>对于一些需要按宽度或者高度，让child自动换行布局的场景，可以使用，但是Wrap可以满足的场景，Flow一定可以实现，只不过会复杂很多，但是相对的会灵活以及高效很多。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/14/flutter/widget%E7%BB%84%E4%BB%B6/%E8%BE%93%E5%85%A5%E6%A1%86TextField/" rel="next" title="输入框TextField">
+                <i class="fa fa-chevron-left"></i> 输入框TextField
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/17/flutter/widget%E7%BB%84%E4%BB%B6/Chip%E6%A0%87%E7%AD%BE/" rel="prev" title="Chip标签">
+                Chip标签 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">冯星</p>
+              <p class="site-description motion-element" itemprop="description">人生就像是一个马尔可夫链，你的未来取决于你当下正在做的事，而无关于过去做完的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Flow"><span class="nav-number">1.</span> <span class="nav-text">1. Flow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-简介"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-布局行为"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 布局行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-继承关系"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 继承关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-示例代码"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-源码解析"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-1-属性解析"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.5.1 属性解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-2-源码"><span class="nav-number">1.5.2.</span> <span class="nav-text">1.5.2 源码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-使用场景"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 使用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Table"><span class="nav-number">2.</span> <span class="nav-text">2. Table</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-简介"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-布局行为"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 布局行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-继承关系"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 继承关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-示例代码"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-源码解析"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-属性解析"><span class="nav-number">2.5.1.</span> <span class="nav-text">2.5.1 属性解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-2-源码"><span class="nav-number">2.5.2.</span> <span class="nav-text">2.5.2 源码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-使用场景"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 使用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Wrap"><span class="nav-number">3.</span> <span class="nav-text">3. Wrap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-简介"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-布局行为"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 布局行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-继承关系"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 继承关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-示例代码"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-源码解析"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-1-属性解析"><span class="nav-number">3.5.1.</span> <span class="nav-text">3.5.1 属性解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-2-源码"><span class="nav-number">3.5.2.</span> <span class="nav-text">3.5.2 源码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-使用场景"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 使用场景</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冯星</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'bbc85MrQ0qhACWJxhCKrJoAj-gzGzoHsz',
+        appKey: 'fWH5REKFSsGT4TKe1lWt1ke4',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
